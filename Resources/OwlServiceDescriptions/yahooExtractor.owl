@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:sa="http://localhost/SemanticAssistants.owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:cu="http://localhost/ConceptUpper.owl#"
+    xmlns="http://localhost/YahooExtractor.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://localhost/YahooExtractor.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://localhost/SemanticAssistants.owl"/>
+  </owl:Ontology>
+  <sa:NLPTool rdf:ID="YahooExtractor">
+    <rdf:type rdf:resource="http://localhost/SemanticAssistants.owl#GATEPipeline"/>
+    <sa:hasInputNaturalLanguage rdf:resource="http://localhost/ConceptUpper.owl#anyLanguage"/>
+    <cu:hasLabel xml:lang="en">IR Information Extractor</cu:hasLabel>
+    <sa:concatenationOfPipelines xml:lang="en">Yahoo Search,Person and Location Extractor</sa:concatenationOfPipelines>
+    <sa:publishAsNLPService rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</sa:publishAsNLPService>
+    <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >IR Information Extractor</sa:hasGATEName>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Performs a Web search and extracts persons and locations from the first hits</rdfs:comment>
+    <sa:hasOutputNaturalLanguage rdf:resource="http://localhost/ConceptUpper.owl#anyLanguage"/>
+    <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#GATEPipeline_Format"/>
+  </sa:NLPTool>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.3.1, Build 430)  http://protege.stanford.edu -->

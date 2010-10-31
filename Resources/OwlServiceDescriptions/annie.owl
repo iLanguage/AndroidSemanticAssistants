@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns="http://localhost/PersonLocationExtractor.owl#"
+    xmlns:sa="http://localhost/SemanticAssistants.owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:cu="http://localhost/ConceptUpper.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://localhost/PersonLocationExtractor.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://localhost/SemanticAssistants.owl"/>
+  </owl:Ontology>
+  <sa:GATEAnnotation rdf:ID="LocationAnnotation">
+    <sa:isInAnnotationSet xml:lang="en"></sa:isInAnnotationSet>
+    <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+    <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Location</sa:hasGATEName>
+    <sa:hasFeature xml:lang="en">locType</sa:hasFeature>
+  </sa:GATEAnnotation>
+  <sa:GATEAnnotation rdf:ID="DateAnnotation">
+    <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+    <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Date</sa:hasGATEName>
+  </sa:GATEAnnotation>
+  <sa:GATE_OutputArtifact rdf:ID="DateAnnotationOutput">
+    <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Person</sa:hasGATEName>
+    <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+    <cu:isProducedBy>
+      <sa:GATEPipeline rdf:ID="PersonLocationExtractor">
+        <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Person and Location Extractor</sa:hasGATEName>
+        <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#GATECorpusPipeline_Format"/>
+        <cu:producesOutput>
+          <sa:GATE_OutputArtifact rdf:ID="LocationAnnotationOutput">
+            <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Location</sa:hasGATEName>
+            <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+            <cu:isProducedBy rdf:resource="#PersonLocationExtractor"/>
+            <sa:isPerDocument rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</sa:isPerDocument>
+            <cu:isActualArtifact rdf:resource="#LocationAnnotation"/>
+          </sa:GATE_OutputArtifact>
+        </cu:producesOutput>
+        <sa:appFileName xml:lang="en">~/Repository/durm/Projects/SemanticAssistants/Resources/GatePipelines/Annie.gapp</sa:appFileName>
+        <cu:producesOutput>
+          <sa:GATE_OutputArtifact rdf:ID="PersonAnnotationOutput">
+            <cu:isProducedBy rdf:resource="#PersonLocationExtractor"/>
+            <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Person</sa:hasGATEName>
+            <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+            <cu:isActualArtifact>
+              <sa:GATEAnnotation rdf:ID="PersonAnnotation">
+                <sa:hasFeature xml:lang="en">gender</sa:hasFeature>
+                <sa:isInAnnotationSet xml:lang="en"></sa:isInAnnotationSet>
+                <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+                <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >Person</sa:hasGATEName>
+              </sa:GATEAnnotation>
+            </cu:isActualArtifact>
+            <sa:isPerDocument rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+            >true</sa:isPerDocument>
+          </sa:GATE_OutputArtifact>
+        </cu:producesOutput>
+        <sa:hasInputNaturalLanguage rdf:resource="http://localhost/ConceptUpper.owl#fr"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Identifies and locates persons and locations in a document</rdfs:comment>
+        <cu:hasLabel xml:lang="en">Person and Location Extractor</cu:hasLabel>
+        <sa:hasOutputNaturalLanguage rdf:resource="http://localhost/ConceptUpper.owl#fr"/>
+        <rdf:type rdf:resource="http://localhost/SemanticAssistants.owl#NLPTool"/>
+        <sa:publishAsNLPService rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</sa:publishAsNLPService>
+        <cu:producesOutput rdf:resource="#DateAnnotationOutput"/>
+      </sa:GATEPipeline>
+    </cu:isProducedBy>
+    <sa:isPerDocument rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</sa:isPerDocument>
+    <cu:isActualArtifact rdf:resource="#DateAnnotation"/>
+  </sa:GATE_OutputArtifact>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.2, Build 355)  http://protege.stanford.edu -->

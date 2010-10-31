@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<project name="clclient" default="compile" basedir=".">
+
+     <!-- Machine specific settings should go in SemassistProperties.xml -->
+    <import file ="../../SemassistProperties.xml"/>
+
+    <!-- Top Directories -->
+    <property name="build.home"    value="${basedir}/bin"/>
+    <property name="dist.home"     value="${basedir}/dist"/>
+    <property name="docs.home"     value="${basedir}/docs"/>
+    <property name="src.home"      value="${basedir}/src"/>
+
+     <!-- Library Files -->
+    <property name="csal.jar"       value="${csal.home}/dist/CSAL.jar" />
+
+
+    <description>
+        Simple command-line client for the semantic assistants infrastructure
+    </description>
+  
+
+    <path id="compile.classpath">
+        <pathelement location="${csal.jar}"/>
+    </path>
+
+    <target name="init" >
+        <mkdir dir="${build.home}" />
+    </target>
+
+    <!-- This target compiles all the classes -->
+    <target name="compile" depends="init" description="Compile the source" >
+        <!-- Compile the java code from ${srcDir} into ${buildDir} -->
+        <javac srcdir="${src.home}" destdir="${build.home}"  includeantruntime="${antruntime}">
+            <classpath refid="compile.classpath" />
+        </javac>
+    </target>
+  
+    <!-- Run the client -->
+    <target name="run" depends="compile" >
+        <java classname="info.semanticsoftware.semassist.client.commandline.SACLClient">
+            <classpath>
+                <pathelement location="${build.home}" />
+                <pathelement location="${csal.jar}" />
+            </classpath>
+        </java>
+    </target>
+
+    <!-- Clear all build output -->
+    <target name="clean">
+        <delete includeemptydirs="true">
+            <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
+        </delete>
+    </target>
+</project>
+

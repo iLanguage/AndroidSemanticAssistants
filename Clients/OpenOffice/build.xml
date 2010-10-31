@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+
+
+<project name="OpenOffice" default="run" basedir=".">
+
+     <!-- Machine specific settings should go in SemassistProperties.xml -->
+    <import file ="../../SemassistProperties.xml"/>
+
+    <!-- Top Directories -->
+    <property name="build.home" value="${basedir}/bin"/>
+    <property name="docs.home"  value="${basedir}/docs"/>
+    <property name="src.home"   value="${basedir}/src"/>
+    <property name="dist.home"  value="${basedir}/dist"/>
+
+
+    <!-- Tool Directories -->
+    <property name="protege-owl.home" value="${protege-home}/plugins/edu.stanford.smi.protegex.owl/" />
+    <property name="common-language"  value="${protege-home}/plugins/edu.stanford.smi.protegex.owl.inference.pellet/" />
+    <property name="office.unopkg"    value="${office.program.dir}${file.separator}unopkg"/>
+    <property name="office.soffice"   value="${office.program.dir}${file.separator}soffice"/>
+    
+    <!-- Library Files -->
+    <property name="protege.jar"      value="${protege-home}/protege.jar" />
+    <property name="commons-lang.jar" value="${common-language}/commons-lang-2.2.jar" />
+    <property name="log4j.jar"        value="${log4j.home}/log4j-1.2.14.jar"/>
+
+    <!-- Other -->
+    <property name="uno-target-file"  value="SemassistOpenOfficePlugIn.uno.zip" />
+    <property name="compile.debug"    value="true" />
+
+    <description>
+        OpenOffice.org client for the semantic assistants infrastructure
+    </description>
+
+    <path id="compile.classpath">
+        <pathelement location="${csal.home}/dist/CSAL.jar" />
+        <pathelement location="${ooo-classes-common}/juh.jar" />
+        <pathelement location="${ooo-classes-common}/jurt.jar" />
+        <pathelement location="${ooo-classes-common}/ridl.jar" />
+        <pathelement location="${ooo-classes-basis}/unoil.jar" />
+        <pathelement location="${log4j.jar}"/>
+        <pathelement location="${commons-lang.jar}"/>
+    </path>
+
+  <!-- This target compiles all the classes -->  
+    <target name="compile" description="Compile the source" >
+        <!-- Compile the java code from ${srcDir} into ${buildDir} -->
+        <mkdir dir="${build.home}" />
+        <copy file="${commons-lang.jar}" todir="${dist.home}"/>
+        <copy file="${log4j.jar}" todir="${dist.home}"/>
+        <javac srcdir="${src.home}/" destdir="${build.home}" debug="true" debuglevel="lines,vars,source"  classpath="${build.home}"  includeantruntime="${antruntime}">
+            <classpath refid="compile.classpath" />
+        </javac>
+    </target>
+
+  <!-- Pack the compiled classes into a jar archive  -->
+    <target name="dist1" depends="compile"  description="Create jar from the compiled classes" >
+        <!-- Create the distribution directory -->
+        <mkdir dir="${dist.home}"/>
+        <jar jarfile="${dist.home}/ProtocolHandlerAddon_java.uno.jar" basedir="${build.home}">
+            <manifest>
+                <attribute name="RegistrationClassName" value="ProtocolHandlerAddon"/>
+            </manifest>
+        </jar>
+    </target>
+
+
+  <!-- Make a uno package  -->
+    <target name="dist2" depends="dist1"  description="Provide the whole UNO package" >
+        <zip destfile="${basedir}/${uno-target-file}" basedir="${dist.home}">
+        </zip>
+    </target>
+
+  <!-- Copy the UNO package to the desired location  -->
+    <target name="deploy" depends="dist2"  description="Copy the UNO package to the desired location" >
+        <copy file="${basedir}/${uno-target-file}" todir="${uno-copy-dest}" />
+    </target>
+  
+  <!-- Run uno-extention manager  -->
+    <target name="run" depends="deploy"  description="Run uno-extention manager" >
+	<!-- subtargets for different office versions -->
+        <echo message="${office.unopkg} add -f ${uno-target-file}"/>
+        <exec dir="${office.program.dir}" executable="${office.unopkg}" failonerror="true">
+            <arg value="add"/>
+            <arg value="-f"/>
+            <arg file="${uno-target-file}"/>
+        </exec>
+        <echo message="${office.soffice}"/>
+        <exec executable="${office.soffice}" dir="${office.program.dir}" failonerror="true">
+            <arg value="-norestore"/>
+        </exec>
+    </target>
+
+
+    <!-- Run uno-extention manager with gui  -->
+    <target name="run-gui" depends="deploy"  description="Run uno-extention manager" >
+	<!-- subtargets for different office versions -->
+        <echo message="${office.unopkg} gui -f ${uno-target-file}"/>
+        <exec dir="${office.program.dir}" executable="${office.unopkg}" failonerror="true">
+            <arg value="gui"/>
+            <arg value="-f"/>
+            <arg file="${uno-target-file}"/>
+        </exec>
+        <echo message="${office.soffice}"/>
+        <exec executable="${office.soffice}" dir="${office.program.dir}" failonerror="true">
+            <arg value="-norestore"/>
+        </exec>
+    </target>
+
+  <!-- Clear all build output -->
+    <target name="clean">
+        <delete includeemptydirs="true">
+            <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
+        </delete>
+    </target>
+</project>
+
