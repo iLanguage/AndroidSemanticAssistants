@@ -1,0 +1,22 @@
+DURMTOOLS=/usr/local/durmtools
+PROTEGE=$(DURMTOOLS)/Protege
+PROTEGEX_OWL=$(PROTEGE)/plugins/edu.stanford.smi.protegex.owl
+PROTEGEX_CLASSPATH=$(PROTEGE)/protege.jar:$(PROTEGEX_OWL)/protege-owl.jar:$(PROTEGE)/looks-2.1.3.jar:$(PROTEGEX_OWL)/orphanNodesAlg.jar
+JENA=$(DURMTOOLS)/Protege/plugins/edu.stanford.smi.protegex.owl/jena.jar
+JUNIT=$(DURMTOOLS)/junit/junit.jar
+FINDBUGS_HOME=$(DURMTOOLS)/findbugs
+FINDBUGS=$(FINDBUGS_HOME)/bin/findbugs
+
+ifndef GATE
+export GATE:=$(DURMTOOLS)/GATE
+endif
+
+ANT=$(GATE)/gate/bin/ant
+
+COMPILE_CLASSPATH=$(GATE)/gate/bin/gate.jar:$(DURMTOOLS)/GURU-2.0/fuzzylib/:$(DURMTOOLS)/jwnl/complete.jar:$(DURMTOOLS)/junit/junit.jar:$(DURMCLASSES):$(GATE)/gate/lib/jena.jar:$(PROTEGEX_CLASSPATH):$(PELLET):$(JENA)
+
+ifndef CLASSPATH
+export CLASSPATH:=$(COMPILE_CLASSPATH)
+else 
+CLASSPATH:=$(COMPILE_CLASSPATH):${CLASSPATH}
+endif
