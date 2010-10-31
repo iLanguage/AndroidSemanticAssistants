@@ -1,0 +1,339 @@
+\chapter{Installation}
+\label{chap:inst}
+\emph{Note: at present, the installation has been tested under
+  Linux and Mac OS X }
+
+\section{Prerequisites}
+To deploy the \sa architecture, a number of other (open source)
+components are needed.  Note that the current distribution comes with
+pre-compiled libraries for the \sa components, but to run them you
+will still need to install the common and server-specific
+prerequisites:
+
+\paragraph{Common throughout the Project:}
+\begin{enumerate}
+  \item  Apache ANT, \url{http://ant.apache.org/}
+  \item  Sun JDK 6, \url{http://java.sun.com/javase/downloads/index.jsp}
+  \item  GATE v5.0 or newer, \url{http://gate.ac.uk/}
+\end{enumerate} 
+
+\paragraph{For the \sa Server:}
+\begin{enumerate}
+  \item Java API for XML Web Services (JAX-WS) v2.1.x, \url{https://jax-ws.dev.java.net/}
+  \item Prot\'{e}g\'{e}-OWL API v3.4, \url{http://protege.stanford.edu/plugins/owl/api/} 
+\end{enumerate}
+
+\paragraph{For the CSAL:}
+\begin{enumerate}
+  \item Java API for XML Web Services (JAX-WS) v2.1.x, \url{https://jax-ws.dev.java.net/}
+\end{enumerate}
+
+\paragraph{For the OpenOffice.org Writer Plug-in:}
+\begin{enumerate}
+\item OpenOffice 3.2, \url{http://download.openoffice.org/}
+\item The OpenOffice.org 3.2 SDK,
+  \url{http://download.openoffice.org/sdk/index.html}
+\item Apache log4j v1.2,
+  \url{http://logging.apache.org/log4j/1.2/index.html}
+\item Apache Commons Lang v2.4, \url{http://commons.apache.org/lang/}
+\end{enumerate}
+
+\section{Download}
+To download the latest version of the \sa and this documentation
+please refer to
+\url{http://www.semanticsoftware.info/semantic-assistants-architecture}.
+
+\section{Project Desciption}
+This section gives an overview of the directory structure and explains the modifications
+required for every user to be able to proceed with the compilation.
+
+\paragraph{Directory Structure}:
+The implementation of the architecture is located in
+\url{SemanticAssistants/}. There are four directories, \emph{Server},
+\emph{CSAL}, \emph{Clients} and \emph{Resources} and one file \emph{SemassistProperties.xml}
+
+\subsection{Server Directory Structure}
+The following directories and files are found under the \emph{Server} directory.
+
+\begin{enumerate}
+\item \url{src}: Contains the java source code.
+\item \url{gate-home}: Contains two gate user configuration files \emph{gate.xml} and \url{user-gate.xml}.
+\item \url{logs}: It is used for server log files.
+\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Server} is loaded through Netbeans.
+\item \url{.classpath}: ClassPath file for NetBeans.
+\item \url{.project}: Project Description file for NetBeans.
+\item \url{Makefile}: Makefile that can be used to invoke Ant targets.
+\item \url{build.xml}: Ant build file use to compile the project. Contains dependency information.
+\item \url{nb-build.xml}: Build file used by Netbeans.
+\item \url{protege.properties}:Generated properties file, used by Protege.
+\item \url{build}: Contains the binary java .class files.
+\item \url{dist} Contains a .jar file of the compiled server side.
+\item \url{nbdist} Contains a .jar file of the compiled server. Generated when the server is compiled through Netbeans.
+\end{enumerate}
+
+
+\subsection{CSAL Directory Structure}
+The following directories and files are found under the \emph{CSAL} directory.
+
+\begin{enumerate}
+\item \url{src}: Contains the java source code of the client side absraction layer.
+\item \url{dist}: Contains the output .jar file result of compilation of the CSAL.
+\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{CSAL} is loaded through Netbeans.
+\item \url{.classpath}: ClassPath file for NetBeans.
+\item \url{.project}: Project Description file for NetBeans.
+\item \url{Makefile}: Makefile that can be used to invoke ant targets.
+\item \url{build.xml}: Ant build file use to compile the project. Contains dependency information.
+\item \url{bin}: Contains the binary java .class files.
+\item \url{nb-build.xml}: Buildfile used by Netbeans.
+\end{enumerate}
+
+
+\subsection{Clients Directory Structure}
+The two sample clients we provide, \emph{CommandLine} and \emph{OpenOffice}, have the following directory structure.
+
+\subsubsection{Command Line Client Directory Structure}
+\begin{enumerate}
+\item \url{src}: Contains the java source code of the Command Line Client.
+\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Command Line Client} is loaded through Netbeans.
+\item \url{.classpath}: ClassPath file for NetBeans.
+\item \url{.project}: Project Description file for NetBeans.
+\item \url{build.xml}: Ant build file use to compile the project.Contains dependency information.
+\item \url{bin}: Contains the binary java .class files.
+\item \url{runclient.sh}: Script helps with the class path setting and running the client.
+\item \url{usableCommands}: Example of commands that can be invoked when running the runclient.sh script.
+\end{enumerate}
+
+\subsubsection{Open Office Writter Client Directory Structure}
+\begin{enumerate}
+\item \url{src}: Contains the java source code.
+\item \url{dist}: Contains the \emph{Addons.xsu}, \emph{Protocolhandler.xsu} and \emph{ProtocolHandlerAddon\_ java.uno.jar} files.
+\item \url{build.xml}: Ant build file use to complile the project.Contains dependency information.
+\item \url{bin}: Contains the binary java .class files.
+\item \url{Semassist.uno.zip}: Contains the output file result of complilation and packaged in uno.zip plug-in format used by OpenOffice.
+\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Command Line Client} is loaded through Netbeans.
+\item \url{nb-build.xml}: Buildfile used by Netbeans.
+\end{enumerate}
+
+\section{Path Configuration}
+The \emph{SemassistProperties.xml} file serves for two purposes.
+It's included by the ANT \emph{build.xml} files of all projects and contains common directory paths and used to compile the various Semantic Assistants components. Secondly, it used by the server at run-time as a property file.
+
+Users needs to modify the values of the properties in order to correspond at the proper paths of their machine. The options to be adapted, include the path to
+the service description directory, GATE home, GATE plug-ins,
+etc. Descriptions of these properties are as the followings:
+
+The first part is an import statement, where it includes the \texttt{LocalProperties.xml} file. This file the is the place to store your local paths and customizations e.g. you can add additional paths for your local pipelines in this file.
+\begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
+    <!-- Importing LocalProperties.xml file for local paths and customizations -->
+    <import file ="LocalProperties.xml"/>
+\end{lstlisting}
+
+The second part of the \texttt{SemassistProperties.xml} is where the machine-specific variables are modified to point to proper paths of the users machine. The variables are as the followings:
+\begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
+    <!-- Machine dependent properties.Need to be modified -->
+    <property name="durmtools"      value="/usr/local/durmtools" />
+    <property name="semassist.home" value="${user.home}/Repository/durm/Projects/SemanticAssistants" />
+    <property name="csal.home"      value="${semassist.home}/CSAL" />
+
+    <property name="jaxws.home"               value="${durmtools}/jaxws-ri" />
+    <property name="protege-home"             value="${durmtools}/Protege" />
+    <property name="gate-home"                value="${durmtools}/GATE/gate" />
+    <property name="jdk.home"                 value="${durmtools}/jdk" />
+    <property name="log4j.home"               value="${gate-home}/lib/"/>
+\end{lstlisting}
+
+\begin{enumerate}
+\item \url{durmtools}: This is one of the most important variables in this properties file and needs to be defined properly. According to the prerequisites mentioned earlier, there are various applications that need to be installed prior to using the Semantic Assistants.
+Create a folder called \texttt{durmtools} and install all the required applications to this folder, or point this variable to where all your applications are installed e.g. \emph{Applications} on Mac or \emph{Programs} in Windows.
+\item \url{semassist.home}: This variable points to the place on your local machine that the Semantic Assistants package has been downloaded and extracted. Put the full path of the folder in here, exempting the user home directory path for it will be automatically replaced by \texttt{\$\{user.home\}}.
+\item \url{csal.home}: This variable points to the \texttt{CSAL} folder inside the Semantic Assistants package. If the structure is untouched, the path should read \texttt{"\$\{semassist.home\}/CSAL"}.
+\item \url{jaxws.home}: This variable points to the Java API for XML Web Services (JAX-WS) v2.1.x application installed in the path defined in \texttt{\$\{durmtools\}} variable.
+\item \url{protege-home}: This variable points to the Prot\'{e}g\'{e}-OWL API v3.4 application installed in the path defined in \texttt{\$\{durmtools\}} variable.
+\item \url{gate-home}: This variable points to the GATE v5.0 or newer application installed in the path defined in \texttt{\$\{durmtools\}} variable.
+\item \url{jdk.home}: This variable points to the Sun JDK 6 installed on your machine.
+\item \url{log4j.home}: This variable points to the GATE application logging component. It is located in the GATE application \texttt{lib} folder.
+\end{enumerate}
+
+
+The third part includes all the properties used by the OpenOffice.org Writer plug-in. Therefore, in order to use this plug-in, all these variables should be defined beforehand.
+\begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
+    <!-- Used by Open Office Writter Plug-In-->    
+    <property name="office.home.dir"          value="${durmtools}/OpenOffice"/>
+    <property name="uno-copy-dest"  	      value="${user.home}/Documents/uno-components" />
+    <property name="office.program.dir"       value="${office.home.dir}/program"/>
+    <property name="ooo-classes-basis"        value="${office.home.dir}/basis3.2/program/classes/" />
+    <property name="ooo-classes-common"       value="${office.home.dir}/ure/share/java/" />
+\end{lstlisting}
+\begin{enumerate}
+\item \url{office.home.dir}: This variable points to the OpenOffice 3.2 application installed in the path defined in \texttt{\$\{durmtools\}} variable explained earlier.
+\item \url{uno-copy-dest}: This variable identifies where the Semantic Assistants plug-in will be stored when it is successfully built. 
+\item \url{office.program.dir}: This variable points to the \texttt{program} folder inside \texttt{\$\{office.home.dir\}} path which contains the Writer program.
+\item \url{ooo-classes-basis}: This variable points to the folder that contains the bulk, brand-independent OpenOffice functionalities.
+\item \url{ooo-classes-common}: This variable points to the folder that containes common Java JAR libraries used by OpenOffice.
+\end{enumerate}
+
+The next part includes all the properties used by the Eclipse plug-in. Therefore, in order to use this plug-in, all these variables should be defined beforehand.
+\begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
+    <!-- Used by Eclipse Plug-In-->
+    <property name="eclipse.program.dir"      value="${durmtools}/eclipse-4.0"/>
+    <property name="eclipse.plugins"          value="${eclipse.program.dir}/plugins"/>
+\end{lstlisting}
+\begin{enumerate}
+\item \url{eclipse.program.dir}: This variable points to the Eclipse v3.5 or newer application installed in the path defined in \texttt{\$\{durmtools\}} variable explained earlier.
+\item \url{eclipse.plugins}: This variable points to the \texttt{plugins} folder located inside the Eclipse application installed on your machine.
+\end{enumerate}
+
+The last part includes all the properties used by the Semantic Assistants server at runtime.
+\begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
+    <!-- Used by the server at runtime as properties -->
+    <property name="gate.plugin.dir"          value="${gate-home}/plugins/"/>
+    <property name="gate.user.file"           value="${semassist.home}/Server/gate-home/user-gate.xml" />
+    <property name="service.repository"       value="${semassist.home}/Resources/OwlServiceDescriptions/"/>
+    <property name="ontology.repository"      value="${semassist.home}/Resources/ont-repository/" />
+
+    <property name="runtime.maxmem"       value="1638m" />
+    <property name="runtime.heap.initial" value="128m" />
+    <property name="runtime.heap.max"     value="1638m" />
+    
+    <!-- Port for which the Server listens for debugers to be attached -->
+    <property name="server.port.debug"    value="8885"/>
+    
+    <!-- Port used by the Server to communicate with the clients through wsdl-->
+    <property name="server.port.wsdl"     value="8879"/>
+\end{lstlisting}
+\begin{enumerate}
+\item \url{gate.plugin.dir}: This variable points to the GATE application \texttt{plugins} folder used for service executions.
+\item \url{gate.user.file}: This variable points to the GATE application user configuration file.
+\item \url{service.repository}: This variable points to the OWL service description files. New service description files are added to this folder once they're available and will be later detected by the server. 
+\item \url{ontology.repository}: This variable points to the folder containing the SemanticAssistants OWL files.
+\item \url{runtime.maxmem}: This variable contains the maximum amount of runtime memory used by JDK. Unless your JDK complains about the value, leave this as it is.
+\item \url{runtime.heap.initial}: This variable contains the initial amount of heap space used by JDK at runtime.
+\item \url{runtime.heap.max}: This variable contains the maximum amount of heap space used by JDK at runtime.
+\item \url{server.port.debug}: This variable contains the port number on users machine on which the server listens for debuggers to be attached.
+\item \url{server.port.wsdl}: This variable contains the port number on which the server communicates with the clients through WSDL.
+\end{enumerate}
+
+\section{Compilation} 
+\label{sec:inst-comp}
+To compile and start the
+server and compile the CSAL, follow these steps:
+
+\begin{enumerate}
+  \item cd to \emph{Server}
+  \item \texttt{ant run}. The server is built and should come up, with
+    some debug output on the console.
+  \item To test if the Server is operating open your favorite browser and paste  \url{http://<server host>:<server port>/SemAssist?wsdl}
+(Note the \texttt{<server host>} has a default value of the local machine name and the \texttt{<server port>} is the value of the property \texttt{server.port.wsdl}
+found in \url{SemanticAssistants/SemassistProperties.xml})
+  \item cd to \emph{CSAL}
+  \item 
+\begin{enumerate}
+\item  \texttt{ant dist}. This builds the client-side abstraction
+    layer (CSAL) that all (Java) clients should use to connect to the
+    architecture (i.e., the server). Note that the server must be
+    running for the client to be built, because the code generation
+    step imports the server's WSDL definitions. In addition the WSDL definitions
+    are cached localy.
+\item  \texttt{ant dist-offline}
+This builds the client-side abstraction
+layer (CSAL) with the cached WSDL definitions during a previous on-line compilation.
+In this case the server does not have to be running for the CSAL to be built.
+\end{enumerate}
+
+  \item To stop the server, simply change to its console window and
+    hit \texttt{Ctrl-C}
+\end{enumerate}
+We recommend you test if the server is running correctly by accessing
+it through the command-line client described below.
+
+\section{Configuration of the Example Services}
+Three example pipelines (NLP services) come with the architecture.
+They are located in the \url{Resources} directory. There are two
+parts: the semantic service descriptions in OWL format stored in the
+\url{OwlServiceDescriptions} directory and corresponding GATE
+pipelines (\url{.gapp} files) implementing these services in the
+\url{GatePipelines} directory.
+
+Because \url{.gapp} files contain hard-coded directory paths, you must
+generate them on the same system where you later run the server. Below
+are step-by-step instructions on how to generate and save these
+pipelines.
+
+In a similar matter the two example \url{.owl} files contain a hardcoded path which point to the corresponding GATE
+pipelines (\url{.gapp} files). Search and replace the following path in the \url{annie.owl} file:
+\url{<sa:appFileName xml:lang="en">~/Repository/durm/Projects/SemanticAssistants/Resources/GatePipelines/Annie.gapp</sa:appFileName>}.
+In the same fashion search and replace the path in the \url{yahoo.owl} file.
+
+\paragraph{Person and Location Extractor.} This NLP service runs the
+ANNIE IE system that comes with the standard GATE distribution.  It
+detects a number of named entities, such as persons, locations,
+organizations, etc.  
+
+To configure the ANNIE NLP service in your installation, perform the
+following two steps:
+\begin{enumerate}
+\item Start GATE and create an ANNIE pipeline ``with defaults''.
+  ANNIE, together with its components, will load automatically (for
+  details on ANNIE, please refer to GATE's user's guide).
+
+\item Store the created GATE pipeline under
+  \url{Resources/GatePipelines} using GATE's \emph{Save Application
+    State} menu function and name it (exactly) as \url{Annie.gapp}.
+\end{enumerate}
+An OWL service description for this pipeline is already implemented
+and stored in the directory
+\url{Resources/OwlServiceDescriptions/annie.owl}.  For details on the
+OWL-based description format, please refer to Section~\ref{sec:owl}.
+
+\paragraph{Yahoo Search.} This service performs a Web search for a
+user and returns the first $n$ documents (where $n$ is a
+user-configurable parameter). To create the corresponding GATE
+pipeline, you need to follow these steps:
+\begin{enumerate}
+\item Start GATE and create a new pipeline through \emph{File
+    $\rightarrow$ New application $\rightarrow$ Pipeline}. Note that
+  you must select ``Pipeline'' and not any of the other options
+  (``Corpus Pipeline'' etc.).
+\item Start the CREOLE plug-in manager with \emph{File
+    $\rightarrow$ Manage CREOLE plug-ins}, scroll down to ``Web\_Search\_Yahoo'',
+  select ``Load now'' and hit ``OK''.
+\item Create a new Yahoo PR component through \emph{File
+    $\rightarrow$ New processing resource $\rightarrow$ YahooPR}. Note
+  that you will need a Yahoo API key for the ``applicationID'' (see
+  the \href{http://gate.ac.uk/sale/tao/splitch19.html#x24-51700019.7}{GATE manual} for details).
+\item Insert the newly created Yahoo PR into the Pipeline
+  (double-click on the pipeline, and add the PR from the left to the
+  pipeline on the right). If you have problems with this step, please
+  consult the GATE manual for basic instructions on how to use the
+  GATE GUI.
+\item Save the pipeline as above with the name \url{Yahoo.gapp}.
+\end{enumerate}
+
+\paragraph{Web IR Extractor.} The third example service shows how to
+combine two existing services, by first calling the Yahoo IR service
+and then using the search results as input to the ANNIE IE
+service. This service is located in \url{yahooExtractor.owl}.
+
+
+
+\section{Client Installation}
+The installation and configuration of clients is covered in
+Chapter~\ref{chap:clients}.
+
+\begin{description}
+\item[Command-Line Client:] For information on how to compile and run
+  the command-line client, please refer to Section~\ref{sec:sacl:clc}.
+
+\item[The OpenOffice.org Writer Plug-In:] For details on how to
+  compile and run the OpenOffice.org Writer plug-in please refer to
+  Section~\ref{subsec:oo-inst}.
+\end{description}
+
+
+
+
+
+
+
+
+

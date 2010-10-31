@@ -1,0 +1,49 @@
+\chapter{The \sa Server} 
+
+\section{Starting the Server}
+Type \texttt{ant run} in the \url{SemanticAssistants/Server} directory
+to start the server. Please refer to Section~\ref{sec:inst-comp} for
+more installation and compilation details. The server will
+automatically load all available OWL service descriptions from the
+default location \url{Resources/OwlServiceDescriptions} and publish
+these to the clients.
+
+
+\section{Testing using the Command Line Client}
+To test if the server is running correctly and can be accessed from
+the clients, we recommend you run some tests using the command-line
+client described in Section~\ref{sec:sacl:clc}.
+
+
+\section{Integrating New NLP Services}\label{sec:nlpservices}
+For the server to know how to handle the different NLP services
+offered through the architecture, it needs a \emph{description} of
+each offered service. These are by default located in the
+\url{SemanticAssistants/Resources/OwlServiceDescriptions}
+directory. The GATE pipelines corresponding to these service
+descriptions are located (by default) in
+\url{Resources/GatePipelines}. The language service descriptions are
+ontologies, building on the \emph{SemanticAssistants.owl} ontology,
+which, in turn, extends the \emph{ConceptUpper.owl} ontology. Both of
+these are located in \url{ont-repository} under
+\url{SemanticAssistants/Resources}.
+
+In order to create a new language service description, it is often
+easier to copy an old one and edit
+it. Prot\'{e}g\'{e}\footnote{Prot\'{e}g\'{e},
+  \url{http://protege.stanford.edu}} is helpful as an ontology
+editor. Most important is to define the parameters that can be passed
+to this language service, as well as the description of the results
+that should be passed back to the client.
+
+
+
+In summary, to integrate a new NLP service, two steps are necessary:
+\begin{enumerate}
+\item Store the GATE pipeline implementing the service under
+  \url{Resources/GatePipelines} (using GATE's \emph{Save Application State}
+  menu function).
+\item Develop an OWL service description for this pipeline.  For
+  details on the OWL NLP description format, please refer to
+  Section~\ref{sec:owl}.
+\end{enumerate}
