@@ -1,0 +1,796 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
+    xmlns:p1="http://localhost/ProcessModel.owl#"
+  xml:base="http://localhost/ProcessModel.owl">
+  <owl:Ontology rdf:about="">
+    <owl:versionInfo rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Created with TopBraid Composer</owl:versionInfo>
+  </owl:Ontology>
+  <owl:Class rdf:ID="IntermediateSimpleActivity">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="SimpleActivity"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="IntermediateActivity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="IntermediateComplexActivity">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ComplexActivity"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#IntermediateActivity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#SimpleActivity">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Activity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="StartComplexActivity">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="StartActivity"/>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#ComplexActivity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#ComplexActivity">
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="consistOf"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Activity"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf rdf:resource="#Activity"/>
+  </owl:Class>
+  <owl:Class rdf:about="#StartActivity">
+    <rdfs:subClassOf rdf:resource="#Activity"/>
+  </owl:Class>
+  <owl:Class rdf:ID="EndComplexActivity">
+    <rdfs:subClassOf rdf:resource="#ComplexActivity"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="EndActivity"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Enhancement">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="ModificationRequest"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="StartSimpleActivity">
+    <rdfs:subClassOf rdf:resource="#SimpleActivity"/>
+    <rdfs:subClassOf rdf:resource="#StartActivity"/>
+  </owl:Class>
+  <owl:Class rdf:about="#IntermediateActivity">
+    <rdfs:subClassOf rdf:resource="#Activity"/>
+  </owl:Class>
+  <owl:Class rdf:ID="ProcessModel"/>
+  <owl:Class rdf:about="#EndActivity">
+    <rdfs:subClassOf rdf:resource="#Activity"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Correction">
+    <rdfs:subClassOf rdf:resource="#ModificationRequest"/>
+  </owl:Class>
+  <owl:Class rdf:ID="EndSimpleActivity">
+    <rdfs:subClassOf rdf:resource="#SimpleActivity"/>
+    <rdfs:subClassOf rdf:resource="#EndActivity"/>
+  </owl:Class>
+  <owl:Class rdf:ID="IEEEMaintenanceProcessModel">
+    <rdfs:subClassOf rdf:resource="#ProcessModel"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:about="#consistOf">
+    <rdfs:domain rdf:resource="#ComplexActivity"/>
+    <rdfs:range rdf:resource="#Activity"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="preActivity">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#IntermediateActivity"/>
+          <owl:Class rdf:about="#EndActivity"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#StartActivity"/>
+          <owl:Class rdf:about="#IntermediateActivity"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasActivity">
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#SimpleActivity"/>
+          <owl:Class rdf:about="#ComplexActivity"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#ProcessModel"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="postActivity">
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#StartActivity"/>
+          <owl:Class rdf:about="#IntermediateActivity"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#IntermediateActivity"/>
+          <owl:Class rdf:about="#EndActivity"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="description">
+    <rdfs:domain rdf:resource="#ModificationRequest"/>
+  </owl:DatatypeProperty>
+  <owl:TransitiveProperty rdf:ID="restActivity">
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#IntermediateActivity"/>
+          <owl:Class rdf:about="#EndActivity"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >this relationship is used to capture all the activities which are after a specific activity in terms of same level activities.</rdfs:comment>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#StartActivity"/>
+          <owl:Class rdf:about="#IntermediateActivity"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+  </owl:TransitiveProperty>
+  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.2.e">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >IEEE_Std14764-2006_5.4.2.2.e</rdfs:comment>
+    <p1:postActivity>
+      <p1:EndSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.2.f">
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IEEE_Std14764-2006_5.4.2.2.f</rdfs:comment>
+        <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.2.e"/>
+      </p1:EndSimpleActivity>
+    </p1:postActivity>
+    <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.2.f"/>
+    <p1:preActivity>
+      <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.2.d">
+        <p1:preActivity>
+          <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.2.c">
+            <p1:restActivity>
+              <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.1.d">
+                <p1:preActivity>
+                  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.1.c">
+                    <p1:preActivity>
+                      <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.1.b">
+                        <p1:restActivity>
+                          <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.3.2.1.c">
+                            <p1:restActivity>
+                              <p1:EndSimpleActivity rdf:ID="IEEE_Std14764-2006_5.3.2.1.d">
+                                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                                >IEEE Std 14764-2006 5.3.2.1.d</rdfs:comment>
+                                <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.3.2.1.c"/>
+                              </p1:EndSimpleActivity>
+                            </p1:restActivity>
+                            <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.3.2.1.d"/>
+                            <p1:preActivity>
+                              <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.3.2.1.b">
+                                <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.3.2.1.c"/>
+                                <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.3.2.1.c"/>
+                                <p1:preActivity>
+                                  <p1:StartSimpleActivity rdf:ID="IEEE_Std14764-2006_5.3.2.1.a">
+                                    <rdfs:comment rdf:datatype=
+                                    "http://www.w3.org/2001/XMLSchema#string"
+                                    >IEEE Std 14764-2006 5.3.2.1.a</rdfs:comment>
+                                    <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.3.2.1.b"/>
+                                    <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.3.2.1.b"/>
+                                  </p1:StartSimpleActivity>
+                                </p1:preActivity>
+                                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                                >IEEE_Std14764-2006_5.3.2.1.b</rdfs:comment>
+                              </p1:IntermediateSimpleActivity>
+                            </p1:preActivity>
+                            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                            >IEEE Std 14764-2006 5.3.2.1.c</rdfs:comment>
+                          </p1:IntermediateSimpleActivity>
+                        </p1:restActivity>
+                        <p1:preActivity>
+                          <p1:StartSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.1.a">
+                            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                            >IEEE Std14764-2006 5.4.2.1.a</rdfs:comment>
+                            <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.b"/>
+                            <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.b"/>
+                          </p1:StartSimpleActivity>
+                        </p1:preActivity>
+                        <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.3.2.1.c"/>
+                        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                        >IEEE Std14764-2006 5.4.2.1.b</rdfs:comment>
+                      </p1:IntermediateSimpleActivity>
+                    </p1:preActivity>
+                    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >IEEE Std14764-2006 5.4.2.1.c</rdfs:comment>
+                    <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.d"/>
+                    <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.d"/>
+                  </p1:IntermediateSimpleActivity>
+                </p1:preActivity>
+                <p1:postActivity>
+                  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.1.e">
+                    <p1:restActivity>
+                      <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.1.f">
+                        <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.e"/>
+                        <p1:postActivity>
+                          <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.1.g">
+                            <p1:restActivity>
+                              <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.1.h">
+                                <p1:postActivity>
+                                  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.1.i">
+                                    <rdfs:comment rdf:datatype=
+                                    "http://www.w3.org/2001/XMLSchema#string"
+                                    >IEEE Std14764-2006 5.4.2.1.i</rdfs:comment>
+                                    <p1:postActivity>
+                                      <p1:EndSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.1.j">
+                                        <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.i"/>
+                                        <rdfs:comment rdf:datatype=
+                                        "http://www.w3.org/2001/XMLSchema#string"
+                                        >IEEE Std14764-2006 5.4.2.1.j</rdfs:comment>
+                                      </p1:EndSimpleActivity>
+                                    </p1:postActivity>
+                                    <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.j"/>
+                                    <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.h"/>
+                                  </p1:IntermediateSimpleActivity>
+                                </p1:postActivity>
+                                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                                >IEEE Std14764-2006 5.4.2.1.h</rdfs:comment>
+                                <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.g"/>
+                                <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.i"/>
+                              </p1:IntermediateSimpleActivity>
+                            </p1:restActivity>
+                            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                            >IEEE Std14764-2006 5.4.2.1.g</rdfs:comment>
+                            <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.h"/>
+                            <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.f"/>
+                          </p1:IntermediateSimpleActivity>
+                        </p1:postActivity>
+                        <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.g"/>
+                        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                        >IEEE Std14764-2006 5.4.2.1.f</rdfs:comment>
+                      </p1:IntermediateSimpleActivity>
+                    </p1:restActivity>
+                    <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.f"/>
+                    <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.d"/>
+                    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >IEEE Std14764-2006 5.4.2.1.e</rdfs:comment>
+                  </p1:IntermediateSimpleActivity>
+                </p1:postActivity>
+                <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.e"/>
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >IEEE Std14764-2006 5.4.2.1.d</rdfs:comment>
+              </p1:IntermediateSimpleActivity>
+            </p1:restActivity>
+            <p1:preActivity>
+              <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.2.b">
+                <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.2.c"/>
+                <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.2.c"/>
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >IEEE_Std14764-2006_5.4.2.2.b</rdfs:comment>
+                <p1:preActivity>
+                  <p1:StartSimpleActivity rdf:ID="IEEE_Std14764-2006_5.4.2.2.a">
+                    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >IEEE_Std14764-2006_5.4.2.2.a</rdfs:comment>
+                    <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.2.b"/>
+                    <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.2.b"/>
+                  </p1:StartSimpleActivity>
+                </p1:preActivity>
+              </p1:IntermediateSimpleActivity>
+            </p1:preActivity>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >IEEE_Std14764-2006_5.4.2.2.c</rdfs:comment>
+            <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1.d"/>
+          </p1:IntermediateSimpleActivity>
+        </p1:preActivity>
+        <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.2.e"/>
+        <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.2.e"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IEEE_Std14764-2006_5.4.2.2.d</rdfs:comment>
+      </p1:IntermediateSimpleActivity>
+    </p1:preActivity>
+  </p1:IntermediateSimpleActivity>
+  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.5.b">
+    <p1:postActivity>
+      <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.5.c">
+        <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.5.b"/>
+        <p1:restActivity>
+          <p1:EndSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.5.d">
+            <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.5.c"/>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >IEEE Std14764-2006 5.2.2.5.d</rdfs:comment>
+          </p1:EndSimpleActivity>
+        </p1:restActivity>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IEEE Std14764-2006 5.2.2.5.c</rdfs:comment>
+        <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.5.d"/>
+      </p1:IntermediateSimpleActivity>
+    </p1:postActivity>
+    <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.5.c"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >IEEE Std14764-2006 5.2.2.5.b</rdfs:comment>
+    <p1:preActivity>
+      <p1:StartSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.5.a">
+        <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.5.b"/>
+        <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.5.b"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IEEE Std14764-2006 5.2.2.5.a</rdfs:comment>
+      </p1:StartSimpleActivity>
+    </p1:preActivity>
+  </p1:IntermediateSimpleActivity>
+  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.h">
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >IEEE Std14764-2006-5.2.2.1.h</rdfs:comment>
+    <p1:preActivity>
+      <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.g">
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IEEE Std14764-2006 5.2.2.1.g</rdfs:comment>
+        <p1:preActivity>
+          <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.f">
+            <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.g"/>
+            <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.g"/>
+            <p1:preActivity>
+              <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.e">
+                <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.f"/>
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >IEEE Std14764-2006 5.2.2.1.e</rdfs:comment>
+                <p1:preActivity>
+                  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.d">
+                    <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.e"/>
+                    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >IEEE Std14764-2006 5.2.2.1.d</rdfs:comment>
+                    <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.e"/>
+                    <p1:preActivity>
+                      <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.c">
+                        <p1:preActivity>
+                          <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.b">
+                            <p1:preActivity>
+                              <p1:StartSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.a">
+                                <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.b"/>
+                                <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.b"/>
+                                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                                >IEEE Std14764-2006 5.2.2.1.a</rdfs:comment>
+                              </p1:StartSimpleActivity>
+                            </p1:preActivity>
+                            <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.c"/>
+                            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                            >IEEE Std14764-2006 5.2.2.1.b</rdfs:comment>
+                            <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.c"/>
+                          </p1:IntermediateSimpleActivity>
+                        </p1:preActivity>
+                        <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.d"/>
+                        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                        >IEEE Std14764-2006 5.2.2.1.c</rdfs:comment>
+                        <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.d"/>
+                      </p1:IntermediateSimpleActivity>
+                    </p1:preActivity>
+                  </p1:IntermediateSimpleActivity>
+                </p1:preActivity>
+                <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.f"/>
+              </p1:IntermediateSimpleActivity>
+            </p1:preActivity>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >IEEE Std14764-2006 5.2.2.1.f</rdfs:comment>
+          </p1:IntermediateSimpleActivity>
+        </p1:preActivity>
+        <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.h"/>
+        <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.h"/>
+      </p1:IntermediateSimpleActivity>
+    </p1:preActivity>
+    <p1:postActivity>
+      <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.i">
+        <p1:restActivity>
+          <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.j">
+            <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.i"/>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >IEEE std14764-2006-5.2.2.1.j</rdfs:comment>
+            <p1:postActivity>
+              <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.k">
+                <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.j"/>
+                <p1:restActivity>
+                  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.l">
+                    <p1:restActivity>
+                      <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.m">
+                        <p1:postActivity>
+                          <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.n">
+                            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                            >IEEE_std14764-2006-5.2.2.1.n</rdfs:comment>
+                            <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.m"/>
+                            <p1:restActivity>
+                              <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.o">
+                                <p1:postActivity>
+                                  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.p">
+                                    <p1:restActivity>
+                                      <p1:EndSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1.q">
+                                        <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.p"/>
+                                        <rdfs:comment rdf:datatype=
+                                        "http://www.w3.org/2001/XMLSchema#string"
+                                        >IEEE_std14764-2006 5.2.2.1.q</rdfs:comment>
+                                      </p1:EndSimpleActivity>
+                                    </p1:restActivity>
+                                    <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.o"/>
+                                    <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.q"/>
+                                    <rdfs:comment rdf:datatype=
+                                    "http://www.w3.org/2001/XMLSchema#string"
+                                    >IEEE_Std14764-2006 5.2.2.1.p</rdfs:comment>
+                                  </p1:IntermediateSimpleActivity>
+                                </p1:postActivity>
+                                <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.p"/>
+                                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                                >IEEE_std14764-2006-5.2.2.1.o</rdfs:comment>
+                                <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.n"/>
+                              </p1:IntermediateSimpleActivity>
+                            </p1:restActivity>
+                            <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.o"/>
+                          </p1:IntermediateSimpleActivity>
+                        </p1:postActivity>
+                        <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.n"/>
+                        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                        >IEEE std14764-2006 5.2.2.1.m</rdfs:comment>
+                        <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.l"/>
+                      </p1:IntermediateSimpleActivity>
+                    </p1:restActivity>
+                    <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.k"/>
+                    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >IEEE_std14764-2006 5.2.2.1.l</rdfs:comment>
+                    <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.m"/>
+                  </p1:IntermediateSimpleActivity>
+                </p1:restActivity>
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >IEEE std14764-2006-5.2.2.1.k</rdfs:comment>
+                <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.l"/>
+              </p1:IntermediateSimpleActivity>
+            </p1:postActivity>
+            <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.k"/>
+          </p1:IntermediateSimpleActivity>
+        </p1:restActivity>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IEEE std14764-2006-5.2.2.1.i</rdfs:comment>
+        <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.h"/>
+        <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.j"/>
+      </p1:IntermediateSimpleActivity>
+    </p1:postActivity>
+    <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.1.i"/>
+  </p1:IntermediateSimpleActivity>
+  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.3.d">
+    <p1:restActivity>
+      <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.3.e">
+        <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.d"/>
+        <p1:postActivity>
+          <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.3.f">
+            <p1:restActivity>
+              <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.3.g">
+                <p1:restActivity>
+                  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.3.h">
+                    <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.g"/>
+                    <p1:restActivity>
+                      <p1:EndSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.3.i">
+                        <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.i"/>
+                        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                        >IEEE Std14764-2006 5.2.2.3.i</rdfs:comment>
+                      </p1:EndSimpleActivity>
+                    </p1:restActivity>
+                    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >IEEE Std14764-2006 5.2.2.3.h</rdfs:comment>
+                    <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.i"/>
+                  </p1:IntermediateSimpleActivity>
+                </p1:restActivity>
+                <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.f"/>
+                <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.h"/>
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >IEEE Std14764-2006 5.2.2.3.g</rdfs:comment>
+              </p1:IntermediateSimpleActivity>
+            </p1:restActivity>
+            <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.g"/>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >IEEE Std14764-2006 5.2.2.3.f</rdfs:comment>
+            <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.e"/>
+          </p1:IntermediateSimpleActivity>
+        </p1:postActivity>
+        <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.f"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IEEE Std14764-2006 5.2.2.3.e</rdfs:comment>
+      </p1:IntermediateSimpleActivity>
+    </p1:restActivity>
+    <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.e"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >IEEE Std14764-2006 5.2.2.3.d</rdfs:comment>
+    <p1:preActivity>
+      <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.3.c">
+        <p1:preActivity>
+          <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.3.b">
+            <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.c"/>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >IEEE Std14764-2006 5.2.2.3.b</rdfs:comment>
+            <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.c"/>
+            <p1:preActivity>
+              <p1:StartSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.3.a">
+                <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.b"/>
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >IEEE Std 14764-2006 5.2.2.3.a</rdfs:comment>
+                <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.b"/>
+              </p1:StartSimpleActivity>
+            </p1:preActivity>
+          </p1:IntermediateSimpleActivity>
+        </p1:preActivity>
+        <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.d"/>
+        <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3.d"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IEEE Std14764-2006 5.2.2.3.c</rdfs:comment>
+      </p1:IntermediateSimpleActivity>
+    </p1:preActivity>
+  </p1:IntermediateSimpleActivity>
+  <p1:StartComplexActivity rdf:ID="IEEE_Std14764-2006_5.2_Problem_and_Modification_Analysis">
+    <p1:postActivity>
+      <p1:IntermediateComplexActivity rdf:ID="IEEE_Std14764-2006_5.3_Modification_Implementation">
+        <p1:restActivity>
+          <p1:EndComplexActivity rdf:ID="IEEE_Std14764-2006_5.4_Maintenance_Review_Or_Acceptance">
+            <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.3_Modification_Implementation"/>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >IEEE Std14764-2006 5.4 Maintenance Review or Acceptance.</rdfs:comment>
+            <p1:consistOf>
+              <p1:StartComplexActivity rdf:ID="IEEE_Std14764-2006_5.4.2.1_Reviews">
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.1.i"/>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.1.b"/>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.1.a"/>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.1.f"/>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.1.h"/>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.1.e"/>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.1.d"/>
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >IEEE Std14764-2006 5.4.2.1</rdfs:comment>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.1.c"/>
+                <p1:postActivity>
+                  <p1:EndComplexActivity rdf:ID="IEEE_Std14764-2006_5.4.2.2_Approval">
+                    <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.1_Reviews"/>
+                    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.2.b"/>
+                    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.2.d"/>
+                    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.2.f"/>
+                    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.2.a"/>
+                    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.2.e"/>
+                    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.2.c"/>
+                    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >IEEE Std14764-2006 5.4.2.2</rdfs:comment>
+                  </p1:EndComplexActivity>
+                </p1:postActivity>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.1.j"/>
+                <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.4.2.2_Approval"/>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.1.g"/>
+              </p1:StartComplexActivity>
+            </p1:consistOf>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.4.2.2_Approval"/>
+          </p1:EndComplexActivity>
+        </p1:restActivity>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IEEE Std14764-2006 5.3 Modification Implementation.</rdfs:comment>
+        <p1:consistOf>
+          <p1:StartComplexActivity rdf:ID="IEEE_Std14764-2006_5.3.2.1_Analysis">
+            <p1:postActivity>
+              <p1:EndComplexActivity rdf:ID="IEEE_Std14764-2006_5.3.2.2_Development_process">
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >IEEE Std14764-2006 5.3.2.2 (No detailed activity described; refer to the activities in ISO/IEC 12207 Development Process)</rdfs:comment>
+                <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.3.2.1_Analysis"/>
+              </p1:EndComplexActivity>
+            </p1:postActivity>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.3.2.1.d"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.3.2.1.b"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.3.2.1.c"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.3.2.1.a"/>
+            <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.3.2.2_Development_process"/>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >IEEE Std14764-2006 5.3.2.1</rdfs:comment>
+          </p1:StartComplexActivity>
+        </p1:consistOf>
+        <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.3.2.2_Development_process"/>
+        <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2_Problem_and_Modification_Analysis"/>
+        <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.4_Maintenance_Review_Or_Acceptance"/>
+      </p1:IntermediateComplexActivity>
+    </p1:postActivity>
+    <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.3_Modification_Implementation"/>
+    <p1:consistOf>
+      <p1:IntermediateComplexActivity rdf:ID="IEEE_Std14764-2006_5.2.2.2_Verification">
+        <p1:restActivity>
+          <p1:IntermediateComplexActivity rdf:ID="IEEE_Std14764-2006_5.2.2.3_Options">
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.3.c"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.3.b"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.3.g"/>
+            <p1:postActivity>
+              <p1:IntermediateComplexActivity rdf:ID="IEEE_Std14764-2006_5.2.2.4_Documentation">
+                <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3_Options"/>
+                <p1:postActivity>
+                  <p1:EndComplexActivity rdf:ID="IEEE_Std14764-2006_5.2.2.5_Approval">
+                    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >IEEE Std14764-2006 5.2.2.5 Obtians approval for the selected modification option.</rdfs:comment>
+                    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.5.a"/>
+                    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.5.d"/>
+                    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.5.c"/>
+                    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.5.b"/>
+                    <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.4_Documentation"/>
+                  </p1:EndComplexActivity>
+                </p1:postActivity>
+                <p1:consistOf>
+                  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.4.b">
+                    <p1:postActivity>
+                      <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.4.c">
+                        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                        >IEEE Std14764-2006 5.2.2.4.c</rdfs:comment>
+                        <p1:restActivity>
+                          <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.4.d">
+                            <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.4.c"/>
+                            <p1:restActivity>
+                              <p1:EndSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.4.e">
+                                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                                >IEEE Std14764-2006 5.2.2.4.e</rdfs:comment>
+                                <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.4.d"/>
+                              </p1:EndSimpleActivity>
+                            </p1:restActivity>
+                            <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.4.e"/>
+                            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                            >IEEE Std14764-2006 5.2.2.4.d</rdfs:comment>
+                          </p1:IntermediateSimpleActivity>
+                        </p1:restActivity>
+                        <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.4.b"/>
+                        <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.4.d"/>
+                      </p1:IntermediateSimpleActivity>
+                    </p1:postActivity>
+                    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >IEEE Std14764-2006 5.2.2.4.b</rdfs:comment>
+                    <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.4.c"/>
+                    <p1:preActivity>
+                      <p1:StartSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.4.a">
+                        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                        >IEEE Std14764-2006 5.2.2.4.a</rdfs:comment>
+                        <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.4.b"/>
+                        <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.4.b"/>
+                      </p1:StartSimpleActivity>
+                    </p1:preActivity>
+                  </p1:IntermediateSimpleActivity>
+                </p1:consistOf>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.4.a"/>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.4.e"/>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.4.d"/>
+                <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.5_Approval"/>
+                <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.4.c"/>
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >IEEE Std14764-2006 5.2.2.4</rdfs:comment>
+              </p1:IntermediateComplexActivity>
+            </p1:postActivity>
+            <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.4_Documentation"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.3.f"/>
+            <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.2_Verification"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.3.a"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.3.e"/>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >IEEE Std14764-2006 5.2.2.3 Deveops options for implementing the modification.</rdfs:comment>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.3.h"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.3.i"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.3.d"/>
+          </p1:IntermediateComplexActivity>
+        </p1:restActivity>
+        <p1:consistOf>
+          <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.2.b">
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >IEEE Std14764-2006 5.2.2.2.b</rdfs:comment>
+            <p1:restActivity>
+              <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.2.c">
+                <p1:postActivity>
+                  <p1:IntermediateSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.2.d">
+                    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                    >IEEE Std14764-2006 5.2.2.2.d</rdfs:comment>
+                    <p1:restActivity>
+                      <p1:EndSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.2.e">
+                        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                        >IEEE Std14764-2006 5.2.2.2.e</rdfs:comment>
+                        <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.2.d"/>
+                      </p1:EndSimpleActivity>
+                    </p1:restActivity>
+                    <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.2.e"/>
+                    <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.2.c"/>
+                  </p1:IntermediateSimpleActivity>
+                </p1:postActivity>
+                <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.2.d"/>
+                <p1:preActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.2.b"/>
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >IEEE Std14764-2006 5.2.2.2.c</rdfs:comment>
+              </p1:IntermediateSimpleActivity>
+            </p1:restActivity>
+            <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.2.c"/>
+            <p1:preActivity>
+              <p1:StartSimpleActivity rdf:ID="IEEE_Std14764-2006_5.2.2.2.a">
+                <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.2.b"/>
+                <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.2.b"/>
+                <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+                >IEEE Std 14764-2006 5.2.2.2.a</rdfs:comment>
+              </p1:StartSimpleActivity>
+            </p1:preActivity>
+          </p1:IntermediateSimpleActivity>
+        </p1:consistOf>
+        <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.2.e"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >IEEE Std14764-2006 5.2.2.2 Replicates or verifies the problems.</rdfs:comment>
+        <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.2.d"/>
+        <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.2.a"/>
+        <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.2.c"/>
+        <p1:preActivity>
+          <p1:StartComplexActivity rdf:ID="IEEE_Std14764-2006_5.2.2.1_MR_Or_PR_analysis">
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.h"/>
+            <p1:restActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.2_Verification"/>
+            <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >IEEE Std14764-2006 5.2.2.1 MR/PR analysis</rdfs:comment>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.k"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.i"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.l"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.b"/>
+            <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.2_Verification"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.a"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.m"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.o"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.c"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.j"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.p"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.d"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.f"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.n"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.q"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.e"/>
+            <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1.g"/>
+          </p1:StartComplexActivity>
+        </p1:preActivity>
+        <p1:postActivity rdf:resource="#IEEE_Std14764-2006_5.2.2.3_Options"/>
+      </p1:IntermediateComplexActivity>
+    </p1:consistOf>
+    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.5_Approval"/>
+    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.3_Options"/>
+    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.4_Documentation"/>
+    <p1:consistOf rdf:resource="#IEEE_Std14764-2006_5.2.2.1_MR_Or_PR_analysis"/>
+    <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >IEEE Std14764-2006 5.2</rdfs:comment>
+  </p1:StartComplexActivity>
+  <p1:Enhancement rdf:ID="Adaptive">
+    <p1:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >the modification of a software product, performed after delivery, to keep a software product usable in a chaned or changing environment</p1:description>
+  </p1:Enhancement>
+  <p1:Correction rdf:ID="Preventive">
+    <p1:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >The modification of a software product after delivery to detect and correct latent faults in the software product before they become operational faults.</p1:description>
+  </p1:Correction>
+  <p1:IEEEMaintenanceProcessModel rdf:ID="MaintenanceProcessModel_IEEE_14764">
+    <p1:hasActivity rdf:resource="#IEEE_Std14764-2006_5.3_Modification_Implementation"/>
+    <p1:hasActivity rdf:resource="#IEEE_Std14764-2006_5.4_Maintenance_Review_Or_Acceptance"/>
+    <p1:hasActivity rdf:resource="#IEEE_Std14764-2006_5.2_Problem_and_Modification_Analysis"/>
+  </p1:IEEEMaintenanceProcessModel>
+  <p1:Enhancement rdf:ID="Perfective">
+    <p1:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >the modification of a software product after delivery to detect and correct latent faults in the software product before they are manifested as failures.</p1:description>
+  </p1:Enhancement>
+  <p1:Correction rdf:ID="Corrective">
+    <p1:description rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >the reactive modification of a software product performed after delivery to correct discovered problems.</p1:description>
+  </p1:Correction>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.2, Build 355)  http://protege.stanford.edu -->

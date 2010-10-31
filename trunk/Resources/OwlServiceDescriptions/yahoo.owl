@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns="http://localhost/Yahoo.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:sa="http://localhost/SemanticAssistants.owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:cu="http://localhost/ConceptUpper.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://localhost/Yahoo.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://localhost/SemanticAssistants.owl"/>
+  </owl:Ontology>
+  <sa:GATERuntimeParameter rdf:ID="CorpusParameter">
+    <cu:isOptional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</cu:isOptional>
+    <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >corpus</sa:hasGATEName>
+    <sa:prName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Yahoo PR</sa:prName>
+    <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATE_RTP_Format"/>
+  </sa:GATERuntimeParameter>
+  <sa:GATERuntimeParameter rdf:ID="NumResultsParameter">
+    <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATE_RTP_Format"/>
+    <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >limit</sa:hasGATEName>
+    <cu:hasLabel xml:lang="en">Number of search results</cu:hasLabel>
+    <sa:paramType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >int</sa:paramType>
+    <sa:prName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Yahoo PR</sa:prName>
+    <cu:isOptional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >true</cu:isOptional>
+    <sa:defaultValue rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >10</sa:defaultValue>
+  </sa:GATERuntimeParameter>
+  <sa:GATERuntimeParameter rdf:ID="QueryParameter">
+    <cu:isOptional rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</cu:isOptional>
+    <sa:prName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Yahoo PR</sa:prName>
+    <sa:paramType rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >string</sa:paramType>
+    <cu:hasLabel rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    ></cu:hasLabel>
+    <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >query</sa:hasGATEName>
+    <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATE_RTP_Format"/>
+  </sa:GATERuntimeParameter>
+  <sa:GATE_OutputArtifact rdf:ID="CorpusOutputArtifact">
+    <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#GATETransientCorpus"/>
+    <cu:isProducedBy>
+      <sa:GATEPipeline rdf:ID="YahooPipeline">
+        <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Yahoo Search</sa:hasGATEName>
+        <cu:hasParameter rdf:resource="#NumResultsParameter"/>
+        <sa:mergeInputDocuments rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >false</sa:mergeInputDocuments>
+        <sa:hasInputNaturalLanguage rdf:resource="http://localhost/ConceptUpper.owl#anyLanguage"/>
+        <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#GATEPipeline_Format"/>
+        <sa:hasOutputNaturalLanguage rdf:resource="http://localhost/ConceptUpper.owl#anyLanguage"/>
+        <rdf:type rdf:resource="http://localhost/SemanticAssistants.owl#NLPTool"/>
+        <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Performs a Yahoo! search and returns the first 10 results</rdfs:comment>
+        <cu:producesOutput rdf:resource="#CorpusOutputArtifact"/>
+        <sa:appFileName xml:lang="en">~/Repository/durm/Projects/SemanticAssistants/Resources/GatePipelines/Yahoo.gapp</sa:appFileName>
+        <sa:giveInputToParameter rdf:resource="#QueryParameter"/>
+        <cu:hasLabel xml:lang="en">Yahoo Search</cu:hasLabel>
+        <sa:publishAsNLPService rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</sa:publishAsNLPService>
+      </sa:GATEPipeline>
+    </cu:isProducedBy>
+    <sa:isPerDocument rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+    >false</sa:isPerDocument>
+    <sa:necessaryParameterSetting>
+      <sa:ParameterValuePair rdf:ID="CorpusValuePair">
+        <sa:parameter rdf:resource="#CorpusParameter"/>
+        <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATE_RTP_Format"/>
+      </sa:ParameterValuePair>
+    </sa:necessaryParameterSetting>
+  </sa:GATE_OutputArtifact>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.3.1, Build 430)  http://protege.stanford.edu -->

@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+<!-- $Id: build.xml,v 1.24 2007/10/12 08:49:59 gitzing Exp $ -->
+<project name="Server" default="run" basedir=".">
+
+    <!-- Machine specific settings should go in SemassistProperties.xml -->
+    <import file ="../SemassistProperties.xml"/>
+
+    <!-- Top Directories -->
+    <property name="build.home"       value="${basedir}/bin"/>
+    <property name="docs.home"        value="${basedir}/docs"/>
+    <property name="src.home"         value="${basedir}/src"/>
+    <property name="dist.home"        value="${basedir}/dist"/>
+
+
+    <!-- Tool Directories -->
+    <property name="protege-owl.home" value="${protege-home}/plugins/edu.stanford.smi.protegex.owl/" />
+
+    <!-- Library Files -->
+    <property name="gate.jar"         value="${gate-home}/bin/gate.jar" />
+    <property name="protege.jar"      value="${protege-home}/protege.jar" />
+
+
+    <!-- ___________________ You should not have to edit anything below this line ________________________  -->
+    <description>
+        Server side Java code of the semantic text assistants infrastructure
+    </description>
+
+  
+
+    <path id="compile.classpath">
+        <pathelement location="${gate.jar}" />
+        <pathelement location="${protege.jar}" />
+        <pathelement location="${protege-owl.home}/protege-owl.jar" />
+        <pathelement location="${protege-owl.home}/jena.jar" />
+        <pathelement location="${protege-owl.home}/arq.jar" />
+    </path>
+
+      
+  
+	<!-- This target compiles all the classes -->  
+    <target name="compile" description="Compile the source" >
+    <!-- Compile the java code from ${srcDir} into ${buildDir} -->
+        <mkdir dir="${build.home}" />
+        <javac srcdir="${src.home}" debug="true" debuglevel="lines,vars,source" destdir="${build.home}" >
+            <classpath refid="compile.classpath" />
+        </javac>
+    </target>
+
+
+  
+  <!-- Generate a web service -->
+    <target name="wsgen" depends="compile" description="Generate a web service">
+        <taskdef name="wsgen" classname="com.sun.tools.ws.ant.WsGen">
+            <classpath>
+                <pathelement location="${jaxws.home}/lib/jaxws-tools.jar" />
+                <pathelement location="${jaxws.home}/lib/jaxb-xjc.jar" />
+            </classpath>
+        </taskdef>
+    
+        <wsgen sei="info.semanticsoftware.semassist.server.SemanticServiceBroker" destdir="${build.home}"
+      sourcedestdir="${build.home}" verbose="true" xendorsed="true" debug="false" >
+            <classpath>
+                <pathelement location="${build.home}" />
+                <pathelement location="${gate.jar}"/>
+            </classpath>
+        </wsgen>
+    </target>
+
+    <target name="dist" depends="wsgen"  description="generate the distribution" >
+    <!-- Create the distribution directory -->
+        <mkdir dir="${dist.home}"/>
+        <jar jarfile="${dist.home}/SemassistServerWS.jar" basedir="${build.home}">
+            <manifest>
+                <attribute name="Main-Class" value="info.semanticsoftware.semassist.server.Bootstrap"/>
+            </manifest>
+        </jar>
+    </target>
+  
+  
+
+<!-- Run the web service -->
+    <target name="run" depends="compile,dist"  description="run the application">
+        <java classname="info.semanticsoftware.semassist.server.Bootstrap" fork="true" maxmemory="${runtime.maxmem}" >
+            <jvmarg value="-Xms${runtime.heap.initial}"/>
+            <jvmarg value="-Xmx${runtime.heap.max}"/>
+            <jvmarg value="-Xdebug"/>
+            <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,address=${server.port.debug},suspend=n"/>
+            <classpath>
+                <pathelement location="${build.home}" />
+                <pathelement location="${gate.jar}" />
+                <pathelement location="${protege.jar}" />
+                <pathelement location="${protege-owl.home}/protege-owl.jar" />
+                <pathelement location="${protege-owl.home}/iri.jar" />
+                <pathelement location="${protege-owl.home}/jena.jar" />
+                <pathelement location="${protege-owl.home}/orphanNodesAlg.jar" />
+                <pathelement location="${protege-owl.home}/arq.jar" />
+                <pathelement location="${protege-home}/looks-2.1.3.jar" />
+                <pathelement location="${fuzzylib.home}" />
+            <!-- To be removed in release -->
+                <pathelement location="${durmclasses}" />
+                <fileset dir="${durmtools}/jwnl/" >
+                    <include name="*.jar" />
+                </fileset>
+            <!-- END To be removed in release -->
+
+                <fileset dir="${gate-home}/lib" >
+                    <include name="*.jar" />
+                </fileset>
+            </classpath>
+        </java>
+    </target>
+  
+	
+  <!-- Clear all build output -->
+    <target name="clean">
+        <delete includeemptydirs="true">
+            <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
+        </delete>
+    </target>
+</project>
+

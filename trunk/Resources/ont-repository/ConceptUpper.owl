@@ -1,0 +1,420 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns="http://localhost/ConceptUpper.owl#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://localhost/ConceptUpper.owl">
+  <owl:Ontology rdf:about=""/>
+  <owl:Class rdf:ID="ArtificialLanguage">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Language"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="NaturalLanguage"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="IdentifiableArtifact">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:ID="Artifact"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            <owl:onProperty>
+              <owl:DatatypeProperty rdf:ID="hasIdentifier"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="Document">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Artifact"/>
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="hasLanguage"/>
+            </owl:onProperty>
+            <owl:someValuesFrom>
+              <owl:Class rdf:about="#Language"/>
+            </owl:someValuesFrom>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:ID="User">
+    <owl:disjointWith>
+      <owl:Class rdf:ID="Task"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Language"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Artifact"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="PLAINTEXT">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Format"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PDF"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="PNG"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="JPG"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="HTML"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:ID="OWL"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="Tool">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Artifact"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Task">
+    <owl:disjointWith rdf:resource="#User"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Language"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Artifact"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Format"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="#PNG">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Format"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#PLAINTEXT"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#PDF"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#JPG"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#HTML"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#OWL"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:ID="LocatableArtifact">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Artifact"/>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            <owl:onProperty>
+              <owl:DatatypeProperty rdf:ID="hasLocation"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="#OWL">
+    <owl:disjointWith rdf:resource="#PLAINTEXT"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#PDF"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#PNG"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#JPG"/>
+    </owl:disjointWith>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#HTML"/>
+    </owl:disjointWith>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Format"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="IOArtifact">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#Artifact"/>
+          <owl:Class>
+            <owl:unionOf rdf:parseType="Collection">
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:ID="servesAsInputFor"/>
+                </owl:onProperty>
+                <owl:someValuesFrom rdf:resource="#Tool"/>
+              </owl:Restriction>
+              <owl:Restriction>
+                <owl:onProperty>
+                  <owl:ObjectProperty rdf:ID="isProducedBy"/>
+                </owl:onProperty>
+                <owl:someValuesFrom rdf:resource="#Tool"/>
+              </owl:Restriction>
+            </owl:unionOf>
+          </owl:Class>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="#JPG">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Format"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#PLAINTEXT"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#PDF"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#PNG"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#HTML"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#OWL"/>
+  </owl:Class>
+  <owl:Class rdf:about="#NaturalLanguage">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Language"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#ArtificialLanguage"/>
+  </owl:Class>
+  <owl:Class rdf:about="#HTML">
+    <owl:disjointWith rdf:resource="#PLAINTEXT"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#PDF"/>
+    </owl:disjointWith>
+    <owl:disjointWith rdf:resource="#PNG"/>
+    <owl:disjointWith rdf:resource="#JPG"/>
+    <owl:disjointWith rdf:resource="#OWL"/>
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Format"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="NaturalLanguageDocument">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:onProperty>
+              <owl:ObjectProperty rdf:ID="hasNaturalLanguage"/>
+            </owl:onProperty>
+            <owl:someValuesFrom rdf:resource="#NaturalLanguage"/>
+          </owl:Restriction>
+          <owl:Class rdf:about="#Document"/>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+  </owl:Class>
+  <owl:Class rdf:about="#PDF">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Format"/>
+    </rdfs:subClassOf>
+    <owl:disjointWith rdf:resource="#PLAINTEXT"/>
+    <owl:disjointWith rdf:resource="#PNG"/>
+    <owl:disjointWith rdf:resource="#JPG"/>
+    <owl:disjointWith rdf:resource="#HTML"/>
+    <owl:disjointWith rdf:resource="#OWL"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Parameter">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Artifact"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="ProgrammingLanguage">
+    <rdfs:subClassOf rdf:resource="#ArtificialLanguage"/>
+  </owl:Class>
+  <owl:Class rdf:ID="GenericDocumentFormat">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Format"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#Format">
+    <owl:equivalentClass>
+      <owl:Class>
+        <owl:intersectionOf rdf:parseType="Collection">
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            <owl:onProperty>
+              <owl:DatatypeProperty rdf:ID="humanReadableFormat"/>
+            </owl:onProperty>
+          </owl:Restriction>
+          <owl:Restriction>
+            <owl:someValuesFrom rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+            <owl:onProperty>
+              <owl:DatatypeProperty rdf:ID="mimeType"/>
+            </owl:onProperty>
+          </owl:Restriction>
+        </owl:intersectionOf>
+      </owl:Class>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="#Task"/>
+  </owl:Class>
+  <owl:Class rdf:about="#Artifact">
+    <owl:equivalentClass>
+      <owl:Restriction>
+        <owl:onProperty>
+          <owl:ObjectProperty rdf:ID="hasFormat"/>
+        </owl:onProperty>
+        <owl:someValuesFrom rdf:resource="#Format"/>
+      </owl:Restriction>
+    </owl:equivalentClass>
+    <owl:disjointWith rdf:resource="#User"/>
+    <owl:disjointWith rdf:resource="#Task"/>
+    <owl:disjointWith>
+      <owl:Class rdf:about="#Language"/>
+    </owl:disjointWith>
+  </owl:Class>
+  <owl:Class rdf:about="#Language">
+    <owl:disjointWith rdf:resource="#User"/>
+    <owl:disjointWith rdf:resource="#Task"/>
+    <owl:disjointWith rdf:resource="#Artifact"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="knowsNaturalLanguage">
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:ID="knowsLanguage"/>
+    </rdfs:subPropertyOf>
+    <rdfs:range rdf:resource="#NaturalLanguage"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasNaturalLanguage">
+    <rdfs:subPropertyOf>
+      <owl:ObjectProperty rdf:about="#hasLanguage"/>
+    </rdfs:subPropertyOf>
+    <rdfs:range rdf:resource="#NaturalLanguage"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#knowsLanguage">
+    <rdfs:domain rdf:resource="#User"/>
+    <rdfs:range rdf:resource="#Language"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="consumesInput">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:about="#servesAsInputFor"/>
+    </owl:inverseOf>
+    <rdfs:range rdf:resource="#Artifact"/>
+    <rdfs:domain rdf:resource="#Tool"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#isProducedBy">
+    <owl:inverseOf>
+      <owl:ObjectProperty rdf:ID="producesOutput"/>
+    </owl:inverseOf>
+    <rdfs:domain rdf:resource="#Artifact"/>
+    <rdfs:range rdf:resource="#Tool"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasLanguage">
+    <rdfs:domain rdf:resource="#Artifact"/>
+    <rdfs:range rdf:resource="#Language"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#servesAsInputFor">
+    <rdfs:domain rdf:resource="#Artifact"/>
+    <rdfs:range rdf:resource="#Tool"/>
+    <owl:inverseOf rdf:resource="#consumesInput"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasParameter">
+    <rdfs:range rdf:resource="#Parameter"/>
+    <rdfs:domain rdf:resource="#Tool"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#producesOutput">
+    <owl:inverseOf rdf:resource="#isProducedBy"/>
+    <rdfs:domain rdf:resource="#Tool"/>
+    <rdfs:range rdf:resource="#Artifact"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTask">
+    <rdfs:domain rdf:resource="#User"/>
+    <rdfs:range rdf:resource="#Task"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:about="#hasFormat">
+    <rdfs:domain rdf:resource="#Artifact"/>
+    <rdfs:range rdf:resource="#Format"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="hasLabel">
+    <rdfs:domain rdf:resource="#Artifact"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="isOptional">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#boolean"/>
+    <rdfs:domain>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <owl:Class rdf:about="#IOArtifact"/>
+          <owl:Class rdf:about="#Parameter"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:domain>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#mimeType">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Format"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#humanReadableFormat">
+    <rdfs:domain rdf:resource="#Format"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#hasIdentifier">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:about="#hasLocation">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <owl:FunctionalProperty rdf:ID="isActualArtifact">
+    <rdf:type rdf:resource="http://www.w3.org/2002/07/owl#ObjectProperty"/>
+    <rdfs:domain rdf:resource="#IOArtifact"/>
+    <rdfs:range rdf:resource="#Artifact"/>
+  </owl:FunctionalProperty>
+  <NaturalLanguage rdf:ID="de"/>
+  <HTML rdf:ID="Standard_HTML_Format">
+    <mimeType xml:lang="en">text/html</mimeType>
+    <humanReadableFormat xml:lang="en">HTML Document</humanReadableFormat>
+  </HTML>
+  <PNG rdf:ID="Standard_PNG_Format">
+    <humanReadableFormat xml:lang="en">PNG Image</humanReadableFormat>
+    <mimeType xml:lang="en">image/png</mimeType>
+  </PNG>
+  <NaturalLanguageDocument rdf:ID="GenericNLDocument">
+    <hasLocation xml:lang="en">none</hasLocation>
+    <hasFormat>
+      <GenericDocumentFormat rdf:ID="Standard_GenericDocumentFormat">
+        <humanReadableFormat xml:lang="en">Document</humanReadableFormat>
+        <mimeType xml:lang="en">none</mimeType>
+      </GenericDocumentFormat>
+    </hasFormat>
+    <hasNaturalLanguage>
+      <NaturalLanguage rdf:ID="noLanguage"/>
+    </hasNaturalLanguage>
+  </NaturalLanguageDocument>
+  <NaturalLanguage rdf:ID="es"/>
+  <PLAINTEXT rdf:ID="Standard_Plaintext_Format">
+    <mimeType xml:lang="en">text/plain</mimeType>
+    <humanReadableFormat xml:lang="en">Plain Text</humanReadableFormat>
+  </PLAINTEXT>
+  <JPG rdf:ID="Standard_JPG_Format">
+    <humanReadableFormat xml:lang="en">JPG Image</humanReadableFormat>
+    <mimeType xml:lang="en">image/jpeg</mimeType>
+  </JPG>
+  <NaturalLanguage rdf:ID="fr"/>
+  <OWL rdf:ID="Standard_OWL_Format">
+    <mimeType xml:lang="en">application/rdf+xml</mimeType>
+    <humanReadableFormat xml:lang="en">OWL Ontology</humanReadableFormat>
+  </OWL>
+  <PDF rdf:ID="Standard_PDF_Format">
+    <mimeType xml:lang="en">application/pdf</mimeType>
+    <humanReadableFormat xml:lang="en">PDF Document</humanReadableFormat>
+  </PDF>
+  <NaturalLanguage rdf:ID="en"/>
+  <NaturalLanguage rdf:ID="anyLanguage"/>
+  <Document rdf:ID="GenericDocument">
+    <hasLocation xml:lang="en">-</hasLocation>
+    <hasFormat rdf:resource="#Standard_GenericDocumentFormat"/>
+  </Document>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.3.1, Build 430)  http://protege.stanford.edu -->

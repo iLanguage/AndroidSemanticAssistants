@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Semantic Assistants Plug-in for Eclipse IDE" default="build.jars" basedir=".">
+	
+    <description>                                                                                                                                 
+        Eclipse client for the Semantic Assistants infrastructure                                                                          
+    </description>      
+    
+	<!-- Importing SemassistProperties.xml file to use machine specific settings -->
+	<import file ="../../SemassistProperties.xml"/>
+	
+	<target name="properties">
+		 <!-- Top Directories -->
+		 <property name="build.home" value="${basedir}/bin"/>
+		 <property name="src.home"   value="${basedir}/src"/>
+		 <property name="plugins.home"   value="${basedir}/plugins"/>
+		 <property name="bundleName" value="info.semanticsoftware.semassist.client.eclipse.1.0.0.jar"/>
+	</target>
+	
+	<!-- This target makes the environment ready for compiling. -->  
+	<target name="init" depends="properties" description="Initialization">
+		<!-- Compiler settings. -->
+		<property name="javacFailOnError" value="true"/>
+		<property name="javacDebugInfo" value="on"/>
+		<property name="javacVerbose" value="true"/>
+		<path id="plugincompile.classpath">
+			<fileset dir="${eclipse.plugins}">
+				<include name="*.jar" />
+			</fileset>
+			<pathelement path="${basedir}/lib/CSAL.jar"/>
+		</path>
+	
+	</target>
+	
+	<!-- This target compiles all the classes -->  
+	<target name="compile" depends="init" description="Compile the source" >
+	        <!-- Compile the java code from ${srcDir} into ${buildDir} -->
+	        <mkdir dir="${build.home}" />
+			<!-- Copying CSAL.jar file from repository to the projects lib folder -->
+			<copy file="${csal.home}/dist/CSAL.jar" todir="${basedir}/lib"/>
+			<javac srcdir="${src.home}/" destdir="${build.home}" failonerror="${javacFailOnError}" debug="true" debuglevel="lines,vars,source"  classpath="${build.home}" includeantruntime="${antruntime}">
+				  <classpath refid="plugincompile.classpath" />
+	        </javac>
+	</target>
+
+	<!-- Build .jar file from compiled classes -->
+	<target name="build.jars" depends="compile"  description="Build plug-in .jar file">
+	        <jar destfile="plugins/${bundleName}" basedir="${build.home}" />
+	</target>
+	
+	<!-- Clear all build output -->
+	<target name="clean" depends="properties" description="Cleaning the build outputs">
+	        <delete dir="${build.home}"/>
+	        <delete file="${plugins.home}/${bundleName}"/>
+	</target>
+</project>

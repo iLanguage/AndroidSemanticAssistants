@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>  
+<GATE>  
+  <GATECONFIG Known_plugin_path="file:/home/rene/Repository/durm/Components/CaseTagger/build/;file:/home/rene/Repository/durm/Components/AAMarker/build/;file:/home/rene/Repository/durm/Components/AnnotationSetTransfer/build/;file:/home/rene/Repository/durm/Components/JavadocMiner/;file:/home/rene/Repository/durm/Components/Number/build/;file:/home/rene/Repository/durm/Components/SentenceChecker/build/;file:/home/rene/Repository/durm/Components/GermanMorphologicalAnalyzer/build/;file:/home/rene/Repository/durm/Components/TfIdf/build/;file:/home/rene/Repository/durm/Components/DurmIndexer/build/;file:/home/rene/Repository/durm/Components/MultiDocSummarySaver/build/;file:/home/rene/Repository/durm/Components/Summarizer/build/;file:/home/rene/Repository/durm/Components/GermanLemmatizer/build/;file:/home/rene/Repository/durm/Components/FuzzyCoreferencer/build/;file:/home/rene/Repository/durm/Components/JavadocLoader/"
+ Load_plugin_path=""
+ Main_frame_height="989"
+ Main_frame_width="1676"
+ Save_options_on_exit="true"
+ Save_session_on_exit="true"
+ docedit_insert_append="true"
+ gate.gui.docview.AnnotationSetsView.colours="{body=-2144542239, tr=-2138636500, Unknown=-2132680404, img=-2138643999, Organization=-2141562113, td=-2134228715, br=-2134239979, th=-2130737620, center=-2146055659, Date=-2130748838, button=-2146055659, UrlPre=-2144542239, h5=-2131290859, Percent=-2141519873, ol=-2132703519, h1=-2138690335, head=-2138690335, Identifier=-2130706598, h3=-2138643999, h2=-2130760479, FirstPerson=-2141520038, form=-2130714324, font=-2138644180, label=-2144534740, table=-2144534559, script=-2132672724, li=-2132672724, cite=-2130760660, input=-2131290859, strong=-2134228715, textarea=-2146044139, small=-2144534559, TempDate=-2132680404, Temp=-2144542420, span=-2144565535, hr=-2143172075, dt=-2130714324, link=-2144565535, div=-2130760660, sup=-2146044139, meta=-2143172075, title=-2130737620, style=-2132703519, dl=-2138644180, nobr=-2132703700, TempOrganization=-2144588575, ul=-2138636500, b=-2132726559, Money=-2130748673, a=-2144588575, blockquote=-2134239979, Location=-2141520038, Token=-2144542420, SpaceToken=-2141519873, Title=-2132726559, i=-2132703700, u=-2130706644, Split=-2132726740, p=-2144534740, Address=-2130748838, Sentence=-2130748673, Lookup=-2130706598, html=-2130760479, JobTitle=-2141562113, Person=-2132726740}"
+ gate.gui.docview.AnnotationSetsView.types="[]"
+ gate.gui.docview.OntologyClassView.hiddenclasses="[]"
+/>  
+</GATE>

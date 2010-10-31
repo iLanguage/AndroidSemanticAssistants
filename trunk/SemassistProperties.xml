@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+
+<!--
+    Document   : SemassistProperties.xml
+    Created on : March 8, 2010, 7:52 PM
+    Author     : Nikolaos Papadakis
+    Description:
+        Purpose of the document follows.
+-->
+<project name="share">
+    
+    <!-- Importing LocalProperties.xml file for local paths and customizations -->
+    <import file ="LocalProperties.xml"/>
+    
+    <!-- Machine dependent properties.Need to be modified -->
+    <property name="durmtools"      value="/usr/local/durmtools" />
+    <property name="semassist.home" value="${user.home}/Repository/durm/Projects/SemanticAssistants" />
+    <property name="csal.home"      value="${semassist.home}/CSAL" />
+
+    <property name="jaxws.home"               value="${durmtools}/jaxws-ri" />
+    <property name="protege-home"             value="${durmtools}/Protege" />
+    <property name="gate-home"                value="${durmtools}/GATE/gate" />
+    <property name="jdk.home"                 value="${durmtools}/jdk" />
+    <property name="log4j.home"               value="${gate-home}/lib/"/>
+    
+    <!-- Used by Open Office Writer Plug-In-->
+    <property name="office.home.dir"          value="${durmtools}/OpenOffice"/>
+    <property name="uno-copy-dest"  	      value="${user.home}/Documents/uno-components" />
+    <property name="office.program.dir"       value="${office.home.dir}/program"/>
+    <property name="ooo-classes-basis"        value="${office.home.dir}/basis3.2/program/classes/" />
+    <property name="ooo-classes-common"       value="${office.home.dir}/ure/share/java/" />
+
+    <!-- Used by Eclipse Plug-In-->
+    <property name="eclipse.program.dir"      value="${durmtools}/eclipse"/>
+    <property name="eclipse.plugins"          value="${eclipse.program.dir}/plugins"/>
+    
+    <!-- Used by the server at runtime as properties -->
+    <property name="gate.plugin.dir"          value="${gate-home}/plugins/"/>
+    <property name="gate.user.file"           value="${semassist.home}/Server/gate-home/user-gate.xml" />
+    <property name="service.repository"       value="${semassist.home}/Resources/OwlServiceDescriptions/"/>
+    <property name="ontology.repository"      value="${semassist.home}/Resources/ont-repository/" />
+
+    <property name="runtime.maxmem"       value="1638m" />
+    <property name="runtime.heap.initial" value="128m" />
+    <property name="runtime.heap.max"     value="1638m" />
+    
+    <!-- Port for which the Server listens for debugers to be attached -->
+    <property name="server.port.debug"    value="8885"/>
+    
+    <!-- Port used by the Server to communicate with the clients through wsdl-->
+    <property name="server.port.wsdl"     value="8879"/>
+    
+    <!-- Ant runtime parameters used to suppress warnings in 1.8 -->
+    <property name="antruntime"		value="false"/>
+
+</project>
