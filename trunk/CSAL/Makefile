@@ -1,4 +1,4 @@
-include ../../../Makefile.variables
+include ../Makefile.variables
 
 all:
 .PHONY : all

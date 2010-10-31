@@ -1,4 +1,4 @@
-include ../../../../Makefile.variables
+include ../../Makefile.variables
 
 FINDBUGS_FILES=\
 -auxclasspath $(GATE)/gate/bin/gate.jar\
