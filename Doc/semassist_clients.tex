@@ -1,0 +1,574 @@
+\chapter{\sa Clients}\label{chap:clients}
+
+\section{Command-Line Client}
+\label{sec:sacl:clc}
+This is a simple example client to access the server from the command line.
+It is located under \url{SemanticAssistants/Clients/CommandLine}. 
+\begin{enumerate}
+\item To compile: \emph{ant compile}
+\item To run: \emph{./runclient.sh}
+\end{enumerate}
+
+The \texttt{runclient.sh} script helps with the
+class path setting, but also adds some difficulty with getting quotes right
+when passing parameters to the program. For example, to list all
+available services, you can run
+\begin{verbatim}
+    ./runclient.sh listall
+\end{verbatim}
+to query the server for all available NLP services. For the default
+installation, you should see an output like:
+\begin{verbatim}
+    Retrieving service info from server...   done
+    Listing services:
+    Yahoo Search
+    IR Information Extractor
+    Person and Location Extractor
+\end{verbatim}
+Now you can invoke one of the services. For example, to extract all
+person and location entities from a Wikipedia article, you can run
+\begin{verbatim}
+    ./runclient.sh invoke "\"Person and Location Extractor\"" \
+   
+"docs=http://en.wikipedia.org/w/index.php?title=Christiane_Kubrick&printable=yes
+"
+\end{verbatim}
+If everything works, you will see the raw service response (in XML
+format).  Note again that the server has to be running and both the
+CSAL and command-line client must have been compiled successfully.
+
+\subsection*{Connecting to any Server}
+The user is able to specify the Server information (Host and Port) of
+a local or distant server.  To achieve that the \url{params} part of the
+command needs to be used.  The only extra info needed is appending the
+following string to the end of the command:
+\begin{verbatim}
+    "params=(Host=<target Host>,Port=<target server port>)"
+\end{verbatim}
+
+For example:
+\begin{verbatim}
+    "params=(Host=localhost,Port=8080)"
+\end{verbatim}
+
+This parameter list has to be added at every invocation.
+
+\section{OpenOffice.org Writer Plug-In}
+The OpenOffice.org application suite offers a mechanism
+to add application extensions, or plug-ins. We used this
+mechanism to integrate OpenOffice.org's word processing
+application Writer with our architecture, and thus equip the
+Writer with Semantic Assistants \citep{giwi08}.
+
+Our primary goal for the Writer extension was to be able
+to perform text analysis on the current document. This
+text can, for instance, be a large document from which
+information should be extracted, or a problem statement
+consisting of a few questions, which serves as input for a
+question-answering (QA) Semantic Assistant. Especially
+for the last use case, it must allow a user to highlight part of
+a document (e.g., a question) and be able to pass only the
+highlighted part as input to a language service. Furthermore,
+the extension must offer the possibility to specify parameters
+that need to be passed to a selected NLP service.
+
+An OpenOffice.org plug-in is basically a zip file with specific
+contents and certain descriptions of these contents.  For a detailed
+description of the implementation please refer to
+Section~\ref{sec:oo-spec}. \textbf{Note:} The current version of the
+plug-in requires at least OpenOffice.org Version 3.1.
+
+
+\subsection{Features}
+Our plug-in creates a new menu entry ``Semantic Assistants:''
+\begin{center}
+\includegraphics[width=0.7\textwidth]{pictures/oomenu.jpg}
+\end{center}
+
+In this menu, the user can inquire about available services, which are
+selected based on the client (here \emph{Writer}) and the language
+capabilities of the deployed NLP services (described in service
+metadata, see Section~\ref{sec:owl}). The dynamically generated list
+of available services is then presented to the user, together with a
+brief description, in a separate window, as shown in
+Figure~\ref{fig:oolist}. Note that the integration of a new service
+does not require any changes on the client side---any new NLP service
+created and deployed by a language engineer is dynamically discovered
+through its OWL metadata maintained by the architecture and so becomes
+immediately available to any connected client.
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.5\textwidth]{pictures/oolist.jpg}
+  \caption{List of available semantic assistants}
+  \label{fig:oolist}
+\end{figure}
+
+The user can now select an assistant and execute it. In case the
+service requires additional parameters, such as the length of a
+summary to be generated, they are detected by our architecture through
+the OWL-based service description and requested from the user through
+an additional dialog window. An example, for the \emph{Web Retrieval
+  Summarizer} assistant, is shown in Figure~\ref{fig:ooparams}.
+\begin{figure}[htb]
+  \centering
+  \includegraphics[width=0.5\textwidth]{pictures/ooparams.jpg}
+  \caption{The parameters dialog, which appears when a Semantic
+    Assistant requiring further input is invoked}
+  \label{fig:ooparams}
+\end{figure}
+After the service is executed, the result is displayed in Writer depending on
+the type of the server response: either as a new document, as annotations on
+the existing document, or by opening an external viewer (e.g., a Web browser
+for HTML documents).
+
+\subsubsection{Side-Notes View}
+The latest release of the OpenOffice.org Suite offer a new feature for text
+annotation.  Depending on the annotation results received from GATE, the
+Semantic Assistants Writer plug-in presents it in a sidenote manner (see
+Figure~\ref{fig:sidenotes}).
+\begin{figure}[htb]
+  \centering
+  %\vspace*{-9mm}
+  \includegraphics[width=0.8\textwidth]{pictures/sidenotes.jpg}
+  \caption{Auto-Generated SideNotes Example}
+  \label{fig:sidenotes}
+  %\vspace*{-0.4cm}
+\end{figure}
+
+\subsubsection{New Document Creation}
+\label{sec:doc-cre}
+Creation of a new document comes handy when the output of an NLP service
+corresponds to a complete document, or the result itself is indivisible. Some
+examples are summarization or question-answering (see Figure~\ref{fig:oores}).
+
+\begin{figure*}[htb]
+  \centering
+  \includegraphics[width=0.8\textwidth]{pictures/ooresult_clip.jpg}
+  \vspace*{-2mm}
+  \caption{NLP services can also create a completely new document as a
+  result (e.g., through summarization)}
+  \label{fig:oores}
+\end{figure*}
+
+\subsubsection{Annotation Highlighting}
+Besides text annotation, we offer the option for enabling/disabling annotation
+highlighting for text that has been processed by GATE. This option can be
+found under the Semantic Assistants menu in ``Global Settings.''  See
+Figure~\ref{fig:highlight}) for an example.
+
+\begin{figure}
+  \centering
+  %\vspace*{-9mm}
+  \includegraphics[width=0.8\textwidth]{pictures/highlighting.jpg}
+  \caption{Highlighted Annotations Example}
+  \label{fig:highlight}
+  %\vspace*{0.5cm}
+\end{figure}
+
+\subsubsection{Server Settings}
+Another option found under the Semantic Assistants menu in ``Global
+Settings.''is \emph{Server Setings}.  There the user is able to specify the
+Server information (Host and Port) of a local or distant server.
+
+\subsection{Installation}
+\label{subsec:oo-inst}
+The OpenOffice.org plug-in can be found in
+\url{SemanticAssistants/Clients/OpenOffice}. To use it, do the following:
+
+\begin{enumerate}
+  % TODO: what about the OO SDK installation?
+
+  \item Start OpenOffice.org Writer and ensure the right Java VM is
+  used. Go to \emph{Tools $\rightarrow$ Options}. Under
+  \emph{OpenOffice.org} you will find a \emph{Java} item. There, you
+  can specify JREs. If it is not already there, add the currently used
+  Java version.
+  
+  \item In the same dialog window, click on the \emph{``Class
+      path$\ldots$''} button.  You will get a new dialog
+    window. Select \emph{``Add archive$\ldots$''} and navigate to the
+    \url{SemanticAssistants/CSAL/dist} directory and add the
+    \url{CSAL.jar} file.  Close the open dialogs with
+    ``OK'' and exit Writer.
+
+  \item cd to the \url{Clients/OpenOffice} directory.
+
+  \item Type \texttt{ant run}, or \texttt{ant run-gui}. Note that the
+    client-side abstraction layer must have already been built and
+    packaged. Both \texttt{ant run} and \texttt{ant run-gui} provide an UNO
+    package named \url{Semassist.uno.zip}. Both targets additionally copy
+    it to \url{~/Documents/uno-components}.  If \texttt{ant run-gui} is issued
+    the OpenOffice.org \emph{Extension Manager} will pop up and prompt the
+    user to install the extension.  If \texttt{ant run} is issued the above
+    process is automated.  After the installation, OpenOffice Writer starts
+    with the plug-in installed. 
+
+    \textbf{Note:} you can also manually add the plug-in from within
+    OpenOffice (skip this step if you already used the \emph{run} or
+    \emph{run-gui} target): Go to Tools, Extension Manager. Select
+    \emph{My Extensions}, then click \emph{Add...} on the
+    right. Choose the UNO package (available in
+    \url{~/Documents/uno-components} if you used the \emph{deploy}
+    target for ant).
+
+  \item Leave the dialog and open a text document. You should have a
+    menu bar entry labelled \emph{Semantic Assistants}. Now play
+    around. Remember the server must be running to be able to query or
+    execute language services.
+\end{enumerate}
+
+
+\subsection{Development Notes}
+\label{sec:oo-spec}
+In this section, we provide further technical details on our plug-in
+for developers interesting in enhancing or modifying it.
+
+\subsubsection{OpenOffice.org Plug-in Specifics}
+Every plug-in has to include a
+\emph{META-INF} directory, which contains a file called
+\emph{manifest.xml}. This XML file lists the elements that come with
+this plug-in;  The concrete manifest file for our plug-in is listed in
+Figure~\ref{list:manifest}.  We can see that it defines three
+\emph{file-entry} elements specifying the type and location of the
+following files:
+\begin{figure}[tb]
+\centering
+\begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE manifest:manifest PUBLIC 
+"-//OpenOffice.org//DTD Manifest 1.0//EN" "Manifest.dtd"> 
+<manifest:manifest 
+ xmlns:manifest="http://openoffice.org/2001/manifest"> 
+  <manifest:file-entry 
+     manifest:media-type=
+        "application/vnd.sun.star.configuration-data" 
+     manifest:full-path="Addons.xcu"/> 
+  <manifest:file-entry 
+     manifest:media-type=
+        "application/vnd.sun.star.configuration-data" 
+     manifest:full-path="ProtocolHandler.xcu"/> 
+  <manifest:file-entry 
+     manifest:media-type=
+        "application/vnd.sun.star.uno-component;type=Java" 
+     manifest:full-path=
+        "ProtocolHandlerAddon_java.uno.jar"/>
+</manifest:manifest> 
+\end{lstlisting}
+\caption{The \emph{manifest.xml} file for our plug-in}
+\label{list:manifest}
+\end{figure}
+
+
+\begin{description}
+\item[\emph{Addons.xcu}.] This XML file defines how the plug-in should
+  be integrated with OpenOffice.org. In our case, it contains a menu
+  definition, specifying that the menu should only appear in the
+  \emph{Writer} application. For each menu item, we specify which
+  messages should be broadcast throughout the OpenOffice.org runtime
+  system when the menu item is activated.
+\item[\emph{ProtocolHandler.xcu}. ] This XML file specifies that the
+  messages defined in \emph{Addons.xcu} should be handled by an object
+  of a certain class. This class is provided in the Java archive and
+  must adhere to a certain interface. 
+\item[\emph{ProtocolHandlerAddon\_ java.uno.jar}.] This Java archive
+  contains the actual functionality of the plug-in. It holds classes
+  responsible for receiving the messages generated by the menu items,
+  as well as classes responsible for the interaction with the
+  client-side abstraction layer.
+\end{description}
+
+
+\subsubsection{Implementation Details}
+A useful class called \url{UNOUtils} found in the \url{package
+  info.semanticsoftware.semassist.client.openoffice.utils} contains most of
+the OO-Writer feature implmentations.  More specifically, the three methods in
+Figure~\ref{list:ssb} implement a major part of the above described features
+(Side-Notes, Highlighting and New Document Creation).
+
+\begin{figure}
+\centering
+\begin{lstlisting}[language=Java,numbers=left,xleftmargin=8mm,columns=flexible]
+
+private static XComponent CreateNewDocument( XDesktop xDesktop, 
+					     String sDocumentType )
+{
+	...
+}
+
+private static void AnnotateField( Annotation annotation )
+{
+	...
+	// Use the text document's factory to create an Annotation text field
+	XTextField xAnnotation = (XTextField) UnoRuntime.queryInterface(
+		XTextField.class, mxDocFactory.createInstance(
+		"com.sun.star.text.TextField.Annotation" ) );
+	
+	// get the properties of the field
+	XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface( 
+						XPropertySet.class, xAnnotation
+);
+	
+	...
+	
+	// Highlight annotated field
+        HighlightField();
+}
+
+private static void HighlightField()
+{
+....
+
+}
+\end{lstlisting}
+\caption{Core methods implementing the OpenOffice Writer plug-in features are
+  part of the \texttt{UNOUtils} class}
+\label{list:ssb}
+\end{figure}
+
+
+More details on how to compile and debug an OpenOffice plug-in can be found in
+Section~\ref{sec:debug}.
+ 
+\section{Eclipse Plug-in}
+Eclipse is not a single monolithic program, but rather a small kernel containing
+a plug-in loader surrounded by hundreds of plug-ins. The behaviour of each
+plug-in in this architecture is stored in its code, and its dependencies and
+services are declared in the plug-in's manifest file. On each Eclipse startup,
+the plug-in loader scans all the available manifest files in the Eclipse
+exclusive plug-in folder and then builds a structure containing this
+information.
+
+We used this characteristic of Eclipse architecture to integrate our Semantic
+Assistants architecture into the Eclipse environment in form of a plug-in, in
+order to offer various Natural Language Processing services. The Eclipse
+Semantic Assistants plug-in is basically a Java archive (JAR) file that ships
+with its own specific content and a description file to introduce itself to the
+Eclipse plug-in loader. 
+
+\subsection{Features}
+Once the Semantic Assistants plug-in is installed, it creates a new menu entry
+in the Eclipse menu toolbar. A user can inquire about the available services
+from the "Available Assistants" item and modify the connection settings to the
+Semantic Assistants server by selecting the second item.
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=0.8\textwidth]{pictures/eclipse_menu.jpg}
+  \caption{Semantic Assistant Menu in Eclipse}
+  \label{fig:eclipse_menu}
+\end{center}
+\end{figure}
+\subsubsection{Available Assistants}
+Selecting the "Available Assistants" item from Semantic Assistants menu will
+open a file selection dialog. The file selection dialog allows the user to
+select the desired files, folders and even complete projects to send to the
+server as inputs to an NLP service.
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=0.5\textwidth]{pictures/eclipse_fileSelection.jpg}
+  \caption{File Selection Dialog}
+  \label{fig:eclipse_fileSelection}
+\end{center}
+\end{figure}
+
+This dialog also lets the user to select an NLP service from a dynamically
+generated list of services. This list is generated dynamically by selecting the
+available services based on the client and the language capabilities of the
+deployed NLP services. Note that the integration of a new service does not
+require any changes on the client side - any new NLP service created and
+deployed by a language engineer is dynamically discovered through its OWL
+metadata maintained by the architecture and so becomes immediately available to
+any connected client.
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=0.5\textwidth]{pictures/eclipse_services.jpg}
+  \caption{A List of Available NLP Services}
+  \label{fig:eclipse_services}
+\end{center}
+\end{figure}
+
+Upon selecting the resource files and the desired service, the user can executed
+the selected service on the checked files in the tree. After the successful
+execution of the selected NLP service, a set of results with be shown to the
+user in the "Semantic Assistants" view. If the service execution fails, a
+description of the occured error will be shown to the user in the "Semantic
+Assistant Status" view and invocation will be aborted.
+
+\subsubsection{Annotations}
+The results of a successful service invocation are being shown to the user in an
+Eclipse view part called "Semantic Assistants" view. In the mentioned view, a
+table will be generated dynamically based on the server response that contains
+all the parsed annotation instances. In Figure~\ref{fig:eclipse_saView} the
+result of an execution of the "Person and Location Extractor" service on two
+sample classes is shown.
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=1\textwidth]{pictures/eclipse_saView.jpg}
+  \caption{Semantic Assistants View}
+  \label{fig:eclipse_saView}
+\end{center}
+\end{figure}
+
+This table can be sorted by different criteria through clicking on each column
+title. Additionally, by double-clicking on each row in the table, the selected
+annotation will appear with a graphical representation attached to the
+corresponding resource. For instance, in Figure~\ref{fig:eclipse_annotation} the
+JavadocMiner service has been invoked on a Java source code file. Some of the
+annotations returned by the server bear a \emph{lineNumber} feature, which
+attaches an annotation instance to a specific line in the java source file. Upon
+double-clicking on the annotation instance in the Semantic Assistant view, the
+corresponding resource - here, a .java file - will be opend in an editor and an
+Eclipse warning marker will appear next to the line defined by the annotation
+\emph{lineNumber} feature.
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=1\textwidth]{pictures/eclipse_annotation.jpg}
+  \caption{A Semantic Annotation}
+  \label{fig:eclipse_annotation}
+\end{center}
+\end{figure}
+
+\subsubsection{Global Settings}
+The second option found under the Semantic Assistants menu is the "Global
+Settings" item. By clicking on this menu item, a dialog will be shown to the
+user that lets him customize the hostname and port number values used to connect
+to the Semantic Assistants server. The values provided by the user in the
+textfields will be saved to a properties file in the Eclipse workspace
+".metadata" folder and will be used to store useful information between
+different Eclipse launch profiles. The ".metadata" folder can be found on the
+root of user's Eclipse workspace folder. Note that this folder is a hidden
+folder and is not meant to be viewed or modified by the users. The Semantic
+Assistants plug-in folder can be found on
+\begin{verbatim}
+${workspace_loc}
+/.metadata/.plugins/info.semanticsoftware.semassist.client.eclipse
+\end{verbatim} 
+
+where the \begin{verbatim}${workspace_loc}\end{verbatim} refers to the path of
+the workspace of the Eclipse installed on the user's machine.
+
+If this folder gets accidentally deleted by the user, the Semantic Assistants
+plug-in will create a new one on the next startup of the plug-in.
+
+In the Semantic Assistants settings dialog, a "Use Defaults" option is also
+available. If this widget is checked, the default values will be overwritten on
+the values previosuly provided by the user and the Semantic Assistants plug-in
+will use the default hostname and port number values to connect to the server
+and invoke services.
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=0.6\textwidth]{pictures/eclipse_settings.jpg}
+  \caption{Semantic Assistants Server Settings Dialog}
+  \label{fig:eclipse_settings}
+\end{center}
+\end{figure}
+
+\subsection{Installation}
+In order to use the Eclipse plug-in, do the following:
+
+\begin{enumerate}
+
+  \item Make sure that the client-side abstraction layer is already been built
+and packaged.
+
+  \item cd to the \url{Clients/EclipsePlugin} directory.
+
+  \item Type \texttt{ant}. The ant file will compile all the classes and package
+the plug-in JAR file in \url{EclipsePlugin/plugins} folder.
+
+  \item Browse to your Eclipse installation folder and paste the generated JAR
+file from previous step into the \url{plugins} folder.
+  
+  \item Start the Eclipse application. The Eclipse plug-in loader will
+automatically install the plug-in for you. If the plug-in is installed
+successfully, you should be able to see the Semantic Assistants menu added to
+you toolbar.
+
+  \textbf{Note:} Remember the server must be running to be able to query or
+execute language services.
+
+\end{enumerate}
+
+\subsection{Development Notes}
+In this section, we provide further technical details on our plug-in for
+developers interesting in enhancing or modifying it.
+
+\subsubsection{Plug-in Directory Structure}
+\begin{enumerate}
+%\item\url{icon}: This is where the SA icon images are stored.
+\item\url{lib}: This is where all the external plug-in dependencies are stored.
+This folder contains the Client-Side Abstraction Layer JAR file used in the
+project to communicate to the server.
+\item\url{META-INF}: This is where the plug-in manifest file is stored. This
+file is used by the Eclipse plug-in loader to identify the Semantic Assistants
+plug-in.
+\item\url{plugins}: This is where the Semantic Assistants plug-in JAR file will
+be stored when successfully built.
+\item\url{src}: This folder contains the Semantic Assistants plug-in source
+code. The internal structure of this directory is further explained in the next
+section.
+\end{enumerate}
+
+There is also another file called \url{plugin.xml} in this directory. This file
+contains general information of the plug-in like its dependencies, runtime
+classpath and extension points in form of an XML file and is used to
+introcude the plug-in to Eclipse plug-in loader. By using this file, you can
+test the plug-in inside an Eclipse runtime application.
+
+\subsubsection{Plug-in Source Directory Structure}
+The Semantic Assistants plug-in uses Model-View-Controller pattern for its
+implementation. Thus, most of the source code files are divided into different
+packages related to their responsibilities. When you browse to
+\url{src/info/semanticsoftware/semassist/client/eclipse/} folder, you see the
+following structure:
+\begin{enumerate}
+\item\url{dialogs}: This folder contains the dialogs that are shown to the user
+for interactions e.g. file selection. The classes inside this folder are the
+codes for graphical user interfaces.
+\item\url{handlers}: This folder contains the classes which play the controller
+role in MVC pattern. Examples of these classes are dialog handlers and service
+invocation jobs.
+\item\url{model}: This folder contains the classes that provide data for
+graphical user interfaces. These models are consumed by classes inside
+\texttt{views} package.
+\item\url{utils}: This folder contains utility classes e.g. logging feature.
+\item\url{views}: This folder contains the source codes for Semantic Assistants
+view parts. These are again graphical user interfaces but packaged differently
+from dialogs.
+\end{enumerate}
+
+There is also another file called \url{Activator.java} in the source directory.
+It is the main class of the plug-in that will be loaded initially and control
+the plug-in's life cycle.
+
+\subsubsection{Modifying the Plug-in}
+If you want to modify the plug-in behavior or enhance it, follow these steps:
+\begin{enumerate}
+\item Open the Eclipse application.
+\item Select File $\rightarrow$ New  $\rightarrow$ Project and under the
+"Plug-in Development" category select the "Plug-in Project".
+\item A new plug-in project wizard will open up. Keep the EclipsePlugin name for
+the project. Just below the project name there is a checkbox reading "Use
+Default Location". Uncheck it and browse to the EclipsePlugin folder inside
+where you've stored the Semantic Assistants folder.
+\item Leave the other options untouched and press Finish.
+\end{enumerate}
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=0.5\textwidth]{pictures/eclipse_project_wizard.jpg}
+  \caption{Eclipse New Plug-in Project Wizard}
+  \label{fig:eclipse_project_wizard}
+\end{center}
+\end{figure}
+
+\textbf{Note:} Remember you should manually copy the CSAL.jar file into you the
+project's \texttt{lib} folder because it is a part of the project's dependency
+and is defined in the classpath.
+
+When the project is loaded in your workspace, feel free to play around. Browse
+the source directory and add your development codes. To run your code, right
+click on \texttt{plugin.xml} file and select Run As $\rightarrow$ Eclipse
+Application.

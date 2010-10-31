@@ -1,0 +1,163 @@
+%% Semantic Assistants Documentation
+%% 
+%% Copyright (c) 2009 Semantic Software Lab, http://www.semanticsoftware.info
+%%    Rene Witte
+%%    Nikolaos Papadakis
+%%
+\documentclass[10pt,twoside,openany,chapterprefix]{scrbook}
+\usepackage{microtype}
+\usepackage{bookman}
+\usepackage{color}
+\usepackage{url}
+\usepackage{rotating}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{xspace}
+%\usepackage{html}
+\usepackage[round, sort]{natbib}
+
+%% package options
+% KOMA-Script
+\typearea{12}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Adding lines above and below the chapter head
+%
+ 
+% 1st get a new command
+\newcommand*{\ORIGchapterheadstartvskip}{}%
+% 2nd save the original definition to the new command
+\let\ORIGchapterheadstartvskip=\chapterheadstartvskip
+% 3rd redefine the command using the saved original command
+\renewcommand*{\chapterheadstartvskip}{%
+  \ORIGchapterheadstartvskip
+  {%
+    \setlength{\parskip}{0pt}%
+    \noindent\rule[.3\baselineskip]{\linewidth}{1pt}\par
+  }%
+}
+ 
+% see above
+\newcommand*{\ORIGchapterheadendvskip}{}%
+\let\ORIGchapterheadendvskip=\chapterheadendvskip
+\renewcommand*{\chapterheadendvskip}{%
+  {%
+    \setlength{\parskip}{0pt}%
+    \noindent\rule[.3\baselineskip]{\linewidth}{1pt}\par
+  }%
+  \ORIGchapterheadendvskip
+}
+%
+%  End of chapter head change
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% floats
+\setcounter{topnumber}{2}
+\setcounter{bottomnumber}{1}
+\renewcommand{\floatpagefraction}{0.9}
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.1}
+
+% color definitions
+\definecolor{darkred}{rgb}{0.5,0.0,0.0}
+\definecolor{darkgreen}{rgb}{0.0,0.4,0.0}
+\definecolor{darkblue}{rgb}{0.0,0.0,0.5}
+
+% listing
+\lstloadlanguages{Lisp,Java,Make}
+\lstset{language=XML,
+        basicstyle=\scriptsize\ttfamily,
+        keywordstyle=\color[rgb]{0.5,0,0.33203125}\bfseries,
+        frame=single,
+        commentstyle=\color[rgb]{0.24609375,0.5,0.37109375}, % commentstyle=\color{blue}\ttfamily,
+        extendedchars=true,
+        showstringspaces=false,
+        showlines=false,
+        stringstyle=\color[rgb]{0.1640625,0,1}\ttfamily}
+%\lstset{language=Java,basicstyle=\sffamily\footnotesize,showlines=true}
+
+% hyperref
+\hypersetup{
+  backref=true,
+  colorlinks=true,
+  citecolor=darkgreen,
+  linkcolor=darkred,
+  urlcolor=darkblue,
+  filecolor=red,
+  letterpaper=false,
+  bookmarks=true,
+  bookmarksopen=true,
+  pdfpagemode=UseOutlines,
+  pdftitle={Semantic Assistants Documentation}, 
+  pdfauthor={Semantic Software Lab}
+}
+
+%\begin{comment}
+%% miscellaneous macros
+\newcommand{\sfcap}[1]{\strut\vspace*{-1mm}{\footnotesize\textsf{#1}}}
+\newcommand{\filetilde}{\char126$\!\!$}
+\newcommand{\javadoc}[1]{\begin{tabular}{|l|}\hline
+  \textbf{Visit the JavaDoc Documentation}\\
+  \url{#1}\\ 
+  \hline\end{tabular}}
+\newcommand{\argmax}{\mathop{\mathrm{argmax}}}
+\newcommand{\sa}{Semantic Assistants\xspace}
+
+\title{Semantic Assistants\bigskip\\
+\Large Guide for Users and Developers}
+\author{Ren\'{e} Witte\\
+Thomas Gitzinger\\
+Nikolaos Papadakis\\
+Bahar Sateli
+\medskip}
+\date{Development Release\\
+\today
+}
+\publishers{Semantic Software Lab\\
+Concordia University\\
+Montr\'{e}al, Canada\\
+{\large\url{http://www.semanticsoftware.info}}
+}
+
+\begin{document}
+\frontmatter
+\maketitle
+\tableofcontents
+
+\section*{About this document}
+This document contains documentation for the \emph{Semantic
+  Assistants} project. You can obtain the latest version from
+\url{http://www.semanticsoftware.info/semantic-assistants}.
+
+\section*{Acknowledgments}
+The following developers contributed to the design and implementation
+of the Semantic Assistants: Ren\'{e} Witte, Nikolaos Papadakis, Tom
+Gitzinger.
+
+\section*{License}
+The Semantic Assistants architecture, clients, and resources are
+published under the GNU Affero General Public License v3
+(AGPL3)\footnote{AGPL3,
+  \url{http://www.fsf.org/licensing/licenses/agpl-3.0.html}}.
+
+\mainmatter
+\input{semassist_overview}
+\input{semassist_install}
+\input{semassist_server}
+\input{semassist_clients}
+\input{semassist_development}
+
+\backmatter
+\appendix
+\bibliographystyle{plainnat}
+\bibliography{semassist}
+
+\end{document}
+
+
+
+
