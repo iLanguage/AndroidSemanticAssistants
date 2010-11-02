@@ -14,7 +14,7 @@
     
     <!-- Machine dependent properties.Need to be modified -->
     <property name="durmtools"      value="/usr/local/durmtools" />
-    <property name="semassist.home" value="${user.home}/Repository/durm/Projects/SemanticAssistants" />
+    <property name="semassist.home" value="${user.home}/Repository/semantic-assist" />
     <property name="csal.home"      value="${semassist.home}/CSAL" />
 
     <property name="jaxws.home"               value="${durmtools}/jaxws-ri" />
