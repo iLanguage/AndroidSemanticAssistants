@@ -43,6 +43,23 @@
     >Person and Location Extractor</sa:hasGATEName>
     <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#GATECorpusPipeline_Format"/>
     <cu:producesOutput>
+      <sa:GATE_OutputArtifact rdf:ID="AddressAnnotationOutput">
+        <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+        >Address</sa:hasGATEName>
+        <cu:isProducedBy rdf:resource="#PersonLocationExtractor"/>
+        <cu:isActualArtifact>
+          <sa:GATEAnnotation rdf:ID="AddressAnnotation">
+            <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+            <sa:hasGATEName rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Address</sa:hasGATEName>
+          </sa:GATEAnnotation>
+        </cu:isActualArtifact>
+        <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
+        <sa:isPerDocument rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
+        >true</sa:isPerDocument>
+      </sa:GATE_OutputArtifact>
+    </cu:producesOutput>
+    <cu:producesOutput>
       <sa:GATE_OutputArtifact rdf:ID="MoneyAnnotationOutput">
         <cu:isActualArtifact>
           <sa:GATEAnnotation rdf:ID="MoneyAnnotation">
@@ -79,6 +96,7 @@
         <cu:hasFormat rdf:resource="http://localhost/SemanticAssistants.owl#Standard_GATEAnnotation_Format"/>
       </sa:GATE_OutputArtifact>
     </cu:producesOutput>
+    <sa:hasOutputNaturalLanguage rdf:resource="http://localhost/ConceptUpper.owl#fr"/>
     <cu:producesOutput>
       <sa:GATE_OutputArtifact rdf:ID="OrganizationAnnotationOutput">
         <sa:isPerDocument rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
@@ -96,7 +114,6 @@
         <cu:isProducedBy rdf:resource="#PersonLocationExtractor"/>
       </sa:GATE_OutputArtifact>
     </cu:producesOutput>
-    <sa:hasOutputNaturalLanguage rdf:resource="http://localhost/ConceptUpper.owl#fr"/>
     <cu:producesOutput>
       <sa:GATE_OutputArtifact rdf:ID="LocationAnnotationOutput">
         <cu:isProducedBy rdf:resource="#PersonLocationExtractor"/>
