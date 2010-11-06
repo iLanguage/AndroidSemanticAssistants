@@ -35,7 +35,6 @@
 
     <!-- Tool Directories -->
     <property name="protege-owl.home" value="${protege-home}/plugins/edu.stanford.smi.protegex.owl/" />
-    <property name="common-language"  value="${protege-home}/plugins/edu.stanford.smi.protegex.owl.inference.pellet/" />
     <property name="office.unopkg"    value="${office.program.dir}${file.separator}unopkg"/>
     <property name="office.soffice"   value="${office.program.dir}${file.separator}soffice"/>
     
@@ -129,7 +128,7 @@
     <target name="clean">
         <delete includeemptydirs="true" quiet="true">
             <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
-            <fileset dir="${dist.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
+            <fileset dir="${dist.home}" excludes="**/*.xcu,**/CVS,**/CVS/**,**/.cvsignore"/>
         </delete>
     </target>
 </project>
