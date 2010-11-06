@@ -33,9 +33,9 @@ prerequisites:
 \item OpenOffice 3.2, \url{http://download.openoffice.org/}
 \item The OpenOffice.org 3.2 SDK,
   \url{http://download.openoffice.org/sdk/index.html}
-\item Apache log4j v1.2,
-  \url{http://logging.apache.org/log4j/1.2/index.html}
-\item Apache Commons Lang v2.4, \url{http://commons.apache.org/lang/}
+%\item Apache log4j v1.2,
+%  \url{http://logging.apache.org/log4j/1.2/index.html}
+%\item Apache Commons Lang v2.4, \url{http://commons.apache.org/lang/}
 \end{enumerate}
 
 \section{Download}
@@ -139,7 +139,6 @@ The second part of the \texttt{SemassistProperties.xml} is where the machine-spe
     <property name="protege-home"             value="${durmtools}/Protege" />
     <property name="gate-home"                value="${durmtools}/GATE/gate" />
     <property name="jdk.home"                 value="${durmtools}/jdk" />
-    <property name="log4j.home"               value="${gate-home}/lib/"/>
 \end{lstlisting}
 
 \begin{enumerate}
@@ -151,13 +150,12 @@ Create a folder called \texttt{durmtools} and install all the required applicati
 \item \url{protege-home}: This variable points to the Prot\'{e}g\'{e}-OWL API v3.4 application installed in the path defined in \texttt{\$\{durmtools\}} variable.
 \item \url{gate-home}: This variable points to the GATE v5.0 or newer application installed in the path defined in \texttt{\$\{durmtools\}} variable.
 \item \url{jdk.home}: This variable points to the Sun JDK 6 installed on your machine.
-\item \url{log4j.home}: This variable points to the GATE application logging component. It is located in the GATE application \texttt{lib} folder.
 \end{enumerate}
 
 
 The third part includes all the properties used by the OpenOffice.org Writer plug-in. Therefore, in order to use this plug-in, all these variables should be defined beforehand.
 \begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
-    <!-- Used by Open Office Writter Plug-In-->    
+    <!-- Used by Open Office Writer Plug-In-->    
     <property name="office.home.dir"          value="${durmtools}/OpenOffice"/>
     <property name="uno-copy-dest"  	      value="${user.home}/Documents/uno-components" />
     <property name="office.program.dir"       value="${office.home.dir}/program"/>

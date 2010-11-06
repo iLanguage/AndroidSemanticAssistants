@@ -1,27 +1,42 @@
 <?xml version="1.0"?>
 
 <!--
-    Document   : SemassistProperties.xml
-    Created on : March 8, 2010, 7:52 PM
-    Author     : Nikolaos Papadakis
-    Description:
-        Purpose of the document follows.
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+   This file is part of the Semantic Assistants architecture.
+
+   Copyright (C) 2009, 2010 Semantic Software Lab, http://www.semanticsoftware.info
+   Document   : SemassistProperties.xml
+   Created on : March 8, 2010, 7:52 PM
+   Author     : Nikolaos Papadakis
+
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+   
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <project name="share">
     
     <!-- Importing LocalProperties.xml file for local paths and customizations -->
     <import file ="LocalProperties.xml"/>
     
-    <!-- Machine dependent properties.Need to be modified -->
-    <property name="durmtools"      value="/usr/local/durmtools" />
-    <property name="semassist.home" value="${user.home}/Repository/semantic-assist" />
-    <property name="csal.home"      value="${semassist.home}/CSAL" />
+    <!-- Machine dependent properties. Need to be modified -->
+    <property name="durmtools"                value="/usr/local/durmtools" />
+    <property name="semassist.home"           value="${user.home}/Repository/semantic-assist" />
+    <property name="csal.home"                value="${semassist.home}/CSAL" />
 
     <property name="jaxws.home"               value="${durmtools}/jaxws-ri" />
     <property name="protege-home"             value="${durmtools}/Protege" />
     <property name="gate-home"                value="${durmtools}/GATE/gate" />
     <property name="jdk.home"                 value="${durmtools}/jdk" />
-    <property name="log4j.home"               value="${gate-home}/lib/"/>
     
     <!-- Used by Open Office Writer Plug-In-->
     <property name="office.home.dir"          value="${durmtools}/OpenOffice"/>
@@ -33,24 +48,28 @@
     <!-- Used by Eclipse Plug-In-->
     <property name="eclipse.program.dir"      value="${durmtools}/eclipse"/>
     <property name="eclipse.plugins"          value="${eclipse.program.dir}/plugins"/>
-    
+
     <!-- Used by the server at runtime as properties -->
     <property name="gate.plugin.dir"          value="${gate-home}/plugins/"/>
     <property name="gate.user.file"           value="${semassist.home}/Server/gate-home/user-gate.xml" />
     <property name="service.repository"       value="${semassist.home}/Resources/OwlServiceDescriptions/"/>
     <property name="ontology.repository"      value="${semassist.home}/Resources/ont-repository/" />
 
-    <property name="runtime.maxmem"       value="1638m" />
-    <property name="runtime.heap.initial" value="128m" />
-    <property name="runtime.heap.max"     value="1638m" />
+    <property name="runtime.maxmem"           value="1638m" />
+    <property name="runtime.heap.initial"     value="128m" />
+    <property name="runtime.heap.max"         value="1638m" />
     
     <!-- Port for which the Server listens for debugers to be attached -->
-    <property name="server.port.debug"    value="8885"/>
+    <property name="server.port.debug"        value="8885"/>
     
     <!-- Port used by the Server to communicate with the clients through wsdl-->
-    <property name="server.port.wsdl"     value="8879"/>
+    <property name="server.port.wsdl"         value="8879"/>
     
     <!-- Ant runtime parameters used to suppress warnings in 1.8 -->
-    <property name="antruntime"		value="false"/>
+    <property name="antruntime"		      value="false"/>
 
+    <!-- Libraries shipped with the distribution. You should not need to change this -->
+    <property name="lib.home"                 value="${semassist.home}/Lib/"/>
+    <property name="log4j.jar"                value="${lib.home}/log4j-1.2.14.jar"/>
+    <property name="commons-lang.jar"         value="${lib.home}/commons-lang-2.4.jar" />
 </project>
