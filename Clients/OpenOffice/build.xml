@@ -1,9 +1,29 @@
 <?xml version="1.0"?>
 
+<!--
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+   This file is part of the Semantic Assistants architecture.
+
+   Copyright (C) 2009, 2010 Semantic Software Lab, http://www.semanticsoftware.info
+
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+   
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
 
 <project name="OpenOffice" default="run" basedir=".">
 
-     <!-- Machine specific settings should go in SemassistProperties.xml -->
+    <!-- Machine specific settings should go in SemassistProperties.xml -->
     <import file ="../../SemassistProperties.xml"/>
 
     <!-- Top Directories -->
@@ -21,15 +41,13 @@
     
     <!-- Library Files -->
     <property name="protege.jar"      value="${protege-home}/protege.jar" />
-    <property name="commons-lang.jar" value="${common-language}/commons-lang-2.2.jar" />
-    <property name="log4j.jar"        value="${log4j.home}/log4j-1.2.14.jar"/>
 
     <!-- Other -->
     <property name="uno-target-file"  value="SemassistOpenOfficePlugIn.uno.zip" />
     <property name="compile.debug"    value="true" />
 
     <description>
-        OpenOffice.org client for the semantic assistants infrastructure
+        OpenOffice.org client for the Semantic Assistants architecture
     </description>
 
     <path id="compile.classpath">
@@ -109,8 +127,9 @@
 
   <!-- Clear all build output -->
     <target name="clean">
-        <delete includeemptydirs="true">
+        <delete includeemptydirs="true" quiet="true">
             <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
+            <fileset dir="${dist.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
         </delete>
     </target>
 </project>
