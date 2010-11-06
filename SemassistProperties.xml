@@ -69,7 +69,7 @@
     <property name="antruntime"		      value="false"/>
 
     <!-- Libraries shipped with the distribution. You should not need to change this -->
-    <property name="lib.home"                 value="${semassist.home}/Lib/"/>
+    <property name="lib.home"                 value="${semassist.home}/Lib"/>
     <property name="log4j.jar"                value="${lib.home}/log4j-1.2.14.jar"/>
     <property name="commons-lang.jar"         value="${lib.home}/commons-lang-2.4.jar" />
 </project>
