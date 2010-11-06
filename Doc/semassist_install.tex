@@ -115,30 +115,39 @@ The two sample clients we provide, \emph{CommandLine} and \emph{OpenOffice}, hav
 \end{enumerate}
 
 \section{Path Configuration}
-The \emph{SemassistProperties.xml} file serves for two purposes.
-It's included by the ANT \emph{build.xml} files of all projects and contains common directory paths and used to compile the various Semantic Assistants components. Secondly, it used by the server at run-time as a property file.
+The \emph{SemassistProperties.xml} file serves for two purposes.  It's
+included by the ANT \emph{build.xml} files of all projects and
+contains common directory paths and used to compile the various
+Semantic Assistants components. Secondly, it used by the server at
+run-time as a property file.
 
-Users needs to modify the values of the properties in order to correspond at the proper paths of their machine. The options to be adapted, include the path to
-the service description directory, GATE home, GATE plug-ins,
-etc. Descriptions of these properties are as the followings:
+Users needs to modify the values of the properties in order to
+correspond at the proper paths of their machine. The options to be
+adapted, include the path to the service description directory, GATE
+home, GATE plug-ins, etc. Descriptions of these properties are as the
+followings:
 
-The first part is an import statement, where it includes the \texttt{LocalProperties.xml} file. This file the is the place to store your local paths and customizations e.g. you can add additional paths for your local pipelines in this file.
+The first part is an import statement, where it includes the
+\texttt{LocalProperties.xml} file. This file the is the place to store
+your local paths and customizations e.g. you can add additional paths
+for your local pipelines in this file.
 \begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
     <!-- Importing LocalProperties.xml file for local paths and customizations -->
     <import file ="LocalProperties.xml"/>
 \end{lstlisting}
 
-The second part of the \texttt{SemassistProperties.xml} is where the machine-specific variables are modified to point to proper paths of the users machine. The variables are as the followings:
+The second part of the \texttt{SemassistProperties.xml} is where the
+machine-specific variables are modified to point to proper paths of
+the users' machine. The variables as follows:
 \begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
     <!-- Machine dependent properties.Need to be modified -->
-    <property name="durmtools"      value="/usr/local/durmtools" />
-    <property name="semassist.home" value="${user.home}/Repository/durm/Projects/SemanticAssistants" />
-    <property name="csal.home"      value="${semassist.home}/CSAL" />
-
-    <property name="jaxws.home"               value="${durmtools}/jaxws-ri" />
-    <property name="protege-home"             value="${durmtools}/Protege" />
-    <property name="gate-home"                value="${durmtools}/GATE/gate" />
-    <property name="jdk.home"                 value="${durmtools}/jdk" />
+    <property name="durmtools"          value="/usr/local/durmtools" />
+    <property name="semassist.home"     value="${user.home}/Repository/semantic-assist" />
+    <property name="csal.home"          value="${semassist.home}/CSAL" />
+    <property name="jaxws.home"         value="${durmtools}/jaxws-ri" />
+    <property name="protege-home"       value="${durmtools}/Protege" />
+    <property name="gate-home"          value="${durmtools}/GATE/gate" />
+    <property name="jdk.home"           value="${durmtools}/jdk" />
 \end{lstlisting}
 
 \begin{enumerate}
