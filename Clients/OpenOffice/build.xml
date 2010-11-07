@@ -129,6 +129,7 @@
         <delete includeemptydirs="true" quiet="true">
             <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
             <fileset dir="${dist.home}" excludes="**/*.xcu,**/CVS,**/CVS/**,**/.cvsignore"/>
+	    <fileset file="${uno-target-file}"/>
         </delete>
     </target>
 </project>
