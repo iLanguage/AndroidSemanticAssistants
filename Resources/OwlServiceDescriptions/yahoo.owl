@@ -64,7 +64,7 @@
         <rdfs:comment rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
         >Performs a Yahoo! search and returns the first 10 results</rdfs:comment>
         <cu:producesOutput rdf:resource="#CorpusOutputArtifact"/>
-        <sa:appFileName xml:lang="en">../Resources/GatePipelines/Yahoo.gapp</sa:appFileName>
+	<sa:appFileName xml:lang="en">../Resources/GatePipelines/Yahoo/application.xgapp</sa:appFileName>
         <sa:giveInputToParameter rdf:resource="#QueryParameter"/>
         <cu:hasLabel xml:lang="en">Yahoo Search</cu:hasLabel>
         <sa:publishAsNLPService rdf:datatype="http://www.w3.org/2001/XMLSchema#boolean"
