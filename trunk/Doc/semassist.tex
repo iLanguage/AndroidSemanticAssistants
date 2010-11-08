@@ -77,13 +77,13 @@
 \renewcommand{\bottomfraction}{0.9}
 \renewcommand{\textfraction}{0.1}
 
-% color definitions
+%% color definitions
 \definecolor{darkred}{rgb}{0.5,0.0,0.0}
 \definecolor{darkgreen}{rgb}{0.0,0.4,0.0}
 \definecolor{darkblue}{rgb}{0.0,0.0,0.5}
 \addtokomafont{sectioning}{\color{blue}}
 
-% listing
+%% listing
 \lstloadlanguages{Lisp,Java,Make}
 \lstset{language=XML,
         basicstyle=\scriptsize\ttfamily,
@@ -96,7 +96,10 @@
         stringstyle=\color[rgb]{0.1640625,0,1}\ttfamily}
 %\lstset{language=Java,basicstyle=\sffamily\footnotesize,showlines=true}
 
-% hyperref
+%% url
+\urlstyle{same}
+
+%% hyperref
 \hypersetup{
   backref=true,
   colorlinks=true,
@@ -147,23 +150,27 @@ Montr\'{e}al, Canada\\
 \section*{About this document}
 This document contains documentation for the \emph{Semantic
   Assistants} project. You can obtain the latest version from
-\url{http://www.semanticsoftware.info/semantic-assistants}.
+\url{http://www.semanticsoftware.info/semantic-assistants}. The code
+is hosted on SourceForge, \url{https://sourceforge.net/projects/semantic-assist/}.
 
 \section*{Acknowledgments}
 The following developers contributed to the design and implementation
-of the Semantic Assistants: Ren\'{e} Witte, Tom
-Gitzinger, Nikolaos Papadakis, Bahar Sateli. Additional thanks for contributions
-to Ninus Khamis.
+of the Semantic Assistants: Ren\'{e} Witte, Tom Gitzinger, Nikolaos
+Papadakis, Bahar Sateli. Additional thanks to Ninus Khamis for
+his contributions.
 
-
-\section*{License}
+\section*{Licenses}
 The Semantic Assistants architecture, clients, and resources are
 published under the GNU Affero General Public License v3
-(AGPL3)\footnote{AGPL3,
-  \url{http://www.fsf.org/licensing/licenses/agpl-3.0.html}}.
+(AGPL3).\footnote{AGPL3,
+  \url{http://www.gnu.org/licenses/agpl-3.0.html}}
 
 This product also includes software developed by the Apache Software
-Foundation (\url{http://www.apache.org/}).
+Foundation (\url{http://www.apache.org/}), licensed under the Apache
+Software License, Version 1.1.
+
+The included NLP pipelines also contain code from the GATE project
+(\url{http://gate.ac.uk}) licensed under the LPGL3.\footnote{LGPL3, \url{http://www.gnu.org/licenses/lgpl-3.0.html}}
 
 \mainmatter
 \input{semassist_overview}
