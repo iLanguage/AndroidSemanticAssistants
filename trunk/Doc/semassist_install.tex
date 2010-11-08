@@ -38,6 +38,11 @@ prerequisites:
 %\item Apache Commons Lang v2.4, \url{http://commons.apache.org/lang/}
 \end{enumerate}
 
+\paragraph{For the Eclipse Plug-in:}
+\begin{enumerate}
+\item Eclipse Classic 3.5+ \url{http://www.eclipse.org/downloads/}
+\end{enumerate}
+
 \section{Download}
 To download the latest version of the \sa and this documentation
 please refer to
@@ -103,7 +108,7 @@ The two sample clients we provide, \emph{CommandLine} and \emph{OpenOffice}, hav
 \item \url{usableCommands}: Example of commands that can be invoked when running the runclient.sh script.
 \end{enumerate}
 
-\subsubsection{Open Office Writter Client Directory Structure}
+\subsubsection{OpenOffice.org Writer Client Directory Structure}
 \begin{enumerate}
 \item \url{src}: Contains the java source code.
 \item \url{dist}: Contains the \emph{Addons.xsu}, \emph{Protocolhandler.xsu} and \emph{ProtocolHandlerAddon\_ java.uno.jar} files.
@@ -112,6 +117,27 @@ The two sample clients we provide, \emph{CommandLine} and \emph{OpenOffice}, hav
 \item \url{Semassist.uno.zip}: Contains the output file result of complilation and packaged in uno.zip plug-in format used by OpenOffice.
 \item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Command Line Client} is loaded through Netbeans.
 \item \url{nb-build.xml}: Buildfile used by Netbeans.
+\end{enumerate}
+
+\subsubsection{Eclipse Client Directory Structure}
+\begin{enumerate}
+%\item\url{icon}: This is where the SA icon images are stored.
+\item \url{src}: This folder contains the Semantic Assistants plug-in source
+code. The internal structure of this directory is further explained in section
+\ref{subsec:eclipse.development}.
+\item \url{lib}: This is where all the external plug-in dependencies are stored.
+This folder contains the Client-Side Abstraction Layer JAR file used in the
+project to communicate with the server.
+\item \url{plugins}: This is where the Semantic Assistants plug-in JAR file will
+be stored when successfully built.
+\item \url{META-INF}: This is where the plug-in manifest file is stored. This
+file is used by the Eclipse plug-in loader to identify the Semantic Assistants
+plug-in.
+\item \url{plugin.xml}: This file
+contains general information of the plug-in like its dependencies, runtime
+classpath and extension points in form of an XML file and is used to
+introcude the plug-in to Eclipse plug-in loader. By using this file, developers
+can test the plug-in inside an Eclipse runtime application.
 \end{enumerate}
 
 \section{Path Configuration}
