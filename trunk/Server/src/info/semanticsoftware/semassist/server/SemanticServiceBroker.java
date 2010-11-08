@@ -499,7 +499,7 @@ public class SemanticServiceBroker
 	    */
 
 	    // RW: set the corpus
-            Logging.log( "---------------- Assining corpus to pipelien..." );
+            Logging.log( "---------------- Assining corpus to pipeline..." );
             boolean corpusAssigned = GateUtils.assignResultCorpus( serialCtrl, currentService, status.getCorpus() );
 	    // RW: maybe add the error handling from above...
 
