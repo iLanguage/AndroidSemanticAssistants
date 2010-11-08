@@ -10,6 +10,7 @@ semassist.pdf: semassist.tex semassist.bib semassist_overview.tex semassist_inst
 	$(BIBTEX) semassist
 	$(LATEX) semassist.tex
 	$(LATEX) semassist.tex
+	$(LATEX) semassist.tex
 
 clean: FORCE
 	-rm -f *.aux *.log *.out *.bbl *.toc *.blg *~
