@@ -340,8 +340,8 @@ information.
 
 We used this characteristic of Eclipse architecture to integrate our Semantic
 Assistants architecture into the Eclipse environment in form of a plug-in, in
-order to offer various Natural Language Processing services. The Eclipse
-Semantic Assistants plug-in is basically a Java archive (JAR) file that ships
+order to offer various Natural Language Processing services. The Semantic
+Assistants Eclipse plug-in is basically a Java archive (JAR) file that ships
 with its own specific content and a description file to introduce itself to the
 Eclipse plug-in loader. 
 
@@ -492,30 +492,9 @@ execute language services.
 \end{enumerate}
 
 \subsection{Development Notes}
+\label{subsec:eclipse.development}
 In this section, we provide further technical details on our plug-in for
 developers interesting in enhancing or modifying it.
-
-\subsubsection{Plug-in Directory Structure}
-\begin{enumerate}
-%\item\url{icon}: This is where the SA icon images are stored.
-\item\url{lib}: This is where all the external plug-in dependencies are stored.
-This folder contains the Client-Side Abstraction Layer JAR file used in the
-project to communicate to the server.
-\item\url{META-INF}: This is where the plug-in manifest file is stored. This
-file is used by the Eclipse plug-in loader to identify the Semantic Assistants
-plug-in.
-\item\url{plugins}: This is where the Semantic Assistants plug-in JAR file will
-be stored when successfully built.
-\item\url{src}: This folder contains the Semantic Assistants plug-in source
-code. The internal structure of this directory is further explained in the next
-section.
-\end{enumerate}
-
-There is also another file called \url{plugin.xml} in this directory. This file
-contains general information of the plug-in like its dependencies, runtime
-classpath and extension points in form of an XML file and is used to
-introcude the plug-in to Eclipse plug-in loader. By using this file, you can
-test the plug-in inside an Eclipse runtime application.
 
 \subsubsection{Plug-in Source Directory Structure}
 The Semantic Assistants plug-in uses Model-View-Controller pattern for its
