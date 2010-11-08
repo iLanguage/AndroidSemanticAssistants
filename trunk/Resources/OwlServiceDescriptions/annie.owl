@@ -16,7 +16,7 @@
     <owl:imports rdf:resource="http://localhost/SemanticAssistants.owl"/>
   </owl:Ontology>
   <sa:NLPTool rdf:ID="PersonLocationExtractor">
-    <sa:appFileName xml:lang="en">../Resources/GatePipelines/Annie.gapp</sa:appFileName>
+    <sa:appFileName xml:lang="en">../Resources/GatePipelines/Annie/application.xgapp</sa:appFileName>
     <cu:producesOutput>
       <sa:GATE_OutputArtifact rdf:ID="DateAnnotationOutput">
         <cu:isProducedBy rdf:resource="#PersonLocationExtractor"/>
