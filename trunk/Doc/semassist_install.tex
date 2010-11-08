@@ -48,7 +48,7 @@ To download the latest version of the \sa and this documentation
 please refer to
 \url{http://www.semanticsoftware.info/semantic-assistants-architecture}.
 
-\section{Project Desciption}
+\section{Project Description}
 This section gives an overview of the directory structure and explains the modifications
 required for every user to be able to proceed with the compilation.
 
@@ -278,74 +278,6 @@ In this case the server does not have to be running for the CSAL to be built.
 \end{enumerate}
 We recommend you test if the server is running correctly by accessing
 it through the command-line client described below.
-
-\section{Configuration of the Example Services}
-Three example pipelines (NLP services) come with the architecture.
-They are located in the \url{Resources} directory. There are two
-parts: the semantic service descriptions in OWL format stored in the
-\url{OwlServiceDescriptions} directory and corresponding GATE
-pipelines (\url{.gapp} files) implementing these services in the
-\url{GatePipelines} directory.
-
-Because \url{.gapp} files contain hard-coded directory paths, you must
-generate them on the same system where you later run the server. Below
-are step-by-step instructions on how to generate and save these
-pipelines.
-
-In a similar matter the two example \url{.owl} files contain a hardcoded path which point to the corresponding GATE
-pipelines (\url{.gapp} files). Search and replace the following path in the \url{annie.owl} file:
-\url{<sa:appFileName xml:lang="en">~/Repository/durm/Projects/SemanticAssistants/Resources/GatePipelines/Annie.gapp</sa:appFileName>}.
-In the same fashion search and replace the path in the \url{yahoo.owl} file.
-
-\paragraph{Person and Location Extractor.} This NLP service runs the
-ANNIE IE system that comes with the standard GATE distribution.  It
-detects a number of named entities, such as persons, locations,
-organizations, etc.  
-
-To configure the ANNIE NLP service in your installation, perform the
-following two steps:
-\begin{enumerate}
-\item Start GATE and create an ANNIE pipeline ``with defaults''.
-  ANNIE, together with its components, will load automatically (for
-  details on ANNIE, please refer to GATE's user's guide).
-
-\item Store the created GATE pipeline under
-  \url{Resources/GatePipelines} using GATE's \emph{Save Application
-    State} menu function and name it (exactly) as \url{Annie.gapp}.
-\end{enumerate}
-An OWL service description for this pipeline is already implemented
-and stored in the directory
-\url{Resources/OwlServiceDescriptions/annie.owl}.  For details on the
-OWL-based description format, please refer to Section~\ref{sec:owl}.
-
-\paragraph{Yahoo Search.} This service performs a Web search for a
-user and returns the first $n$ documents (where $n$ is a
-user-configurable parameter). To create the corresponding GATE
-pipeline, you need to follow these steps:
-\begin{enumerate}
-\item Start GATE and create a new pipeline through \emph{File
-    $\rightarrow$ New application $\rightarrow$ Pipeline}. Note that
-  you must select ``Pipeline'' and not any of the other options
-  (``Corpus Pipeline'' etc.).
-\item Start the CREOLE plug-in manager with \emph{File
-    $\rightarrow$ Manage CREOLE plug-ins}, scroll down to ``Web\_Search\_Yahoo'',
-  select ``Load now'' and hit ``OK''.
-\item Create a new Yahoo PR component through \emph{File
-    $\rightarrow$ New processing resource $\rightarrow$ YahooPR}. Note
-  that you will need a Yahoo API key for the ``applicationID'' (see
-  the \href{http://gate.ac.uk/sale/tao/splitch19.html#x24-51700019.7}{GATE manual} for details).
-\item Insert the newly created Yahoo PR into the Pipeline
-  (double-click on the pipeline, and add the PR from the left to the
-  pipeline on the right). If you have problems with this step, please
-  consult the GATE manual for basic instructions on how to use the
-  GATE GUI.
-\item Save the pipeline as above with the name \url{Yahoo.gapp}.
-\end{enumerate}
-
-\paragraph{Web IR Extractor.} The third example service shows how to
-combine two existing services, by first calling the Yahoo IR service
-and then using the search results as input to the ANNIE IE
-service. This service is located in \url{yahooExtractor.owl}.
 
 
 
