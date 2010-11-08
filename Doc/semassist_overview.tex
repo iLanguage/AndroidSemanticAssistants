@@ -147,5 +147,38 @@ with the following components:
 %   %\vspace*{-0.4cm}
 % \end{figure}
 
+\section{Example NLP Services}
+A number of example pipelines (NLP services) come with the architecture.
+They are located in the \url{Resources} directory. There are two
+parts: the semantic service descriptions in OWL format stored in the
+\url{OwlServiceDescriptions} directory and corresponding GATE
+pipelines (\url{.xgapp} files) implementing these services in the
+\url{GatePipelines} directory.
+
+\paragraph{Person and Location Extractor.} This NLP service runs the
+ANNIE IE system that comes with the standard GATE distribution.  It
+detects a number of named entities, such as persons, locations,
+organizations, etc.  An OWL service description for this pipeline is
+already implemented and stored in the directory
+\url{Resources/OwlServiceDescriptions/annie.owl}.  For details on the
+OWL-based description format, please refer to Section~\ref{sec:owl}.
+
+\paragraph{Yahoo Search.} This service performs a Web search for a
+user and returns the first $n$ documents (where $n$ is a
+user-configurable runtime parameter). While this service usually works
+as provided, you should obtain a Yahoo API key (see the
+\href{http://gate.ac.uk/sale/tao/splitch19.html#x24-51700019.7}{GATE
+  manual} for details on this) and store this key in the file
+\url{Resources/GatePipelines/Yahoo/application.xgapp} by replacing the
+string ``insertyahooidhere'':
+\begin{verbatim}
+    <string>applicationID</string>
+    <string>insertyahooidhere</string>
+\end{verbatim}
+
+\paragraph{Web IR Extractor.} The third example service shows how to
+combine two existing services, by first calling the Yahoo IR service
+and then using the search results as input to the ANNIE IE
+service. This service is located in \url{yahooExtractor.owl}.
 
 
