@@ -25,9 +25,6 @@
 -->
 <project name="share">
     
-    <!-- Importing LocalProperties.xml file for local paths and customizations -->
-    <import file ="LocalProperties.xml"/>
-    
     <!-- Machine dependent properties. Need to be modified -->
     <property name="durmtools"                value="/usr/local/durmtools" />
     <property name="semassist.home"           value="${user.home}/Repository/semantic-assist" />
@@ -72,4 +69,8 @@
     <property name="lib.home"                 value="${semassist.home}/Lib"/>
     <property name="log4j.jar"                value="${lib.home}/log4j-1.2.14.jar"/>
     <property name="commons-lang.jar"         value="${lib.home}/commons-lang-2.4.jar" />
+
+    <!-- Importing LocalProperties.xml file for local paths and customizations -->
+    <import file ="LocalProperties.xml"/>
+
 </project>
