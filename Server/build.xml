@@ -111,17 +111,13 @@ destdir="${build.home}">
                 <pathelement location="${protege-owl.home}/orphanNodesAlg.jar" />
                 <pathelement location="${protege-owl.home}/arq.jar" />
                 <pathelement location="${protege-home}/looks-2.1.3.jar" />
-                <pathelement location="${fuzzylib.home}" />
-            <!-- To be removed in release -->
-                <pathelement location="${durmclasses}" />
-                <fileset dir="${durmtools}/jwnl/" >
-                    <include name="*.jar" />
-                </fileset>
-            <!-- END To be removed in release -->
-
                 <fileset dir="${gate-home}/lib" >
                     <include name="*.jar" />
                 </fileset>
+
+		<!-- Locally needed paths defined in LocalProperties.xml file -->
+                <path refid="localruntimeclasspath"/>
+                
             </classpath>
         </java>
     </target>
