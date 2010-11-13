@@ -155,12 +155,22 @@ followings:
 
 The first part is an import statement, where it includes the
 \texttt{LocalProperties.xml} file. This file the is the place to store
-your local paths and customizations e.g. you can add additional paths
+your local paths and customizations, e.g., you can add additional paths
 for your local pipelines in this file.
 \begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
     <!-- Importing LocalProperties.xml file for local paths and customizations -->
     <import file ="LocalProperties.xml"/>
 \end{lstlisting}
+By default, \texttt{LocalProperties.xml} contains the path to the directory containing the NLP
+service descriptions (OWL files):
+\begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
+  <property name="service.repository"       value="${semassist.home}/Resources/OwlServiceDescriptions/"/>
+
+  <path id="localruntimeclasspath">
+    <!-- Added locally needed paths here -->
+  </path>
+\end{lstlisting}
+
 
 The second part of the \texttt{SemassistProperties.xml} is where the
 machine-specific variables are modified to point to proper paths of
@@ -168,8 +178,6 @@ the users' machine. The variables as follows:
 \begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
     <!-- Machine dependent properties.Need to be modified -->
     <property name="durmtools"          value="/usr/local/durmtools" />
-    <property name="semassist.home"     value="${user.home}/Repository/semantic-assist" />
-    <property name="csal.home"          value="${semassist.home}/CSAL" />
     <property name="jaxws.home"         value="${durmtools}/jaxws-ri" />
     <property name="protege-home"       value="${durmtools}/Protege" />
     <property name="gate-home"          value="${durmtools}/GATE/gate" />
@@ -179,8 +187,8 @@ the users' machine. The variables as follows:
 \begin{enumerate}
 \item \url{durmtools}: This is one of the most important variables in this properties file and needs to be defined properly. According to the prerequisites mentioned earlier, there are various applications that need to be installed prior to using the Semantic Assistants.
 Create a folder called \texttt{durmtools} and install all the required applications to this folder, or point this variable to where all your applications are installed e.g. \emph{Applications} on Mac or \emph{Programs} in Windows.
-\item \url{semassist.home}: This variable points to the place on your local machine that the Semantic Assistants package has been downloaded and extracted. Put the full path of the folder in here, exempting the user home directory path for it will be automatically replaced by \texttt{\$\{user.home\}}.
-\item \url{csal.home}: This variable points to the \texttt{CSAL} folder inside the Semantic Assistants package. If the structure is untouched, the path should read \texttt{"\$\{semassist.home\}/CSAL"}.
+%\item \url{semassist.home}: This variable points to the place on your local machine that the Semantic Assistants package has been downloaded and extracted. Put the full path of the folder in here, exempting the user home directory path for it will be automatically replaced by \texttt{\$\{user.home\}}.
+%\item \url{csal.home}: This variable points to the \texttt{CSAL} folder inside the Semantic Assistants package. If the structure is untouched, the path should read \texttt{"\$\{semassist.home\}/CSAL"}.
 \item \url{jaxws.home}: This variable points to the Java API for XML Web Services (JAX-WS) v2.1.x application installed in the path defined in \texttt{\$\{durmtools\}} variable.
 \item \url{protege-home}: This variable points to the Prot\'{e}g\'{e}-OWL API v3.4 application installed in the path defined in \texttt{\$\{durmtools\}} variable.
 \item \url{gate-home}: This variable points to the GATE v5.0 or newer application installed in the path defined in \texttt{\$\{durmtools\}} variable.
@@ -221,7 +229,6 @@ The last part includes all the properties used by the Semantic Assistants server
     <!-- Used by the server at runtime as properties -->
     <property name="gate.plugin.dir"          value="${gate-home}/plugins/"/>
     <property name="gate.user.file"           value="${semassist.home}/Server/gate-home/user-gate.xml" />
-    <property name="service.repository"       value="${semassist.home}/Resources/OwlServiceDescriptions/"/>
     <property name="ontology.repository"      value="${semassist.home}/Resources/ont-repository/" />
 
     <property name="runtime.maxmem"       value="1638m" />
@@ -237,7 +244,7 @@ The last part includes all the properties used by the Semantic Assistants server
 \begin{enumerate}
 \item \url{gate.plugin.dir}: This variable points to the GATE application \texttt{plugins} folder used for service executions.
 \item \url{gate.user.file}: This variable points to the GATE application user configuration file.
-\item \url{service.repository}: This variable points to the OWL service description files. New service description files are added to this folder once they're available and will be later detected by the server. 
+%\item \url{service.repository}: This variable points to the OWL service description files. New service description files are added to this folder once they're available and will be later detected by the server. 
 \item \url{ontology.repository}: This variable points to the folder containing the SemanticAssistants OWL files.
 \item \url{runtime.maxmem}: This variable contains the maximum amount of runtime memory used by JDK. Unless your JDK complains about the value, leave this as it is.
 \item \url{runtime.heap.initial}: This variable contains the initial amount of heap space used by JDK at runtime.
