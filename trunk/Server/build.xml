@@ -22,6 +22,7 @@
 -->
 
 <project name="Server" default="run" basedir=".">
+    <property name="semassist.home"           value="../" />
 
     <!-- Machine specific settings should go in SemassistProperties.xml -->
     <import file ="../SemassistProperties.xml"/>

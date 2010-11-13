@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 <!-- $Id: build.xml,v 1.7 2007/05/10 15:03:27 gitzing Exp $ -->
 <project name="CSAL" default="dist" basedir=".">
+    <property name="semassist.home"           value="../" />
 
     <!-- Machine specific settings should go in SemassistProperties.xml -->
     <import file ="../SemassistProperties.xml"/>
