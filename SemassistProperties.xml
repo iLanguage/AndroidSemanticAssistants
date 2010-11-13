@@ -25,11 +25,10 @@
 -->
 <project name="share">
     <property name="semassist.home"           value="${basedir}" />
-    
-    <!-- Machine dependent properties. Need to be modified -->
-    <property name="durmtools"                value="/usr/local/durmtools" />
     <property name="csal.home"                value="${semassist.home}/CSAL" />
 
+    <!-- Machine dependent properties. Need to be modified -->
+    <property name="durmtools"                value="/usr/local/durmtools" />
     <property name="jaxws.home"               value="${durmtools}/jaxws-ri" />
     <property name="protege-home"             value="${durmtools}/Protege" />
     <property name="gate-home"                value="${durmtools}/GATE/gate" />
@@ -49,7 +48,6 @@
     <!-- Used by the server at runtime as properties -->
     <property name="gate.plugin.dir"          value="${gate-home}/plugins/"/>
     <property name="gate.user.file"           value="${semassist.home}/Server/gate-home/user-gate.xml" />
-    <property name="service.repository"       value="${semassist.home}/Resources/OwlServiceDescriptions/"/>
     <property name="ontology.repository"      value="${semassist.home}/Resources/ont-repository/" />
 
     <property name="runtime.maxmem"           value="1638m" />

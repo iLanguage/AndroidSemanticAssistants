@@ -22,7 +22,7 @@
     <property name="wsdl.source"   value="http://${env.HOSTNAME}:${server.port.wsdl}/SemAssist?wsdl" />
     
     <!-- Library Files -->
-    <property name="csal.jar"       value="${csal.home}/dist/CSAL.jar" />
+    <property name="csal.jar"      value="${csal.home}/dist/CSAL.jar" />
     <property name="gate.jar"      value="${gate-home}/bin/gate.jar" />
    
 
