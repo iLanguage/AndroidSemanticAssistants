@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
    
 <project name="semassist-local">
+  <property name="service.repository"       value="${semassist.home}/Resources/OwlServiceDescriptions/"/>
 
-   <path id="localruntimeclasspath">
-        <!-- Added locally needed paths here -->
-   </path>
+  <path id="localruntimeclasspath">
+    <!-- Added locally needed paths here -->
+  </path>
 
 </project>
