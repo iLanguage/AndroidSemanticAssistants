@@ -25,7 +25,7 @@
     <property name="semassist.home"           value="../../" />
 
     <!-- Machine specific settings should go in SemassistProperties.xml -->
-    <import file ="../../SemassistProperties.xml"/>
+    <import file ="${semassist.home}/SemassistProperties.xml"/>
 
     <!-- Top Directories -->
     <property name="build.home"    value="${basedir}/bin"/>
