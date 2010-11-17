@@ -1,0 +1,11 @@
+\chapter{Troubleshooting}
+\section{Compiling}
+\subsection{Eclipse Plug-In}
+\paragraph{"Too many open files" Error.} This problem happens only on Linux
+machines and is related to the limitations of shell resources stored in system configurations. You get this error when you're pushing various limits like open file descriptors to your system e.g. compiling numerous classes in JVM.
+
+To fix this problem, first check your user limit with the following command:
+\begin{verbatim}
+ulimit -aH
+\end{verbatim}
+The \texttt{ulimit} is a Linux built-in shell command, which provides control over the resources available to the shell and its child processes. The result reports the file-size  writing limit imposed on files written by your shell. This problem arises when your open files size is less than what is required by the JVM to compile all the classes, which is at least 6000. Thus, to bypass this problem, simply increase the open files size to a size more than 6000.
