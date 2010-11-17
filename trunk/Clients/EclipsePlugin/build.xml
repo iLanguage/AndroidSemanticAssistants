@@ -14,6 +14,7 @@
       <property name="build.home" value="${basedir}/bin"/>
       <property name="src.home"   value="${basedir}/src"/>
       <property name="plugins.home"   value="${basedir}/plugins"/>
+      <property name="plugins.temp" value="${basedir}/temp"/>
       <property name="bundleName" value="info.semanticsoftware.semassist.client.eclipse.1.0.0.jar"/>
     </target>
 	
@@ -24,10 +25,10 @@
       <property name="javacDebugInfo" value="on"/>
       <property name="javacVerbose" value="true"/>
       <path id="plugincompile.classpath">
-	<fileset dir="${eclipse.plugins}">
-	  <include name="*.jar" />
-	</fileset>
-	<pathelement path="${basedir}/lib/CSAL.jar"/>
+		<fileset dir="${eclipse.plugins}">
+	  	<include name="*.jar" />
+		</fileset>
+		<pathelement path="${basedir}/lib/CSAL.jar"/>
       </path>
       
     </target>
@@ -45,8 +46,20 @@
     
     <!-- Build .jar file from compiled classes -->
     <target name="build.jars" depends="compile"  description="Build plug-in .jar file">
-      <jar destfile="plugins/${bundleName}" basedir="${build.home}" />
-    </target>
+    	<mkdir dir="${plugins.temp}"/>
+    	<copy todir="${plugins.temp}">
+        	<fileset dir="${build.home}"/>
+    	</copy>
+    	<copy todir="${plugins.temp}">
+    	<fileset dir="${basedir}" includes="lib"/>
+    	</copy>
+    	<copy todir="${plugins.temp}/lib">
+    	<fileset dir="${basedir}/lib"/>
+    	</copy>
+
+    	<jar destfile="plugins/${bundleName}" basedir="${plugins.temp}" manifest="META-INF/MANIFEST.MF" filesetmanifest="merge"/>
+    	<delete dir="${plugins.temp}"/>
+	</target>
     
     <!-- Clear all build output -->
     <target name="clean" depends="properties" description="Cleaning the build outputs">
