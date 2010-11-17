@@ -7,7 +7,7 @@
     <property name="semassist.home"           value="../../" />
     
     <!-- Importing SemassistProperties.xml file to use machine specific settings -->
-    <import file ="../../SemassistProperties.xml"/>
+    <import file ="${semassist.home}/SemassistProperties.xml"/>
 	
     <target name="properties">
       <!-- Top Directories -->
