@@ -56,6 +56,11 @@
     	<copy todir="${plugins.temp}/lib">
     	<fileset dir="${basedir}/lib"/>
     	</copy>
+    	
+    	<copy todir="${plugins.temp}">
+    	<fileset file="${basedir}/plugin.xml"/>
+    	</copy>
+
 
     	<jar destfile="plugins/${bundleName}" basedir="${plugins.temp}" manifest="META-INF/MANIFEST.MF" filesetmanifest="merge"/>
     	<delete dir="${plugins.temp}"/>
