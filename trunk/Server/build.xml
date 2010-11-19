@@ -53,6 +53,7 @@
         <pathelement location="${protege-owl.home}/protege-owl.jar" />
         <pathelement location="${protege-owl.home}/jena.jar" />
         <pathelement location="${protege-owl.home}/arq.jar" />
+        <pathelement location="${ant.jar}" />
     </path>    
   
     <!-- This target compiles all the classes -->  
@@ -60,7 +61,7 @@
     <!-- Compile the java code from ${srcDir} into ${buildDir} -->
         <mkdir dir="${build.home}" />
         <javac srcdir="${src.home}" debug="true" debuglevel="lines,vars,source"
-destdir="${build.home}">
+destdir="${build.home}" includeantruntime="${antruntime}">
             <classpath refid="compile.classpath" />
         </javac>
     </target>

@@ -67,6 +67,7 @@
     <property name="lib.home"                 value="${semassist.home}/Lib"/>
     <property name="log4j.jar"                value="${lib.home}/log4j-1.2.14.jar"/>
     <property name="commons-lang.jar"         value="${lib.home}/commons-lang-2.4.jar" />
+    <property name="ant.jar" 		      value="${lib.home}/ant.jar"/>
 
     <!-- Importing LocalProperties.xml file for local paths and customizations -->
     <import file ="LocalProperties.xml"/>
