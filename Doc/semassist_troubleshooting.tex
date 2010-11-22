@@ -9,3 +9,8 @@ To fix this problem, first check your user limit with the following command:
 ulimit -aH
 \end{verbatim}
 The \texttt{ulimit} is a Linux built-in shell command, which provides control over the resources available to the shell and its child processes. The result reports the file-size  writing limit imposed on files written by your shell. This problem arises when your open files size is less than what is required by the JVM to compile all the classes, which is at least 6000. Thus, to bypass this problem, simply increase the open files size to a size more than 6000.
+
+\section{Installation}
+\subsection{Eclipse Plug-In}
+\paragraph{The Plug-in does not show up in Eclipse.} This problem happens when the plug-in could not successfully install itself on your Eclipse. The most common cause of this is when you have not enough permissions on your Eclipse installation folder. For Eclipse plug-in to install itself, it needs write permission to the \texttt{configurations} folder. Login as root or obtain the adequate permissions to write into the Eclipse installation folder and restart application.
+It is recommended to start Eclipse with \texttt{"-clean"} command line argument to clear any per-configuration cached data.
