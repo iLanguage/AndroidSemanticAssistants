@@ -24,7 +24,6 @@ public class SemanticAssistantsStatusView extends ViewPart {
 	/** The ID of the view as specified by the extension. */
 	public static final String ID = "info.semanticsoftware.semassist.client.eclipse.views.SemanticAssistantsStatusView";
 	
-	// TODO remove sample action
 	private Action refreshAction;
 	/** The viewer to show the content of the table. */
 	private TableViewer viewer;
