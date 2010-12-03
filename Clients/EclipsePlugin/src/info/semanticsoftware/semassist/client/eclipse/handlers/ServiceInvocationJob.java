@@ -22,9 +22,9 @@ import org.eclipse.swt.widgets.Display;
 public class ServiceInvocationJob extends Job{
 
 	/** The name of the service to be invoked */
-	String serviceName;
+	String serviceName = "";
 
-	/** This  variable is used as a container for parameters needed by some NLP services */
+	/** This  variable is used as a container for parameters needed by some NLP services /
 	/* Sample parameters
 	 * String params = "docs=http://en.wikipedia.org/w/index.php?title=Stanley_Kubrick&printable=yes";
 	 * */
@@ -42,14 +42,15 @@ public class ServiceInvocationJob extends Job{
 
 	/** This method runs when the job is scheduled to run by operating system.
 	 * @return the status of the job when it is finished
-	 *  */
+	 */
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
         monitor.beginTask("Retrieving annotations...", 1000000000);
 		try
          {
              System.out.println( "Invoking " + serviceName + "..." );
-             // Extract user context from the parameters
+    
+             // Build user context from the parameters
              UserContext ctx = buildUserContext( params );
              
              //TODO check with SA document
@@ -68,19 +69,12 @@ public class ServiceInvocationJob extends Job{
              monitor.done();
              return Status.CANCEL_STATUS;
          }finally{
-        	 new Thread(new Runnable() {
- 				//TODO look for thread overhead
- 				@Override
-				public void run() {
-					Display.getDefault().asyncExec(new Runnable() {
+        	 Display.getDefault().asyncExec(new Runnable() {
 						@Override
 						public void run() {
 							FileSelectionHandler.openViews();
 						}
-					});
-				}
-			}).start();
-        		    
+					}); 
         	this.done(ASYNC_FINISH);
          }
 	}
