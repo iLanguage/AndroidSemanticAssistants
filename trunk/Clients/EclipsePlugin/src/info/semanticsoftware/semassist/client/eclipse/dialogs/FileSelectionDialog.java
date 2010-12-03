@@ -369,6 +369,7 @@ public class FileSelectionDialog extends SelectionStatusDialog {
 		Label lblServices = new Label(composite, SWT.LEFT);
 		lblServices.setText("Step 2: Please choose one of the available services:");
         cmbServices = new Combo(composite, SWT.DROP_DOWN | SWT.READ_ONLY);
+	    cmbServices.add("");
 
 		 for(int i=0; i < servicesThread.services.size(); i++){
 			 cmbServices.add(servicesThread.services.get(i));
