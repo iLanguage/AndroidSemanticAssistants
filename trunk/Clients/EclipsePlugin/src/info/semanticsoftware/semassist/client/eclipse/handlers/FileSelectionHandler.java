@@ -10,7 +10,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.Assert;
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.IWorkbenchWindow;
@@ -29,7 +29,7 @@ public class FileSelectionHandler extends AbstractHandler{
 	/** The acceptable file extension to be sent through the pipeline */
 	final private String extension = "java";
 	public static IWorkspace workspace;
-	public static String serviceName = "";
+	public static String serviceName;
 	public static IWorkbenchWindow window;
 	/**
 	 * The constructor.
@@ -86,19 +86,18 @@ public class FileSelectionHandler extends AbstractHandler{
             }
     		
            if(EvaluationSession.getResources().size() == 0){
-               //FIXME error report. To be removed
-        	   System.err.println("No files was selected.");
+        	   showError("No file was selected. Aborting...");
            }else{
         	   // We have the files in session, let's invoke the service...
         	   
-        	   // Make sure we have the name of the service
-        	   Assert.isNotNull(serviceName, "The service name is not available.");
-
-        	   EvaluationSession.invoke(serviceName);  
-	           SemanticAssistantsStatusViewModel.addLog("Invoking " + serviceName + "...");
-	           
-	       
-	        }
+        	   // First, let's make sure we have the name of the service!       	   
+	      		 if(serviceName.equals("")){
+	    			 showError("No service was selected to run. Aborting...");
+	    		  }else{
+	    			  EvaluationSession.invoke(serviceName);  
+	    			  SemanticAssistantsStatusViewModel.addLog("Invoking " + serviceName + "...");
+	    		  }
+		        }
         }
         return null;
 	}
@@ -117,5 +116,9 @@ public class FileSelectionHandler extends AbstractHandler{
 				System.err.println("Could not open the view.");
 				e.printStackTrace();
 			}
+	}
+	
+	private void showError(String errorMessage) {
+		MessageDialog.openInformation(window.getShell(),"Semantic Assistants",errorMessage);
 	}
 }
