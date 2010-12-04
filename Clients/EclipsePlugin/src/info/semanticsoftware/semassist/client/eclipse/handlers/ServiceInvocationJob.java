@@ -2,12 +2,17 @@ package info.semanticsoftware.semassist.client.eclipse.handlers;
 
 import info.semanticsoftware.semassist.client.eclipse.model.AnnotationParser;
 import info.semanticsoftware.semassist.client.eclipse.model.SemanticAssistantsStatusViewModel;
+import info.semanticsoftware.semassist.csal.ClientUtils;
+import info.semanticsoftware.semassist.csal.result.SemanticServiceResult;
 import info.semanticsoftware.semassist.server.GateRuntimeParameterArray;
 import info.semanticsoftware.semassist.server.SemanticServiceBroker;
 import info.semanticsoftware.semassist.server.UriList;
 import info.semanticsoftware.semassist.server.UserContext;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Iterator;
+import java.util.Vector;
+
 import net.java.dev.jaxb.array.StringArray;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -188,7 +193,35 @@ public class ServiceInvocationJob extends Job{
 		        System.out.println( "" );
 		        System.out.println(serviceResponse);
 
-			    new AnnotationParser(serviceResponse).parseXML();
+
+			      // returns result in sorted by type
+			      Vector<SemanticServiceResult> results = ClientUtils.getServiceResults( serviceResponse );
+		          if( results == null ) {
+			                // Open document showing response message
+			                System.out.println( "---------- No results retrieved in response message" );
+			                return;
+			      }
+
+			            for( Iterator<SemanticServiceResult> it = results.iterator(); it.hasNext(); )
+			            {
+			                SemanticServiceResult current = it.next();
+			                if(current.mResultType.equals(SemanticServiceResult.FILE)){
+			                	System.out.println("*File Case*");
+			                }
+			                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION_IN_WHOLE)){
+			                	System.out.println("*Annotation Case - Append to data structure*");
+			                }
+			                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
+			                	System.out.println("*Annotation Case*");
+			    		        new AnnotationParser(serviceResponse).parseXML();
+			                }
+			                else if(current.mResultType.equals(SemanticServiceResult.CORPUS)){
+			                	System.out.println("*Corpus Case*");
+			                }
+			                else if(current.mResultType.equals(SemanticServiceResult.DOCUMENT)){
+			                	System.out.println("*Document Case*");
+			                }
+			            }
 	    }
 	 
 	 public void addLiteral(String literal){
