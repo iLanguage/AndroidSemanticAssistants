@@ -1,6 +1,5 @@
 package info.semanticsoftware.semassist.client.eclipse.handlers;
 
-import info.semanticsoftware.semassist.client.eclipse.model.AnnotationParser;
 import info.semanticsoftware.semassist.client.eclipse.model.SemanticAssistantsStatusViewModel;
 import info.semanticsoftware.semassist.csal.ClientUtils;
 import info.semanticsoftware.semassist.csal.result.SemanticServiceResult;
@@ -212,7 +211,7 @@ public class ServiceInvocationJob extends Job{
 			                }
 			                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
 			                	System.out.println("*Annotation Case*");
-			    		        new AnnotationParser(serviceResponse).parseXML();
+			    		        ServerResonseHandler.annotationCase(serviceResponse);
 			                }
 			                else if(current.mResultType.equals(SemanticServiceResult.CORPUS)){
 			                	System.out.println("*Corpus Case*");
