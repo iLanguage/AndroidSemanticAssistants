@@ -211,7 +211,7 @@ public class ServiceInvocationJob extends Job{
 			                }
 			                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
 			                	System.out.println("*Annotation Case*");
-			    		        ServerResonseHandler.annotationCase(serviceResponse);
+			    		        ServerResponseHandler.annotationCase(serviceResponse);
 			                }
 			                else if(current.mResultType.equals(SemanticServiceResult.CORPUS)){
 			                	System.out.println("*Corpus Case*");
