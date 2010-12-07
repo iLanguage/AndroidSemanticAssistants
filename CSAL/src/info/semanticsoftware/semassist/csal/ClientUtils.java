@@ -317,10 +317,12 @@ public class ClientUtils
         {
 
             System.out.println( "------------- #text case!! " + nodeName );
+	    result = null;
         }
         else
         {
             System.out.println( "------------- Unhandled case: " + nodeName );
+	    result = null;
         }
 
         return result;
