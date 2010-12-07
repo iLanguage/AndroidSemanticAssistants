@@ -28,7 +28,6 @@ import java.util.*;
 import java.text.DateFormat;
 
 import info.semanticsoftware.semassist.csal.result.*;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.w3c.dom.*;
