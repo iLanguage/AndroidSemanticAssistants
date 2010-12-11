@@ -100,7 +100,7 @@ destdir="${build.home}" includeantruntime="${antruntime}">
 
     <!-- Clear all build output -->
     <target name="clean">
-        <delete includeemptydirs="true">
+        <delete includeemptydirs="true" quiet="true">
             <fileset dir="${build.home}"/>
         </delete>
     </target>
