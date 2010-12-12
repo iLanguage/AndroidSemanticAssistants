@@ -40,6 +40,7 @@
       <!-- Copying CSAL.jar file from repository to the projects lib folder -->
       <copy file="${csal.home}/dist/CSAL.jar" todir="${basedir}/lib"/>
       <javac srcdir="${src.home}/" destdir="${build.home}" failonerror="${javacFailOnError}" debug="true" debuglevel="lines,vars,source"  classpath="${build.home}" includeantruntime="${antruntime}">
+	<compilerarg value="${compile.args}" />
 	<classpath refid="plugincompile.classpath" />
       </javac>
     </target>
