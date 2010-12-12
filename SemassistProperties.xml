@@ -63,6 +63,9 @@
     <!-- Ant runtime parameters used to suppress warnings in 1.8 -->
     <property name="antruntime"		      value="false"/>
 
+    <!-- Compile parameters for javac. Set "-Xlint:none" to suppress warnings -->
+    <property name="compile.args"	      value="-Xlint"/>
+
     <!-- Libraries shipped with the distribution. You should not need to change this -->
     <property name="lib.home"                 value="${semassist.home}/Lib"/>
     <property name="log4j.jar"                value="${lib.home}/log4j-1.2.14.jar"/>

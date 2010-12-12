@@ -62,7 +62,8 @@
         <mkdir dir="${build.home}" />
         <javac srcdir="${src.home}" debug="true" debuglevel="lines,vars,source"
 destdir="${build.home}" includeantruntime="${antruntime}">
-            <classpath refid="compile.classpath" />
+	  <compilerarg value="${compile.args}" />
+	  <classpath refid="compile.classpath" />
         </javac>
     </target>
 

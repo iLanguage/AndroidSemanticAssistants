@@ -67,6 +67,7 @@
         <copy file="${commons-lang.jar}" todir="${dist.home}"/>
         <copy file="${log4j.jar}" todir="${dist.home}"/>
         <javac srcdir="${src.home}/" destdir="${build.home}" debug="true" debuglevel="lines,vars,source"  classpath="${build.home}"  includeantruntime="${antruntime}">
+            <compilerarg value="${compile.args}" />
             <classpath refid="compile.classpath" />
         </javac>
     </target>
