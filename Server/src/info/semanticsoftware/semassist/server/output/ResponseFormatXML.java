@@ -33,6 +33,7 @@ import java.util.Arrays;
 public class ResponseFormatXML
 {
 
+    /* We keep these strings for better readability while debugging
     public static final String START_MARKING = "    <mark ";
     public static final String END_MARKING = "</mark>\n";
     public static final String START_ANNOTATION = "    <annotation ";
@@ -40,7 +41,16 @@ public class ResponseFormatXML
     public static final String START_ANNOTATION_INSTANCE = "        <annotationInstance ";
     public static final String START_OUTPUT_FILE = "    <outputFile ";
     public static final String START_OUTPUT_DOCUMENT = "    <outputDocument ";
-    public static final String START_FEATURE = "          <feature ";
+    public static final String START_FEATURE = "          <feature ";*/
+
+    public static final String START_MARKING = "<mark";
+    public static final String END_MARKING = "</mark>";
+    public static final String START_ANNOTATION = "<annotation";
+    public static final String START_DOCUMENT = "<document";
+    public static final String START_ANNOTATION_INSTANCE = "<annotationInstance";
+    public static final String START_OUTPUT_FILE = "<outputFile";
+    public static final String START_OUTPUT_DOCUMENT = "<outputDocument";
+    public static final String START_FEATURE = "<feature";
 
     public static String createMarkingElement( String type,
                                                String startOffset,
@@ -51,7 +61,7 @@ public class ResponseFormatXML
         result.append( specifyType( type ) );
         result.append( specifyStartOffset( startOffset ) );
         result.append( specifyEndOffset( endOffset ) );
-        result.append( " >" );
+        result.append( ">" );
         result.append( content );
         result.append( END_MARKING );
 
@@ -69,14 +79,15 @@ public class ResponseFormatXML
         }
 
         result.append( set( "annotationSet", a.mSetName ) );
-        result.append( " >\n" );
-
+        //result.append( ">\n" );
+	result.append( ">" );
         return result.toString();
     }
 
     public static String closeAnnotationTag()
     {
-        return "    </annotation>\n";
+        //return "    </annotation>\n";
+	return "</annotation>";
     }
 
     public static String openAnnotationInstance( String content, long start, long end )
@@ -85,14 +96,15 @@ public class ResponseFormatXML
         result.append( set( "content", content ) );
         result.append( set( "start", Long.toString( start ) ) );
         result.append( set( "end", Long.toString( end ) ) );
-        result.append( " >\n" );
-
+        //result.append( " >\n" );
+	result.append( ">" );
         return result.toString();
     }
 
     public static String closeAnnotationInstance()
     {
-        return "        </annotationInstance>\n";
+        //return "        </annotationInstance>\n";
+	  return "</annotationInstance>";
     }
 
     public static String outputFeature( String name, String value )
@@ -103,7 +115,8 @@ public class ResponseFormatXML
         value = forXML( value );
         System.out.println( "--------Value after stripping out illegal characters: " + value );
         result.append( set( "value", value ) );
-        result.append( " />\n" );
+        //result.append( " />\n" );
+        result.append( "/>" );
 
         return result.toString();
     }
@@ -147,14 +160,15 @@ public class ResponseFormatXML
         StringBuffer result = new StringBuffer( START_DOCUMENT );
         String urlString = (docUrl == null) ? "" : docUrl.toString();
         result.append( set( "url", urlString ) );
-        result.append( " >\n" );
-
+        //result.append( " >\n" );
+	result.append( ">" );
         return result.toString();
     }
 
     public static String closeDocumentTag()
     {
-        return "      </document>\n";
+        //return "      </document>\n";
+	  return "</document>";
     }
 
     public static String outputFile( URL u, String mime, String hrFormat )
@@ -167,8 +181,8 @@ public class ResponseFormatXML
 
         result.append( set( "mimeType", (mime == null ? "" : mime) ) );
         result.append( set( "format", (hrFormat == null ? "" : hrFormat) ) );
-        result.append( " />\n" );
-
+        //result.append( " />\n" );
+	result.append( "/>" );
         return result.toString();
     }
 
@@ -184,7 +198,8 @@ public class ResponseFormatXML
             }
         }
 
-        result.append( " />\n" );
+        //result.append( " />\n" );
+        result.append( "/>" );
         return result.toString();
     }
 
@@ -205,7 +220,7 @@ public class ResponseFormatXML
 
     protected static String set( String attName, String value )
     {
-        return " " + attName + "=\"" + value + "\" ";
+        return " " + attName + "=\"" + value + "\"";
     }
 
 }
