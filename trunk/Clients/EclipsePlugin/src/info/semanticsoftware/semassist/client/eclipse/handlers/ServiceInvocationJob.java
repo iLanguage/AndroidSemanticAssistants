@@ -195,9 +195,8 @@ public class ServiceInvocationJob extends Job{
 			      // returns result in sorted by type
 			      Vector<SemanticServiceResult> results = ClientUtils.getServiceResults( serviceResponse );
 		          if( results == null ) {
-			                // Open document showing response message
-			                System.out.println( "---------- No results retrieved in response message" );
-			                return;
+		                System.out.println( "---------- No results retrieved in response message" );
+		                return;
 			      }
 
 			            for( Iterator<SemanticServiceResult> it = results.iterator(); it.hasNext(); )
@@ -211,7 +210,7 @@ public class ServiceInvocationJob extends Job{
 			                }
 			                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
 			                	System.out.println("*Annotation Case*");
-			    		        ServerResponseHandler.annotationCase(serviceResponse);
+			                	ServerResponseHandler.createAnnotation(current);
 			                }
 			                else if(current.mResultType.equals(SemanticServiceResult.CORPUS)){
 			                	System.out.println("*Corpus Case*");
