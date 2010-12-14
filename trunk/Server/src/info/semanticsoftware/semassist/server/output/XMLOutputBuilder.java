@@ -44,13 +44,15 @@ public class XMLOutputBuilder extends OutputBuilder
     @Override
     protected String startResponse()
     {
-        return "<?xml version=\"1.0\"?>\n<saResponse>\n";
+        //return "<?xml version=\"1.0\"?>\n<saResponse>\n";
+	return "<?xml version=\"1.0\"?><saResponse>";
     }
 
     @Override
     protected String endResponse()
     {
-        return "</saResponse>\n";
+        //return "</saResponse>\n";
+	return "</saResponse>";
     }
 
     @Override
