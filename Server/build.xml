@@ -127,10 +127,21 @@ destdir="${build.home}" includeantruntime="${antruntime}">
   
 	
   <!-- Clear all build output -->
-    <target name="clean">
-        <delete includeemptydirs="true" quiet="true">
-            <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
-        </delete>
-    </target>
+  <target name="clean">
+    <delete includeemptydirs="true" quiet="true">
+      <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
+    </delete>
+  </target>
+
+  <!-- Checkstyle analysis -->
+ <target name="checkstyle" description="Source analysis using checkstyle">
+   <taskdef resource="checkstyletask.properties"
+            classpath="${checkstyle.classpath}"/>
+   <checkstyle config="${checkstyle.config}"
+	       failOnViolation="false" >
+     <formatter type="xml" tofile="checkstyle_report.xml"/>
+     <fileset dir="src" includes="**/*.java"/>
+   </checkstyle>
+ </target>
 </project>
 
