@@ -37,5 +37,28 @@
       <fileset dir="." includes="**/*.java"/>
     </checkstyle>
   </target>
+  
+
+  <!-- PMD analysis -->
+  <target name="pmd">
+    <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.classpath"/>
+    <pmd>
+      <ruleset>rulesets/favorites.xml</ruleset>
+      <formatter type="xml" toFile="pmd_report.xml"/>
+        <fileset dir=".">
+            <include name="**/*.java"/>
+        </fileset>
+    </pmd>
+  </target>
+
+  <target name="cpd">
+    <taskdef name="cpd" classname="net.sourceforge.pmd.cpd.CPDTask" classpathref="pmd.classpath" />
+    <cpd minimumTokenCount="100" format="xml" outputFile="cpd_report.xml">
+        <fileset dir=".">
+            <include name="**/*.java"/>
+        </fileset>
+    </cpd>
+  </target>
+
 </project>
 

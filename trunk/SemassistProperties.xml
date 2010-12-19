@@ -71,7 +71,15 @@
     <property name="checkstyle.config"        value="${checkstyle.home}/durm_checks.xml" />
     <property name="checkstyle.classpath"     value="${checkstyle.home}/checkstyle-5.3-all.jar" />
     <property name="checkstyle.report"        value="checkstyle-result.xml" />
-
+    <property name="pmd.home"                 value="${durmtools}/pmd" />
+    <property name="pmd.lib"                  value="${pmd.home}/lib" />
+    <path id="pmd.classpath">
+      <pathelement location="${build}"/>
+      <fileset dir="${pmd.lib}">
+        <include name="*.jar"/>
+      </fileset>
+    </path>
+    
     <!-- Libraries shipped with the distribution. You should not need to change this -->
     <property name="lib.home"                 value="${semassist.home}/Lib"/>
     <property name="log4j.jar"                value="${lib.home}/log4j-1.2.14.jar"/>
