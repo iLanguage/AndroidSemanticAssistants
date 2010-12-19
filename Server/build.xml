@@ -133,15 +133,5 @@ destdir="${build.home}" includeantruntime="${antruntime}">
     </delete>
   </target>
 
-  <!-- Checkstyle analysis -->
- <target name="checkstyle" description="Source analysis using checkstyle">
-   <taskdef resource="checkstyletask.properties"
-            classpath="${checkstyle.classpath}"/>
-   <checkstyle config="${checkstyle.config}"
-	       failOnViolation="false" >
-     <formatter type="xml" tofile="${checkstyle.report}"/>
-     <fileset dir="src" includes="**/*.java"/>
-   </checkstyle>
- </target>
 </project>
 
