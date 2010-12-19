@@ -139,7 +139,7 @@ destdir="${build.home}" includeantruntime="${antruntime}">
             classpath="${checkstyle.classpath}"/>
    <checkstyle config="${checkstyle.config}"
 	       failOnViolation="false" >
-     <formatter type="xml" tofile="checkstyle_report.xml"/>
+     <formatter type="xml" tofile="${checkstyle.report}"/>
      <fileset dir="src" includes="**/*.java"/>
    </checkstyle>
  </target>
