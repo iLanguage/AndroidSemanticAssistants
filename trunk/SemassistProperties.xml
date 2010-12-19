@@ -66,6 +66,11 @@
     <!-- Compile parameters for javac. Set "-Xlint:none" to suppress warnings -->
     <property name="compile.args"	      value="-Xlint"/>
 
+    <!-- Development tools.  Not needed for compiling or running the system -->
+    <property name="checkstyle.home"                 value="${durmtools}/checkstyle" />
+    <property name="checkstyle.config"               value="${checkstyle.home}/sun_checks.xml" />
+    <property name="checkstyle.classpath"            value="${checkstyle.home}/checkstyle-5.3-all.jar" />
+
     <!-- Libraries shipped with the distribution. You should not need to change this -->
     <property name="lib.home"                 value="${semassist.home}/Lib"/>
     <property name="log4j.jar"                value="${lib.home}/log4j-1.2.14.jar"/>
