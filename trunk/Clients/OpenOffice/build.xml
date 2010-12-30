@@ -51,7 +51,7 @@
     </description>
 
     <path id="compile.classpath">
-        <pathelement location="${dist.home}/${csal.jar}" />
+        <pathelement location="${dist.home}/${csal.name}" />
         <pathelement location="${ooo-classes-common}/juh.jar" />
         <pathelement location="${ooo-classes-common}/jurt.jar" />
         <pathelement location="${ooo-classes-common}/ridl.jar" />
@@ -62,7 +62,7 @@
 
     <!-- This target compiles the CSAL to the dist -->  
     <target name="copycsal" description="Copy CSAL.jar" >
-      <copy file="${csal.home}/dist/${csal.jar}" todir="${dist.home}"/>
+      <copy file="${csal.home}/dist/${csal.name}" todir="${dist.home}"/>
     </target>
 
     <!-- This target compiles all the classes -->  
@@ -137,7 +137,7 @@
             <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
             <fileset dir="${dist.home}" excludes="**/*.xcu,**/CVS,**/CVS/**,**/.cvsignore"/>
 	    <fileset file="${uno-target-file}"/>
-	    <fileset file="${dist.home}/${csal.jar}"/>
+	    <fileset file="${dist.home}/${csal.name}"/>
         </delete>
     </target>
 </project>
