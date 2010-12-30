@@ -5,10 +5,10 @@
 
    This file is part of the Semantic Assistants architecture.
 
-   Copyright (C) 2009, 2010 Semantic Software Lab, http://www.semanticsoftware.info
+   Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
    Document   : SemassistProperties.xml
    Created on : March 8, 2010, 7:52 PM
-   Author     : Nikolaos Papadakis
+   Created by : Nikolaos Papadakis
 
    The Semantic Assistants architecture is free software: you can
    redistribute and/or modify it under the terms of the GNU Affero General
@@ -26,6 +26,7 @@
 <project name="share">
     <property name="semassist.home"           value="${basedir}" />
     <property name="csal.home"                value="${semassist.home}/CSAL" />
+    <property name="csal.jar"                 value="CSAL.jar" />
 
     <!-- Machine dependent properties. Need to be modified -->
     <property name="durmtools"                value="/usr/local/durmtools" />
