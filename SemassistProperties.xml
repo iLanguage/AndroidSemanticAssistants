@@ -26,7 +26,7 @@
 <project name="share">
     <property name="semassist.home"           value="${basedir}" />
     <property name="csal.home"                value="${semassist.home}/CSAL" />
-    <property name="csal.jar"                 value="CSAL.jar" />
+    <property name="csal.name"                value="CSAL.jar" />
 
     <!-- Machine dependent properties. Need to be modified -->
     <property name="durmtools"                value="/usr/local/durmtools" />
