@@ -1,4 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+   This file is part of the Semantic Assistants architecture.
+
+   Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+   
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <project name="Semantic Assistants Plug-in for Eclipse IDE" default="build.jars" basedir=".">
 	
     <description>
@@ -28,7 +49,7 @@
 		<fileset dir="${eclipse.plugins}">
 	  	<include name="*.jar" />
 		</fileset>
-		<pathelement path="${basedir}/lib/CSAL.jar"/>
+		<pathelement path="${basedir}/lib/${csal.jar}"/>
       </path>
       
     </target>
@@ -37,8 +58,9 @@
     <target name="compile" depends="init" description="Compile the source" >
       <!-- Compile the java code from ${srcDir} into ${buildDir} -->
       <mkdir dir="${build.home}" />
+
       <!-- Copying CSAL.jar file from repository to the projects lib folder -->
-      <copy file="${csal.home}/dist/CSAL.jar" todir="${basedir}/lib"/>
+      <copy file="${csal.home}/dist/${csal.jar}" todir="${basedir}/lib"/>
       <javac srcdir="${src.home}/" destdir="${build.home}" failonerror="${javacFailOnError}" debug="true" debuglevel="lines,vars,source"  classpath="${build.home}" includeantruntime="${antruntime}">
 	<compilerarg value="${compile.args}" />
 	<classpath refid="plugincompile.classpath" />

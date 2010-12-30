@@ -1,3 +1,21 @@
+% Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+% This file is part of the Semantic Assistants architecture.
+
+% Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
+% The Semantic Assistants architecture is free software: you can
+% redistribute and/or modify it under the terms of the GNU Affero General
+% Public License as published by the Free Software Foundation, either
+% version 3 of the License, or (at your option) any later version.
+   
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU Affero General Public License for more details.
+ 
+% You should have received a copy of the GNU Affero General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 \chapter{\sa Clients}\label{chap:clients}
 
 \section{Command-Line Client}
@@ -176,7 +194,8 @@ The OpenOffice.org plug-in can be found in
 \url{SemanticAssistants/Clients/OpenOffice}. To use it, do the following:
 
 \begin{enumerate}
-  % TODO: what about the OO SDK installation?
+  % TODO: what about the OO SDK installation? 
+  % Is it needed for running the plug-in?
 
   \item Start OpenOffice.org Writer and ensure the right Java VM is
   used. Go to \emph{Tools $\rightarrow$ Options}. Under
@@ -184,24 +203,40 @@ The OpenOffice.org plug-in can be found in
   can specify JREs. If it is not already there, add the currently used
   Java version.
   
-  \item In the same dialog window, click on the \emph{``Class
-      path$\ldots$''} button.  You will get a new dialog
-    window. Select \emph{``Add archive$\ldots$''} and navigate to the
-    \url{SemanticAssistants/CSAL/dist} directory and add the
-    \url{CSAL.jar} file.  Close the open dialogs with
-    ``OK'' and exit Writer.
+  % should add screenshots for this
+  \item Go to \emph{Tools $\rightarrow$ Extension Manager}. Click the
+    \emph{Add$\ldots$} button on the bottom. Navigate to your local
+    copy of the \sa\ architecture and then to
+    \texttt{Clients/OpenOffice}. Select the file
+    \texttt{SemassistOpenOfficePlugIn.uno.zip} and click \emph{Open}.
 
+  \item Leave the dialog and open a new text document. You should have
+    a new menu bar entry labelled \emph{Semantic Assistants}. Now you
+    can run services on the current document (remember the server must
+    be running to be able to query or execute language services).
+\end{enumerate}
+
+
+\subsection{Development Notes}
+\label{sec:oo-spec}
+In this section, we provide further technical details on our plug-in
+for developers interesting in enhancing or modifying it.
+
+\subsubsection{Compiling the Plug-in}
+If you want to build the plugin yourself, follow these steps:
+\begin{itemize}
   \item cd to the \url{Clients/OpenOffice} directory.
 
   \item Type \texttt{ant run}, or \texttt{ant run-gui}. Note that the
     client-side abstraction layer must have already been built and
-    packaged. Both \texttt{ant run} and \texttt{ant run-gui} provide an UNO
-    package named \url{Semassist.uno.zip}. Both targets additionally copy
-    it to \url{~/Documents/uno-components}.  If \texttt{ant run-gui} is issued
-    the OpenOffice.org \emph{Extension Manager} will pop up and prompt the
-    user to install the extension.  If \texttt{ant run} is issued the above
-    process is automated.  After the installation, OpenOffice Writer starts
-    with the plug-in installed. 
+    packaged. Both \texttt{ant run} and \texttt{ant run-gui} provide
+    an UNO package named \url{SemassistOpenOfficePlugIn.uno.zip}. Both
+    targets additionally copy it to \url{~/Documents/uno-components}.
+    If \texttt{ant run-gui} is issued the OpenOffice.org
+    \emph{Extension Manager} will pop up and prompt the user to
+    install the extension.  If \texttt{ant run} is issued the above
+    process is automated.  After the installation, OpenOffice Writer
+    starts with the plug-in installed.
 
     \textbf{Note:} you can also manually add the plug-in from within
     OpenOffice (skip this step if you already used the \emph{run} or
@@ -210,18 +245,7 @@ The OpenOffice.org plug-in can be found in
     right. Choose the UNO package (available in
     \url{~/Documents/uno-components} if you used the \emph{deploy}
     target for ant).
-
-  \item Leave the dialog and open a text document. You should have a
-    menu bar entry labelled \emph{Semantic Assistants}. Now play
-    around. Remember the server must be running to be able to query or
-    execute language services.
-\end{enumerate}
-
-
-\subsection{Development Notes}
-\label{sec:oo-spec}
-In this section, we provide further technical details on our plug-in
-for developers interesting in enhancing or modifying it.
+\end{itemize}
 
 \subsubsection{OpenOffice.org Plug-in Specifics}
 Every plug-in has to include a

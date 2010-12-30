@@ -5,7 +5,7 @@
 
    This file is part of the Semantic Assistants architecture.
 
-   Copyright (C) 2009, 2010 Semantic Software Lab, http://www.semanticsoftware.info
+   Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
 
    The Semantic Assistants architecture is free software: you can
    redistribute and/or modify it under the terms of the GNU Affero General
@@ -51,7 +51,7 @@
     </description>
 
     <path id="compile.classpath">
-        <pathelement location="${csal.home}/dist/CSAL.jar" />
+        <pathelement location="${dist.home}/${csal.jar}" />
         <pathelement location="${ooo-classes-common}/juh.jar" />
         <pathelement location="${ooo-classes-common}/jurt.jar" />
         <pathelement location="${ooo-classes-common}/ridl.jar" />
@@ -60,8 +60,13 @@
         <pathelement location="${commons-lang.jar}"/>
     </path>
 
-  <!-- This target compiles all the classes -->  
-    <target name="compile" description="Compile the source" >
+    <!-- This target compiles the CSAL to the dist -->  
+    <target name="copycsal" description="Copy CSAL.jar" >
+      <copy file="${csal.home}/dist/${csal.jar}" todir="${dist.home}"/>
+    </target>
+
+    <!-- This target compiles all the classes -->  
+    <target name="compile" depends="copycsal" description="Compile the source" >
         <!-- Compile the java code from ${srcDir} into ${buildDir} -->
         <mkdir dir="${build.home}" />
         <copy file="${commons-lang.jar}" todir="${dist.home}"/>
@@ -72,7 +77,7 @@
         </javac>
     </target>
 
-  <!-- Pack the compiled classes into a jar archive  -->
+    <!-- Pack the compiled classes into a jar archive  -->
     <target name="dist1" depends="compile"  description="Create jar from the compiled classes" >
         <!-- Create the distribution directory -->
         <mkdir dir="${dist.home}"/>
@@ -84,18 +89,18 @@
     </target>
 
 
-  <!-- Make a uno package  -->
+    <!-- Make a uno package  -->
     <target name="dist2" depends="dist1"  description="Provide the whole UNO package" >
         <zip destfile="${basedir}/${uno-target-file}" basedir="${dist.home}">
         </zip>
     </target>
 
-  <!-- Copy the UNO package to the desired location  -->
+    <!-- Copy the UNO package to the desired location  -->
     <target name="deploy" depends="dist2"  description="Copy the UNO package to the desired location" >
         <copy file="${basedir}/${uno-target-file}" todir="${uno-copy-dest}" />
     </target>
   
-  <!-- Run uno-extention manager  -->
+    <!-- Run uno-extention manager  -->
     <target name="run" depends="deploy"  description="Run uno-extention manager" >
 	<!-- subtargets for different office versions -->
         <echo message="${office.unopkg} add -f ${uno-target-file}"/>
@@ -132,6 +137,7 @@
             <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
             <fileset dir="${dist.home}" excludes="**/*.xcu,**/CVS,**/CVS/**,**/.cvsignore"/>
 	    <fileset file="${uno-target-file}"/>
+	    <fileset file="${dist.home}/${csal.jar}"/>
         </delete>
     </target>
 </project>
