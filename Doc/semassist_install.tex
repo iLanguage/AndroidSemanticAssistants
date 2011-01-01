@@ -1,26 +1,50 @@
+% Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+% This file is part of the Semantic Assistants architecture.
+
+% Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
+% The Semantic Assistants architecture is free software: you can
+% redistribute and/or modify it under the terms of the GNU Affero General
+% Public License as published by the Free Software Foundation, either
+% version 3 of the License, or (at your option) any later version.
+   
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU Affero General Public License for more details.
+ 
+% You should have received a copy of the GNU Affero General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
 \chapter{Installation}
 \label{chap:inst}
 \emph{Note: at present, the installation has been tested under
-  Linux and Mac OS X }
+  Linux and Mac OS X}
+
+\section{Download}
+To download the latest version of the \sa and this documentation
+please refer to
+\url{http://www.semanticsoftware.info/semantic-assistants-architecture}.
+A pre-compiled build of the latest version is available from our
+Hudson server, \url{http://assistant.cs.concordia.ca:8080/}. In the
+following, we assume you use a pre-compiled version; for compilation
+instructions, please refer to Chapter~\ref{chap:dev}.
 
 \section{Prerequisites}
 To deploy the \sa architecture, a number of other (open source)
-components are needed.  Note that the current distribution comes with
-pre-compiled libraries for the \sa components, but to run them you
-will still need to install the common and server-specific
-prerequisites:
+components are needed:
 
 \paragraph{Common throughout the Project:}
 \begin{enumerate}
-  \item  Apache ANT, \url{http://ant.apache.org/}
+%  \item  Apache ANT, \url{http://ant.apache.org/}
   \item  Sun JDK 6, \url{http://java.sun.com/javase/downloads/index.jsp}
-  \item  GATE v5.0 or newer, \url{http://gate.ac.uk/}
+  \item  GATE v6.0 or newer, \url{http://gate.ac.uk/}
 \end{enumerate} 
 
 \paragraph{For the \sa Server:}
 \begin{enumerate}
   \item Java API for XML Web Services (JAX-WS) v2.1.x, \url{https://jax-ws.dev.java.net/}
-  \item Prot\'{e}g\'{e}-OWL API v3.4, \url{http://protege.stanford.edu/plugins/owl/api/} 
+%  \item Prot\'{e}g\'{e}-OWL API v3.4, \url{http://protege.stanford.edu/plugins/owl/api/} 
 \end{enumerate}
 
 \paragraph{For the CSAL:}
@@ -43,104 +67,9 @@ prerequisites:
 \item Eclipse Classic 3.5+ \url{http://www.eclipse.org/downloads/}
 \end{enumerate}
 
-\section{Download}
-To download the latest version of the \sa and this documentation
-please refer to
-\url{http://www.semanticsoftware.info/semantic-assistants-architecture}.
-
-\section{Project Description}
-This section gives an overview of the directory structure and explains the modifications
-required for every user to be able to proceed with the compilation.
-
-\paragraph{Directory Structure}:
-The implementation of the architecture is located in
-\url{SemanticAssistants/}. There are four directories, \emph{Server},
-\emph{CSAL}, \emph{Clients} and \emph{Resources} and one file \emph{SemassistProperties.xml}
-
-\subsection{Server Directory Structure}
-The following directories and files are found under the \emph{Server} directory.
-
-\begin{enumerate}
-\item \url{src}: Contains the java source code.
-\item \url{gate-home}: Contains two gate user configuration files \emph{gate.xml} and \url{user-gate.xml}.
-\item \url{logs}: It is used for server log files.
-\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Server} is loaded through Netbeans.
-\item \url{.classpath}: ClassPath file for NetBeans.
-\item \url{.project}: Project Description file for NetBeans.
-\item \url{Makefile}: Makefile that can be used to invoke Ant targets.
-\item \url{build.xml}: Ant build file use to compile the project. Contains dependency information.
-\item \url{nb-build.xml}: Build file used by Netbeans.
-\item \url{protege.properties}:Generated properties file, used by Protege.
-\item \url{build}: Contains the binary java .class files.
-\item \url{dist} Contains a .jar file of the compiled server side.
-\item \url{nbdist} Contains a .jar file of the compiled server. Generated when the server is compiled through Netbeans.
-\end{enumerate}
-
-
-\subsection{CSAL Directory Structure}
-The following directories and files are found under the \emph{CSAL} directory.
-
-\begin{enumerate}
-\item \url{src}: Contains the java source code of the client side absraction layer.
-\item \url{dist}: Contains the output .jar file result of compilation of the CSAL.
-\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{CSAL} is loaded through Netbeans.
-\item \url{.classpath}: ClassPath file for NetBeans.
-\item \url{.project}: Project Description file for NetBeans.
-\item \url{Makefile}: Makefile that can be used to invoke ant targets.
-\item \url{build.xml}: Ant build file use to compile the project. Contains dependency information.
-\item \url{bin}: Contains the binary java .class files.
-\item \url{nb-build.xml}: Buildfile used by Netbeans.
-\end{enumerate}
-
-
-\subsection{Clients Directory Structure}
-The two sample clients we provide, \emph{CommandLine} and \emph{OpenOffice}, have the following directory structure.
-
-\subsubsection{Command Line Client Directory Structure}
-\begin{enumerate}
-\item \url{src}: Contains the java source code of the Command Line Client.
-\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Command Line Client} is loaded through Netbeans.
-\item \url{.classpath}: ClassPath file for NetBeans.
-\item \url{.project}: Project Description file for NetBeans.
-\item \url{build.xml}: Ant build file use to compile the project.Contains dependency information.
-\item \url{bin}: Contains the binary java .class files.
-\item \url{runclient.sh}: Script helps with the class path setting and running the client.
-\item \url{usableCommands}: Example of commands that can be invoked when running the runclient.sh script.
-\end{enumerate}
-
-\subsubsection{OpenOffice.org Writer Client Directory Structure}
-\begin{enumerate}
-\item \url{src}: Contains the java source code.
-\item \url{dist}: Contains the \emph{Addons.xsu}, \emph{Protocolhandler.xsu} and \emph{ProtocolHandlerAddon\_ java.uno.jar} files.
-\item \url{build.xml}: Ant build file use to complile the project.Contains dependency information.
-\item \url{bin}: Contains the binary java .class files.
-\item \url{Semassist.uno.zip}: Contains the output file result of complilation and packaged in uno.zip plug-in format used by OpenOffice.
-\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Command Line Client} is loaded through Netbeans.
-\item \url{nb-build.xml}: Buildfile used by Netbeans.
-\end{enumerate}
-
-\subsubsection{Eclipse Client Directory Structure}
-\begin{enumerate}
-%\item\url{icon}: This is where the SA icon images are stored.
-\item \url{src}: This folder contains the Semantic Assistants plug-in source
-code. The internal structure of this directory is further explained in section
-\ref{subsec:eclipse.development}.
-\item \url{lib}: This is where all the external plug-in dependencies are stored.
-This folder contains the Client-Side Abstraction Layer JAR file used in the
-project to communicate with the server.
-\item \url{plugins}: This is where the Semantic Assistants plug-in JAR file will
-be stored when successfully built.
-\item \url{META-INF}: This is where the plug-in manifest file is stored. This
-file is used by the Eclipse plug-in loader to identify the Semantic Assistants
-plug-in.
-\item \url{plugin.xml}: This file
-contains general information of the plug-in like its dependencies, runtime
-classpath and extension points in form of an XML file and is used to
-introcude the plug-in to Eclipse plug-in loader. By using this file, developers
-can test the plug-in inside an Eclipse runtime application.
-\end{enumerate}
 
 \section{Path Configuration}
+\label{sec:props}
 The \emph{SemassistProperties.xml} file serves for two purposes.  It's
 included by the ANT \emph{build.xml} files of all projects and
 contains common directory paths and used to compile the various
@@ -179,7 +108,6 @@ the users' machine. The variables as follows:
     <!-- Machine dependent properties.Need to be modified -->
     <property name="durmtools"          value="/usr/local/durmtools" />
     <property name="jaxws.home"         value="${durmtools}/jaxws-ri" />
-    <property name="protege-home"       value="${durmtools}/Protege" />
     <property name="gate-home"          value="${durmtools}/GATE/gate" />
     <property name="jdk.home"           value="${durmtools}/jdk" />
 \end{lstlisting}
@@ -190,8 +118,8 @@ Create a folder called \texttt{durmtools} and install all the required applicati
 %\item \url{semassist.home}: This variable points to the place on your local machine that the Semantic Assistants package has been downloaded and extracted. Put the full path of the folder in here, exempting the user home directory path for it will be automatically replaced by \texttt{\$\{user.home\}}.
 %\item \url{csal.home}: This variable points to the \texttt{CSAL} folder inside the Semantic Assistants package. If the structure is untouched, the path should read \texttt{"\$\{semassist.home\}/CSAL"}.
 \item \url{jaxws.home}: This variable points to the Java API for XML Web Services (JAX-WS) v2.1.x application installed in the path defined in \texttt{\$\{durmtools\}} variable.
-\item \url{protege-home}: This variable points to the Prot\'{e}g\'{e}-OWL API v3.4 application installed in the path defined in \texttt{\$\{durmtools\}} variable.
-\item \url{gate-home}: This variable points to the GATE v5.0 or newer application installed in the path defined in \texttt{\$\{durmtools\}} variable.
+%\item \url{protege-home}: This variable points to the Prot\'{e}g\'{e}-OWL API v3.4 application installed in the path defined in \texttt{\$\{durmtools\}} variable.
+\item \url{gate-home}: This variable points to the GATE v6.0 or newer application installed in the path defined in \texttt{\$\{durmtools\}} variable.
 \item \url{jdk.home}: This variable points to the Sun JDK 6 installed on your machine.
 \end{enumerate}
 
@@ -252,40 +180,6 @@ The last part includes all the properties used by the Semantic Assistants server
 \item \url{server.port.debug}: This variable contains the port number on users machine on which the server listens for debuggers to be attached.
 \item \url{server.port.wsdl}: This variable contains the port number on which the server communicates with the clients through WSDL.
 \end{enumerate}
-
-\section{Compilation} 
-\label{sec:inst-comp}
-To compile and start the
-server and compile the CSAL, follow these steps:
-
-\begin{enumerate}
-  \item cd to \emph{Server}
-  \item \texttt{ant run}. The server is built and should come up, with
-    some debug output on the console.
-  \item To test if the Server is operating open your favorite browser and paste  \url{http://<server host>:<server port>/SemAssist?wsdl}
-(Note the \texttt{<server host>} has a default value of the local machine name and the \texttt{<server port>} is the value of the property \texttt{server.port.wsdl}
-found in \url{SemanticAssistants/SemassistProperties.xml})
-  \item cd to \emph{CSAL}
-  \item 
-\begin{enumerate}
-\item  \texttt{ant dist}. This builds the client-side abstraction
-    layer (CSAL) that all (Java) clients should use to connect to the
-    architecture (i.e., the server). Note that the server must be
-    running for the client to be built, because the code generation
-    step imports the server's WSDL definitions. In addition the WSDL definitions
-    are cached localy.
-\item  \texttt{ant dist-offline}
-This builds the client-side abstraction
-layer (CSAL) with the cached WSDL definitions during a previous on-line compilation.
-In this case the server does not have to be running for the CSAL to be built.
-\end{enumerate}
-
-  \item To stop the server, simply change to its console window and
-    hit \texttt{Ctrl-C}
-\end{enumerate}
-We recommend you test if the server is running correctly by accessing
-it through the command-line client described below.
-
 
 
 \section{Client Installation}

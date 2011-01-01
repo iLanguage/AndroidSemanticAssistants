@@ -5,7 +5,7 @@
 
    This file is part of the Semantic Assistants architecture.
 
-   Copyright (C) 2009, 2010 Semantic Software Lab, http://www.semanticsoftware.info
+   Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
 
    The Semantic Assistants architecture is free software: you can
    redistribute and/or modify it under the terms of the GNU Affero General
@@ -32,14 +32,6 @@
     <property name="docs.home"        value="${basedir}/docs"/>
     <property name="src.home"         value="${basedir}/src"/>
     <property name="dist.home"        value="${basedir}/dist"/>
-
-    <!-- Tool Directories -->
-    <property name="protege-owl.home" value="${protege-home}/plugins/edu.stanford.smi.protegex.owl/" />
-
-    <!-- Library Files -->
-    <property name="gate.jar"         value="${gate-home}/bin/gate.jar" />
-    <property name="protege.jar"      value="${protege-home}/protege.jar" />
-
 
     <!-- ___________________ You should not have to edit anything below this line ________________________  -->
     <description>
@@ -113,7 +105,6 @@ destdir="${build.home}" includeantruntime="${antruntime}">
                 <pathelement location="${protege-owl.home}/jena.jar" />
                 <pathelement location="${protege-owl.home}/orphanNodesAlg.jar" />
                 <pathelement location="${protege-owl.home}/arq.jar" />
-                <pathelement location="${protege-home}/looks-2.1.3.jar" />
                 <fileset dir="${gate-home}/lib" >
                     <include name="*.jar" />
                 </fileset>

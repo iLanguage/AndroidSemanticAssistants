@@ -35,13 +35,9 @@
 
 
     <!-- Tool Directories -->
-    <property name="protege-owl.home" value="${protege-home}/plugins/edu.stanford.smi.protegex.owl/" />
     <property name="office.unopkg"    value="${office.program.dir}${file.separator}unopkg"/>
     <property name="office.soffice"   value="${office.program.dir}${file.separator}soffice"/>
     
-    <!-- Library Files -->
-    <property name="protege.jar"      value="${protege-home}/protege.jar" />
-
     <!-- Other -->
     <property name="uno-target-file"  value="SemassistOpenOfficePlugIn.uno.zip" />
     <property name="compile.debug"    value="true" />
