@@ -2,7 +2,7 @@
 %% 
 %% This file is part of the Semantic Assistants architecture.
 %%
-%% Copyright (C) 2009, 2010 Semantic Software Lab, http://www.semanticsoftware.info
+%% Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
 %%
 %% The Semantic Assistants architecture is free software: you can
 %% redistribute and/or modify it under the terms of the GNU Affero General
@@ -16,10 +16,9 @@
 %% 
 %% You should have received a copy of the GNU Affero General Public License
 %% along with this program.  If not, see <http://www.gnu.org/licenses/>.
-%% Copyright (c) 2009, 2010 Semantic Software Lab, http://www.semanticsoftware.info
-%%    Rene Witte
 %%
-\documentclass[10pt,twoside,openany,chapterprefix]{scrbook}
+
+\documentclass[10pt,twoside,openany,bibtotoc,liststotoc,chapterprefix]{scrbook}
 \usepackage{microtype}
 \usepackage{bookman}
 \usepackage{color}
@@ -145,13 +144,16 @@ Montr\'{e}al, Canada\\
 \begin{document}
 \frontmatter
 \maketitle
-\tableofcontents
+\pdfbookmark{Contents}{2}\tableofcontents
 
 \section*{About this document}
 This document contains documentation for the \emph{Semantic
   Assistants} project. You can obtain the latest version from
-\url{http://www.semanticsoftware.info/semantic-assistants}. The code
-is hosted on SourceForge, \url{https://sourceforge.net/projects/semantic-assist/}.
+\url{http://www.semanticsoftware.info/semantic-assistants}. The source
+code is hosted on SourceForge,
+\url{https://sourceforge.net/projects/semantic-assist/}.  A public
+Hudson server is hosted on
+\url{http://assistant.cs.concordia.ca:8080/}.
 
 \section*{Acknowledgments}
 The following developers contributed to the design and implementation
@@ -172,11 +174,20 @@ Software License, Version 1.1.
 The included NLP pipelines also contain code from the GATE project
 (\url{http://gate.ac.uk}) licensed under the LPGL3.\footnote{LGPL3, \url{http://www.gnu.org/licenses/lgpl-3.0.html}}
 
+The Semantic Assistants server utilizes libraries from the Pro\'eg\'e
+project, which are licensed under the Mozilla Public license
+(MPL).\footnote{Mozilla Public License (MPL),
+  \url{http://mozilla.org/MPL/MPL-1.1.html}} Additionally, it uses
+the Jena framework for Java; please refer to the license files included with
+the distribution or the Jena Website\footnote{Jena License and
+  Copyright, \url{http://jena.sourceforge.net/license.html}} for details.
+
 \mainmatter
 \input{semassist_overview}
 \input{semassist_install}
 \input{semassist_server}
 \input{semassist_clients}
+\input{semassist_services}
 \input{semassist_development}
 \input{semassist_troubleshooting}
 

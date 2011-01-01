@@ -1,4 +1,31 @@
+%% Semantic Assistants Documentation
+%% 
+%% This file is part of the Semantic Assistants architecture.
+%%
+%% Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
+%%
+%% The Semantic Assistants architecture is free software: you can
+%% redistribute and/or modify it under the terms of the GNU Affero General
+%% Public License as published by the Free Software Foundation, either
+%% version 3 of the License, or (at your option) any later version.
+%% 
+%% This program is distributed in the hope that it will be useful,
+%% but WITHOUT ANY WARRANTY; without even the implied warranty of
+%% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+%% GNU Affero General Public License for more details.
+%% 
+%% You should have received a copy of the GNU Affero General Public License
+%% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+%%
+
 \chapter{The \sa Server} 
+Semantic NLP services are executed by a Semantic Assistants
+server. You can either use an existing server (e.g., from your
+company's or university's intranet, or a public server) or run you own
+server locally. To access to an existing server, you need to know it's
+hostname and port, which are then configured in the client plug-ins
+through a preference window.  If you want to run your own server using
+the included example NLP services, follow the instructions below.
 
 \section{Starting the Server}
 Type \texttt{ant run} in the \url{SemanticAssistants/Server} directory
@@ -8,8 +35,17 @@ automatically load all available OWL service descriptions from the
 default location \url{Resources/OwlServiceDescriptions} and publish
 these to the clients.
 
+\subsection{Server Testing by accessing the WSDL}
+To test if the Server is operating open your favourite browser and
+paste \url{http://<server host>:<server port>/SemAssist?wsdl} (Note
+the \texttt{<server host>} has a default value of the local machine
+name and the \texttt{<server port>} is the value of the property
+\texttt{server.port.wsdl} found in
+\url{SemanticAssistants/SemassistProperties.xml}; by default it is set
+to 8879)
 
-\section{Testing using the Command Line Client}
+
+\subsection{Server Testing using the Command Line Client}
 To test if the server is running correctly and can be accessed from
 the clients, we recommend you run some tests using the command-line
 client described in Section~\ref{sec:sacl:clc}.
@@ -28,8 +64,9 @@ which, in turn, extends the \emph{ConceptUpper.owl} ontology. Both of
 these are located in \url{ont-repository} under
 \url{SemanticAssistants/Resources}.
 
-In order to create a new language service description, it is often
-easier to copy an old one and edit
+The details for developing new NLP service descriptions are covered in
+Chapter~\ref{chap:services}.  In order to create a new language
+service description, it is often easier to copy an old one and edit
 it. Prot\'{e}g\'{e}\footnote{Prot\'{e}g\'{e},
   \url{http://protege.stanford.edu}} is helpful as an ontology
 editor. Most important is to define the parameters that can be passed

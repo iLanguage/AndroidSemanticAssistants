@@ -31,8 +31,8 @@
     <!-- Machine dependent properties. Need to be modified -->
     <property name="durmtools"                value="/usr/local/durmtools" />
     <property name="jaxws.home"               value="${durmtools}/jaxws-ri" />
-    <property name="protege-home"             value="${durmtools}/Protege" />
     <property name="gate-home"                value="${durmtools}/GATE/gate" />
+    <property name="gate.jar"                 value="${gate-home}/bin/gate.jar" />
     <property name="jdk.home"                 value="${durmtools}/jdk" />
     
     <!-- Used by Open Office Writer Plug-In-->
@@ -86,6 +86,9 @@
     <property name="log4j.jar"                value="${lib.home}/log4j-1.2.14.jar"/>
     <property name="commons-lang.jar"         value="${lib.home}/commons-lang-2.4.jar" />
     <property name="ant.jar" 		      value="${lib.home}/ant.jar"/>
+    <property name="protege.home"             value="${lib.home}" />
+    <property name="protege-owl.home"         value="${protege.home}" />
+    <property name="protege.jar"              value="${protege.home}/protege.jar" />
 
     <!-- Importing LocalProperties.xml file for local paths and customizations -->
     <import file ="LocalProperties.xml"/>
