@@ -24,10 +24,12 @@
 The \sa project aims to bring natural language processing (NLP)
 techniques directly to end users by integrating them with common
 desktop applications, such as word processors, email clients, or Web
-browsers. To facilitate this integration, a service-oriented
-architecture (Figure~\ref{fig:arch}) has been developed that allows to
-integrate (desktop) clients with NLP services implemented in the GATE
-framework.\footnote{GATE, \url{http://gate.ac.uk}} 
+browsers. To facilitate the connection between NLP frameworks and
+(desktop) clients, a service-oriented architecture
+(Figure~\ref{fig:arch}) has been developed that allows to integrate
+(desktop) clients with NLP services implemented in the GATE
+framework.\footnote{GATE, \url{http://gate.ac.uk}} NLP services are
+published as standard Web services with a WSDL description.
 
 For the general motivation, design, and background on the \sa project,
 please read the information on the \sa Web site\footnote{Semantic
@@ -48,14 +50,17 @@ To deploy \sa, we recommend you first read this overview chapter.
 Then, consult the following parts of this documentation:
 
 \begin{description}
-\item[End Users:] Please refer to the server installation guide
-  (Chapter~\ref{chap:inst}) and the client guides in
-  Chapter~\ref{chap:clients}.
+\item[End Users:] Please refer to the installation guide in
+  Chapter~\ref{chap:inst}, as well as the client-specific installation
+  instructions in Chapter~\ref{chap:clients}. Additionally, if you
+  want to run your own server, read the server installation guide
+  (Chapter~\ref{chap:serv}).
 
-\item[Language Engineers:] If you want find out how to integrate a new
-  NLP service, please refer to Section~\ref{sec:nlpservices} and
-  Section~\ref{sec:owl} for documentation on the OWL service
-  descriptions.
+\item[Language Engineers:] If you want find out how to integrate a
+  GATE pipeline as a new NLP service, please refer to
+  Chapter~\ref{chap:services} for documentation on the OWL service
+  descriptions and Section~\ref{sec:nlpservices} for publishing the
+  new service through the \sa server.
 
 \item[Plug-in Developers:] Please first read the background material
   (Web site, papers). Then refer to the developers' notes in
