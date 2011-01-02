@@ -80,21 +80,28 @@
 \definecolor{darkred}{rgb}{0.5,0.0,0.0}
 \definecolor{darkgreen}{rgb}{0.0,0.4,0.0}
 \definecolor{darkblue}{rgb}{0.0,0.0,0.5}
+\definecolor{gray}{gray}{0.8}
 \addtokomafont{sectioning}{\color{blue}}
 
 %% listing
-\lstloadlanguages{Lisp,Java,Make}
+\lstloadlanguages{Lisp,Java,Make,Ant}
 \lstset{language=XML,
-        basicstyle=\scriptsize\ttfamily,
+        basicstyle=\footnotesize\sffamily, %\ttfamily,
         keywordstyle=\color[rgb]{0.5,0,0.33203125}\bfseries,
-        frame=single,
-        commentstyle=\color[rgb]{0.24609375,0.5,0.37109375}, % commentstyle=\color{blue}\ttfamily,
+        frame=shadowbox,
+        rulesepcolor=\color{gray},
+        commentstyle=\color[rgb]{0.24609375,0.5,0.37109375}, % commentstyle=\color{blue}\textit,
         extendedchars=true,
         showstringspaces=false,
-        showlines=false,
+        breaklines=true,
+        breakatwhitespace=false,
+        showlines=true,
+        backgroundcolor=\color{white},
+        numberstyle=\scriptsize,
+        stepnumber=1,
+        numbersep=5pt,
+        numbers=left,
         stringstyle=\color[rgb]{0.1640625,0,1}\ttfamily}
-%\lstset{language=Java,basicstyle=\sffamily\footnotesize,showlines=true}
-
 %% url
 \urlstyle{same}
 

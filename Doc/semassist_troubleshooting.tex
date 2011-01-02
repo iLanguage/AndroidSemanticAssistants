@@ -21,14 +21,44 @@
 \chapter{Troubleshooting}
 \section{Compiling}
 \subsection{Eclipse Plug-In}
-\paragraph{"Too many open files" Error.} This problem happens only on Linux
-machines and is related to the limitations of shell resources stored in system configurations. You get this error when you're pushing various limits like open file descriptors to your system e.g. compiling numerous classes in JVM.
+\paragraph{"Too many open files" Error.} This problem happens only on
+Linux machines and is related to the default limitations of shell
+resources in some system configurations. You get this error
+when you're pushing various limits like open file descriptors to your
+system e.g. compiling numerous classes in JVM:
 
-To fix this problem, first check your user limit with the following command:
+
+\begin{lstlisting}[language=Ant,xleftmargin=8mm,columns=flexible,numbers=left]
+compile:
+    [javac] Compiling 26 source files to /home/rene/Repository/semantic-assist/Clients/EclipsePlugin/bin
+    [javac] error: error reading /home/rene/Repository/semantic-assist/Clients/EclipsePlugin/src/info/semanticsoftware/semassist/client/eclipse/Activator.java; 
+        /home/rene/Repository/semantic-assist/Clients/EclipsePlugin/src/info/semanticsoftware/semassist/client/eclipse/Activator.java (Too many open files)
+    ....
+\end{lstlisting}
+
+\noindent To fix this problem, first check your user limits with the
+following command:
 \begin{verbatim}
-ulimit -aH
+    ulimit -aH
 \end{verbatim}
-The \texttt{ulimit} is a Linux built-in shell command, which provides control over the resources available to the shell and its child processes. The result reports the file-size  writing limit imposed on files written by your shell. This problem arises when your open files size is less than what is required by the JVM to compile all the classes, which is at least 6000. Thus, to bypass this problem, simply increase the open files size to a size more than 6000.
+The \texttt{ulimit} is a Linux built-in shell command, which provides
+control over the resources available to the shell and its child
+processes. The result includes the ``open files'' limit imposed on
+your system. This compilation error arises when your open files
+size is less than what is required by the JVM to compile all the
+classes, which is at least 6000. Thus, to bypass this problem, simply
+increase the open files size to a size more than 6000 (note that this
+typically requires administrator priviliges):
+\begin{verbatim}
+    sudo ulimit -n 8000
+\end{verbatim}
+To change the limit permanently, consult the documentation of your
+distribution. E.g., under Ubuntu, you can increase the limit by
+editing the file \verb=/etc/security/limits=:
+\begin{verbatim}
+    hard nofile 10000
+    soft nofile 10000
+\end{verbatim}
 
 \section{Installation}
 \subsection{Eclipse Plug-In}

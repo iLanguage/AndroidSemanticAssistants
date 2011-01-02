@@ -30,10 +30,27 @@ In this chapter, we provide additional information for developers.
 This section gives an overview of the directory structure and explains the modifications
 required for every user to be able to proceed with the compilation.
 
-\paragraph{Directory Structure:}
+\subsection{Top-Level Directory Structure}
 The implementation of the architecture is located in
-\url{SemanticAssistants/}. There are four directories, \emph{Server},
-\emph{CSAL}, \emph{Clients} and \emph{Resources} and one file \emph{SemassistProperties.xml}
+\url{SemanticAssistants/}. There are the following directories:
+\begin{description}
+\item[Clients:] contains all clients (OpenOffice, CommandLine, Eclipse)
+\item[CSAL:] constain ths client-side abstraction layer code
+\item[Doc:] contains this documentation
+\item[Lib:] contains 3rd-party libraries
+\item[Resources:] contains the upper ontologies, as well as the
+  example OWL service descriptions and corresponding GATE pipelines
+\item[Server:] contains the \sa server code
+\end{description}
+In addition, there are a number of files:
+\begin{description}
+\item[build.xml] used for executing code analysis tools
+\item[LICENSE.txt] the APGL3 license for the \sa architecture
+\item[LocalProperties.xml] optional customatizations, e.g., for local
+  classpaths or overriding the default locations of the NLP services
+\item[SemassistProperties.xml] properties file evaluated by ant when
+  compiling or running the various parts of the \sa architecture
+\end{description}
 
 \paragraph{Generic Compilation Instructions:}
 All parts of the \sa architecture (server, CSAL, clients) come with
@@ -53,10 +70,10 @@ The following directories and files are found under the \emph{Server} directory.
 \item \url{Makefile}: Makefile that can be used to invoke Ant targets.
 \item \url{build.xml}: Ant build file use to compile the project. Contains dependency information.
 \item \url{nb-build.xml}: Build file used by Netbeans.
-\item \url{protege.properties}:Generated properties file, used by Protege.
+\item \url{protege.properties}: Generated properties file, used by Protege.
 \item \url{build}: Contains the binary java .class files.
-\item \url{dist} Contains a .jar file of the compiled server side.
-\item \url{nbdist} Contains a .jar file of the compiled server. Generated when the server is compiled through Netbeans.
+\item \url{dist}: Contains a .jar file of the compiled server side.
+\item \url{nbdist}: Contains a .jar file of the compiled server. Generated when the server is compiled through Netbeans.
 \end{enumerate}
 
 
@@ -64,7 +81,7 @@ The following directories and files are found under the \emph{Server} directory.
 The following directories and files are found under the \emph{CSAL} directory.
 
 \begin{enumerate}
-\item \url{src}: Contains the java source code of the client side absraction layer.
+\item \url{src}: Contains the java source code of the client side abstraction layer.
 \item \url{dist}: Contains the output .jar file result of compilation of the CSAL.
 \item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{CSAL} is loaded through Netbeans.
 \item \url{.classpath}: ClassPath file for NetBeans.
@@ -124,29 +141,34 @@ can test the plug-in inside an Eclipse runtime application.
 \end{enumerate}
 
 
-\section{CSAL Compilation} 
+\section{Server and CSAL Compilation} 
 \label{sec:inst-comp}
 To compile and start the server and compile the CSAL, follow these
 steps:
 
 \begin{enumerate}
   \item cd to \emph{Server}
+
   \item \texttt{ant run}. The server is built and should come up, with
     some debug output on the console.
-  \item with the server running, cd to \emph{CSAL}
-\begin{enumerate}
-\item  \texttt{ant dist}. This builds the client-side abstraction
-    layer (CSAL) that all (Java) clients should use to connect to the
-    architecture (i.e., the server). Note that the server must be
-    running for the client to be built, because the code generation
-    step imports the server's WSDL definitions. In addition the WSDL definitions
-    are cached localy.
-\item  \texttt{ant dist-offline}
-This builds the client-side abstraction
-layer (CSAL) with the cached WSDL definitions during a previous on-line compilation.
-In this case the server does not have to be running for the CSAL to be built.
-\end{enumerate}
 
+  \item with the server running, cd to \emph{CSAL}
+
+    \begin{enumerate}
+    \item \texttt{ant dist}. This builds the client-side abstraction
+      layer (CSAL) that all (Java) clients should use to connect to
+      the architecture (i.e., the server). Note that the server must
+      be running for the client to be built, because the code
+      generation step imports the server's WSDL definitions. In
+      addition, the WSDL definitions are cached localy.
+      % where exactly?
+      
+      \item \texttt{ant dist-offline} This builds the client-side
+      abstraction layer (CSAL) with the cached WSDL definitions during
+      a previous on-line compilation.  In this case the server does
+      not have to be running for the CSAL to be built.
+    \end{enumerate}
+    
   \item To stop the server, simply change to its console window and
     hit \texttt{Ctrl-C}
 \end{enumerate}
@@ -155,7 +177,7 @@ it through the command-line client described in Section~\ref{sec:sacl:clc}.
 
 
 \section{NetBeans Development}
-The project has been developed using the NetBeans
+Parts of the project have been developed using the NetBeans
 IDE.\footnote{NetBeans IDE, \url{http://netbeans.org/}.} Debugging is
   made possible for all elements of the project, the steps will be
   described in this section. \textbf{Note:} The following steps have
@@ -344,7 +366,6 @@ annotation and a file, or two different annotations, etc.
     </result2>
 </saResponse>
 \end{lstlisting}
-\vspace*{-2mm}
 \caption{Schematic structure of an example response with two results}
 \label{list:response1}
 \end{figure}

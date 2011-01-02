@@ -18,7 +18,8 @@
 %% along with this program.  If not, see <http://www.gnu.org/licenses/>.
 %%
 
-\chapter{The \sa Server} 
+\chapter{The \sa Server}
+\label{chap:serv}
 Semantic NLP services are executed by a Semantic Assistants
 server. You can either use an existing server (e.g., from your
 company's or university's intranet, or a public server) or run you own
@@ -35,15 +36,21 @@ automatically load all available OWL service descriptions from the
 default location \url{Resources/OwlServiceDescriptions} and publish
 these to the clients.
 
-\subsection{Server Testing by accessing the WSDL}
+\subsection{Testing the Server by accessing the WSDL}
 To test if the Server is operating open your favourite browser and
 paste \url{http://<server host>:<server port>/SemAssist?wsdl} (Note
 the \texttt{<server host>} has a default value of the local machine
 name and the \texttt{<server port>} is the value of the property
 \texttt{server.port.wsdl} found in
 \url{SemanticAssistants/SemassistProperties.xml}; by default it is set
-to 8879)
+to 8879.
 
+On most platforms, either \url{http://localhost:8879/SemAssist?wsdl}
+or \url{http://127.0.0.1:8879/SemAssist?wsdl} should show you the WSDL
+if the server has been initialized correctly.\footnote{If this does
+  not work, try substituting the current IP address for
+  localhost/127.0.0.1 and check that the port is not blocked by a
+  firewall.}
 
 \subsection{Server Testing using the Command Line Client}
 To test if the server is running correctly and can be accessed from
@@ -51,7 +58,8 @@ the clients, we recommend you run some tests using the command-line
 client described in Section~\ref{sec:sacl:clc}.
 
 
-\section{Integrating New NLP Services}\label{sec:nlpservices}
+\section{Integrating New NLP Services}
+\label{sec:nlpservices}
 For the server to know how to handle the different NLP services
 offered through the architecture, it needs a \emph{description} of
 each offered service. These are by default located in the
