@@ -3,7 +3,7 @@
 
     This file is part of the Semantic Assistants architecture.
 
-    Copyright (C) 2009, 2010 Semantic Software Lab, http://www.semanticsoftware.info
+    Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
         Nikolaos Papadakis
         Tom Gitzinger
 
@@ -37,9 +37,10 @@ public class Logging
 
         if( DO_LOG )
         {
-            System.out.println( "[" + DateFormat.getDateInstance().format( rightNow ) + "] " + s );
+        	//modified the datetime format to show time.
+        	//Easier to know when each process was actually run
+            System.out.println( "[" + DateFormat.getDateTimeInstance().format( rightNow ) + "] " + s );
         }
-
     }
 
     public static void exception( Exception e, boolean printStackTrace )
