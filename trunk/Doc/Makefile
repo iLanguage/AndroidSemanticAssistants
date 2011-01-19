@@ -16,7 +16,7 @@
 #
 # You should have received a copy of the GNU Affero General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
-# Copyright (c) 2009, 2010 Semantic Software Lab, http://www.semanticsoftware.info
+# Copyright (c) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
 
 LATEX=pdflatex
 BIBTEX=bibtex

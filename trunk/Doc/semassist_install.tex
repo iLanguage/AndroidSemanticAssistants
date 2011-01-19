@@ -163,6 +163,9 @@ The last part includes all the properties used by the Semantic Assistants server
     <property name="runtime.heap.initial" value="128m" />
     <property name="runtime.heap.max"     value="1638m" />
     
+    <!-- Server Property Settings (ie # of Threads allowed) -->
+    <property name="server.threads.allowed"        value="3"/>
+
     <!-- Port for which the Server listens for debugers to be attached -->
     <property name="server.port.debug"    value="8885"/>
     
@@ -177,6 +180,7 @@ The last part includes all the properties used by the Semantic Assistants server
 \item \url{runtime.maxmem}: This variable contains the maximum amount of runtime memory used by JDK. Unless your JDK complains about the value, leave this as it is.
 \item \url{runtime.heap.initial}: This variable contains the initial amount of heap space used by JDK at runtime.
 \item \url{runtime.heap.max}: This variable contains the maximum amount of heap space used by JDK at runtime.
+\item \url{server.threads.allowed}: This variable contains the number of threads the server should allow to run concurrently.
 \item \url{server.port.debug}: This variable contains the port number on users machine on which the server listens for debuggers to be attached.
 \item \url{server.port.wsdl}: This variable contains the port number on which the server communicates with the clients through WSDL.
 \end{enumerate}
