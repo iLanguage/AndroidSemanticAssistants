@@ -3,7 +3,7 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
-Copyright (C) 2009, 2010 Semantic Software Lab, http://www.semanticsoftware.info
+Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
 Nikolaos Papadakis
 Tom Gitzinger
 
@@ -22,9 +22,22 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package info.semanticsoftware.semassist.server;
 
+import info.semanticsoftware.semassist.server.util.GATEPipelineOutput;
+import info.semanticsoftware.semassist.server.util.GATERuntimeParameter;
+import info.semanticsoftware.semassist.server.util.Logging;
+import info.semanticsoftware.semassist.server.util.MasterData;
+import info.semanticsoftware.semassist.server.util.ServiceInfo;
+import info.semanticsoftware.semassist.server.util.ServiceInfoForClient;
+import info.semanticsoftware.semassist.server.util.UserContext;
+
 import java.io.*;
 import java.util.*;
 //import javax.xml.ws.Endpoint;
+
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jws.*;
@@ -32,6 +45,7 @@ import java.net.*;
 
 
 import javax.jws.soap.SOAPBinding;
+
 import edu.stanford.smi.protegex.owl.jena.*;
 
 
@@ -53,7 +67,6 @@ import com.hp.hpl.jena.query.QuerySolution;
 
 import info.semanticsoftware.semassist.server.output.OutputBuilder;
 import info.semanticsoftware.semassist.server.output.XMLOutputBuilder;
-import info.semanticsoftware.semassist.server.util.UserContext;
 import info.semanticsoftware.semassist.server.util.*;
 //import info.semanticsoftware.semassist.server.output.*;
 
@@ -62,22 +75,36 @@ import gate.*;
 import gate.creole.*;
 //import gate.gui.*; // for debugging only
 //import gate.util.*;
+import gate.gui.MainFrame;
 
 @WebService()
 @SOAPBinding( style = SOAPBinding.Style.RPC )
 public class SemanticServiceBroker
 {
 
+	private static int nThreads=3;
     // Some constants related to GATE
     private static boolean mGateInited = false;
     // private HashMap<String, String> serviceToDirectory = new HashMap<String, String>();
     private HashMap<String, ServiceInfo> mAvailableServices = new HashMap<String, ServiceInfo>();
-    // The OWL model that will hold the information
+    /**
+	 * @return the mAvailableServices
+	 */
+	protected HashMap<String, ServiceInfo> getmAvailableServices() {
+		return mAvailableServices;
+	}
+
+
+	// The OWL model that will hold the information
     // on the language services
     protected JenaOWLModel mOwlModel = null;
     // A mReasoner instance
     private ProtegeReasoner mReasoner = null;
 
+    
+    private ExecutorService tpes = null; //this is my thread pool.
+    
+    
     public SemanticServiceBroker() throws Exception
     {
         // Let's see what we have to offer
@@ -90,8 +117,11 @@ public class SemanticServiceBroker
 
         // Initialize GATE
         initGate();
+        tpes = Executors.newFixedThreadPool(nThreads); //initialize the thread pool with the number of allowed
+        												//concurrent threads
     }
 
+    
     @WebMethod()
     public ServiceInfoForClient[] getAvailableServices()
     {
@@ -216,55 +246,98 @@ public class SemanticServiceBroker
                                  @WebParam( name = "gateParams" ) GATERuntimeParameter[] gateParams,
                                  @WebParam( name = "userCtx" ) UserContext userCtx )
     {
-	//MainFrame.getInstance().setVisible(true); // for debugging only
-
+    	//TODO: comment out the MainFrame call
+    	MainFrame.getInstance().setVisible(true); // for debugging only
+		
+    	//create a new Thread that offers the call function
+    	//it will allow the return of the future results once the thread has completed
+		CallableServiceThread workers = new CallableServiceThread(serviceName, documents, literalDocs, connID, gateParams, userCtx, this);
+		
+		Future<String> ftp = tpes.submit(workers);//send the thread to the thread pool and wait for it's completion
+    	
+		String returnValue="";//used to store the return value from the thread
+    	try{
+    		returnValue = ftp.get(); //query the thread and get the result (String)
+    	}catch(Exception e){
+    		returnValue = e.getMessage(); 
+    	}    	
+    	return returnValue;    	
+    }
+    
+    
+    /*
+     * Function created to pass the contents of the invokeService(webmethod) to a callable
+     * protected function that could be referenced from another class in the same package.
+     * In this case we are refering to the CallableServiceThread.
+     * 
+     * This method was necessary to keep the SemanticServiceBroker class attributes from having to be redefined
+     * to protected or public
+     */
+    protected String invokeServiceCall(String serviceName,URIList documents,String[] literalDocs,
+    		long connID,GATERuntimeParameter[] gateParams, UserContext userCtx){
         for( int i = 0; i < gateParams.length; i++ )
         {
             Logging.log( "---------------- Name: " + gateParams[i].getParamName() + ", value: " + gateParams[i].getValueAsObject() );
         }
 
         // Check if mServiceName exists
-        if( !mAvailableServices.containsKey( serviceName ) )
+        
+        if( !getmAvailableServices().containsKey( serviceName ) )
         {
+        
             return MasterData.ERROR_ANNOUNCEMENT + "Service does not seem to exist.";
         }
-        ServiceInfo si = mAvailableServices.get( serviceName );
-
+        
+        ServiceInfo si = getmAvailableServices().get( serviceName );
+        
         // Create initial ServiceExecutionStatus object
         ServiceExecutionStatus status = new ServiceExecutionStatus();
+        
         status.setParams( gateParams );
-
+        
         // Assemble corpus
         Corpus corpus = getCorpusFromURIs( documents, literalDocs );
+        
         Logging.log( "---------------- Corpus assembled. Size: " + corpus.size() );
+        
         // if (corpus.size() > 0 || corpus.size() == 0) return "";
         status.setCorpus( corpus );
-
+        
         // Pass service description(s) to the status object
         String concatenation = si.getConcatenationOf();
+        
         Vector<ServiceInfo> descriptions = new Vector<ServiceInfo>();
+        
         if( concatenation.trim().equals( "" ) )
         {
             Logging.log( "---------------- Single language service" );
+        
             descriptions.add( si );
+        
         }
         else
         {
+        
             Logging.log( "---------------- Concatenated language services" );
             descriptions = getServiceDescriptionVector( concatenation );
+        
         }
+        
         status.setServiceInfos( descriptions );
-
+        
         // Pass connection ID and user context to status object
         status.setConnID( connID );
+        
         status.setUserContext( userCtx );
-
+        
         // Run the language services one by one. Information is
         // passed from one to another via the shared corpus.
         Iterator<ServiceInfo> ito = descriptions.iterator();
+        
         ServiceInfo latestService = null;
+        
         Runtime runtime = Runtime.getRuntime();
-
+        
         while( ito.hasNext() )
         {
             latestService = ito.next();
@@ -294,11 +367,10 @@ public class SemanticServiceBroker
 
 
 	// cleanup corpus and documents
-	cleanup( status );
-
+        cleanup( status );
         return finalResult;
     }
-
+    
     @WebMethod()
     public String getResultFile( @WebParam( name = "resultFileUrl" ) URL url )
     {
@@ -357,6 +429,11 @@ public class SemanticServiceBroker
         return result;
     }
 
+    /*
+     * Needed to modify this method in order to now either load a new service or pull an already existing service
+     * from the threadpool.
+     */
+    
     protected ServiceExecutionStatus runOneService( ServiceInfo currentService, ServiceExecutionStatus status )
     {
         // Get a handle of the application file
@@ -372,9 +449,54 @@ public class SemanticServiceBroker
 
         // Load the application
         Logging.log( "---------------- Preparing to load application..." );
-        Object serviceApp = loadGateApp( serviceAppFile );
-
-
+        
+        //check if service already exists
+        //TODO: check what happens here
+        
+        //check the to see if an already existing inactive service with the same type that is needed
+        //can be used.   if so return it's position in the process register
+        int gateProcessRegisterIDX = GateProcessRegister.getInstance().getInactiveServicePosition(serviceAppFile.getAbsolutePath());
+        //make sure the serviceApp is completely clear
+        Object serviceApp=null;
+        Logging.log("Service Register INDEX " + gateProcessRegisterIDX);
+        if(gateProcessRegisterIDX < 0){ //if no service is found
+        	Logging.log("Service not found in Register");
+        	serviceApp = loadGateApp( serviceAppFile ); //load a new service into memory
+        	Logging.log("Created New Service");
+        	
+        	if(nThreads<=GateProcessRegister.getInstance().getCurrentRegisterSize()){ //check to see if the register exceeds the number of threads (processes) allowed
+        		//we need to make space in the register to accept this new service
+        		int inactiveProcessPosition = GateProcessRegister.getInstance().getInactiveServicePosition(serviceAppFile.getAbsolutePath());
+        		//find an inactive service of the same type (there should only be a value if a service has finished between the previous call and now
+        		if(inactiveProcessPosition < 0){//if no current inactive service with the same name is found
+        			inactiveProcessPosition = GateProcessRegister.getInstance().getInactiveServicePosition();
+        				//return any inactive service
+        		}
+        		if(inactiveProcessPosition >= 0){//if an inactive service is found
+        			//we need to get it's reference and delete it from the GATE list of active processes (pipelines)
+        			Object gateProcess = GateProcessRegister.getInstance().getGateProcessServiceStatus(inactiveProcessPosition).getGateService();
+        				//retrieve service from register
+        			if( !(gateProcess instanceof CorpusController) ){
+        				Factory.deleteResource((SerialController)gateProcess);
+        			}else{
+        				Factory.deleteResource((CorpusController)gateProcess);
+        			}
+        			GateProcessRegister.getInstance().removeGateProcess(inactiveProcessPosition);
+        				//remove the reference from the gate process register
+        		}
+        		
+        	}
+        	
+			GateProcessRegister.getInstance().addGateProcess(serviceAppFile.getAbsolutePath(), serviceApp);
+				//add the new process to the Register
+        }else{
+        		//if the process does already exists and it is inactive(free to use)
+        	serviceApp = GateProcessRegister.getInstance().getGateProcessServiceStatus(gateProcessRegisterIDX).getGateService();
+        		//retrieve service from register
+        	GateProcessRegister.getInstance().ActivateGateProcess(gateProcessRegisterIDX);
+        		//reactivate the process so it cannot be reused
+        }
+        Logging.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Process ID Started: " + serviceApp.hashCode());
         // Does the pipeline demand merged input documents?
         if( currentService.getMergeInputDocs() )
         {
@@ -397,6 +519,11 @@ public class SemanticServiceBroker
 
         // Possibly pass runtime parameters to the pipeline
         SerialController serialCtrl = (SerialController) serviceApp;
+        Logging.log("serviceApp was set correctly");
+        
+        
+        
+        
         if( status.mParams != null && status.mParams.size() > 0 )
         {
             GateUtils.passRuntimeParameters( serialCtrl, status.mParams, currentService.getServiceName() );
@@ -499,7 +626,7 @@ public class SemanticServiceBroker
 	    */
 
 	    // RW: set the corpus
-            Logging.log( "---------------- Assining corpus to pipeline..." );
+            Logging.log( "---------------- Assigning corpus to pipeline..." );
             boolean corpusAssigned = GateUtils.assignResultCorpus( serialCtrl, currentService, status.getCorpus() );
 	    // RW: maybe add the error handling from above...
 
@@ -507,10 +634,21 @@ public class SemanticServiceBroker
             try
             {
                 Logging.log( "---------------- Running application..." );
+                
                 serialCtrl.execute();
                 Logging.log( "---------------- Cleaning up controller..." );
-                Factory.deleteResource( serialCtrl );
-
+                
+              //TODO: DUPLICATED CODE TO BE REMOVED AND PLACED AT THE END OF FUNCTION
+                int positionOfCurrentService = GateProcessRegister.getInstance().getServicePosition(serviceApp);  
+                if(positionOfCurrentService < 0){
+                	Logging.log("We have a problem with locating objects in Register!");
+                }else{
+                	Logging.log("Setting the Register Status to INACTIVE");
+                	GateProcessRegister.getInstance().InActivateGateProcess(positionOfCurrentService);
+                }
+                Logging.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Process ID Stopped: " + serviceApp.hashCode());
+                //TODO: Factory.deleteResource( serialCtrl );
+                
                 // If a corpus was produced as result, let
                 // the execution status know
                 /* RW: commented out, since we use the same corpus as above
@@ -541,7 +679,17 @@ public class SemanticServiceBroker
                 Logging.log( "---------------- Running application..." );
                 GateUtils.runApplicationOnCorpus( corpusController, status.getCorpus() );
                 Logging.log( "---------------- Cleaning up controller..." );
-                Factory.deleteResource( corpusController );
+
+                //TODO: DUPLICATED CODE TO BE REMOVED AND PLACED AT THE END OF FUNCTION
+                int positionOfCurrentService = GateProcessRegister.getInstance().getServicePosition(serviceApp);  
+                if(positionOfCurrentService < 0){
+                	Logging.log("We have a problem with locating objects in Register!");
+                }else{
+                	Logging.log("Setting the Register Status to INACTIVE");
+                	GateProcessRegister.getInstance().InActivateGateProcess(positionOfCurrentService);
+                }
+                Logging.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Process ID Stopped: " + serviceApp.hashCode());
+                //TODO:  Factory.deleteResource( corpusController );
             }
             catch( gate.creole.ExecutionException e )
             {
@@ -655,10 +803,9 @@ public class SemanticServiceBroker
     protected Object loadGateApp( File serviceAppFile )
     {
         Object result;
-
         try
         {
-            result = gate.util.persistence.PersistenceManager.loadObjectFromFile( serviceAppFile );
+        	result = gate.util.persistence.PersistenceManager.loadObjectFromFile( serviceAppFile );
         }
         catch( Exception e )
         {
@@ -667,7 +814,6 @@ public class SemanticServiceBroker
             return MasterData.ERROR_ANNOUNCEMENT +
                    "Could not instantiate the application on the server (" + c.getName() + ").";
         }
-
         return result;
     }
 
@@ -681,10 +827,13 @@ public class SemanticServiceBroker
             try
             {
                 // Get GATE home
+            	Logging.log("# of Threads: " + nThreads);
+            	nThreads = MasterData.Instance().getServerThreadsAllowed();
+            	Logging.log("# of Threads: " + nThreads);
                 String gateHomePath = MasterData.Instance().getGateHome();
                 String gatePluginDir = MasterData.Instance().getGatePluginDir();
                 String gateUserFile = MasterData.Instance().getGateUserFile();
-
+                
                 File gateHome = new File( gateHomePath );
 
                 Gate.setGateHome( gateHome );
@@ -1250,7 +1399,7 @@ public class SemanticServiceBroker
     /**
      * Cleanup documents and corpus after service execution
      */
-     private void cleanup( ServiceExecutionStatus status ) {
+    protected void cleanup( ServiceExecutionStatus status ) {
 
 	 // remove documents from memory
 	 Iterator<Document> it_doc = status.getCorpus().iterator();
@@ -1267,3 +1416,6 @@ public class SemanticServiceBroker
 	 Factory.deleteResource( status.getCorpus() );	 
      }
 }
+
+
+

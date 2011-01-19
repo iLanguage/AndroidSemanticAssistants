@@ -3,7 +3,7 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
-Copyright (C) 2009, 2010 Semantic Software Lab, http://www.semanticsoftware.info
+Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
 Nikolaos Papadakis
 Tom Gitzinger
 
@@ -43,6 +43,8 @@ public class XMLFileParser
     private static String mMergeCmd = "";
     private static String mHTMLtoText = "";
     private static String mServerPort = "";
+    private static int mServerThreadsAllowed = 5; //Added this variable to hold the number of threads
+    											  //read from the xml properties file for the Semassist	
 
     public static void read()
     {
@@ -71,6 +73,7 @@ public class XMLFileParser
         mMergeCmd = project.getProperty( "merge.command" );
         mHTMLtoText = project.getProperty( "html2text.command" );
         mServerPort = project.getProperty( "server.port.wsdl" );
+        mServerThreadsAllowed = Integer.parseInt(project.getProperty("server.threads.allowed"));
 
         if( mGateHome ==null || mGatePluginDir==null|| mServiceRepository==null
                 || mGateUserFile==null || mOntRepository==null || mMergeCmd==null
@@ -81,7 +84,12 @@ public class XMLFileParser
 
     }
 
-    public static String getGateHome()
+   
+	protected static int getServerThreadsAllowed() {
+		return mServerThreadsAllowed;
+	}
+
+	public static String getGateHome()
     {
         return mGateHome;
     }

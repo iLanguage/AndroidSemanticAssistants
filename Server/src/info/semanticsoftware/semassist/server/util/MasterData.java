@@ -3,7 +3,7 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
-Copyright (C) 2009, 2010 Semantic Software Lab, http://www.semanticsoftware.info
+Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
 Nikolaos Papadakis
 Tom Gitzinger
 
@@ -69,7 +69,11 @@ public class MasterData
         XMLFileParser.read();
         
     }
-    
+    //Function used to retrieve the number of threads we wish to allow to run concurrently on the
+    //machine running the server
+    public int getServerThreadsAllowed(){
+    	return XMLFileParser.getServerThreadsAllowed();
+    }
     public String getGateHome()
     {
         //checkFile();
