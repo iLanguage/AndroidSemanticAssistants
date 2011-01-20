@@ -246,8 +246,8 @@ public class SemanticServiceBroker
                                  @WebParam( name = "gateParams" ) GATERuntimeParameter[] gateParams,
                                  @WebParam( name = "userCtx" ) UserContext userCtx )
     {
-    	//TODO: comment out the MainFrame call
-    	MainFrame.getInstance().setVisible(true); // for debugging only
+    	
+    	//MainFrame.getInstance().setVisible(true); // for debugging only
 		
     	//create a new Thread that offers the call function
     	//it will allow the return of the future results once the thread has completed
