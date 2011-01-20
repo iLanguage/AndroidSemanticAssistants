@@ -54,7 +54,10 @@
     <property name="runtime.maxmem"           value="1638m" />
     <property name="runtime.heap.initial"     value="128m" />
     <property name="runtime.heap.max"         value="1638m" />
-    
+
+    <!-- Server Property Settings (ie # of Threads allowed) -->
+    <property name="server.threads.allowed"        value="3"/>
+
     <!-- Port for which the Server listens for debugers to be attached -->
     <property name="server.port.debug"        value="8885"/>
     
