@@ -73,7 +73,11 @@ public class XMLFileParser
         mMergeCmd = project.getProperty( "merge.command" );
         mHTMLtoText = project.getProperty( "html2text.command" );
         mServerPort = project.getProperty( "server.port.wsdl" );
-        mServerThreadsAllowed = Integer.parseInt(project.getProperty("server.threads.allowed"));
+        try{
+        	mServerThreadsAllowed = Integer.parseInt(project.getProperty("server.threads.allowed"));
+        }catch(Exception ex){
+        	System.out.print( "The server.threads.allowed property in the " + propFile + " file has not been set correctly.\nYou must have it set to a valid numerical value\n" );
+        }
 
         if( mGateHome ==null || mGatePluginDir==null|| mServiceRepository==null
                 || mGateUserFile==null || mOntRepository==null || mMergeCmd==null
