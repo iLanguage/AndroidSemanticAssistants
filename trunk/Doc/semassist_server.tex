@@ -36,6 +36,13 @@ automatically load all available OWL service descriptions from the
 default location \url{Resources/OwlServiceDescriptions} and publish
 these to the clients.
 
+\subsection{Configuring the Server User Request Limit}
+To configure the server to limit the amount of user requests it will
+process concurrently, one needs to modify the \texttt{server.thread.allowed}
+found in \url{SemanticAssistants/SemassistProperties.xml};  The default
+value is already set but if ommitted the number of threads that will
+be allowed will not necessarily reflect the server capabilities.
+
 \subsection{Testing the Server by accessing the WSDL}
 To test if the Server is operating open your favourite browser and
 paste \url{http://<server host>:<server port>/SemAssist?wsdl} (Note
