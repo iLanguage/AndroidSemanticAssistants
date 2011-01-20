@@ -33,14 +33,6 @@
     <property name="src.home"         value="${basedir}/src"/>
     <property name="dist.home"        value="${basedir}/dist"/>
 
-    <!-- Tool Directories -->
-    <property name="protege-owl.home" value="${protege-home}/plugins/edu.stanford.smi.protegex.owl/" />
-
-    <!-- Library Files -->
-    <property name="gate.jar"         value="${gate-home}/bin/gate.jar" />
-    <property name="protege.jar"      value="${protege-home}/protege.jar" />
-
-
     <!-- ___________________ You should not have to edit anything below this line ________________________  -->
     <description>
         Server side Java code of the semantic text assistants infrastructure
@@ -60,9 +52,9 @@
     <target name="compile" description="Compile the source" >
     <!-- Compile the java code from ${srcDir} into ${buildDir} -->
         <mkdir dir="${build.home}" />
-        <javac srcdir="${src.home}" debug="true" debuglevel="lines,vars,source"
-destdir="${build.home}" includeantruntime="${antruntime}">
-            <classpath refid="compile.classpath" />
+        <javac srcdir="${src.home}" debug="true" debuglevel="lines,vars,source" destdir="${build.home}" includeantruntime="${antruntime}">
+        	<compilerarg value="${compile.args}" />
+        	<classpath refid="compile.classpath" />
         </javac>
     </target>
 
@@ -112,7 +104,6 @@ destdir="${build.home}" includeantruntime="${antruntime}">
                 <pathelement location="${protege-owl.home}/jena.jar" />
                 <pathelement location="${protege-owl.home}/orphanNodesAlg.jar" />
                 <pathelement location="${protege-owl.home}/arq.jar" />
-                <pathelement location="${protege-home}/looks-2.1.3.jar" />
                 <fileset dir="${gate-home}/lib" >
                     <include name="*.jar" />
                 </fileset>
@@ -125,11 +116,12 @@ destdir="${build.home}" includeantruntime="${antruntime}">
     </target>
   
 	
-  <!-- Clear all build output -->
-    <target name="clean">
-        <delete includeemptydirs="true" quiet="true">
-            <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
-        </delete>
-    </target>
+	  <!-- Clear all build output -->
+	  <target name="clean">
+	    <delete includeemptydirs="true" quiet="true">
+	      <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
+	    </delete>
+	  </target>
+
 </project>
 
