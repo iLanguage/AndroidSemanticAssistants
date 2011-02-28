@@ -7,6 +7,7 @@ import info.semanticsoftware.semassist.server.GateRuntimeParameterArray;
 import info.semanticsoftware.semassist.server.SemanticServiceBroker;
 import info.semanticsoftware.semassist.server.UriList;
 import info.semanticsoftware.semassist.server.UserContext;
+
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ public class ServiceInvocationJob extends Job{
 	 * String params = "docs=http://en.wikipedia.org/w/index.php?title=Stanley_Kubrick&printable=yes";
 	 * */
 	String params = "";
+	SemanticServiceBroker broker;
 
 	private GateRuntimeParameterArray rtpArray = new GateRuntimeParameterArray();
     
@@ -118,6 +120,7 @@ public class ServiceInvocationJob extends Job{
 	        UriList uriList = new UriList();
 	        //StringArray stringArray = new StringArray();
 	        
+	        
 	            String[] split = params.split( " " );
 		        for( int i = 0; i < split.length; i++ )
 		        {
@@ -178,7 +181,7 @@ public class ServiceInvocationJob extends Job{
 		        String serviceResponse = null;
 		        try
 		        {
-			        SemanticServiceBroker broker = ServiceAgentSingleton.getInstance();
+			        broker = ServiceAgentSingleton.getInstance();
 			        serviceResponse = broker.invokeService( serviceName, uriList, stringArray, 0L, rtpArray, ctx );
 		        }
 		        catch( Exception connEx)
@@ -203,22 +206,26 @@ public class ServiceInvocationJob extends Job{
 			            {
 			                SemanticServiceResult current = it.next();
 			                if(current.mResultType.equals(SemanticServiceResult.FILE)){
-			                	System.out.println("*File Case*");
+			                	//System.out.println("*File Case*");
+			                	String fileContent = broker.getResultFile(current.mFileUrl);
+			                	String fileExt = ClientUtils.getFileNameExt(current.mFileUrl);
+								ServerResponseHandler.createFile(fileContent, fileExt);
 			                }
 			                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION_IN_WHOLE)){
-			                	System.out.println("*Annotation Case - Append to data structure*");
+			                	System.out.println("Annotation Case (Append to data structure). I don't know how to handle this!");
 			                }
 			                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
-			                	System.out.println("*Annotation Case*");
+			                	//System.out.println("*Annotation Case*");
 			                	ServerResponseHandler.createAnnotation(current);
 			                }
 			                else if(current.mResultType.equals(SemanticServiceResult.CORPUS)){
-			                	System.out.println("*Corpus Case*");
+			                	System.out.println("Corpus Case. I don't know how to handle this!");
 			                }
 			                else if(current.mResultType.equals(SemanticServiceResult.DOCUMENT)){
-			                	System.out.println("*Document Case*");
+			                	System.out.println("DocumentCase. I don't know how to handle this!");
 			                }
 			            }
+
 	    }
 	 
 	 public void addLiteral(String literal){
