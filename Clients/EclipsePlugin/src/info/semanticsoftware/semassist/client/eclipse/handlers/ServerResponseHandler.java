@@ -56,6 +56,7 @@ public class ServerResponseHandler {
         	try {
         		outputFilePath = "file://" + outputFile.getCanonicalPath();
 				PlatformUI.getWorkbench().getBrowserSupport().getExternalBrowser().openURL(new URL(outputFilePath));
+				SemanticAssistantsStatusViewModel.addLog("The results are retrieved from the server. Please check your browser to see the output.");
         	}catch (MalformedURLException e) {
 				System.err.println("A malfored URL has been retrieved from the server. Semantic Assistants cannot open the results.");
 				SemanticAssistantsStatusViewModel.addLog("A malfored URL has been retrieved from the server. Semantic Assistants cannot open the results.");
