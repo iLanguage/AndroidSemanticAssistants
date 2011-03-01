@@ -371,8 +371,8 @@ public class FileSelectionDialog extends SelectionStatusDialog {
         cmbServices = new Combo(composite, SWT.DROP_DOWN | SWT.READ_ONLY);
 	    cmbServices.add("");
 
-		 for(int i=0; i < servicesThread.services.size(); i++){
-			 cmbServices.add(servicesThread.services.get(i));
+		 for(int i=0; i < servicesThread.servicesNames.size(); i++){
+			 cmbServices.add(servicesThread.servicesNames.get(i));
 		 }
 
 		cmbServices.select(0);
