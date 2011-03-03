@@ -2,16 +2,25 @@ package info.semanticsoftware.semassist.client.eclipse.handlers;
 
 import info.semanticsoftware.semassist.client.eclipse.model.SemanticAssistantsStatusViewModel;
 import info.semanticsoftware.semassist.csal.ClientUtils;
+import info.semanticsoftware.semassist.csal.RTParamFrame;
 import info.semanticsoftware.semassist.csal.result.SemanticServiceResult;
+import info.semanticsoftware.semassist.server.GateRuntimeParameter;
 import info.semanticsoftware.semassist.server.GateRuntimeParameterArray;
 import info.semanticsoftware.semassist.server.SemanticServiceBroker;
+import info.semanticsoftware.semassist.server.ServiceInfoForClient;
 import info.semanticsoftware.semassist.server.UriList;
 import info.semanticsoftware.semassist.server.UserContext;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
+
+import javax.swing.JFrame;
+
 import net.java.dev.jaxb.array.StringArray;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
@@ -25,20 +34,35 @@ import org.eclipse.swt.widgets.Display;
  * */
 public class ServiceInvocationJob extends Job{
 
-	/** The name of the service to be invoked */
-	String serviceName;
-
 	/** This  variable is used as a container for parameters needed by some NLP services /
-	/* Sample parameters
-	 * String params = "docs=http://en.wikipedia.org/w/index.php?title=Stanley_Kubrick&printable=yes";
-	 * */
+	/* Sample: String params = "docs=http://en.wikipedia.org/w/index.php?title=Stanley_Kubrick&printable=yes";
+	*/
 	String params = "";
-	SemanticServiceBroker broker;
-
+	
+	/** The singleton instance of service broker */
+	private SemanticServiceBroker broker;
+	
+	/** The name of the service to be invoked */
+	private String serviceName = null;
+	
+	/** The array of GATE pipelines' runtime parameters */
 	private GateRuntimeParameterArray rtpArray = new GateRuntimeParameterArray();
-    
+	
+	/** The arrays of strings to send to pipeline */
 	private StringArray stringArray = new StringArray();
-
+	
+	/** The user context object */
+	private UserContext ctx = new UserContext();
+	
+	/** The list of document URIs to send to pipeline */
+	private UriList uriList = new UriList();
+	
+	/** The runtime parameters dialog */
+	protected static JFrame mparamFrame = null;
+	
+	/** The strings containing the server XML response */
+	private String 	serviceResponse = null;
+	
 	/** Constructor initializes the service name */
 	public ServiceInvocationJob(String name) {
 		super(name);
@@ -56,9 +80,8 @@ public class ServiceInvocationJob extends Job{
              System.out.println( "Invoking " + serviceName + "..." );
     
              // Build user context from the parameters
-             UserContext ctx = buildUserContext( params );
+             ctx = buildUserContext( params );
              
-
              invokeService( params , serviceName, ctx);
 
              monitor.done();
@@ -66,27 +89,19 @@ public class ServiceInvocationJob extends Job{
          }
          catch( javax.xml.ws.WebServiceException e )
          {
-             System.out.println( "\nConnection error! Possible reasons: Exception on server or server not running." );
+             System.err.println( "\nConnection error! Possible reasons: Exception on server or server not running." );
              SemanticAssistantsStatusViewModel.addLog("Connection error! Possible reasons: Exception on server or server not running.");
              monitor.done();
              return Status.CANCEL_STATUS;
-         }finally{
-        	 Display.getDefault().asyncExec(new Runnable() {
-						@Override
-						public void run() {
-							FileSelectionHandler.openViews();
-						}
-					}); 
-        	this.done(ASYNC_FINISH);
          }
 	}
 	
-	/** Builds the user context from the input params
+	/** Builds the user context from the input parameters
 	 * @param params parameters
 	 *  */
-	private static UserContext buildUserContext( String params )
+	private UserContext buildUserContext( String params )
 	    {
-	        UserContext ctx = new UserContext();
+	        ctx = new UserContext();
 
 	        // Parse parameters
 	        String[] pa = params.split( " " );
@@ -115,12 +130,9 @@ public class ServiceInvocationJob extends Job{
 	 * @param serviceName name of the NLP service to be invoked
 	 * @param ctx User context
 	 *  */
-	 private void invokeService( String params, String serviceName, UserContext ctx )
-	    {
-	        UriList uriList = new UriList();
-	        //StringArray stringArray = new StringArray();
-	        
-	        
+	 private void invokeService( String params, String serviceName, UserContext ctx ){
+		 		uriList = new UriList();
+	        	        
 	            String[] split = params.split( " " );
 		        for( int i = 0; i < split.length; i++ )
 		        {
@@ -178,58 +190,159 @@ public class ServiceInvocationJob extends Job{
 		   	        	uriList.getUriList().add(stringArray.getItem().get(i));
 		   	    }
 		        
-		        String serviceResponse = null;
-		        try
-		        {
-			        broker = ServiceAgentSingleton.getInstance();
-			        serviceResponse = broker.invokeService( serviceName, uriList, stringArray, 0L, rtpArray, ctx );
-		        }
-		        catch( Exception connEx)
-		        {
-		            SemanticAssistantsStatusViewModel.addLog("Server not found. \nPlease check the Server Host and Port and if Server is Online");
-		        	System.out.println("Server not found. \nPlease check the Server Host and Port and if Server is Online");
-		            return;
-		        }
-		        
-		        System.out.println( "" );
-		        System.out.println(serviceResponse);
-
-
-			      // returns result in sorted by type
-			      Vector<SemanticServiceResult> results = ClientUtils.getServiceResults( serviceResponse );
-		          if( results == null ) {
-		                System.out.println( "---------- No results retrieved in response message" );
-		                return;
-			      }
-
-			            for( Iterator<SemanticServiceResult> it = results.iterator(); it.hasNext(); )
-			            {
-			                SemanticServiceResult current = it.next();
-			                if(current.mResultType.equals(SemanticServiceResult.FILE)){
-			                	//System.out.println("*File Case*");
-			                	String fileContent = broker.getResultFile(current.mFileUrl);
-			                	String fileExt = ClientUtils.getFileNameExt(current.mFileUrl);
-								ServerResponseHandler.createFile(fileContent, fileExt);
-			                }
-			                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION_IN_WHOLE)){
-			                	System.out.println("Annotation Case (Append to data structure). I don't know how to handle this!");
-			                }
-			                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
-			                	//System.out.println("*Annotation Case*");
-			                	ServerResponseHandler.createAnnotation(current);
-			                }
-			                else if(current.mResultType.equals(SemanticServiceResult.CORPUS)){
-			                	System.out.println("Corpus Case. I don't know how to handle this!");
-			                }
-			                else if(current.mResultType.equals(SemanticServiceResult.DOCUMENT)){
-			                	System.out.println("DocumentCase. I don't know how to handle this!");
-			                }
-			            }
-
-	    }
+		        // Before invoking the service, let's check if this pipeline requires runtime parameters...
+	        	Iterator<ServiceInfoForClient> it = ServiceInformationThread.serviceInfos.iterator();
+	 	        while( it.hasNext() )
+	 	        {
+	 	        		ServiceInfoForClient info = it.next();
+		 	            if(info.getServiceName().equals(serviceName)){
+		 	            	// Get all the runtime parameters needed
+		 	            	List<GateRuntimeParameter> runtimeParams = info.getParams();
+		 	            	
+		 	            	if( runtimeParams.iterator().hasNext() ){
+			 				   if( mparamFrame != null ){
+			 	            		 if( !mparamFrame.isVisible() )
+				                        {
+				                            mparamFrame = null;
+				                        }
+				                        else
+				                        {
+				                            return;
+				                        }
+			 	            	 }
+			 	            	mparamFrame = buildRTParamFrame( info, runtimeParams );
+			                    mparamFrame.pack();
+			                    mparamFrame.setLocation( 430, 430 );
+			                    mparamFrame.setVisible( true );
+		 	            	}else{
+			 				    rtpArray = new GateRuntimeParameterArray();
+			 				    doRunSelectedService();
+			 	            }
+		 	            	
+		 	            	// We've found the service description, no more loops is needed
+		 	            	break;
+		 	            }
+	 	        }
+	 }
 	 
 	 public void addLiteral(String literal){
 		 stringArray.getItem().add(literal);
 	 }
+	 
+	  private JFrame buildRTParamFrame( ServiceInfoForClient info, List<GateRuntimeParameter> params ){
 
+          Vector<GateRuntimeParameter> mandatory = new Vector<GateRuntimeParameter>();
+          Vector<GateRuntimeParameter> optional = new Vector<GateRuntimeParameter>();
+
+          for( Iterator<GateRuntimeParameter> it = params.iterator(); it.hasNext(); )
+          {
+              GateRuntimeParameter p = it.next();
+              if( p.isOptional() )
+              {
+                  optional.add( p );
+              }
+              else
+              {
+                  mandatory.add( p );
+              }
+          }
+
+          // Show window for parameter settings
+          RTParamFrame frame = new RTParamFrame( info );
+          frame.setOkActionListener( new ParamActionListener( frame ) );
+          frame.setMandatories( mandatory );
+          frame.setOptionals( optional );
+
+          return frame;
+      }
+	  
+	  private class ParamActionListener implements ActionListener{
+
+          private RTParamFrame frame = null;
+          public ParamActionListener( RTParamFrame f )
+          {
+              frame = f;
+          }
+
+          @Override
+          public void actionPerformed( ActionEvent e )
+          {
+              GateRuntimeParameterArray params = frame.getParams();
+              System.out.println( "------ Retrieved params array from the frame: " );
+              List<GateRuntimeParameter> list = params.getItem();
+              Iterator<GateRuntimeParameter> it = list.iterator();
+
+              while( it.hasNext() )
+              {
+                  GateRuntimeParameter p = it.next();
+                  System.out.println( "------   Parameter: " + p.getParamName() + " = " + p.getStringValue());
+              }
+
+              frame = null;
+              rtpArray = params;
+              doRunSelectedService();
+          }
+      }
+	
+	  private void doRunSelectedService(){
+		  try{
+	        	broker = ServiceAgentSingleton.getInstance();
+		        serviceResponse = broker.invokeService(serviceName, uriList, stringArray, 0L, rtpArray, ctx );
+	        }catch( Exception connEx){
+	            SemanticAssistantsStatusViewModel.addLog("Server not found. Please check the Server Host and Port and if Server is Online");
+	        	System.err.println("Server not found. Please check the Server Host and Port and if Server is Online");
+	            return;
+	        }
+	        
+	        System.out.println("");
+	        System.out.println(serviceResponse);
+	        
+	        // The response is ready, now let's decide how we're going to present it
+	        handleResponse(serviceResponse);
+			SemanticAssistantsStatusViewModel.addLog("Service invocation terminated.");
+
+	        // Open the Semantic Assistants views
+	        Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								FileSelectionHandler.openViews();
+							}
+						}); 
+	        
+	        // Signal that the job is done
+	        this.done(ASYNC_FINISH);
+	  }
+	  
+	  private void handleResponse(String serviceResponse){
+		  // returns result in sorted by type
+	      Vector<SemanticServiceResult> results = ClientUtils.getServiceResults( serviceResponse );
+          if( results == null ) {
+                System.err.println( "No results retrieved in response message" );
+                return;
+	      }
+
+	            for( Iterator<SemanticServiceResult> it = results.iterator(); it.hasNext(); )
+	            {
+	                SemanticServiceResult current = it.next();
+	                if(current.mResultType.equals(SemanticServiceResult.FILE)){
+	                	//System.out.println("*File Case*");
+	                	String fileContent = broker.getResultFile(current.mFileUrl);
+	                	String fileExt = ClientUtils.getFileNameExt(current.mFileUrl);
+						ServerResponseHandler.createFile(fileContent, fileExt);
+	                }
+	                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION_IN_WHOLE)){
+	                	System.out.println("Annotation Case (Append to data structure). I don't know how to handle this!");
+	                }
+	                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
+	                	//System.out.println("*Annotation Case*");
+	                	ServerResponseHandler.createAnnotation(current);
+	                }
+	                else if(current.mResultType.equals(SemanticServiceResult.CORPUS)){
+	                	System.out.println("Corpus Case. I don't know how to handle this!");
+	                }
+	                else if(current.mResultType.equals(SemanticServiceResult.DOCUMENT)){
+	                	System.out.println("DocumentCase. I don't know how to handle this!");
+	                }
+	            }
+	  }
 }
