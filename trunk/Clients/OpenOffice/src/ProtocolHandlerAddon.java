@@ -29,9 +29,10 @@ import java.awt.event.*;
 
 import info.semanticsoftware.semassist.server.*;
 import info.semanticsoftware.semassist.csal.*;
+import info.semanticsoftware.semassist.csal.RTParamFrame;
 import info.semanticsoftware.semassist.client.openoffice.*;
-
 import info.semanticsoftware.semassist.client.openoffice.utils.*;
+
 
 import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
