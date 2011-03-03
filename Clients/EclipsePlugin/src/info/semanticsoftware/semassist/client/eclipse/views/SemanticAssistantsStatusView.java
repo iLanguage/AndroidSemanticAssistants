@@ -107,8 +107,8 @@ public class SemanticAssistantsStatusView extends ViewPart {
 				viewer.setInput(SemanticAssistantsStatusViewModel.getInstance().getLogs());
 			}
 		};
-		refreshAction.setText("Sample Action");
-		refreshAction.setToolTipText("Sample Action");
+		refreshAction.setText("Refresh");
+		refreshAction.setToolTipText("Refresh");
 		refreshAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
 	}
 
