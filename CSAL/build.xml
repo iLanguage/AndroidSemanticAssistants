@@ -93,7 +93,7 @@ destdir="${build.home}" includeantruntime="${antruntime}">
     <target name="dist-offline" depends="wsimport-offline,compile">
         <mkdir dir="${dist.home}" />
 
-        <jar destfile="${dist.home}/CSAL.jar" update="false" index="true">
+        <jar destfile="${dist.home}/CSAL.jar" update="true" index="true">
             <fileset dir="${build.home}" />
         </jar>
     </target>
