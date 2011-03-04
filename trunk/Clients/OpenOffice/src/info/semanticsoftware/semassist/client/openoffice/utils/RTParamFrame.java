@@ -21,7 +21,7 @@
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-package info.semanticsoftware.semassist.csal;
+package info.semanticsoftware.semassist.client.openoffice.utils;
 
 import java.util.*;
 import java.net.*;
