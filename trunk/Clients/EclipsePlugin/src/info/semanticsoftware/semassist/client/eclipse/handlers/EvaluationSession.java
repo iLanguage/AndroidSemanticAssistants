@@ -78,10 +78,9 @@ public class EvaluationSession {
 		invocationJob.addJobChangeListener(new JobChangeAdapter() {
 	        public void done(IJobChangeEvent event) {
 		            if (event.getResult().isOK()){
-		            	// Great! Invocation was successful.
+		          	  SemanticAssistantsStatusViewModel.addLog("Service invocation completed.");
 		            }else{
-		  	     	  SemanticAssistantsStatusViewModel.addLog("Service invocation failed.");
-		  	     	  System.err.println("Service invocation failed.");
+		  	     	  SemanticAssistantsStatusViewModel.addLog("Service invocation did not complete successfully.");
 		            }
 	            }
 	         });
