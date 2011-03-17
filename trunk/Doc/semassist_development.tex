@@ -593,7 +593,57 @@ response messages from the server, and extract the relevant
 information in them. Usually, however, there are standard libraries
 that facilitate these tasks.
 
+\subsection{Reusing CSAL Utility Classes}
+The CSAL contains Java classes that define a set of methods that perform common, often re-used functions for clients to facilitate the interaction with the sever and consuming the results afterwards. It is encouraged that all the clients use these utility classes to ensure a unique presence and behavior among all the plug-ins.
 
+\paragraph{Runtime Parameters Prompt Dialog.} There exists NLP pipelines that require mandatory runtime parameters which has to be acquired from the user prior to execution. This requirement has been fulfilled through a runtime parameter prompt dialog that pops up everytime the user invokes such an NLP pipeline. Since this dialog is used by all of the plug-ins, the prompt dialog - implemented as a swing dialog - has been placed in the CSAL in \texttt{RTParamFrame.java} class.
+
+To use this dialog, import the RTParamFrame class into your program, provided that CSAL.jar file is on your project build path.
+
+\begin{lstlisting}[language=Java,xleftmargin=4mm,columns=flexible]
+import info.semanticsoftware.semassist.csal.RTParamFrame;
+\end{lstlisting}
+
+First of all, create an object of this class by passing the NLP service information as the input argument.  
+
+\begin{lstlisting}[language=Java,xleftmargin=4mm,columns=flexible]
+// The NLP service of choice
+ServiceInfoForClient info = getAvailableServices().get( serviceName );
+
+// Check whether this service actually requires mandatory runtime parameters
+...
+
+// If yes, create a new prompt dialog for the NLP service described in the 'info' argument
+RTParamFrame frame = new RTParamFrame( info );   
+\end{lstlisting}
+
+Then you should extract the parameters to be shown in the dialog,
+\begin{lstlisting}[language=Java,xleftmargin=4mm,columns=flexible]
+Vector<GateRuntimeParameter> mandatory = new Vector<GateRuntimeParameter>();
+Vector<GateRuntimeParameter> optional = new Vector<GateRuntimeParameter>();
+
+// Read the mandatory and optional runtime parameters by investigating the 'info' parameters list
+...
+
+// Set the parameters
+frame.setMandatories( mandatory );
+frame.setOptionals( optional );
+\end{lstlisting}
+
+Next, you should override the frame's OK button ActionListener method and implement your own desired action.
+
+\begin{lstlisting}[language=Java,xleftmargin=4mm,columns=flexible]
+frame.setOkActionListener( new ParamActionListener() {
+  ...
+});
+\end{lstlisting}
+
+Finally, make it visible to the user.
+
+\begin{lstlisting}[language=Java,xleftmargin=4mm,columns=flexible]
+  frame.pack();
+  frame.setVisible( true );
+\end{lstlisting}
 
 % \subsection{Control Flow Overview}
 % \begin{figure}[htb]
