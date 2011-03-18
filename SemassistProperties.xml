@@ -34,14 +34,13 @@
     <property name="gate-home"                value="${durmtools}/GATE/gate" />
     <property name="gate.jar"                 value="${gate-home}/bin/gate.jar" />
     <property name="jdk.home"                 value="${durmtools}/jdk" />
-    
     <!-- Used by Open Office Writer Plug-In-->
     <property name="office.home.dir"          value="${durmtools}/OpenOffice"/>
     <property name="uno-copy-dest"  	      value="${user.home}/Documents/uno-components" />
     <property name="office.program.dir"       value="${office.home.dir}/program"/>
     <property name="ooo-classes-basis"        value="${office.home.dir}/basis3.2/program/classes/" />
     <property name="ooo-classes-common"       value="${office.home.dir}/ure/share/java/" />
-
+ 
     <!-- Used by Eclipse Plug-In-->
     <property name="eclipse.program.dir"      value="${durmtools}/eclipse"/>
     <property name="eclipse.plugins"          value="${eclipse.program.dir}/plugins"/>
@@ -50,14 +49,35 @@
     <property name="gate.plugin.dir"          value="${gate-home}/plugins/"/>
     <property name="gate.user.file"           value="${semassist.home}/Server/gate-home/user-gate.xml" />
     <property name="ontology.repository"      value="${semassist.home}/Resources/ont-repository/" />
+    <property name="gate.pipeline.repository" value="${semassist.home}/Resources/GatePipelines/" />
 
     <property name="runtime.maxmem"           value="1638m" />
     <property name="runtime.heap.initial"     value="128m" />
     <property name="runtime.heap.max"         value="1638m" />
 
-    <!-- Server Property Settings (ie # of Threads allowed) -->
-    <property name="server.threads.allowed"        value="3"/>
+    <!-- Server Pipeline Property Settings (ie # of Threads allowed) -->
+    <property name="server.threads.allowed"        value="10"/>
+<!--
+    <property name="server.pipeline.1.name"        value="ANNIE"/>
+    <property name="server.pipeline.1.number.pooled"        value="2"/>
+    <property name="server.pipeline.1.startup"        value="true"/>
+    <property name="server.pipeline.1.fullpath"        value="${gate.pipeline.repository}Annie/application.xgapp"/>
 
+    <property name="server.pipeline.2.name"        value="Organism"/>
+    <property name="server.pipeline.2.number.pooled"        value="1"/>
+    <property name="server.pipeline.2.startup"        value="true"/>
+    <property name="server.pipeline.2.fullpath"        value="${gate.pipeline.repository}OrganismTagger/OrganismTagger.xgapp"/>
+
+    <property name="server.pipeline.3.name"        value="DurmIndexer-EN"/>
+    <property name="server.pipeline.3.number.pooled"        value="2"/>
+    <property name="server.pipeline.3.startup"        value="true"/>
+    <property name="server.pipeline.3.fullpath"        value="${gate.pipeline.repository}Durm-Indexer-EN/Indexer-EN.xgapp"/>
+
+    <property name="server.pipeline.4.name"        value="Yahoo Pipeline"/>
+    <property name="server.pipeline.4.number.pooled"        value="2"/>
+    <property name="server.pipeline.4.startup"        value="true"/>
+    <property name="server.pipeline.4.fullpath"        value="${gate.pipeline.repository}Yahoo/application.xgapp"/>
+-->
     <!-- Port for which the Server listens for debugers to be attached -->
     <property name="server.port.debug"        value="8885"/>
     
@@ -83,7 +103,7 @@
         <include name="*.jar"/>
       </fileset>
     </path>
-    
+
     <!-- Libraries shipped with the distribution. You should not need to change this -->
     <property name="lib.home"                 value="${semassist.home}/Lib"/>
     <property name="log4j.jar"                value="${lib.home}/log4j-1.2.14.jar"/>
