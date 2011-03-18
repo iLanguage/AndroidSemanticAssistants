@@ -29,6 +29,7 @@ import gate.*;
 import gate.util.InvalidOffsetException;
 
 import info.semanticsoftware.semassist.server.util.*;
+import java.util.regex.*;
 
 public class XMLOutputBuilder extends OutputBuilder
 {
@@ -135,7 +136,6 @@ public class XMLOutputBuilder extends OutputBuilder
         // ***** Corpus case
         else if( o.getParameterForResultCorpus() != null )
         {
-
             for( Iterator<Document> it = mCorpus.iterator(); it.hasNext(); )
             {
                 mTotalResult.append( ResponseFormatXML.outputDocument( it.next() ) );
@@ -148,9 +148,9 @@ public class XMLOutputBuilder extends OutputBuilder
                          "know what to do with this output: " + o.getHRFormat() );
             return;
         }
-
     }
-
+    
+    
     protected String getActualContents()
     {
         return mTotalResult.toString();

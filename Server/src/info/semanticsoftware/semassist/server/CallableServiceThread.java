@@ -2,6 +2,7 @@ package info.semanticsoftware.semassist.server;
 
 import info.semanticsoftware.semassist.server.util.GATERuntimeParameter;
 import info.semanticsoftware.semassist.server.util.Logging;
+import info.semanticsoftware.semassist.server.util.ServiceInfo;
 import info.semanticsoftware.semassist.server.util.UserContext;
 import java.util.Calendar;
 import java.util.concurrent.Callable;
@@ -22,6 +23,7 @@ public class CallableServiceThread implements Callable<String> {
     private GATERuntimeParameter[] gateParams;
     private UserContext userCtx; 
     private SemanticServiceBroker SSB;
+    private ServiceInfo si;
     
     public CallableServiceThread(String _serviceName,URIList _documents,String[] _literalDocs,
     		long _connID,GATERuntimeParameter[] _gateParams, UserContext _userCtx, SemanticServiceBroker _SSB) {
@@ -38,6 +40,7 @@ public class CallableServiceThread implements Callable<String> {
     	gateParams=_gateParams;
     	userCtx=_userCtx;
     	SSB=_SSB;//setting a reference of the semanticservicebroker object (used to call the function)
+    	si = SSB.getmAvailableServices().get( serviceName );
     }
 
     public String call() {
@@ -54,6 +57,13 @@ public class CallableServiceThread implements Callable<String> {
     	return(finalResult);
     }
     
+    public boolean isServiceComposite(){
+    	return si.isConcatenation();
+    }
+    
+    public String getAppFileName(){
+    	return si.getAppFileName();
+    }
     public String getService(){
     	return serviceName;
     }

@@ -34,10 +34,6 @@ import java.io.*;
 import java.util.*;
 //import javax.xml.ws.Endpoint;
 
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jws.*;
@@ -82,7 +78,6 @@ import gate.gui.MainFrame;
 public class SemanticServiceBroker
 {
 
-	private static int nThreads=3;
     // Some constants related to GATE
     private static boolean mGateInited = false;
     // private HashMap<String, String> serviceToDirectory = new HashMap<String, String>();
@@ -100,10 +95,6 @@ public class SemanticServiceBroker
     protected JenaOWLModel mOwlModel = null;
     // A mReasoner instance
     private ProtegeReasoner mReasoner = null;
-
-    
-    private ExecutorService tpes = null; //this is my thread pool.
-    
     
     public SemanticServiceBroker() throws Exception
     {
@@ -117,12 +108,27 @@ public class SemanticServiceBroker
 
         // Initialize GATE
         initGate();
-        tpes = Executors.newFixedThreadPool(nThreads); //initialize the thread pool with the number of allowed
-        												//concurrent threads
+        
+        Logging.log("Server Beginning to Loading Resources");
+        //MainFrame.getInstance().setVisible(true); // for debugging only
+        initThreadRegistry();
+        Logging.log("Server Finished Loading Resources, Ready for Requests...");
     }
 
-    
-    @WebMethod()
+    private void initThreadRegistry() {
+    	for(String[] s:MasterData.Instance().getPipelineThreadProperties()){
+    		PipelineThreadInfo pti = new PipelineThreadInfo(s[0], Integer.parseInt(s[1]), Boolean.parseBoolean(s[2]), s[3]);
+    		GatePipelineRegistery.getInstance().addPipelineThreadInfo(pti);
+    		if(pti.isLoadAtStatup()){
+    			for(int iGAPI=0;iGAPI<pti.getMaxConcurrent();iGAPI++){
+    				GatePipelineRegistery.getInstance().addGateProcess(pti.getPipelineAppFile().getPath(), loadGateApp(pti.getPipelineAppFile()), ServiceStatus.STATUS_INACTIVE, pti, false);
+    				Logging.log("Pipeline (" + pti.getPipelineName() + ") loaded");
+    			}
+    		}
+    	}
+ 	}
+
+	@WebMethod()
     public ServiceInfoForClient[] getAvailableServices()
     {
         // Initialize GATE
@@ -251,17 +257,8 @@ public class SemanticServiceBroker
 		
     	//create a new Thread that offers the call function
     	//it will allow the return of the future results once the thread has completed
-		CallableServiceThread workers = new CallableServiceThread(serviceName, documents, literalDocs, connID, gateParams, userCtx, this);
-		
-		Future<String> ftp = tpes.submit(workers);//send the thread to the thread pool and wait for it's completion
-    	
-		String returnValue="";//used to store the return value from the thread
-    	try{
-    		returnValue = ftp.get(); //query the thread and get the result (String)
-    	}catch(Exception e){
-    		returnValue = e.getMessage(); 
-    	}    	
-    	return returnValue;    	
+		CallableServiceThread cst = new CallableServiceThread(serviceName, documents, literalDocs, connID, gateParams, userCtx, this);
+		return GatePipelineThreadPool.getInstance().submitNewThread(cst);    	
     }
     
     
@@ -337,11 +334,14 @@ public class SemanticServiceBroker
         ServiceInfo latestService = null;
         
         Runtime runtime = Runtime.getRuntime();
-        
+        boolean compositeService = false;
+        if(descriptions.size()>1){
+        	compositeService=true;
+        }
         while( ito.hasNext() )
         {
             latestService = ito.next();
-            status = runOneService( latestService, status );
+            status = runOneService( latestService, status, compositeService );
             Logging.log( "---------------- totalMemory: " + runtime.totalMemory() );
             Logging.log( "---------------- maxMemory  : " + runtime.maxMemory() );
             if( status == null )
@@ -360,6 +360,7 @@ public class SemanticServiceBroker
                          o.getAnnotation() + ", " + o.getFileURL() );
         }
 
+        
         // Collect result
         String finalResult = getOutputInfo( new XMLOutputBuilder(),
                 status.mExpectedOutputs, status.getCorpus() );
@@ -434,7 +435,7 @@ public class SemanticServiceBroker
      * from the threadpool.
      */
     
-    protected ServiceExecutionStatus runOneService( ServiceInfo currentService, ServiceExecutionStatus status )
+    protected ServiceExecutionStatus runOneService( ServiceInfo currentService, ServiceExecutionStatus status, boolean compositeService )
     {
         // Get a handle of the application file
         File serviceAppFile = new File( currentService.getAppFileName() );
@@ -450,52 +451,8 @@ public class SemanticServiceBroker
         // Load the application
         Logging.log( "---------------- Preparing to load application..." );
         
-        //check if service already exists
-        //TODO: check what happens here
+        Object serviceApp = retreiveGatePipeline(serviceAppFile, compositeService);
         
-        //check the to see if an already existing inactive service with the same type that is needed
-        //can be used.   if so return it's position in the process register
-        int gateProcessRegisterIDX = GateProcessRegister.getInstance().getInactiveServicePosition(serviceAppFile.getAbsolutePath());
-        //make sure the serviceApp is completely clear
-        Object serviceApp=null;
-        Logging.log("Service Register INDEX " + gateProcessRegisterIDX);
-        if(gateProcessRegisterIDX < 0){ //if no service is found
-        	Logging.log("Service not found in Register");
-        	serviceApp = loadGateApp( serviceAppFile ); //load a new service into memory
-        	Logging.log("Created New Service");
-        	
-        	if(nThreads<=GateProcessRegister.getInstance().getCurrentRegisterSize()){ //check to see if the register exceeds the number of threads (processes) allowed
-        		//we need to make space in the register to accept this new service
-        		int inactiveProcessPosition = GateProcessRegister.getInstance().getInactiveServicePosition(serviceAppFile.getAbsolutePath());
-        		//find an inactive service of the same type (there should only be a value if a service has finished between the previous call and now
-        		if(inactiveProcessPosition < 0){//if no current inactive service with the same name is found
-        			inactiveProcessPosition = GateProcessRegister.getInstance().getInactiveServicePosition();
-        				//return any inactive service
-        		}
-        		if(inactiveProcessPosition >= 0){//if an inactive service is found
-        			//we need to get it's reference and delete it from the GATE list of active processes (pipelines)
-        			Object gateProcess = GateProcessRegister.getInstance().getGateProcessServiceStatus(inactiveProcessPosition).getGateService();
-        				//retrieve service from register
-        			if( !(gateProcess instanceof CorpusController) ){
-        				Factory.deleteResource((SerialController)gateProcess);
-        			}else{
-        				Factory.deleteResource((CorpusController)gateProcess);
-        			}
-        			GateProcessRegister.getInstance().removeGateProcess(inactiveProcessPosition);
-        				//remove the reference from the gate process register
-        		}
-        		
-        	}
-        	
-			GateProcessRegister.getInstance().addGateProcess(serviceAppFile.getAbsolutePath(), serviceApp);
-				//add the new process to the Register
-        }else{
-        		//if the process does already exists and it is inactive(free to use)
-        	serviceApp = GateProcessRegister.getInstance().getGateProcessServiceStatus(gateProcessRegisterIDX).getGateService();
-        		//retrieve service from register
-        	GateProcessRegister.getInstance().ActivateGateProcess(gateProcessRegisterIDX);
-        		//reactivate the process so it cannot be reused
-        }
         Logging.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Process ID Started: " + serviceApp.hashCode());
         // Does the pipeline demand merged input documents?
         if( currentService.getMergeInputDocs() )
@@ -638,16 +595,9 @@ public class SemanticServiceBroker
                 serialCtrl.execute();
                 Logging.log( "---------------- Cleaning up controller..." );
                 
-              //TODO: DUPLICATED CODE TO BE REMOVED AND PLACED AT THE END OF FUNCTION
-                int positionOfCurrentService = GateProcessRegister.getInstance().getServicePosition(serviceApp);  
-                if(positionOfCurrentService < 0){
-                	Logging.log("We have a problem with locating objects in Register!");
-                }else{
-                	Logging.log("Setting the Register Status to INACTIVE");
-                	GateProcessRegister.getInstance().InActivateGateProcess(positionOfCurrentService);
-                }
+                inactivateCurrentPipeline(serviceApp,compositeService);
                 Logging.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Process ID Stopped: " + serviceApp.hashCode());
-                //TODO: Factory.deleteResource( serialCtrl );
+                
                 
                 // If a corpus was produced as result, let
                 // the execution status know
@@ -680,14 +630,7 @@ public class SemanticServiceBroker
                 GateUtils.runApplicationOnCorpus( corpusController, status.getCorpus() );
                 Logging.log( "---------------- Cleaning up controller..." );
 
-                //TODO: DUPLICATED CODE TO BE REMOVED AND PLACED AT THE END OF FUNCTION
-                int positionOfCurrentService = GateProcessRegister.getInstance().getServicePosition(serviceApp);  
-                if(positionOfCurrentService < 0){
-                	Logging.log("We have a problem with locating objects in Register!");
-                }else{
-                	Logging.log("Setting the Register Status to INACTIVE");
-                	GateProcessRegister.getInstance().InActivateGateProcess(positionOfCurrentService);
-                }
+                inactivateCurrentPipeline(serviceApp,compositeService);
                 Logging.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Process ID Stopped: " + serviceApp.hashCode());
                 //TODO:  Factory.deleteResource( corpusController );
             }
@@ -703,6 +646,100 @@ public class SemanticServiceBroker
 
         return status;
     }
+
+    synchronized private void inactivateCurrentPipeline(Object serviceApp, boolean compositeService) {
+		if(compositeService==false){
+	    	int positionOfCurrentService = GatePipelineRegistery.getInstance().getServicePosition(serviceApp);  
+			if(positionOfCurrentService < 0){
+				Logging.log("We have a problem with locating objects in Register!");
+			}else{
+				Logging.log("Setting the Register Status to INACTIVE");
+				GatePipelineRegistery.getInstance().InActivateGateProcess(positionOfCurrentService);
+			}
+			cleanGatePipelineRegistry(((SerialController)serviceApp).getName());
+		}else{
+			if( !(serviceApp instanceof CorpusController) ){
+				Factory.deleteResource((SerialController)serviceApp);
+			}else{
+				Factory.deleteResource((CorpusController)serviceApp);
+			}
+		}
+	}
+
+    static int testX=1;
+    
+    synchronized private Object retreiveGatePipeline(File serviceAppFile, boolean compositeService) {
+		 
+        Logging.log("Entering Sync Method " + testX);
+        //check the to see if an already existing inactive service with the same type that is needed
+        //can be used.   if so return it's position in the process register
+        
+      //make sure the serviceApp is completely clear
+        Object serviceApp=null;
+        if(compositeService==true){
+        	serviceApp = loadGateApp( serviceAppFile );
+        }else{
+	        int gateProcessRegisterIDX = GatePipelineRegistery.getInstance().getInactiveServicePosition(serviceAppFile.getPath());
+	        Logging.log(gateProcessRegisterIDX+"");
+	        if(gateProcessRegisterIDX>=0){//pipeline has been found and is inactive
+	    		//if the process does already exists and it is inactive(free to use)
+	        	serviceApp = GatePipelineRegistery.getInstance().getGateProcessServiceStatus(gateProcessRegisterIDX).getGatePipeline();
+	        		//retrieve service from register
+	        	GatePipelineRegistery.getInstance().ActivateGateProcess(gateProcessRegisterIDX);
+	        		//reactivate the process so it cannot be reused
+	        }else{//pipeline is not in the registry
+	        	serviceApp = loadGateApp( serviceAppFile ); //load a new service into memory        	
+	            String serviceName = ((SerialController)serviceApp).getName();
+	            Logging.log(serviceName);
+	            PipelineThreadInfo pti = GatePipelineRegistery.getInstance().getPipelineThreadInfo(serviceName);
+	            Logging.log("trying to look for PTI");
+	            if(pti==null){
+	            	Logging.log("PTI is null");
+	            	pti = new PipelineThreadInfo(serviceName, 0, false, serviceAppFile.getPath());
+	            }
+	            cleanGatePipelineRegistry(serviceName);
+	
+	            int currentPipelineRegistrCount = GatePipelineRegistery.getInstance().getPipelineCount(serviceName);
+	            boolean toTerminate = false;
+	            if(currentPipelineRegistrCount>=pti.getMaxConcurrent()){
+	            	toTerminate = true;
+	            }
+	            GatePipelineRegistery.getInstance().addGateProcess(serviceAppFile.getPath(), serviceApp,ServiceStatus.STATUS_ACTIVE, pti,toTerminate);
+	        }
+        }
+        Logging.log("Exiting Sync Method " + testX++);
+		return serviceApp;
+	}
+
+	private void cleanGatePipelineRegistry(String serviceName) {
+		int totalPipelineRegisterCount = GatePipelineRegistery.getInstance().getCurrentRegisterSize();
+		int maxThreadsAllowed = MasterData.Instance().getServerThreadsAllowed();
+		if(totalPipelineRegisterCount>=maxThreadsAllowed){
+			//terminate any pipeline that is not of the type we are requesting
+			//if no other pipeline other that the type we are requesting can be found
+			//then terminate that one. 
+			//(only one pipeline will be removed and terminated because of possible reuse)
+			int eofPipeline = GatePipelineRegistery.getInstance().getEndOfLifePipelinePosition(serviceName);
+			Logging.log("looking for EOF " + eofPipeline);
+			if(eofPipeline>=0){
+				removeAndDeletePipeline(eofPipeline);
+			}
+		}
+	}
+
+
+	private void removeAndDeletePipeline(int inactiveProcessPosition) {
+		//we need to get it's reference and delete it from the GATE list of active processes (pipelines)
+		Object gateProcess = GatePipelineRegistery.getInstance().getGateProcessServiceStatus(inactiveProcessPosition).getGatePipeline();
+			//retrieve service from register
+		if( !(gateProcess instanceof CorpusController) ){
+			Factory.deleteResource((SerialController)gateProcess);
+		}else{
+			Factory.deleteResource((CorpusController)gateProcess);
+		}
+		GatePipelineRegistery.getInstance().removeGateProcess(inactiveProcessPosition);
+			//remove the reference from the gate process register
+	}
 
     /*
     // Assemble corpus
@@ -800,7 +837,7 @@ public class SemanticServiceBroker
     return finalResult;
     }
      */
-    protected Object loadGateApp( File serviceAppFile )
+    public Object loadGateApp( File serviceAppFile )
     {
         Object result;
         try
@@ -827,9 +864,6 @@ public class SemanticServiceBroker
             try
             {
                 // Get GATE home
-            	Logging.log("# of Threads: " + nThreads);
-            	nThreads = MasterData.Instance().getServerThreadsAllowed();
-            	Logging.log("# of Threads: " + nThreads);
                 String gateHomePath = MasterData.Instance().getGateHome();
                 String gatePluginDir = MasterData.Instance().getGatePluginDir();
                 String gateUserFile = MasterData.Instance().getGateUserFile();
@@ -1390,6 +1424,10 @@ public class SemanticServiceBroker
         }
 
         String s = builder.getResult();
+        
+        Logging.log("Verify Encoding of XML");
+        
+        
         Logging.log( "---------------- Got result. s = " );
         Logging.log( s );
         return s;

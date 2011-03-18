@@ -32,6 +32,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.Properties;
 import java.net.URL;
 import java.net.MalformedURLException;
@@ -73,6 +74,10 @@ public class MasterData
     //machine running the server
     public int getServerThreadsAllowed(){
     	return XMLFileParser.getServerThreadsAllowed();
+    }
+    
+    public ArrayList<String[]> getPipelineThreadProperties(){
+    	return XMLFileParser.getPipelineThreadProperties();
     }
     public String getGateHome()
     {

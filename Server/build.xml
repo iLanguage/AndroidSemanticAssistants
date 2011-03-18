@@ -32,7 +32,14 @@
     <property name="docs.home"        value="${basedir}/docs"/>
     <property name="src.home"         value="${basedir}/src"/>
     <property name="dist.home"        value="${basedir}/dist"/>
-
+	
+	<!-- Used for testing -->
+	<property name="test.src"		  value="${basedir}/test.src"/>
+	<property name="junitDir" value="${build.home}/JUnit"/>
+	<property name="tempDir" value="${basedir}/tmp"/>
+	<mkdir dir="${junitDir}"/>
+	
+	
     <!-- ___________________ You should not have to edit anything below this line ________________________  -->
     <description>
         Server side Java code of the semantic text assistants infrastructure
@@ -46,6 +53,8 @@
         <pathelement location="${protege-owl.home}/jena.jar" />
         <pathelement location="${protege-owl.home}/arq.jar" />
         <pathelement location="${ant.jar}" />
+        <pathelement location="${commons-lang.jar}" /> <!-- used for xml encoding -->
+    	<pathelement location="${gate-home}/lib/junit.jar" />
     </path>    
   
     <!-- This target compiles all the classes -->  
@@ -58,7 +67,6 @@
         </javac>
     </target>
 
-  
   <!-- Generate a web service -->
     <target name="wsgen" depends="compile" description="Generate a web service">
         <taskdef name="wsgen" classname="com.sun.tools.ws.ant.WsGen">
@@ -86,7 +94,46 @@
             </manifest>
         </jar>
     </target> 
-  
+
+    <target name="junit" depends="compile,dist" description="Performs unit tests.">
+        <javac srcdir="test.src" destdir="${build.home}" debug="true" deprecation="true">
+        	<classpath refid="compile.classpath"/>
+        </javac>
+
+        <mkdir dir="${tempDir}"/>
+
+        <junit failureproperty="junit.failed"  printsummary="yes">
+            <formatter type="xml"/>
+            <batchtest todir="${tempDir}">
+                <fileset dir="${build.home}">
+                   <include name="**/*Test.class"/>
+                   <include name="**/Test*.class"/>
+                </fileset>
+            </batchtest>
+            <classpath>
+                <path refid="compile.classpath"/>
+                <pathelement location="${build.home}"/>
+            	
+                <pathelement location="${gate.jar}" />
+                <pathelement location="${protege.jar}" />
+                <pathelement location="${protege-owl.home}/protege-owl.jar" />
+                <pathelement location="${protege-owl.home}/iri.jar" />
+                <pathelement location="${protege-owl.home}/jena.jar" />
+                <pathelement location="${protege-owl.home}/orphanNodesAlg.jar" />
+                <pathelement location="${protege-owl.home}/arq.jar" />
+                <fileset dir="${gate-home}/lib" >
+                    <include name="*.jar" />
+                </fileset>
+
+            	
+            </classpath>
+        </junit>
+
+        <mkdir dir="${build.home}/JUnit"/>
+  	
+        <fail message="JUnit test failure." if="junit.failed"/>  	
+    </target>
+
 
 <!-- Run the web service -->
     <target name="run" depends="compile,dist"  description="run the application">
@@ -108,14 +155,12 @@
                     <include name="*.jar" />
                 </fileset>
 
-		<!-- Locally needed paths defined in LocalProperties.xml file -->
                 <path refid="localruntimeclasspath"/>
                 
             </classpath>
         </java>
     </target>
   
-	
 	  <!-- Clear all build output -->
 	  <target name="clean">
 	    <delete includeemptydirs="true" quiet="true">
