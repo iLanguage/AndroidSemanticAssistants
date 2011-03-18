@@ -43,6 +43,30 @@ found in \url{SemanticAssistants/SemassistProperties.xml};  The default
 value is already set but if ommitted the number of threads that will
 be allowed will not necessarily reflect the server capabilities.
 
+\subsection{Configuring the Server Fixed Pipelines}
+The server comes with the possibility to set the number of concurrent threads
+of the same pipeline (see GATE documentation for pipeline definition).  To 
+configure these settings, one must modfiy/add the following lines
+\begin{enumerate}
+\item \texttt{server.pipeline.\#.name}
+\item \texttt{server.pipeline.\#.number.pooled}
+\item \texttt{server.pipeline.\#.startup}
+\item \texttt{server.pipeline.\#.fullpath}
+\end{enumerate}
+(**note: the '\#' must be replaced by a valid positive integer value)
+These lines refer to the pipeline that will be pooled for concurrent and
+speedier access.  
+"name" refers to the name of the pipeline as indicated by the contents of the .xgapp file.
+"number.pooled" refers to the number of threads we have allocated for this pipeline.
+"startup" indicated by a "true"/"false" string value which loads or ignores the pipeline at server startup.
+"fullpath" refers to the location of the xgapp file that will be used to load the pipeline.
+These properties must be grouped and must be a set when being used in the \url{SemanticAssistants/SemassistProperties.xml};
+These properties can be omitted if desired and only the \texttt{server.thread.allowed} will be taken into account
+One must be aware that the number of pipelines set in \texttt{server.pipeline.\#.number.pooled}
+will be substracted from the \texttt{server.thread.allowed} property.  Should the number previously
+set in \texttt{server.thread.allowed} not be sufficient, the server will automatically resize the property
+to contain the total number of threads needed.
+
 \subsection{Testing the Server by accessing the WSDL}
 To test if the Server is operating open your favourite browser and
 paste \url{http://<server host>:<server port>/SemAssist?wsdl} (Note
