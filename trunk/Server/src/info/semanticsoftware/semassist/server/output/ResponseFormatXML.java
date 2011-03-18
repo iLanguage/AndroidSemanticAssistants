@@ -28,7 +28,7 @@ import info.semanticsoftware.semassist.server.util.*;
 import gate.*;
 import java.text.CharacterIterator;
 import java.text.StringCharacterIterator;
-import java.util.Arrays;
+import org.apache.commons.lang.StringEscapeUtils;
 
 public class ResponseFormatXML
 {
@@ -51,6 +51,9 @@ public class ResponseFormatXML
     public static final String START_OUTPUT_FILE = "<outputFile";
     public static final String START_OUTPUT_DOCUMENT = "<outputDocument";
     public static final String START_FEATURE = "<feature";
+    
+    public static final String START_CDATA = "";//"<![CDATA[";
+    public static final String END_CDATA = "";//"]]>";
 
     public static String createMarkingElement( String type,
                                                String startOffset,
@@ -112,7 +115,11 @@ public class ResponseFormatXML
         StringBuffer result = new StringBuffer( START_FEATURE );
 
         result.append( set( "name", name ) );
-        value = forXML( value );
+        //value = forXML( value );
+  //DB: not sure what was happening here with forXML.  I have replaced with another function
+  //    it should keep the same values as the original text.
+        value = replaceIllegalCharacters( value );
+        
         System.out.println( "--------Value after stripping out illegal characters: " + value );
         result.append( set( "value", value ) );
         //result.append( " />\n" );
@@ -127,7 +134,7 @@ public class ResponseFormatXML
         final StringCharacterIterator iterator = new StringCharacterIterator( aText );
         char character = iterator.current();
 
-
+        Logging.log(aText);
 
         while( character != CharacterIterator.DONE )
         {
@@ -152,16 +159,43 @@ public class ResponseFormatXML
 
             character = iterator.next();
         }
+        
+        Logging.log(aText);
+        
         return result.toString();
     }
 
+    //function to modify the original string being input
+    //it will replace the illegal characters with the XML entities so that it can be interpreted by
+    //the xml parser correctly and conveyed correctly
+    public static String replaceIllegalCharacters(String s){
+/*    	HashMap<String,String> entityXML = new HashMap<String,String>();
+    	//list of 5 xml entities can be modified in the future
+    	entityXML.put("\"", "&quot;");
+    	entityXML.put("&", "&amp;");
+    	entityXML.put("'", "&apos;");
+    	entityXML.put("<", "&lt;");
+    	entityXML.put(">", "&gt;");
+    	
+    	//we first replace any already encoded values with the non encoded value
+    	//to then be able to replace all occurrences of that character by the correctly encoded one
+    	//the reason was for the '&' in the encoded '&amp;' , '&quot;' and so on
+    	for(String illXML: entityXML.keySet()){
+    		s = s.replaceAll(entityXML.get(illXML),illXML).replaceAll(illXML, entityXML.get(illXML));
+    	}
+*/
+    	s = StringEscapeUtils.escapeXml(s);
+    	return s;
+    }
+    
     public static String openDocumentTag( URL docUrl )
     {
         StringBuffer result = new StringBuffer( START_DOCUMENT );
         String urlString = (docUrl == null) ? "" : docUrl.toString();
+        urlString = replaceIllegalCharacters(urlString);
         result.append( set( "url", urlString ) );
         //result.append( " >\n" );
-	result.append( ">" );
+	result.append( ">");
         return result.toString();
     }
 
@@ -176,7 +210,9 @@ public class ResponseFormatXML
         StringBuffer result = new StringBuffer( START_OUTPUT_FILE );
         if( u != null )
         {
-            result.append( set( "url", u.toString() ) );
+        	String rString = replaceIllegalCharacters(u.toString());
+            //result.append( set( "url", u.toString() ) );
+            result.append( set( "url", rString ) );
         }
 
         result.append( set( "mimeType", (mime == null ? "" : mime) ) );
@@ -194,7 +230,9 @@ public class ResponseFormatXML
             URL url = doc.getSourceUrl();
             if( url != null )
             {
-                result.append( set( "url", url.toString() ) );
+            	String rString = replaceIllegalCharacters(url.toString());
+                result.append( set( "url", rString ) );
+                //result.append( set( "url", url.toString() ) );
             }
         }
 
