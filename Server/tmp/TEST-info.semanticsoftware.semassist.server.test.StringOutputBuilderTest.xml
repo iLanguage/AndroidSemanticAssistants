@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<testsuite errors="0" failures="0" hostname="DBLYTE-FEDORA" name="info.semanticsoftware.semassist.server.test.StringOutputBuilderTest" tests="1" time="0.031" timestamp="2011-03-05T21:46:02">
+  <properties>
+    <property name="java.vendor" value="Sun Microsystems Inc." />
+    <property name="sun.java.launcher" value="SUN_STANDARD" />
+    <property name="eclipse.pdebuild.templates" value="/home/d_barbie/Apps/eclipse/plugins/org.eclipse.pde.build_3.6.1.R36x_v20100823/templates//" />
+    <property name="sun.management.compiler" value="HotSpot 64-Bit Server Compiler" />
+    <property name="checkstyle.config" value="/usr/local/durmtools/checkstyle/durm_checks.xml" />
+    <property name="compile.args" value="-Xlint" />
+    <property name="server.pipeline.3.name" value="Yahoo Pipeline" />
+    <property name="protege-owl.home" value="/usr/local/durmtools/Protege/plugins/edu.stanford.smi.protegex.owl" />
+    <property name="os.name" value="Linux" />
+    <property name="sun.boot.class.path" value="/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/resources.jar:/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/rt.jar:/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/jsse.jar:/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/jce.jar:/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/charsets.jar:/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/rhino.jar:/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/classes" />
+    <property name="uno-copy-dest" value="/home/d_barbie/Documents/uno-components" />
+    <property name="office.home.dir" value="/usr/lib64/openoffice.org" />
+    <property name="sun.desktop" value="gnome" />
+    <property name="ooo-classes-common" value="/usr/lib64/openoffice.org/ure/share/java/" />
+    <property name="java.vm.specification.vendor" value="Sun Microsystems Inc." />
+    <property name="ant.home" value="/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145" />
+    <property name="java.runtime.version" value="1.6.0_18-b18" />
+    <property name="gate-home" value="/usr/local/durmtools/GATE/GATE" />
+    <property name="src.home" value="/usr/local/durmtools/SemanticAssistants/Server/src" />
+    <property name="user.name" value="d_barbie" />
+    <property name="ooo-classes-basis" value="/usr/lib64/openoffice.org/basis3.2/program/classes/" />
+    <property name="office.program.dir" value="/usr/lib64/openoffice.org3/program" />
+    <property name="user.language" value="en" />
+    <property name="protege.jar" value="/usr/local/durmtools/Protege/protege.jar" />
+    <property name="sun.boot.library.path" value="/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/amd64" />
+    <property name="commons-lang.jar" value="..//Lib/commons-lang-2.4.jar" />
+    <property name="junitDir" value="/usr/local/durmtools/SemanticAssistants/Server/bin/JUnit" />
+    <property name="server.pipeline.3.startup" value="false" />
+    <property name="docs.home" value="/usr/local/durmtools/SemanticAssistants/Server/docs" />
+    <property name="ant.project.name" value="Server" />
+    <property name="java.version" value="1.6.0_18" />
+    <property name="lib.home" value="..//Lib" />
+    <property name="user.timezone" value="" />
+    <property name="server.pipeline.1.startup" value="false" />
+    <property name="sun.arch.data.model" value="64" />
+    <property name="gate.jar" value="/usr/local/durmtools/GATE/GATE/bin/gate.jar" />
+    <property name="java.endorsed.dirs" value="/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/endorsed" />
+    <property name="sun.cpu.isalist" value="" />
+    <property name="sun.jnu.encoding" value="UTF-8" />
+    <property name="file.encoding.pkg" value="sun.io" />
+    <property name="file.separator" value="/" />
+    <property name="java.specification.name" value="Java Platform API Specification" />
+    <property name="checkstyle.home" value="/usr/local/durmtools/checkstyle" />
+    <property name="java.class.version" value="50.0" />
+    <property name="build.home" value="/usr/local/durmtools/SemanticAssistants/Server/bin" />
+    <property name="eclipse.plugins" value="/usr/local/durmtools/eclipse/plugins" />
+    <property name="runtime.maxmem" value="1638m" />
+    <property name="user.country" value="US" />
+    <property name="ontology.repository" value="..//Resources/ont-repository/" />
+    <property name="java.home" value="/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre" />
+    <property name="service.repository" value="..//Resources/OwlServiceDescriptions/" />
+    <property name="java.vm.info" value="mixed mode" />
+    <property name="checkstyle.report" value="checkstyle-result.xml" />
+    <property name="ant.file" value="/usr/local/durmtools/SemanticAssistants/Server/build.xml" />
+    <property name="os.version" value="2.6.34.7-66.fc13.x86_64" />
+    <property name="semassist.home" value="../" />
+    <property name="runtime.heap.max" value="1638m" />
+    <property name="server.pipeline.3.max" value="2" />
+    <property name="path.separator" value=":" />
+    <property name="pmd.lib" value="/usr/local/durmtools/pmd/lib" />
+    <property name="java.vm.version" value="14.0-b16" />
+    <property name="ant.library.dir" value="/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib" />
+    <property name="java.awt.printerjob" value="sun.print.PSPrinterJob" />
+    <property name="sun.io.unicode.encoding" value="UnicodeLittle" />
+    <property name="ant.jar" value="..//Lib/ant.jar" />
+    <property name="durmtools" value="/usr/local/durmtools" />
+    <property name="csal.name" value="CSAL.jar" />
+    <property name="server.threads.allowed" value="10" />
+    <property name="eclipse.pdebuild.scripts" value="/home/d_barbie/Apps/eclipse/plugins/org.eclipse.pde.build_3.6.1.R36x_v20100823/scripts//" />
+    <property name="user.home" value="/home/d_barbie" />
+    <property name="eclipse.program.dir" value="/usr/local/durmtools/eclipse" />
+    <property name="java.specification.vendor" value="Sun Microsystems Inc." />
+    <property name="ant.file.Server" value="/usr/local/durmtools/SemanticAssistants/Server/build.xml" />
+    <property name="jaxws.home" value="/usr/local/durmtools/jaxws-ri" />
+    <property name="java.vendor.url" value="http://java.sun.com/" />
+    <property name="java.library.path" value="/usr/java/jdk1.6.0_23/jre/lib/amd64/server:/usr/java/jdk1.6.0_23/jre/lib/amd64:/usr/java/jdk1.6.0_23/jre/../lib/amd64:/usr/lib64/xulrunner-1.9.2:/usr/java/packages/lib/amd64:/usr/lib64:/lib64:/lib:/usr/lib:/home/d_barbie/Apps/eclipse/configuration/org.eclipse.osgi/bundles/563/1/.cp" />
+    <property name="server.pipeline.2.max" value="2" />
+    <property name="java.vm.vendor" value="Sun Microsystems Inc." />
+    <property name="java.runtime.name" value="OpenJDK Runtime Environment" />
+    <property name="tempDir" value="/usr/local/durmtools/SemanticAssistants/Server/tmp" />
+    <property name="ant.version" value="Apache Ant version 1.7.1 compiled on June 27 2008" />
+    <property name="java.class.path" value="/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-antlr.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-apache-bcel.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-apache-bsf.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-apache-log4j.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-apache-oro.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-apache-regexp.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-apache-resolver.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-commons-logging.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-commons-net.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-jai.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-javamail.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-jdepend.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-jmf.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-jsch.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-junit.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-launcher.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-netrexx.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-nodeps.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-starteam.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-stylebook.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-swing.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-trax.jar:/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant-weblogic.jar:/home/d_barbie/Apps/eclipse/configuration/org.eclipse.osgi/bundles/52/1/.cp/lib/antdebug.jar:/home/d_barbie/Apps/eclipse/configuration/org.eclipse.osgi/bundles/52/1/.cp/lib/remote.jar:/home/d_barbie/Apps/eclipse/configuration/org.eclipse.osgi/bundles/53/1/.cp/lib/remoteAnt.jar:/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/lib/tools.jar:/home/d_barbie/Apps/eclipse/plugins/org.eclipse.swt.gtk.linux.x86_64_3.6.0.v3650b.jar" />
+    <property name="server.port.wsdl" value="8879" />
+    <property name="antruntime" value="false" />
+    <property name="jdk.home" value="/usr/java/default" />
+    <property name="java.vm.specification.name" value="Java Virtual Machine Specification" />
+    <property name="java.vm.specification.version" value="1.0" />
+    <property name="protege.home" value="/usr/local/durmtools/Protege" />
+    <property name="ant.file.semassist-local" value="/usr/local/durmtools/SemanticAssistants/LocalProperties.xml" />
+    <property name="sun.os.patch.level" value="unknown" />
+    <property name="sun.cpu.endian" value="little" />
+    <property name="log4j.jar" value="..//Lib/log4j-1.2.14.jar" />
+    <property name="eclipse.pdebuild.home" value="/home/d_barbie/Apps/eclipse/plugins/org.eclipse.pde.build_3.6.1.R36x_v20100823/.//" />
+    <property name="java.io.tmpdir" value="/tmp" />
+    <property name="pmd.home" value="/usr/local/durmtools/pmd" />
+    <property name="dist.home" value="/usr/local/durmtools/SemanticAssistants/Server/dist" />
+    <property name="server.pipeline.1.name" value="ANNIE" />
+    <property name="test.src" value="/usr/local/durmtools/SemanticAssistants/Server/test.src" />
+    <property name="java.vendor.url.bug" value="http://java.sun.com/cgi-bin/bugreport.cgi" />
+    <property name="server.pipeline.2.startup" value="false" />
+    <property name="gate.user.file" value="..//Server/gate-home/user-gate.xml" />
+    <property name="os.arch" value="amd64" />
+    <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
+    <property name="server.pipeline.1.max" value="2" />
+    <property name="runtime.heap.initial" value="128m" />
+    <property name="java.ext.dirs" value="/usr/lib/jvm/java-1.6.0-openjdk-1.6.0.0.x86_64/jre/lib/ext:/usr/java/packages/lib/ext" />
+    <property name="gate.plugin.dir" value="/usr/local/durmtools/GATE/GATE/plugins/" />
+    <property name="user.dir" value="/usr/local/durmtools/SemanticAssistants/Server" />
+    <property name="line.separator" value="
+" />
+    <property name="java.vm.name" value="OpenJDK 64-Bit Server VM" />
+    <property name="basedir" value="/usr/local/durmtools/SemanticAssistants/Server" />
+    <property name="ant.java.version" value="1.6" />
+    <property name="ant.core.lib" value="/home/d_barbie/Apps/eclipse/plugins/org.apache.ant_1.7.1.v20100518-1145/lib/ant.jar" />
+    <property name="server.pipeline.2.name" value="DurmIndexer-EN" />
+    <property name="file.encoding" value="UTF-8" />
+    <property name="server.port.debug" value="8885" />
+    <property name="csal.home" value="..//CSAL" />
+    <property name="checkstyle.classpath" value="/usr/local/durmtools/checkstyle/checkstyle-5.3-all.jar" />
+    <property name="java.specification.version" value="1.6" />
+    <property name="ant.file.share" value="/usr/local/durmtools/SemanticAssistants/SemassistProperties.xml" />
+  </properties>
+  <testcase classname="info.semanticsoftware.semassist.server.test.StringOutputBuilderTest" name="testIllegalXMLCharacters" time="0.021" />
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

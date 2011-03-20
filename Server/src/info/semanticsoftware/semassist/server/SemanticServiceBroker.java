@@ -109,10 +109,11 @@ public class SemanticServiceBroker
         // Initialize GATE
         initGate();
         
-        Logging.log("Server Beginning to Loading Resources");
+        Logging.log("Server Started Loading Resources");
         //MainFrame.getInstance().setVisible(true); // for debugging only
         initThreadRegistry();
-        Logging.log("Server Finished Loading Resources, Ready for Requests...");
+        Logging.log("Server Finished Loading Resources");
+        Logging.log("Server Ready for Requests...");
     }
 
     private void initThreadRegistry() {

@@ -52,9 +52,6 @@ public class ResponseFormatXML
     public static final String START_OUTPUT_DOCUMENT = "<outputDocument";
     public static final String START_FEATURE = "<feature";
     
-    public static final String START_CDATA = "";//"<![CDATA[";
-    public static final String END_CDATA = "";//"]]>";
-
     public static String createMarkingElement( String type,
                                                String startOffset,
                                                String endOffset,
@@ -82,15 +79,13 @@ public class ResponseFormatXML
         }
 
         result.append( set( "annotationSet", a.mSetName ) );
-        //result.append( ">\n" );
-	result.append( ">" );
+        result.append( ">" );
         return result.toString();
     }
 
     public static String closeAnnotationTag()
     {
-        //return "    </annotation>\n";
-	return "</annotation>";
+    	return "</annotation>";
     }
 
     public static String openAnnotationInstance( String content, long start, long end )
@@ -99,14 +94,12 @@ public class ResponseFormatXML
         result.append( set( "content", content ) );
         result.append( set( "start", Long.toString( start ) ) );
         result.append( set( "end", Long.toString( end ) ) );
-        //result.append( " >\n" );
-	result.append( ">" );
+    	result.append( ">" );
         return result.toString();
     }
 
     public static String closeAnnotationInstance()
     {
-        //return "        </annotationInstance>\n";
 	  return "</annotationInstance>";
     }
 
@@ -115,53 +108,13 @@ public class ResponseFormatXML
         StringBuffer result = new StringBuffer( START_FEATURE );
 
         result.append( set( "name", name ) );
-        //value = forXML( value );
-  //DB: not sure what was happening here with forXML.  I have replaced with another function
-  //    it should keep the same values as the original text.
+
         value = replaceIllegalCharacters( value );
         
         System.out.println( "--------Value after stripping out illegal characters: " + value );
         result.append( set( "value", value ) );
-        //result.append( " />\n" );
         result.append( "/>" );
 
-        return result.toString();
-    }
-
-    public static String forXML( String aText )
-    {
-        final StringBuilder result = new StringBuilder();
-        final StringCharacterIterator iterator = new StringCharacterIterator( aText );
-        char character = iterator.current();
-
-        Logging.log(aText);
-
-        while( character != CharacterIterator.DONE )
-        {
-            switch( character )
-            {
-                case '<':
-                case '>':
-                case '\"':
-                case '\'':
-                    break;
-
-                case '&':
-                    result.append( "and" );
-                    break;
-                default:
-                    //the char is not a special one
-                    //add it to the result as is
-                    result.append( character );
-                    break;
-
-            }
-
-            character = iterator.next();
-        }
-        
-        Logging.log(aText);
-        
         return result.toString();
     }
 
@@ -169,21 +122,6 @@ public class ResponseFormatXML
     //it will replace the illegal characters with the XML entities so that it can be interpreted by
     //the xml parser correctly and conveyed correctly
     public static String replaceIllegalCharacters(String s){
-/*    	HashMap<String,String> entityXML = new HashMap<String,String>();
-    	//list of 5 xml entities can be modified in the future
-    	entityXML.put("\"", "&quot;");
-    	entityXML.put("&", "&amp;");
-    	entityXML.put("'", "&apos;");
-    	entityXML.put("<", "&lt;");
-    	entityXML.put(">", "&gt;");
-    	
-    	//we first replace any already encoded values with the non encoded value
-    	//to then be able to replace all occurrences of that character by the correctly encoded one
-    	//the reason was for the '&' in the encoded '&amp;' , '&quot;' and so on
-    	for(String illXML: entityXML.keySet()){
-    		s = s.replaceAll(entityXML.get(illXML),illXML).replaceAll(illXML, entityXML.get(illXML));
-    	}
-*/
     	s = StringEscapeUtils.escapeXml(s);
     	return s;
     }
