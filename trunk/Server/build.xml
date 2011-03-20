@@ -154,7 +154,8 @@
                 <fileset dir="${gate-home}/lib" >
                     <include name="*.jar" />
                 </fileset>
-
+            	
+        		<!-- Locally needed paths defined in LocalProperties.xml file -->
                 <path refid="localruntimeclasspath"/>
                 
             </classpath>
