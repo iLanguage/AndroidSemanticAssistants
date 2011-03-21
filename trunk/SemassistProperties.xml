@@ -56,8 +56,8 @@
     <property name="runtime.heap.max"         value="1638m" />
 
     <!-- Server Pipeline Property Settings (ie # of Threads allowed) -->
-    <property name="server.threads.allowed"        value="10"/>
-
+    <property name="server.threads.allowed"        value="3"/>
+<!--
     <property name="server.pipeline.1.name"        value="ANNIE"/>
     <property name="server.pipeline.1.number.pooled"        value="2"/>
     <property name="server.pipeline.1.startup"        value="true"/>
@@ -77,7 +77,7 @@
     <property name="server.pipeline.4.number.pooled"        value="2"/>
     <property name="server.pipeline.4.startup"        value="true"/>
     <property name="server.pipeline.4.fullpath"        value="${gate.pipeline.repository}Yahoo/application.xgapp"/>
-
+-->
     <!-- Port for which the Server listens for debugers to be attached -->
     <property name="server.port.debug"        value="8885"/>
     
