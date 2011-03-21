@@ -110,7 +110,7 @@ public class SemanticServiceBroker
         initGate();
         
         Logging.log("Server Started Loading Resources");
-        //MainFrame.getInstance().setVisible(true); // for debugging only
+        MainFrame.getInstance().setVisible(true); // for debugging only
         initThreadRegistry();
         Logging.log("Server Finished Loading Resources");
         Logging.log("Server Ready for Requests...");
@@ -472,6 +472,7 @@ public class SemanticServiceBroker
             String output = MasterData.ERROR_ANNOUNCEMENT + "Not all required runtime " +
                             "parameters were given for service \"" + currentService.getServiceName() + "\"";
             Logging.log( output );
+            inactivateCurrentPipeline(serviceApp,compositeService);
             return null;
         }
 
@@ -506,6 +507,7 @@ public class SemanticServiceBroker
             String message = "----------------" + MasterData.ERROR_ANNOUNCEMENT +
                              "Could not create temporary file for result output (IOException).";
             Logging.log( message );
+            inactivateCurrentPipeline(serviceApp,compositeService);
             return null;
         }
 
@@ -554,6 +556,7 @@ public class SemanticServiceBroker
                                  ") document and its text is supposed to be assigned to one or more runtime parameters. " +
                                  "Currently, this is not supported.";
                 Logging.log( warning );
+                inactivateCurrentPipeline(serviceApp,compositeService);
                 return null;
             }
             Logging.log( "---------------- Passing input document to parameters..." );
@@ -613,6 +616,7 @@ public class SemanticServiceBroker
             {
                 Logging.exception( e );
                 // return MasterData.ERROR_ANNOUNCEMENT  + "ExecutionException on server";
+                inactivateCurrentPipeline(serviceApp,compositeService);
                 return null;
             }
 
@@ -638,6 +642,7 @@ public class SemanticServiceBroker
             catch( gate.creole.ExecutionException e )
             {
                 Logging.exception( e );
+                inactivateCurrentPipeline(serviceApp,compositeService);
                 // return MasterData.ERROR_ANNOUNCEMENT  + "ExecutionException on server";
                 return null;
             }
