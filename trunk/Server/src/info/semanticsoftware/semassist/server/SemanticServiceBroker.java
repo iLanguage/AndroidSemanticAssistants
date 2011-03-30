@@ -110,7 +110,7 @@ public class SemanticServiceBroker
         initGate();
         
         Logging.log("Server Started Loading Resources");
-        //MainFrame.getInstance().setVisible(true); // for debugging only
+        MainFrame.getInstance().setVisible(true); // for debugging only
         initThreadRegistry();
         Logging.log("Server Finished Loading Resources");
         Logging.log("Server Ready for Requests...");
@@ -118,10 +118,10 @@ public class SemanticServiceBroker
 
     private void initThreadRegistry() {
     	for(String[] s:MasterData.Instance().getPipelineThreadProperties()){
-    		PipelineThreadInfo pti = new PipelineThreadInfo(s[0], Integer.parseInt(s[1]), Boolean.parseBoolean(s[2]), s[3]);
+    		PipelineThreadInfo pti = new PipelineThreadInfo(s[0], Integer.parseInt(s[1]), Boolean.parseBoolean(s[2]), s[3],Integer.parseInt(s[4]));
     		GatePipelineRegistery.getInstance().addPipelineThreadInfo(pti);
     		if(pti.isLoadAtStatup()){
-    			for(int iGAPI=0;iGAPI<pti.getMaxConcurrent();iGAPI++){
+    			for(int iGAPI=0;iGAPI<pti.getNumberPooled();iGAPI++){
     				GatePipelineRegistery.getInstance().addGateProcess(pti.getPipelineAppFile().getPath(), loadGateApp(pti.getPipelineAppFile()), ServiceStatus.STATUS_INACTIVE, pti, false);
     				Logging.log("Pipeline (" + pti.getPipelineName() + ") loaded");
     			}
@@ -430,11 +430,6 @@ public class SemanticServiceBroker
 
         return result;
     }
-
-    /*
-     * Needed to modify this method in order to now either load a new service or pull an already existing service
-     * from the threadpool.
-     */
     
     protected ServiceExecutionStatus runOneService( ServiceInfo currentService, ServiceExecutionStatus status, boolean compositeService )
     {
@@ -454,7 +449,7 @@ public class SemanticServiceBroker
         
         Object serviceApp = retreiveGatePipeline(serviceAppFile, compositeService);
         
-        Logging.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Process ID Started: " + serviceApp.hashCode());
+        Logging.log("++++++++++Process ID Started: " + serviceApp.hashCode());
         // Does the pipeline demand merged input documents?
         if( currentService.getMergeInputDocs() )
         {
@@ -479,9 +474,6 @@ public class SemanticServiceBroker
         // Possibly pass runtime parameters to the pipeline
         SerialController serialCtrl = (SerialController) serviceApp;
         Logging.log("serviceApp was set correctly");
-        
-        
-        
         
         if( status.mParams != null && status.mParams.size() > 0 )
         {
@@ -600,7 +592,7 @@ public class SemanticServiceBroker
                 Logging.log( "---------------- Cleaning up controller..." );
                 
                 inactivateCurrentPipeline(serviceApp,compositeService);
-                Logging.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Process ID Stopped: " + serviceApp.hashCode());
+                Logging.log("++++++++++Process ID Stopped: " + serviceApp.hashCode());
                 
                 
                 // If a corpus was produced as result, let
@@ -701,14 +693,18 @@ public class SemanticServiceBroker
 	            Logging.log("trying to look for PTI");
 	            if(pti==null){
 	            	Logging.log("PTI is null");
-	            	pti = new PipelineThreadInfo(serviceName, 0, false, serviceAppFile.getPath());
+	            	pti = new PipelineThreadInfo(serviceName, 0, false, serviceAppFile.getPath(),0);
 	            }
 	            cleanGatePipelineRegistry(serviceName);
 	
 	            int currentPipelineRegistrCount = GatePipelineRegistery.getInstance().getPipelineCount(serviceName);
+	            Logging.log("currentPipelineRegistrCount  --   " + currentPipelineRegistrCount + " ("+pti.getNumberPooled()+")"); 
+	            //currentPipelineRegistrCount += 1; // we add 1 to the total value to verify that once added the pipeline has not exceeded it's max...
 	            boolean toTerminate = false;
-	            if(currentPipelineRegistrCount>=pti.getMaxConcurrent()){
+	            int poolNumber = pti.getNumberPooled();
+	            if(currentPipelineRegistrCount>=poolNumber){
 	            	toTerminate = true;
+	            	Logging.log("Pipeline is to be terminated");
 	            }
 	            GatePipelineRegistery.getInstance().addGateProcess(serviceAppFile.getPath(), serviceApp,ServiceStatus.STATUS_ACTIVE, pti,toTerminate);
 	        }
@@ -717,10 +713,24 @@ public class SemanticServiceBroker
 		return serviceApp;
 	}
 
-	private void cleanGatePipelineRegistry(String serviceName) {
+	private synchronized void cleanGatePipelineRegistry(String serviceName) {
 		int totalPipelineRegisterCount = GatePipelineRegistery.getInstance().getCurrentRegisterSize();
 		int maxThreadsAllowed = MasterData.Instance().getServerThreadsAllowed();
-		if(totalPipelineRegisterCount>=maxThreadsAllowed){
+		
+		int currentPipelineRegistrCount = GatePipelineRegistery.getInstance().getPipelineCount(serviceName);
+		PipelineThreadInfo pti = GatePipelineRegistery.getInstance().getPipelineThreadInfo(serviceName);
+		int maxPipelineAllowed = 0;
+		if(pti!=null){
+			maxPipelineAllowed = pti.getNumberPooled();
+			if(maxPipelineAllowed==0){//means that there is no value set for this pipeline and it should be discarded only if there is no more room
+				currentPipelineRegistrCount=0;
+			}
+		}else{
+			currentPipelineRegistrCount=0;
+		}
+		
+		if(totalPipelineRegisterCount>=maxThreadsAllowed || 
+				currentPipelineRegistrCount > maxPipelineAllowed){
 			//terminate any pipeline that is not of the type we are requesting
 			//if no other pipeline other that the type we are requesting can be found
 			//then terminate that one. 

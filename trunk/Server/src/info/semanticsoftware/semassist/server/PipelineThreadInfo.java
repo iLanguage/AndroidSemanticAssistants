@@ -1,21 +1,21 @@
 package info.semanticsoftware.semassist.server;
 
-import info.semanticsoftware.semassist.server.util.Logging;
-
 import java.io.File;
 import java.io.FilenameFilter;
 
 public class PipelineThreadInfo {
 	private String pipelineName;
 	private int maxConcurrent;
+	private int number_pooled;
 	private String pipelineAppFileLocation;
 	private boolean loadAtStatup;
 	
-	public PipelineThreadInfo(String pipelineName, int maxConcurrent, boolean loadAtStatup, String pipelineAppFileLocation) {
+	public PipelineThreadInfo(String pipelineName, int numberPooled, boolean loadAtStatup, String pipelineAppFileLocation,int maxConcurrent) {
 		setPipelineName(pipelineName);
 		setMaxConcurrent(maxConcurrent);
 		setLoadAtStatup(loadAtStatup);
 		setPipelineAppFileLocation(pipelineAppFileLocation);
+		setNumberPooled(numberPooled);
 	}
 	public String getPipelineName() {
 		return pipelineName;
@@ -72,5 +72,11 @@ public class PipelineThreadInfo {
 			f = new File(getPipelineAppFileLocation());
 		}
 		return f;
+	}
+	public void setNumberPooled(int number_pooled) {
+		this.number_pooled = number_pooled;
+	}
+	public int getNumberPooled() {
+		return number_pooled;
 	}
 }

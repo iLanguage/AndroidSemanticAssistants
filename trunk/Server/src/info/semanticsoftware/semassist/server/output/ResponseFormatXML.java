@@ -62,7 +62,7 @@ public class ResponseFormatXML
         result.append( specifyStartOffset( startOffset ) );
         result.append( specifyEndOffset( endOffset ) );
         result.append( ">" );
-        result.append( content );
+        result.append( replaceIllegalCharacters(content) );
         result.append( END_MARKING );
 
         return result.toString();
@@ -91,7 +91,7 @@ public class ResponseFormatXML
     public static String openAnnotationInstance( String content, long start, long end )
     {
         StringBuffer result = new StringBuffer( START_ANNOTATION_INSTANCE );
-        result.append( set( "content", content ) );
+        result.append( set( "content", replaceIllegalCharacters( content ) ) );
         result.append( set( "start", Long.toString( start ) ) );
         result.append( set( "end", Long.toString( end ) ) );
     	result.append( ">" );

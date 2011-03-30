@@ -44,16 +44,13 @@ public class CallableServiceThread implements Callable<String> {
     }
 
     public String call() {
-    	Logging.log("Starting Thread: #" + serviceNumber);
-
     	//the SemanticServiceBroker InvokeService call
     	String finalResult = SSB.invokeServiceCall(serviceName, documents, literalDocs, connID, gateParams, userCtx);
     	//to hold the result and return the value
-        Logging.log("Stoping Thread: #" + serviceNumber);
-    	Calendar calendar = Calendar.getInstance();
+        Calendar calendar = Calendar.getInstance();
     	java.util.Date now = calendar.getTime();
     	java.sql.Timestamp cts = new java.sql.Timestamp(now.getTime());
-        Logging.log("\n\n\n\n\n\n\nDURATION: " + (cts.getTime()-serviceNumber) + "\n\n\n\n\n\n\n");
+        Logging.log("\n\nDURATION: " + (cts.getTime()-serviceNumber) + "\n\n");
     	return(finalResult);
     }
     

@@ -79,8 +79,8 @@ public class GatePipelineThreadPool {
 	public void setUpThreadPoolMap(){
 		ArrayList<String[]> s = MasterData.Instance().getPipelineThreadProperties();
 		for(String[] sa:s){
-			Logging.log("Setup :" + sa[3] + "  number of threads: " + sa[1]);
-			tpes.put(new java.io.File(sa[3]).getPath(), Executors.newFixedThreadPool(Integer.parseInt(sa[1])));
+			Logging.log("Setup :" + sa[3] + "  number of threads: " + sa[4]);
+			tpes.put(new java.io.File(sa[3]).getPath(), Executors.newFixedThreadPool(Integer.parseInt(sa[4])));
 		}		
 	}
 	
@@ -88,7 +88,7 @@ public class GatePipelineThreadPool {
 		ArrayList<String[]> s = MasterData.Instance().getPipelineThreadProperties();
 		int x = 0;
 		for(String[] sa:s){
-			x+=Integer.parseInt(sa[1]);
+			x+=Integer.parseInt(sa[4]);
 		}
 		return x;
 	}
