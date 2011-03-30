@@ -119,6 +119,7 @@ public class XMLFileParser
         //Added by d_barbie...  this should allow for setting the correct pipeline numbers
         String readPipelineName = "";
         String readPipelinePooled = "";
+        String readPipelineConcurrent="";
         String readPipelineStartup = "";
         String readPipelineAppPath = "";
         int minThreadsAdded = 0;
@@ -128,24 +129,41 @@ public class XMLFileParser
         
         while(readPipelineName != null && !readPipelineName.equals("")){
         	readPipelinePooled = project.getProperty( "server.pipeline." + xmlPropertyPipelineIDX + ".number.pooled" );
+        	readPipelineConcurrent = project.getProperty( "server.pipeline." + xmlPropertyPipelineIDX + ".max.concurrent" );
         	readPipelineStartup = project.getProperty( "server.pipeline." + xmlPropertyPipelineIDX + ".startup" );
         	readPipelineAppPath = project.getProperty( "server.pipeline." + xmlPropertyPipelineIDX + ".fullpath" );
         	
-        	String[] mServerPipeline = new String[4];
+        	String[] mServerPipeline = new String[5];
         	
         	mServerPipeline[0] = readPipelineName;
-        	mServerPipeline[1] = readPipelinePooled;
+
         	mServerPipeline[2] = readPipelineStartup;
         	mServerPipeline[3] = readPipelineAppPath;
-        	alServerPipeline.add(mServerPipeline);
-        	xmlPropertyPipelineIDX++; //needed to iterate through the different xml thread numbers 
-        	readPipelineName = project.getProperty( "server.pipeline." + xmlPropertyPipelineIDX + ".name" );
+        	
 
         	try{
-        		minThreadsAdded += Integer.parseInt(mServerPipeline[1]);
+        	
+        		if(Integer.parseInt(readPipelinePooled) > Integer.parseInt(readPipelineConcurrent)){
+                	mServerPipeline[1] = readPipelinePooled;
+                	mServerPipeline[4] = readPipelinePooled;
+                	System.out.println( "The number that is set for pooled pipelines is greater than the maximum wanted for concurrent pipelines of the same type.\nThe concurrent number of pipelines has been reset to the minimum number of desired pooled pipelines." );
+        		}else{
+                	mServerPipeline[1] = readPipelinePooled;
+                	mServerPipeline[4] = readPipelineConcurrent;	        			
+        		}
+        	}catch(Exception e){
+        		System.out.println(e.getMessage());
+        	}
+        	
+        	try{
+        		minThreadsAdded += Integer.parseInt(readPipelineConcurrent);
         	}catch(Exception e){
         		minThreadsAdded+=0;
         	}
+        	
+        	alServerPipeline.add(mServerPipeline);
+        	xmlPropertyPipelineIDX++; //needed to iterate through the different xml thread numbers 
+        	readPipelineName = project.getProperty( "server.pipeline." + xmlPropertyPipelineIDX + ".name" );
         };
         
         try{
