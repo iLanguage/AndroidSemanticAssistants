@@ -168,12 +168,14 @@ The last part includes all the properties used by the Semantic Assistants server
     <property name="server.threads.allowed"        value="10"/>
 
     <property name="server.pipeline.1.name"        value="ANNIE"/>
-    <property name="server.pipeline.1.number.pooled"        value="2"/>
+    <property name="server.pipeline.1.number.pooled"        value="1"/>
+    <property name="server.pipeline.1.max.concurrent"        value="1"/>
     <property name="server.pipeline.1.startup"        value="true"/>
     <property name="server.pipeline.1.fullpath"        value="${gate.pipeline.repository}/Annie/"/>
 
     <property name="server.pipeline.2.name"        value="Organism"/>
     <property name="server.pipeline.2.number.pooled"        value="1"/>
+    <property name="server.pipeline.2.max.concurrent"        value="1"/>
     <property name="server.pipeline.2.startup"        value="true"/>
     <property name="server.pipeline.2.fullpath"        value="${gate.pipeline.repository}/OrganismTagger/"/>
 
@@ -194,8 +196,12 @@ The last part includes all the properties used by the Semantic Assistants server
 \item \url{server.threads.allowed}: This variable contains the number of threads the server should allow to run concurrently.
 \item \url{server.pipeline.\#.name}: This variable contains the name of one of the pipelines that will be initialized with certain constraints.  The value must match the actual name of the pipeline used by GATE. (\# must be replaced with an positive integer value.  this number will identify the group of properties related to the pipeline)
 \item \url{server.pipeline.\#.number.pooled}: This variable contains the number of threads we wish to keep in memory and allow to be executed concurrently.  Any additional thread of this type will be placed in a queue and will be executed as soon as an available pipeline is free. (\# must be replaced with an positive integer value.  this number will identify the group of properties related to the pipeline)
+\item \url{server.pipeline.\#.max.concurrent}: This variable contains the number of maximum threads we will allow to be executed at one time.  The value can be equal to or greater than the \url{server.pipeline.\#.number.pooled} variable.  Once the threads are complete, the number of threds that surpass the \url{server.pipeline.\#.number.pooled} value will be removed from memory
 \item \url{server.pipeline.\#.startup}: This variable contains the property that inidicates if this pipeline should be launched at server startup.  This should be set to true in the case that the pipeline you are requesting may take a longer period to ready itself  (\# must be replaced with an positive integer value.  this number will identify the group of properties related to the pipeline)
 \item \url{server.pipeline.\#.fullpath}: This variable contains the location of the pipeline application xgapp file.  This is needed to identify the correct pipeline to be executed by the threads (\# must be replaced with an positive integer value.  this number will identify the group of properties related to the pipeline)
+\begin{itemize}
+  \item It should be noted that if we set the \url{server.pipeline.\#} property in the SemassistProperties.xml file we need to have all 5 properties set correctly.  Each of those properties will be used to set up the pipelines at server startup.
+\end{itemize}
 \item \url{server.port.debug}: This variable contains the port number on users machine on which the server listens for debuggers to be attached.
 \item \url{server.port.wsdl}: This variable contains the port number on which the server communicates with the clients through WSDL.
 \end{enumerate}
@@ -217,7 +223,6 @@ Chapter~\ref{chap:clients}.
   compile and run the Eclipse plug-in please refer to
   Section~\ref{subsec:eclipse_install}.
 \end{description}
-
 
 
 
