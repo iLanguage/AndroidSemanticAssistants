@@ -60,21 +60,25 @@
 <!--
     <property name="server.pipeline.1.name"        value="ANNIE"/>
     <property name="server.pipeline.1.number.pooled"        value="2"/>
-    <property name="server.pipeline.1.startup"        value="true"/>
+    <property name="server.pipeline.1.max.concurrent"        value="2"/>
+    <property name="server.pipeline.1.startup"        value="false"/>
     <property name="server.pipeline.1.fullpath"        value="${gate.pipeline.repository}Annie/application.xgapp"/>
 
     <property name="server.pipeline.2.name"        value="Organism"/>
     <property name="server.pipeline.2.number.pooled"        value="1"/>
+    <property name="server.pipeline.2.max.concurrent"        value="1"/>
     <property name="server.pipeline.2.startup"        value="true"/>
     <property name="server.pipeline.2.fullpath"        value="${gate.pipeline.repository}OrganismTagger/OrganismTagger.xgapp"/>
 
     <property name="server.pipeline.3.name"        value="DurmIndexer-EN"/>
     <property name="server.pipeline.3.number.pooled"        value="2"/>
+    <property name="server.pipeline.3.max.concurrent"        value="2"/>
     <property name="server.pipeline.3.startup"        value="true"/>
     <property name="server.pipeline.3.fullpath"        value="${gate.pipeline.repository}Durm-Indexer-EN/Indexer-EN.xgapp"/>
 
     <property name="server.pipeline.4.name"        value="Yahoo Pipeline"/>
     <property name="server.pipeline.4.number.pooled"        value="2"/>
+    <property name="server.pipeline.4.max.concurrent"        value="2"/>
     <property name="server.pipeline.4.startup"        value="true"/>
     <property name="server.pipeline.4.fullpath"        value="${gate.pipeline.repository}Yahoo/application.xgapp"/>
 -->
