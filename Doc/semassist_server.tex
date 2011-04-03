@@ -50,6 +50,7 @@ configure these settings, one must modfiy/add the following lines
 \begin{enumerate}
 \item \texttt{server.pipeline.\#.name}
 \item \texttt{server.pipeline.\#.number.pooled}
+\item \texttt{server.pipeline.\#.max.concurrent}
 \item \texttt{server.pipeline.\#.startup}
 \item \texttt{server.pipeline.\#.fullpath}
 \end{enumerate}
@@ -58,6 +59,7 @@ These lines refer to the pipeline that will be pooled for concurrent and
 speedier access.  
 "name" refers to the name of the pipeline as indicated by the contents of the .xgapp file.
 "number.pooled" refers to the number of threads we have allocated for this pipeline.
+"max.concurrent" refers to how many threads you will allow to run concurrently.  This number is not permanent as the pipeline completes the numbers will return to the "number.pooled" value
 "startup" indicated by a "true"/"false" string value which loads or ignores the pipeline at server startup.
 "fullpath" refers to the location of the xgapp file that will be used to load the pipeline.
 These properties must be grouped and must be a set when being used in the \url{SemanticAssistants/SemassistProperties.xml};
