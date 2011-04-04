@@ -516,10 +516,16 @@ public class ClientUtils
                 annotation.mContent = content;
                 annotation.mStart = Long.parseLong( nm.getNamedItem( "start" ).getNodeValue() );
                 annotation.mEnd = Long.parseLong( nm.getNamedItem( "end" ).getNodeValue() );
-
-
-                // Get features
-                annotation.mFeatures = getAnnotationFeatures( kid );
+		
+		if(kid.getFirstChild() != null)
+		{
+		    // Get features
+		    annotation.mFeatures = getAnnotationFeatures( kid );
+		}
+		else
+		{
+		    System.out.println( "------------- This annotation has no features."); 
+		}
 
                 // Add to result
                 result.add( annotation );
