@@ -225,11 +225,21 @@ public class ServiceInvocationJob extends Job{
 	 	        }
 	 }
 	 
+	 /** This method adds literal strings to the list of service input 
+	  * @param literal the literal text content
+	  * */
 	 public void addLiteral(String literal){
 		 stringArray.getItem().add(literal);
 	 }
 	 
-	  private JFrame buildRTParamFrame( ServiceInfoForClient info, List<GateRuntimeParameter> params ){
+	 /**
+	  * This method creates a frame to prompt the user for runtime parameters
+	  * @param info The selected service information
+	  * @param params The selected service list of runtime parameters
+	  * @return JFrame The swing frame to be shown to the user
+	  * @see info.semanticsoftware.semassist.csal.RTParamFrame
+	  * */
+	 private JFrame buildRTParamFrame(ServiceInfoForClient info, List<GateRuntimeParameter> params){
 
           Vector<GateRuntimeParameter> mandatory = new Vector<GateRuntimeParameter>();
           Vector<GateRuntimeParameter> optional = new Vector<GateRuntimeParameter>();
@@ -255,8 +265,8 @@ public class ServiceInvocationJob extends Job{
 
           return frame;
       }
-	  
-	  private class ParamActionListener implements ActionListener{
+	   
+	 private class ParamActionListener implements ActionListener{
 
           private RTParamFrame frame = null;
           public ParamActionListener( RTParamFrame f )
@@ -275,6 +285,7 @@ public class ServiceInvocationJob extends Job{
               while( it.hasNext() )
               {
                   GateRuntimeParameter p = it.next();
+                  //FIX buggy, returns null
                   System.out.println( "------   Parameter: " + p.getParamName() + " = " + p.getStringValue());
               }
 
@@ -284,7 +295,10 @@ public class ServiceInvocationJob extends Job{
           }
       }
 	
-	  private void doRunSelectedService(){
+	 /**
+	  * This methods invokes the NLP service with the proper runtime parameters 
+	  * */ 
+	 private void doRunSelectedService(){
 		  try{
 	        	broker = ServiceAgentSingleton.getInstance();
 		        serviceResponse = broker.invokeService(serviceName, uriList, stringArray, 0L, rtpArray, ctx );
@@ -313,19 +327,23 @@ public class ServiceInvocationJob extends Job{
 	        this.done(ASYNC_FINISH);
 	  }
 	  
-	  private void handleResponse(String serviceResponse){
-		  // returns result in sorted by type
+	 /**
+	  * This method parses the server response and return the annotations in a proper format
+	  * @param serviceResponse The server XML response
+	  * */ 
+	 private void handleResponse(String serviceResponse){
+		  String documentString="";
+		  boolean isDocument = false;
+		  // returns result is sorted by type
 	      Vector<SemanticServiceResult> results = ClientUtils.getServiceResults( serviceResponse );
-          if( results == null ) {
-                System.err.println( "No results retrieved in response message" );
-                return;
-	      }
+	          if( results == null ) {
+	                System.err.println( "No results retrieved in response message" );
+	                return;
+		      }
 
-	            for( Iterator<SemanticServiceResult> it = results.iterator(); it.hasNext(); )
-	            {
+	          for( Iterator<SemanticServiceResult> it = results.iterator(); it.hasNext();){
 	                SemanticServiceResult current = it.next();
 	                if(current.mResultType.equals(SemanticServiceResult.FILE)){
-	                	//System.out.println("*File Case*");
 	                	String fileContent = broker.getResultFile(current.mFileUrl);
 	                	String fileExt = ClientUtils.getFileNameExt(current.mFileUrl);
 						ServerResponseHandler.createFile(fileContent, fileExt);
@@ -334,15 +352,19 @@ public class ServiceInvocationJob extends Job{
 	                	System.out.println("Annotation Case (Append to data structure). I don't know how to handle this!");
 	                }
 	                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
-	                	//System.out.println("*Annotation Case*");
 	                	ServerResponseHandler.createAnnotation(current);
 	                }
 	                else if(current.mResultType.equals(SemanticServiceResult.CORPUS)){
 	                	System.out.println("Corpus Case. I don't know how to handle this!");
 	                }
 	                else if(current.mResultType.equals(SemanticServiceResult.DOCUMENT)){
-	                	System.out.println("DocumentCase. I don't know how to handle this!");
+	                	documentString += current.mFileUrl + System.getProperty("line.separator");
+	                	isDocument = true;
 	                }
+	            }
+	            
+	          	if(isDocument){
+	            	ServerResponseHandler.createDocument(documentString);
 	            }
 	  }
 }
