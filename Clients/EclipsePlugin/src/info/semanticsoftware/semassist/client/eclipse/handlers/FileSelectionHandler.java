@@ -1,11 +1,15 @@
 package info.semanticsoftware.semassist.client.eclipse.handlers;
 
+import java.io.File;
+
 import info.semanticsoftware.semassist.client.eclipse.dialogs.FileSelectionDialog;
 import info.semanticsoftware.semassist.client.eclipse.model.Resource;
 import info.semanticsoftware.semassist.client.eclipse.model.SemanticAssistantsStatusViewModel;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.filesystem.EFS;
+import org.eclipse.core.filesystem.IFileStore;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
@@ -13,9 +17,12 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.handlers.HandlerUtil;
+import org.eclipse.ui.ide.IDE;
 import org.eclipse.ui.model.BaseWorkbenchContentProvider;
 import org.eclipse.ui.model.WorkbenchLabelProvider;
 
@@ -116,6 +123,17 @@ public class FileSelectionHandler extends AbstractHandler{
 				System.err.println("Could not open the view.");
 				e.printStackTrace();
 			}
+	}
+	
+	public static void openEditor(File file){
+		 IFileStore fileStore = EFS.getLocalFileSystem().getStore(file.toURI());
+		 IWorkbenchPage page = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage();
+		 
+		 try {
+		        IDE.openEditorOnFileStore( page, fileStore );
+		 } catch ( PartInitException e ) {
+			 System.err.println("Could not open the editor.");
+		 }
 	}
 	
 	private void showError(String errorMessage) {

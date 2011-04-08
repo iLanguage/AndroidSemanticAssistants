@@ -16,6 +16,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 
@@ -27,27 +28,27 @@ import org.eclipse.ui.PlatformUI;
 public class ServerResponseHandler {
 	
 		public static void createAnnotation(SemanticServiceResult current){
-		HashMap<String, AnnotationVector> annotationsVector = current.mAnnotations;
-		Set<String> keys = annotationsVector.keySet();
-			for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); )
-	        {
-	            String docID = it2.next();
-	            
-	            AnnotationVector annotsVector = annotationsVector.get(docID);
-	            Vector<Annotation> annots = annotsVector.mAnnotationVector;
-	            for(int i=0; i < annots.size(); i++){
-	            	AnnotationInstance annotation = new AnnotationInstance("0", annots.get(i).mContent, annotsVector.mType, String.valueOf(annots.get(i).mStart), String.valueOf(annots.get(i).mEnd));
-	            	Set<String> featureNames = annots.get(i).mFeatures.keySet();
-	            	            	
-	            	for(Iterator<String> it3 = featureNames.iterator(); it3.hasNext();){
-	            		String name = it3.next();
-	            		String value = annots.get(i).mFeatures.get(name);
-	            		annotation.addFeatureMap(name, value);
-	            	}
-	
-	            	EvaluationSession.getResources().get(Integer.parseInt(docID)).getAnnotations().add(annotation);
-	            }
-	        }
+			HashMap<String, AnnotationVector> annotationsVector = current.mAnnotations;
+			Set<String> keys = annotationsVector.keySet();
+				for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); )
+		        {
+		            String docID = it2.next();
+		            
+		            AnnotationVector annotsVector = annotationsVector.get(docID);
+		            Vector<Annotation> annots = annotsVector.mAnnotationVector;
+		            for(int i=0; i < annots.size(); i++){
+		            	AnnotationInstance annotation = new AnnotationInstance("0", annots.get(i).mContent, annotsVector.mType, String.valueOf(annots.get(i).mStart), String.valueOf(annots.get(i).mEnd));
+		            	Set<String> featureNames = annots.get(i).mFeatures.keySet();
+		            	            	
+		            	for(Iterator<String> it3 = featureNames.iterator(); it3.hasNext();){
+		            		String name = it3.next();
+		            		String value = annots.get(i).mFeatures.get(name);
+		            		annotation.addFeatureMap(name, value);
+		            	}
+		
+		            	EvaluationSession.getResources().get(Integer.parseInt(docID)).getAnnotations().add(annotation);
+		            }
+		        }
 		}
 		
 		public static void createFile(String fileContent, String fileExt){
@@ -71,4 +72,17 @@ public class ServerResponseHandler {
 				e1.printStackTrace();
 			}
 		}
+		
+		public static void createDocument(String result){
+			
+			final File outputFile = ClientUtils.writeStringToFile(result,".txt");
+			System.err.println(outputFile.getAbsolutePath());
+			 // Open the output document in a new editor
+	        Display.getDefault().asyncExec(new Runnable() {
+							@Override
+							public void run() {
+								FileSelectionHandler.openEditor(outputFile);
+							}
+						}); 
+			}
 }
