@@ -126,6 +126,14 @@
             <arg value="-norestore"/>
         </exec>
     </target>
+    
+    <!-- Generates Javadoc output -->
+    <target name="javadoc">
+        <javadoc sourcepath="${src.home}" destdir="${javadoc.home}/OpenOffice" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: OpenOffice.org Writer Plug-in">
+        <doctitle><![CDATA[<h1>Semantic Assistants: OpenOffice.org Writer Plug-in</h1>]]></doctitle>
+        <bottom><![CDATA[<i>Copyright © 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
+          </javadoc>
+    </target>
 
   <!-- Clear all build output -->
     <target name="clean">
