@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<shortcuts>
+  <!--<skipIfNotSupported/>-->
+  <programGroup defaultName="Semantic Assistants" location="applications"/>
+  <shortcut
+    name="Run Server"
+    target="$INSTALL_PATH/Server/RunServer.sh"
+    workingDirectory="$INSTALL_PATH/Server"
+    description="Run NLP server."
+    initialState="normal"
+    applications="no"
+    programGroup="yes"
+    desktop="yes"
+    type="Application"
+    terminal="true"
+    startMenu="yes"
+    encoding="UTF-8"
+    startup="no">
+    
+    <createForPack name="Server"/>
+  </shortcut>
+  <shortcut
+    name="Uninstall"
+    target="$INSTALL_PATH\\Uninstaller\uninstaller.jar"
+    commandLine="-jar $INSTALL_PATH\Uninstaller\uninstaller.jar"
+    workingDirectory=""
+    description="Uninstall Semantic Assistant"
+    initialState="normal"
+    iconFile="trashcan_full"
+    programGroup="yes"
+    desktop="no"
+    applications="no"
+    startMenu="no"
+    type="Application"
+    encoding="UTF-8"
+    startup="no">
+  </shortcut>
+
+
+</shortcuts>

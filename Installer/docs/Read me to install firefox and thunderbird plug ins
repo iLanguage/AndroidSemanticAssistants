@@ -1,0 +1,58 @@
+Pre-requisite to Firefox and Thunderbird
+
+1-Go to JDK install path
+
+In there, go to /jre/lib/i386/libnpjp2.so
+
+for example:
+/usr/java/jdk1.6.0_20/jre/lib/i386/libnpjp2.so
+
+
+2-Go to the firefox install folder
+
+for example:
+/usr/lib/firefox-3.0.19
+
+OR
+
+go to the mozilla folder, which is usually at
+
+/usr/lib/mozilla
+
+^ this may be better as it SHOULD be used by both Thunderbird and Firefox
+
+3-Go to the plugins folder in there
+
+for example:
+/usr/lib/firefox-3.0.19/plugins
+OR
+/usr/lib/mozilla/plugins
+
+4-Open a Terminal window there and copy:
+
+ln -s PATH-TO-THE-JDK/jre/lib/i386/libnpjp2.so .
+
+for example:
+ln -s /usr/java/jdk1.6.0_20/jre/lib/i386/libnpjp2.so .
+
+and backup the openJDK file then REMOVE/delete it
+
+libjavaplugin_oji.so
+
+If it's in the plugins folder
+especially if it's in /usr/lib/mozilla/plugins
+
+5a- FOR FIREFOX
+Drag and drop Semantic AssistantFF.xpi on a firefox web browser
+OR 
+Use the following command line
+
+firefox PATH-TO-SEMANTIC-ASSISTANT/Client/Mozilla/Firefox/SemanticAssistants@ca.ca/"Semantic AssistantFF.xpi"
+
+5b- FOR THUNDERBIRD
+Open Thunderbird, go under Tools->Add Ons
+Select Extensions
+Click on "Install..."
+Then Browse to
+PATH-TO-SEMANTIC-ASSISTANT/Client/Mozilla/Firefox/SemanticAssistants@semanticsoftware.info/"Semantic AssistantFF.xpi"
+

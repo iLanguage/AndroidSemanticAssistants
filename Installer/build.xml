@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<project name="Installer" default="run" basedir=".">
+   	<target name="compile" description="compile the installer">
+
+		<property name="base.dir"       value="."/>
+		<property name="IzPack.dir"       value="../IzPack"/>
+		<property name="output.dir"       value="${base.dir}"/>
+		<property name="installer.name"       value="Semantic Assistant Installer.jar"/>
+		<property name="installFile.name"       value="install.xml"/>
+
+		<taskdef name="IzPack" classpath="${IzPack.dir}/lib/compiler.jar"
+         	classname="com.izforge.izpack.ant.IzPackTask"/>
+	
+		<echo message="Makes the installer using IzPack"/>
+		<IzPack input="${base.dir}/${installFile.name}"
+    			output="${output.dir}/${installer.name}"
+    	 		installerType="standard"
+    		 	basedir="${base.dir}"
+    		 	IzPackDir="${IzPack.dir}"/>
+	</target>
+</project>

@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
+
+<!--     
+    To compile it :
+    - go in the bin directory where you installed IzPack
+    - call "compile ../sample/install.xml -b ../sample"
+-->
+
+<installation version="1.0">
+
+    <!-- 
+        The info section.
+        The meaning of the tags should be natural ...
+    -->
+    <info>
+        <appname>Semantic Assistants</appname>
+        <appversion>1.0.0.0</appversion>
+		
+	<authors>
+            <author name="Dr. René Witte" email=""/>
+        </authors>
+
+        <url>http://www.semanticsoftware.info/semantic-assistants-project/</url>  
+        <javaversion>
+        	1.5       	
+        </javaversion>
+
+		
+    </info>
+
+    <!-- 
+        The gui preferences indication.
+        Sets the installer window to 800x600. It will not be able to change the size.
+    -->
+    <guiprefs width="800" height="600" resizable="no">
+		<modifier key="allXGap" value="5"/>
+		<modifier key="allYGap" value="5"/>
+		<modifier key="paragraphYGap" value="15"/>
+		<modifier key="useHeadingPanel" value="yes"/>
+		<modifier key="headingLineCount" value="1"/>
+		<modifier key="headingFontSize" value="2"/>
+		<modifier key="headingBackgroundColor" value="0x00ffffff"/>
+		<modifier key="headingPanelCounter" value="text"/>
+		<modifier key="headingPanelCounterPos" value="inHeading"/>
+		<laf name="liquid">
+			<os family="unix" />
+		</laf>
+		<laf name="looks">
+			<os family="windows" />
+			<param name="variant" value="extwin" />
+		</laf>
+    </guiprefs>
+    <!-- 
+        The locale section.
+        Asks here to include the English and French langpacks.
+    -->
+    <locale>
+        <langpack iso3="eng"/>
+        <langpack iso3="fra"/>
+        <langpack iso3="deu"/>
+        <langpack iso3="spa"/>
+        <langpack iso3="ita"/>
+		<langpack iso3="chn"/>
+    </locale>
+    
+    <!--
+    	The native section.
+    	Import libraries from izpack or 3rd party.
+    -->  
+   	<native type="izpack" name="ShellLink.dll">  <!-- Used for creating shortcuts -->
+		<os family="windows"/>
+	</native>
+    
+    <!-- 
+        The resources section.
+        The ids must be these ones if you want to use the LicencePanel and/or the InfoPanel.
+    -->
+    <resources>
+        <res id="Logo" src="logo.jpg"/>
+        <res id="LicencePanel.licence" src="License.txt"/>
+        <res id="HTMLInfoPanel.info" src="HTMLInfoPanel.html"/>
+		<res id="HTMLInfoPanel.info_fra" src="HTMLInfoPanel.html_fra"/>
+		<res id="HTMLInfoPanel.info_deu" src="HTMLInfoPanel.html_deu"/>
+		<res id="HTMLInfoPanel.info_spa" src="HTMLInfoPanel.html_spa"/>
+		<res id="HTMLInfoPanel.info_ita" src="HTMLInfoPanel.html_ita"/>
+		<res id="HTMLInfoPanel.info_chn" src="HTMLInfoPanel.html_chn"/>
+		<res id="userInputSpec.xml" src="userInputSpec.xml" parse="yes" type="xml"/>
+		<!--<res id="userInputSpec.xml" src="userInputSpecGATE.xml" parse="yes" type="xml"/>-->
+		<res id="ProcessPanel.Spec.xml" src="ProcessPanel.Spec.xml"  parse="yes" type="xml"/>
+		<res id="Win_shortcutSpec.xml" src="win_shortcut_specification.xml" parse="yes" type="xml"/>
+		<res id="shortcutSpec.xml" src="unix_shortcut_specification.xml" parse="yes" type="xml"/>
+		<res id="SemassistProperties.xml" src="varfile/SemassistProperties.xml" parse="yes" type="xml"/>	
+		<res id="CSALBuild.xml" src="varfile/build.xml" parse="yes" type="xml"/>    
+		<res id="CSAL.sh" src="script/CSAL.sh" parse="yes" type="plain"/>
+		<res id="CSAL.bat" src="script/CSAL.bat" parse="yes" type="plain"/>
+		<res id="ANTpath.sh" src="script/ANTpath.sh" parse="yes" type="plain"/>
+		<res id="ANTpath.bat" src="script/ANTpath.sh" parse="yes" type="plain"/>
+		<res id="FirefoxInstaller.sh" src="script/FirefoxInstaller.sh" parse="yes" type="plain"/>
+		<res id="FirefoxInstaller.bat" src="script/FirefoxInstaller.bat" parse="yes" type="plain"/>
+		<res id="ThunderbirdInstaller.sh" src="script/ThunderbirdInstaller.sh" parse="yes" type="plain"/>
+		<res id="ThunderbirdInstaller.bat" src="script/ThunderbirdInstaller.bat" parse="yes" type="plain"/>
+		<res id="RunServer.sh" src="script/RunServer.sh" parse="yes" type="plain"/>
+		<res id="RunServer.bat" src="script/RunServer.bat" parse="yes" type="plain"/>
+    </resources>
+
+    <!-- 
+        The panels section.
+        We indicate here which panels we want to use. The order will be respected.
+    -->
+    <panels>
+        <panel classname="HelloPanel"/>
+        <panel classname="HTMLInfoPanel"/>
+        <panel classname="LicencePanel"/>     
+        <panel classname="TargetPanel"/>
+        <panel classname="TreePacksPanel"/>
+		<panel classname="JDKPathPanel"/>
+        <panel classname="UserInputPanel" id="UserInputPanelGATE"/> 
+		<panel classname="UserInputPanel" id="UserInputPanelCSAL"/>
+        <panel classname="UserInputPanel" id="UserInputPanelOpenOffice"/>
+		<panel classname="UserInputPanel" id="UserInputPanelEcplise"/>	
+		<panel classname="SummaryPanel"/>
+        <panel classname="InstallPanel"/>
+		<panel classname="ProcessPanel"/>
+		<panel classname="ShortcutPanel"/>	
+        <panel classname="FinishPanel"/>
+    </panels>
+
+    <!-- Variables -->
+    <variables>
+		<variable name="InstallerFrame.logfilePath" value="$INSTALL_PATH/install.log" />
+		<variable name="desktopshortcutcheckboxenabled" value="true" />
+		<variable name="JDKPathPanel.minVersion" value="1.5.1" />
+		<variable name="JDKPathPanel.maxVersion" value="1.6.99" />
+		<variable name="JDKPathPanel.skipIfValid" value="yes" />
+    </variables>
+
+    <!-- 
+        The packs section.
+        We specify here our packs.
+    -->
+    <packs>
+      	<pack name="Core" required="yes"> 
+            <description>Core Resources</description> 
+            <fileset dir="/home/teamA/workspace/SFCode/Resources" targetdir="$INSTALL_PATH/Resources"/>
+            <file src="License.txt" targetdir="$INSTALL_PATH"/>
+			<file src="/home/teamA/workspace/SFCode/LocalProperties.xml" targetdir="$INSTALL_PATH" override="true"/>
+			<fileset dir="/home/teamA/workspace/SFCode/Lib" targetdir="$INSTALL_PATH/Lib"/>
+            <file src="varfile/SemassistProperties.xml" targetdir="$INSTALL_PATH" override="true"/>
+            <parsable targetfile="$INSTALL_PATH/SemassistProperties.xml"/>    
+        </pack>  
+       
+		<pack name="CSAL"  parent="Core" required="yes">
+            <description>The Client Abstraction Layer (CSAL)</description>
+            <fileset dir="/home/teamA/workspace/SFCode/CSAL" targetdir="$INSTALL_PATH/CSAL"/>
+			<file src="varfile/build.xml" targetdir="$INSTALL_PATH/CSAL" override="true"/>
+            <parsable targetfile="$INSTALL_PATH/CSAL/build.xml"/>
+			<!-- UNIX scripts --> 
+            <file src="script/CSAL.sh" targetdir="$INSTALL_PATH/script">
+				<os family="unix"/>
+			</file>
+            <parsable targetfile="$INSTALL_PATH/script/CSAL.sh">
+				<os family="unix"/>
+			</parsable>
+			<executable targetfile="$INSTALL_PATH/script/CSAL.sh" stage="never" failure="abort">
+				<os family="unix"/>
+            </executable>
+			<!-- Windows scripts -->
+            <file src="script/CSAL.bat" targetdir="$INSTALL_PATH\script">
+				<os family="windows"/>
+			</file>
+            <parsable targetfile="$INSTALL_PATH\script\CSAL.bat">
+				<os family="windows"/>
+			</parsable>
+			<executable targetfile="$INSTALL_PATH\script\CSAL.bat" stage="never" failure="abort">
+				<os family="windows"/>
+			</executable> 
+			<depends packname = "JAXWS"/>
+        </pack>   
+      
+        <pack name="JDK" id="JDKPack" parent="Core" required="yes">
+            <description>Java Developer Kit</description>
+		</pack>
+        
+        <pack name="ANT" parent="ServerPack" required="no">
+           	<description>Build utility</description>
+           	<fileset dir="/usr/local/ant" targetdir="$INSTALL_PATH/ant"/>
+			<!-- UNIX scripts -->        		
+           	<file src="script/ANTpath.sh" targetdir="$INSTALL_PATH/script">
+				<os family="unix"/>
+			</file>
+           	<parsable targetfile="$INSTALL_PATH/script/ANTpath.sh">
+				<os family="unix"/>
+			</parsable>  
+           	<executable targetfile="$INSTALL_PATH/script/ANTpath.sh" stage="never" failure="abort">
+    			<os family="unix"/>
+			</executable>
+			<!-- Windows scripts -->
+			<file src="script/ANTpath.bat" targetdir="$INSTALL_PATH\script">
+				<os family="windows"/>
+			</file>
+           	<parsable targetfile="$INSTALL_PATH\script\ANTpath.bat">
+				<os family="windows"/>
+			</parsable>  
+			<executable targetfile="$INSTALL_PATH\script\ANTpath.bat" stage="never" failure="abort">
+    		   	<os family="windows"/>
+    		</executable>
+       	</pack>	
+
+        <pack name="GATE" parent="ServerPack" required="no">
+            <description>
+            General Architecture for Text Engineering (GATE)
+			Must be downloaded and installed in order to install the server on the local machine
+            Download from: http://gate.ac.uk/
+            </description>
+            <!-- <fileset dir="/usr/local/GATE-6.0-beta1" targetdir="$INSTALL_PATH/durmtools/GATE-6.0-beta1"/>   -->  
+        </pack>
+        
+        <pack name="Server" id="ServerPack" required="no">
+            <description>Server base files needed to run the server</description>
+            <fileset dir="/home/teamA/workspace/SFCode/Server" targetdir="$INSTALL_PATH/Server"/>
+			<!-- UNIX scripts -->   
+			<file src="script/RunServer.sh" targetdir="$INSTALL_PATH/script">
+				<os family="unix"/>
+			</file> 
+			<parsable targetfile="$INSTALL_PATH/script/RunServer.sh">
+				<os family="unix"/>
+			</parsable> 
+            <executable targetfile="$INSTALL_PATH/script/RunServer.sh" stage="never" failure="abort" keep="true">
+				<os family="unix"/>
+			</executable>		
+			<!-- Windows scripts -->
+			<file src="script/RunServer.bat" targetdir="$INSTALL_PATH\script">
+				<os family="windows"/>
+			</file> 
+			<parsable targetfile="$INSTALL_PATH\script\RunServer.bat">
+				<os family="windows"/>
+			</parsable> 
+			<executable targetfile="$INSTALL_PATH\script\RunServer.bat" stage="never" failure="abort"  keep="true">
+				<os family="windows"/>
+			</executable>		  
+			<depends packname = "GATE"/>
+        </pack>			
+        
+        <pack name="JAXWS" parent="CSAL" required="no">
+            <description>Java API for XML Web Services</description>
+            <fileset dir="/usr/local/jaxws-ri" targetdir="$INSTALL_PATH/durmtools/jaxws-ri"/>
+        </pack>
+      
+        <pack name="Clients" required="no">
+            <description>NLP Clients</description>
+        </pack>    
+            
+        <pack name="Command Line" parent="Clients" required="no">
+            <description>Command Line base Files</description>
+            <fileset dir="/home/teamA/workspace/SFCode/Clients/CommandLine" targetdir="$INSTALL_PATH/Clients/CommandLine"/>
+        </pack>
+        
+        <pack name="Mozilla" parent="Clients" required="no">
+            <description>Mozilla Plugins</description>
+        </pack> 
+        
+        <pack name="Firefox Plugin" parent="Mozilla" required="no">
+            <description>Firefox Plugin base files</description>
+			<fileset dir="/home/teamA/workspace/Mozilla/FirefoxThunderbird/SemanticAssistants@ca.ca" targetdir="$INSTALL_PATH/Clients/Mozilla/Firefox/SemanticAssistants@ca.ca"/>
+			<!-- UNIX scripts --> 
+            <file src="script/FirefoxInstaller.sh" targetdir="$INSTALL_PATH/script">
+				<os family="unix"/>
+			</file>
+			<parsable targetfile="$INSTALL_PATH/script/FirefoxInstaller.sh">
+				<os family="unix"/>
+			</parsable>   
+			<executable targetfile="$INSTALL_PATH/script/FirefoxInstaller.sh" stage="never" failure="abort" keep="true">
+				<os family="unix"/>
+			</executable>
+			<!-- Windows scripts -->
+			<file src="script/FirefoxInstaller.bat" targetdir="$INSTALL_PATH\script">
+				<os family="windows"/>
+			</file>
+			<parsable targetfile="$INSTALL_PATH\script\FirefoxInstaller.bat">
+				<os family="windows"/>
+			</parsable>   
+			<executable targetfile="$INSTALL_PATH\script\FirefoxInstaller.bat" stage="never" failure="abort" keep="true">
+				<os family="windows"/>
+			</executable>
+        </pack> 
+        
+        <pack name="Thunderbird Plugin" parent="Mozilla" required="no">
+            <description>Thunderbird Plugin base files</description>
+			<fileset dir="/home/teamA/workspace/Mozilla/FirefoxThunderbird/SemanticAssistants@ca.ca" targetdir="$INSTALL_PATH/Clients/Mozilla/Thunderbird/SemanticAssistants@ca.ca"/>
+			<!-- UNIX scripts --> 
+            <file src="script/ThunderbirdInstaller.sh" targetdir="$INSTALL_PATH/script">
+				<os family="unix"/>
+			</file>
+			<parsable targetfile="$INSTALL_PATH/script/ThunderbirdInstaller.sh">
+				<os family="unix"/>
+			</parsable>   
+            <executable targetfile="$INSTALL_PATH/script/ThunderbirdInstaller.sh" stage="never" failure="abort" keep="true">
+				<os family="unix"/>
+            </executable>
+            <!-- Windows scripts -->
+			<file src="script/ThunderbirdInstaller.bat" targetdir="$INSTALL_PATH\script">
+				<os family="windows"/>
+			</file>
+			<parsable targetfile="$INSTALL_PATH\script\ThunderbirdInstaller.bat">
+				<os family="windows"/>
+			</parsable>   
+			<executable targetfile="$INSTALL_PATH\script\ThunderbirdInstaller.bat" stage="never" failure="abort" keep="true">
+				<os family="windows"/>
+			</executable>
+        </pack>   
+           
+        <pack name="OpenOffice Plugin" parent="Clients" required="no">
+            <description>OpenOffice Plugin base files</description>
+            <fileset dir="/home/teamA/workspace/SFCode/Clients/OpenOffice" targetdir="$INSTALL_PATH/Clients/OpenOffice"/>
+        </pack>
+
+        <pack name="Eclipse Plugin" parent="Clients" required="no">
+            <description>Eclipse Plugin base files</description>
+            <fileset dir="/home/teamA/workspace/SFCode/Clients/EclipsePlugin" targetdir="$INSTALL_PATH/Clients/EclipsePlugin"/> 
+        </pack>
+         
+    	<pack name="Documentations" required="no">
+            <description>The documentation and user manual</description>
+			<fileset dir="/home/teamA/workspace/SFCode/Installer/Semantic Assistant/docs" targetdir="$INSTALL_PATH/docs"/>
+		</pack>		
+    </packs>
+</installation>

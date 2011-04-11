@@ -1,0 +1,21 @@
+<html>
+<head>
+<title> Léame </title>
+</head>
+<h4><img src="Logo"> Asistentes Semánticos </h4>
+<br> Esto instalará y pondrá en marcha <b> Asistentes Semánticos </b> en su sistema. </br>
+<br></br>
+<br> El proyecto Asistentes Semánticos pretende acercar el procesamiento de lenguaje natural (NLP)
+directamente a los usuarios finales mediante su integración con aplicaciones de escritorio comunes, como 
+procesadores de texto, clientes de correo electrónico o navegadores Web. Para facilitar esta integración, una
+arquitectura orientada a servicios se ha desarrollado que permite integrar las aplicaciones de escritori con los
+servicios PLN implementados con el framework GATE. </br>
+<br></br>
+<br> Para más información sobre la motivación general de diseño, y los antecedentes sobre el proyecto de Asistentes Semánticos,
+antes de efectuar la instalación, por favor lea la información en la página Web Asistentes Semánticos y las referencias contenidas
+(Gitzinger y Witte, 2008; Witte y Gitzinger, 2009). Este documento sólo
+describe la instalación y uso del sistema desarrollado. </br>
+<br></br>
+<br> Puede encontrar más información acerca de los Asistentes Semánticos en la página web del proyecto <a href="http://www.semanticsoftware.info/semantic-assistants-project/"> <a http://www.semanticsoftware.info/semantic-assistants-project/</a>.</br>
+</body>
+</html>
