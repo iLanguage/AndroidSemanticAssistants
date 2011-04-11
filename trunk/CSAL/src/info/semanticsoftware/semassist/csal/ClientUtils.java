@@ -23,24 +23,15 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package info.semanticsoftware.semassist.csal;
 
 import java.io.*;
-import java.net.URISyntaxException;
 import java.util.*;
 import java.text.DateFormat;
-
 import info.semanticsoftware.semassist.csal.result.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.w3c.dom.*;
-import org.xml.sax.*;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
+
 import javax.xml.parsers.*;
-//import javax.xml.transform.*;
-//import javax.xml.transform.dom.*;
-//import javax.xml.transform.stream.*;
 import info.semanticsoftware.semassist.server.*;
-import java.net.URI;
-import java.text.CharacterIterator;
-import java.text.StringCharacterIterator;
-import javax.xml.namespace.QName;
 
 public class ClientUtils
 {
@@ -64,7 +55,7 @@ public class ClientUtils
         }
         catch( Exception ex)
         {
-            //ex.printStackTrace();
+            ex.printStackTrace();
             
         }
         return strHost;
@@ -81,7 +72,7 @@ public class ClientUtils
         }
         catch( Exception ex )
         {
-            //ex.printStackTrace();
+            ex.printStackTrace();
         }
 
         return strPort;
@@ -316,12 +307,12 @@ public class ClientUtils
         {
 
             System.out.println( "------------- #text case!! " + nodeName );
-	    result = null;
+            result = null;
         }
         else
         {
             System.out.println( "------------- Unhandled case: " + nodeName );
-	    result = null;
+            result = null;
         }
 
         return result;
