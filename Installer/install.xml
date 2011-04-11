@@ -1,22 +1,39 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
 
-<!--     
-    To compile it :
-    - go in the bin directory where you installed IzPack
-    - call "compile ../sample/install.xml -b ../sample"
--->
+	<!--
+	   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+	   This file is part of the Semantic Assistants architecture.
+
+	   Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
+	   Document   : SemassistProperties.xml
+       Created on : April 11, 2010, 1:10 PM
+       Created by : Albert Trinh
+       
+	   The Semantic Assistants architecture is free software: you can
+	   redistribute and/or modify it under the terms of the GNU Affero General
+	   Public License as published by the Free Software Foundation, either
+	   version 3 of the License, or (at your option) any later version.
+	   
+	   This program is distributed in the hope that it will be useful,
+	   but WITHOUT ANY WARRANTY; without even the implied warranty of
+	   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+	   GNU Affero General Public License for more details.
+	   
+	   You should have received a copy of the GNU Affero General Public License
+	   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+	-->
 
 <installation version="1.0">
 
     <!-- 
         The info section.
-        The meaning of the tags should be natural ...
     -->
     <info>
         <appname>Semantic Assistants</appname>
         <appversion>1.0.0.0</appversion>
 		
-	<authors>
+		<authors>
             <author name="Dr. René Witte" email=""/>
         </authors>
 
@@ -24,7 +41,6 @@
         <javaversion>
         	1.5       	
         </javaversion>
-
 		
     </info>
 
@@ -42,17 +58,17 @@
 		<modifier key="headingBackgroundColor" value="0x00ffffff"/>
 		<modifier key="headingPanelCounter" value="text"/>
 		<modifier key="headingPanelCounterPos" value="inHeading"/>
-		<laf name="liquid">
+		<laf name="liquid">  <!-- Look and Feel in UNIX/Linux -->
 			<os family="unix" />
 		</laf>
-		<laf name="looks">
+		<laf name="looks"> <!-- Look and Feel in Windows -->
 			<os family="windows" />
 			<param name="variant" value="extwin" />
 		</laf>
     </guiprefs>
+    
     <!-- 
-        The locale section.
-        Asks here to include the English and French langpacks.
+        The locale section. Refer to documentation for more language
     -->
     <locale>
         <langpack iso3="eng"/>
@@ -65,7 +81,7 @@
     
     <!--
     	The native section.
-    	Import libraries from izpack or 3rd party.
+    	Import libraries from IzPack or 3rd party.
     -->  
    	<native type="izpack" name="ShellLink.dll">  <!-- Used for creating shortcuts -->
 		<os family="windows"/>
@@ -85,7 +101,6 @@
 		<res id="HTMLInfoPanel.info_ita" src="HTMLInfoPanel.html_ita"/>
 		<res id="HTMLInfoPanel.info_chn" src="HTMLInfoPanel.html_chn"/>
 		<res id="userInputSpec.xml" src="userInputSpec.xml" parse="yes" type="xml"/>
-		<!--<res id="userInputSpec.xml" src="userInputSpecGATE.xml" parse="yes" type="xml"/>-->
 		<res id="ProcessPanel.Spec.xml" src="ProcessPanel.Spec.xml"  parse="yes" type="xml"/>
 		<res id="Win_shortcutSpec.xml" src="win_shortcut_specification.xml" parse="yes" type="xml"/>
 		<res id="shortcutSpec.xml" src="unix_shortcut_specification.xml" parse="yes" type="xml"/>
@@ -139,19 +154,21 @@
         We specify here our packs.
     -->
     <packs>
+   	    <!--  Core files for the installtion -->
       	<pack name="Core" required="yes"> 
             <description>Core Resources</description> 
-            <fileset dir="/home/teamA/workspace/SFCode/Resources" targetdir="$INSTALL_PATH/Resources"/>
+            <fileset dir="../Resources" targetdir="$INSTALL_PATH/Resources"/>
             <file src="License.txt" targetdir="$INSTALL_PATH"/>
-			<file src="/home/teamA/workspace/SFCode/LocalProperties.xml" targetdir="$INSTALL_PATH" override="true"/>
-			<fileset dir="/home/teamA/workspace/SFCode/Lib" targetdir="$INSTALL_PATH/Lib"/>
+			<file src="../LocalProperties.xml" targetdir="$INSTALL_PATH" override="true"/>
+			<fileset dir="../Lib" targetdir="$INSTALL_PATH/Lib"/>
             <file src="varfile/SemassistProperties.xml" targetdir="$INSTALL_PATH" override="true"/>
             <parsable targetfile="$INSTALL_PATH/SemassistProperties.xml"/>    
         </pack>  
        
+        <!-- CSAL files -->
 		<pack name="CSAL"  parent="Core" required="yes">
             <description>The Client Abstraction Layer (CSAL)</description>
-            <fileset dir="/home/teamA/workspace/SFCode/CSAL" targetdir="$INSTALL_PATH/CSAL"/>
+            <fileset dir="../CSAL" targetdir="$INSTALL_PATH/CSAL"/>
 			<file src="varfile/build.xml" targetdir="$INSTALL_PATH/CSAL" override="true"/>
             <parsable targetfile="$INSTALL_PATH/CSAL/build.xml"/>
 			<!-- UNIX scripts --> 
@@ -177,10 +194,12 @@
 			<depends packname = "JAXWS"/>
         </pack>   
       
+        <!-- JDK empty pack -->
         <pack name="JDK" id="JDKPack" parent="Core" required="yes">
             <description>Java Developer Kit</description>
 		</pack>
         
+        <!-- ANT files -->
         <pack name="ANT" parent="ServerPack" required="no">
            	<description>Build utility</description>
            	<fileset dir="/usr/local/ant" targetdir="$INSTALL_PATH/ant"/>
@@ -206,6 +225,7 @@
     		</executable>
        	</pack>	
 
+		<!-- GATE empty pack -->
         <pack name="GATE" parent="ServerPack" required="no">
             <description>
             General Architecture for Text Engineering (GATE)
@@ -215,9 +235,10 @@
             <!-- <fileset dir="/usr/local/GATE-6.0-beta1" targetdir="$INSTALL_PATH/durmtools/GATE-6.0-beta1"/>   -->  
         </pack>
         
+        <!--  Server files -->
         <pack name="Server" id="ServerPack" required="no">
             <description>Server base files needed to run the server</description>
-            <fileset dir="/home/teamA/workspace/SFCode/Server" targetdir="$INSTALL_PATH/Server"/>
+            <fileset dir="../Server" targetdir="$INSTALL_PATH/Server"/>
 			<!-- UNIX scripts -->   
 			<file src="script/RunServer.sh" targetdir="$INSTALL_PATH/script">
 				<os family="unix"/>
@@ -241,27 +262,32 @@
 			<depends packname = "GATE"/>
         </pack>			
         
+        <!--  JAX-WS files -->
         <pack name="JAXWS" parent="CSAL" required="no">
             <description>Java API for XML Web Services</description>
             <fileset dir="/usr/local/jaxws-ri" targetdir="$INSTALL_PATH/durmtools/jaxws-ri"/>
         </pack>
       
+      	<!-- Parent node for Clients -->
         <pack name="Clients" required="no">
             <description>NLP Clients</description>
         </pack>    
             
+        <!-- Command line client files -->
         <pack name="Command Line" parent="Clients" required="no">
             <description>Command Line base Files</description>
-            <fileset dir="/home/teamA/workspace/SFCode/Clients/CommandLine" targetdir="$INSTALL_PATH/Clients/CommandLine"/>
+            <fileset dir="../CommandLine" targetdir="$INSTALL_PATH/Clients/CommandLine"/>
         </pack>
         
+        <!-- Parent node for Mozilla clients -->
         <pack name="Mozilla" parent="Clients" required="no">
             <description>Mozilla Plugins</description>
         </pack> 
         
+        <!--  Firefox plug-in with Mozilla as parent node -->
         <pack name="Firefox Plugin" parent="Mozilla" required="no">
             <description>Firefox Plugin base files</description>
-			<fileset dir="/home/teamA/workspace/Mozilla/FirefoxThunderbird/SemanticAssistants@ca.ca" targetdir="$INSTALL_PATH/Clients/Mozilla/Firefox/SemanticAssistants@ca.ca"/>
+			<fileset dir="../Mozilla/FirefoxThunderbird/SemanticAssistants@ca.ca" targetdir="$INSTALL_PATH/Clients/Mozilla/Firefox/SemanticAssistants@ca.ca"/>
 			<!-- UNIX scripts --> 
             <file src="script/FirefoxInstaller.sh" targetdir="$INSTALL_PATH/script">
 				<os family="unix"/>
@@ -284,9 +310,10 @@
 			</executable>
         </pack> 
         
+        <!--  Thunderbird plug-in with Mozilla as parent node -->
         <pack name="Thunderbird Plugin" parent="Mozilla" required="no">
             <description>Thunderbird Plugin base files</description>
-			<fileset dir="/home/teamA/workspace/Mozilla/FirefoxThunderbird/SemanticAssistants@ca.ca" targetdir="$INSTALL_PATH/Clients/Mozilla/Thunderbird/SemanticAssistants@ca.ca"/>
+			<fileset dir="../Mozilla/FirefoxThunderbird/SemanticAssistants@ca.ca" targetdir="$INSTALL_PATH/Clients/Mozilla/Thunderbird/SemanticAssistants@ca.ca"/>
 			<!-- UNIX scripts --> 
             <file src="script/ThunderbirdInstaller.sh" targetdir="$INSTALL_PATH/script">
 				<os family="unix"/>
@@ -309,19 +336,22 @@
 			</executable>
         </pack>   
            
+        <!-- OpenOffice plug-in files -->
         <pack name="OpenOffice Plugin" parent="Clients" required="no">
             <description>OpenOffice Plugin base files</description>
-            <fileset dir="/home/teamA/workspace/SFCode/Clients/OpenOffice" targetdir="$INSTALL_PATH/Clients/OpenOffice"/>
+            <fileset dir="../Clients/OpenOffice" targetdir="$INSTALL_PATH/Clients/OpenOffice"/>
         </pack>
 
+		<!-- Eclipse plug-in files -->
         <pack name="Eclipse Plugin" parent="Clients" required="no">
             <description>Eclipse Plugin base files</description>
-            <fileset dir="/home/teamA/workspace/SFCode/Clients/EclipsePlugin" targetdir="$INSTALL_PATH/Clients/EclipsePlugin"/> 
+            <fileset dir="../Clients/EclipsePlugin" targetdir="$INSTALL_PATH/Clients/EclipsePlugin"/> 
         </pack>
          
+        <!--  Semantic Assistants Documentation and Installer Documentation -->
     	<pack name="Documentations" required="no">
             <description>The documentation and user manual</description>
-			<fileset dir="/home/teamA/workspace/SFCode/Installer/Semantic Assistant/docs" targetdir="$INSTALL_PATH/docs"/>
+			<fileset dir="docs/" targetdir="$INSTALL_PATH/docs"/>
 		</pack>		
     </packs>
 </installation>
