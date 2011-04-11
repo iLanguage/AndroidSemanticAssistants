@@ -135,7 +135,7 @@
     </target>
 
 
-<!-- Run the web service -->
+    <!-- Run the web service -->
     <target name="run" depends="compile,dist"  description="run the application">
         <java classname="info.semanticsoftware.semassist.server.Bootstrap" fork="true" maxmemory="${runtime.maxmem}" >
             <jvmarg value="-Xms${runtime.heap.initial}"/>
@@ -161,13 +161,21 @@
             </classpath>
         </java>
     </target>
+    
+    <!-- Generates Javadoc output -->
+    <target name="javadoc">
+        <javadoc sourcepath="${src.home}" destdir="${javadoc.home}/Server" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: Server">
+        <doctitle><![CDATA[<h1>Semantic Assistants: Server</h1>]]></doctitle>
+        <bottom><![CDATA[<i>Copyright © 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
+          </javadoc>
+    </target>
   
-	  <!-- Clear all build output -->
-	  <target name="clean">
-	    <delete includeemptydirs="true" quiet="true">
-	      <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
-	    </delete>
-	  </target>
+    <!-- Clear all build output -->
+    <target name="clean">
+      <delete includeemptydirs="true" quiet="true">
+	<fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
+      </delete>
+    </target>
 
 </project>
 
