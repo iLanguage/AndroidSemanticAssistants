@@ -27,13 +27,11 @@ import java.util.*;
 import java.net.*;
 import javax.swing.*;
 import java.awt.event.*;
-
 import info.semanticsoftware.semassist.server.*;
-import info.semanticsoftware.semassist.csal.*;
 
 /**
  *
- * @author  tom
+ * @author  Tom Gitzinger
  */
 public class RTParamFrame extends JFrame
         implements ActionListener
