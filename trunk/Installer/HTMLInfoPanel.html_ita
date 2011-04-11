@@ -1,0 +1,22 @@
+<html>
+<head>
+<title> Leggimi </title>
+</head>
+<body>
+<h4> <img src="Logo"> Semantic Assistenti </h4>
+<br> Verrà installato e set-up <b> Semantic Assistenti </b> sul proprio sistema. </br>
+<br> </br>
+<br> Il progetto Semantic Assistenti mira a portare l'elaborazione del linguaggio naturale (ELN) tecniche
+direttamente agli utenti finali attraverso l'integrazione con le applicazioni desktop comuni, come la parola
+processori, client di posta elettronica o browser web. Per facilitare questa integrazione, una service-oriented
+architettura è stata sviluppata che permette di integrare (desktop) con i clienti
+Servizi di ELN attuate nel quadro GATE </br>
+<br> </br>
+<br> Per il generale motivazione, design, e lo sfondo del progetto Semantic Assistenti,
+Si prega di leggere le informazioni sul sito Assistenti Semantic Web e le informazioni riportate
+prima (Gitzinger e Witte, 2008; Witte e Gitzinger, 2009). Il presente documento solo
+descrive l'installazione e l'utilizzo del sistema sviluppato.</br>
+<br> </br>
+<br> È possibile trovare maggiori informazioni su Assistenti Semantic sul sito del progetto a<a href="http://www.semanticsoftware.info/semantic-assistants-project/">http://www.semanticsoftware.info/semantic-assistants-project/</a>.</br>
+</body>
+</html>

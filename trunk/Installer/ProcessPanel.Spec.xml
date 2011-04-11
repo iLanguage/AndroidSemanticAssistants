@@ -1,0 +1,75 @@
+<processing>
+  <logfiledir>$INSTALL_PATH</logfiledir>
+  <onFail previous="true" next="false" />
+  <onSuccess previous="true" next="true"/>
+  
+	<!-- Executing UNIX Scripts -->
+  <job name="Adding ANT to the $PATH env. variable">
+    <os family="unix"/>
+    <executeForPack name="ANT"/>
+    <executefile name="$INSTALL_PATH/script/ANTpath.sh">
+      <arg>$INSTALL_PATH</arg>
+    </executefile>
+  </job>
+
+  <job name="Create CSAL.jar">
+    <os family="unix"/>
+    <executeForPack name="Server"/>
+    <executefile name="$INSTALL_PATH/script/CSAL.sh">
+      <arg>$INSTALL_PATH</arg>
+    </executefile>
+  </job>
+
+  <job name="Packaging Firefox XPI with CSAL.jar">
+    <os family="unix"/>
+    <executeForPack name="Firefox Plugin"/>
+    <executefile name="$INSTALL_PATH/script/FirefoxInstaller.sh">
+      <arg>$INSTALL_PATH</arg>
+    </executefile>
+  </job>
+
+  <job name="Packaging Thunderbird XPI with CSAL.jar">
+    <os family="unix"/>
+    <executeForPack name="Thunderbird Plugin"/>
+    <executefile name="$INSTALL_PATH/script/ThunderbirdInstaller.sh">
+      <arg>$INSTALL_PATH</arg>
+    </executefile>
+  </job> 
+
+	<!-- Executing Windows Scripts --> 
+
+  <job name="Adding ANT to the $PATH env. variable">
+    <os family="windows"/>
+    <executeForPack name="ANT"/>
+    <executefile name="$INSTALL_PATH\script\ANTpath.bat">
+      <arg>$INSTALL_PATH</arg>
+    </executefile>
+  </job>
+
+  <job name="Create CSAL.jar">
+    <os family="windows" />
+    <executeForPack name="CSAL"/>
+    <executefile name="$INSTALL_PATH\script\CSAL.bat">
+      <arg>$INSTALL_PATH</arg>
+    </executefile>
+    
+  </job>
+
+  <job name="Packaging Firefox XPI with CSAL.jar">
+    <os family="windows" />
+    <executeForPack name="Firefox"/>
+    <executefile name="$INSTALL_PATH\script\FirefoxInstaller.bat">
+      <arg>$INSTALL_PATH</arg>
+    </executefile>
+  </job>
+
+  <job name="Packaging Thunderbird XPI with CSAL.jar">
+    <os family="unix" />
+    <executeForPack name="Thunderbird"/>
+    <executefile name="$INSTALL_PATH\script\ThunderbirdInstaller.bat">
+      <arg>$INSTALL_PATH</arg>
+    </executefile>
+  </job> 
+
+
+</processing>

@@ -1,0 +1,21 @@
+<html>
+<head>
+<title> Lisez-moi </title>
+</head>
+<body>
+<h4> <img src="Logo"> Semantic Assistants </h4>
+<br> Cela permet d'installer et de mettre en place <b> Semantic Assistants </b> sur votre système. </br>
+<br> </br>
+<br> Le projet Semantic Assistants vise à apporter le traitement du langage naturel (TLN) techniques
+directement aux utilisateurs finaux en les intégrant aux applications courantes, tels que traitement de texte,
+, les applications de messagerie et courriers ou les navigateurs pour le Web. Pour faciliter cette intégration, un service axé sur
+l'architecture a été développé qui permet d'intégrer les applications avec les services offer par la TLN œuvrant dans le cadre de GATE </br>
+<br> </br>
+<br> Pour la motivation, la conception générale et le contexte du projet Semantic assistants,
+s'il vous plaît lire les informations sur le site de Web Sémantique et assistants et de lire les références contenues en
+premier (Gitzinger et Witte, 2008; Witte et Gitzinger, 2009). Ce document ne
+décrit l'installation et l'utilisation du système actuel seulement. </br>
+<br> </br>
+<br> Vous pouvez en savoir plus sur les assistants sémantique sur le site du projet <a href="http://www.semanticsoftware.info/semantic-assistants-project/"> http://www.semanticsoftware.info/semantic-assistants-project/</a></br>
+</body>
+</html>

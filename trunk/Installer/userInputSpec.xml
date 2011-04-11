@@ -1,0 +1,81 @@
+<userInput> 
+	<!-- Gate -->
+	<panel id="UserInputPanelGATE" order="0">          
+        <createForPack name="GATE"/>
+		<field type="title" txt="GATE Location" bold="true" size="1" />
+        <field type="divider" align="top"/>
+        <field type="staticText" align="left" txt="GATE"/>
+        <field type="dir" align="left" variable="gate.location.dir">
+			<!-- Testing Purpose --> 
+			<!-- <spec txt="Location to import:" size="25" set="/usr/local/GATE-6.0-beta1/"/>  -->
+      	   	<spec txt="Location to import:" size="25" set=""/> 
+		</field>
+        <field type="space"/>
+        <field type="staticText" align="left" txt="Download at: http://gate.ac.uk/download/"/>
+        <field type="space"/> 
+		<str id="UserInputPanelGATE.dir.nodirectory.message"   txt="You must select a valid directory"/>
+		<str id="UserInputPanelGATE.dir.nodirectory.caption"   txt="No Directory Selected"/>
+		<str id="UserInputPanelGATE.dir.notdirectory.message"   txt="The directory you have chosen either does not exist or is not valid."/>
+		<str id="UserInputPanelGATE.dir.notdirectory.caption"   txt="Invalid Directory"/>		
+	</panel>
+	<!-- CSAL server location -->
+    <panel id="UserInputPanelCSAL" order="1"> 
+    	<createForPack name="CSAL"/>
+    	<field type="title" txt="CSAL's Server Location" bold="true" size="1" />
+        <field type="divider" align="top"/>
+        <field type="staticText" align="left" txt="CSAL"/>
+		<field type="text" align="left" variable="CSAL.Server.Loc" value="$HOST_NAME">
+			<spec txt="Server Location:" size="25" set="$HOST_NAME"/>
+        </field>
+        <field type="space"/>
+        <field type="staticText" align="left" txt="Local Server is default, change the address to a external server if the server is not present"/>
+		<field type="staticText" align="left" txt="Server name can be replaced by IP address"/>
+		<field type="space"/> 
+		<field type="text" align="left" variable="CSAL.Port.No" value="8879">
+			<spec txt="Server Port Number:" size="10" set="8879"/>
+        </field>
+        <field type="space"/>
+		<field type="staticText" align="left" txt="Please Visit: http://www.semanticsoftware.info/semantic-assistants-project/ for the NLP server IP address"/>
+        <field type="space"/>    
+    </panel>  
+
+	<!-- Open Office location -->
+    <panel id="UserInputPanelOpenOffice" order="2"> 
+    	<createForPack name="OpenOffice Plugin"/>
+    	<field type="title" txt="Open Office Location" bold="true" size="1" />
+        <field type="divider" align="top"/>
+        <field type="staticText" align="left" txt="Open Office"/>
+        <field type="dir" align="left" variable="openOffice.location.dir">
+			<!-- Testing Purpose --> 
+			<!-- <spec txt="Open Office Location:" size="25" set="/usr/lib/openoffice.org3/program"/> -->
+			<spec txt="Open Office Location:" size="25" set="/usr/lib/openoffice.org3/program"/>
+		</field>
+		<field type="space"/>
+ 		<field type="staticText" align="left" txt="Download at: http://download.openoffice.org/"/>
+        <field type="space"/>    
+        <str id="UserInputPanelOpenOffice.dir.nodirectory.message"   txt="You must select a valid directory"/>
+		<str id="UserInputPanelOpenOffice.dir.nodirectory.caption"   txt="No Directory Selected"/>
+		<str id="UserInputPanelOpenOffice.dir.notdirectory.message"   txt="The directory you have chosen either does not exist or is not valid."/>
+		<str id="UserInputPanelOpenOffice.dir.notdirectory.caption"   txt="Invalid Directory"/>  
+    </panel>  
+
+	<!-- Eclipse Location -->
+    <panel id="UserInputPanelEclipse" order="3">
+    	<createForPack name="Eclipse Plugin"/>
+    	<field type="title" txt="Eclipse Location" bold="true" size="1" />
+        <field type="divider" align="top"/>
+        <field type="staticText" align="left" txt="Eclipse"/>
+        <field type="dir" align="left" variable="eclipse.location.dir">
+			<!-- Testing Purpose --> 
+			<!--<spec txt="Open Office Location:" size="25" set="/home/teamA/Desktop/eclipse/plugins"/> -->
+			<spec txt="Eclipse Location:" size="25"/>
+		</field>
+		<field type="space"/>
+ 		<field type="staticText" align="left" txt="Download at: http://www.eclipse.org/downloads/"/>
+        <field type="space"/>   
+        <str id="UserInputPanelEclipse.dir.nodirectory.message"   txt="You must select a valid directory"/>
+		<str id="UserInputPanelEclipse.dir.nodirectory.caption"   txt="No Directory Selected"/>
+		<str id="UserInputPanelEclipse.dir.notdirectory.message"   txt="The directory you have chosen either does not exist or is not valid."/>
+		<str id="UserInputPanelEclipse.dir.notdirectory.caption"   txt="Invalid Directory"/>  -->
+    </panel>  
+</userInput>
