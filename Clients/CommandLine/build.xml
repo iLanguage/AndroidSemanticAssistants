@@ -68,6 +68,14 @@
             </classpath>
         </java>
     </target>
+    
+    <!-- Generates Javadoc output -->
+    <target name="javadoc">
+        <javadoc sourcepath="${src.home}" destdir="${javadoc.home}/CommandLine" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: Command Line Client">
+        <doctitle><![CDATA[<h1>Semantic Assistants: Command Line Client</h1>]]></doctitle>
+        <bottom><![CDATA[<i>Copyright © 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
+          </javadoc>
+    </target>
 
     <!-- Clear all build output -->
     <target name="clean">

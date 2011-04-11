@@ -93,7 +93,7 @@
     <!-- Generates Javadoc output -->
     <target name="javadoc" depends="properties">
         <mkdir dir="${docs.home}"/>
-        <javadoc sourcepath="${src.home}" destdir="${docs.home}" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: Eclipse Plug-in">
+        <javadoc sourcepath="${src.home}" destdir="${javadoc.home}/Eclipse" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: Eclipse Plug-in">
         <doctitle><![CDATA[<h1>Semantic Assistants: Eclipse Plug-in</h1>]]></doctitle>
         <bottom><![CDATA[<i>Copyright © 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
           </javadoc>
