@@ -4,8 +4,7 @@
     This file is part of the Semantic Assistants architecture.
 
     Copyright (C) 2009 Semantic Software Lab, http://www.semanticsoftware.info
-        Nikolaos Papadakis
-        Tom Gitzinger
+
 
     The Semantic Assistants architecture is free software: you can
     redistribute and/or modify it under the terms of the GNU Affero General
@@ -23,25 +22,30 @@
 package info.semanticsoftware.semassist.csal.result;
 
 import java.util.*;
-//import java.net.*;
+
+/**
+  Defines a result entity retrieved from parsing the server XML response.
+  @author Tom Gitzinger,Nikolaos Papadakis
+*/
 
 public class SemanticServiceResult
 {
-
+    /** Result types */
     public static final String ANNOTATION = "annotation";
     public static final String FILE = "outputFile";
     public static final String DOCUMENT = "outputDocument";
     public static final String CORPUS = "corpus";
     public static final String ANNOTATION_IN_WHOLE = "annotation in whole";
-    // Must be one of the above constants
+    
+    /** A result type. Must be one of the class constants */
     public String mResultType = "";
 
-    // Annotation case. Map document IDs to annotation instances
+    /** List of annotations that maps document IDs to annotation instances */
     public HashMap<String, AnnotationVector> mAnnotations = new HashMap<String, AnnotationVector>();
 
-    // File case
+    /** The URL of the retrieved result file */
     public String mFileUrl;
 
-    // Corpus case
+    /** Corpus case */
     public Vector<RetrievedDocument> mCorpus = new Vector<RetrievedDocument>();
 }

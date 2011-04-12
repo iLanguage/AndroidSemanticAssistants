@@ -4,8 +4,6 @@
     This file is part of the Semantic Assistants architecture.
 
     Copyright (C) 2009 Semantic Software Lab, http://www.semanticsoftware.info
-        Nikolaos Papadakis
-        Tom Gitzinger
 
     The Semantic Assistants architecture is free software: you can
     redistribute and/or modify it under the terms of the GNU Affero General
@@ -25,12 +23,26 @@ package  info.semanticsoftware.semassist.csal.result;
 
 import java.util.*;
 
+/**
+  Defines the structure of an annotation instance.
+  @author Tom Gitzinger, Nikolaos Papadakis
+*/
 public class Annotation
 {
+
+    // annotation type.
     public String mType = "";
+    
+    // annotation content
     public String mContent = "";
+    
+    // list of annotation features as <key,value> pairs
     public HashMap<String, String> mFeatures = new HashMap<String, String>();
+    
+    // annotation start offset
     public long mStart;
+    
+    //annotation end offset
     public long mEnd;  
      
 }
