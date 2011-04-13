@@ -202,7 +202,7 @@
         <!-- ANT files -->
         <pack name="ANT" parent="ServerPack" required="no">
            	<description>Build utility</description>
-           	<fileset dir="/usr/local/ant" targetdir="$INSTALL_PATH/ant"/>
+           	<fileset dir="../Lib" targetdir="$INSTALL_PATH/ant"/>
 			<!-- UNIX scripts -->        		
            	<file src="script/ANTpath.sh" targetdir="$INSTALL_PATH/script">
 				<os family="unix"/>
@@ -265,7 +265,7 @@
         <!--  JAX-WS files -->
         <pack name="JAXWS" parent="CSAL" required="no">
             <description>Java API for XML Web Services</description>
-            <fileset dir="/usr/local/jaxws-ri" targetdir="$INSTALL_PATH/durmtools/jaxws-ri"/>
+            <fileset dir="/usr/local/durmtools/jaxws-ri" targetdir="$INSTALL_PATH/durmtools/jaxws-ri"/>
         </pack>
       
       	<!-- Parent node for Clients -->
@@ -276,19 +276,20 @@
         <!-- Command line client files -->
         <pack name="Command Line" parent="Clients" required="no">
             <description>Command Line base Files</description>
-            <fileset dir="../CommandLine" targetdir="$INSTALL_PATH/Clients/CommandLine"/>
+            <fileset dir="../Clients/CommandLine" targetdir="$INSTALL_PATH/Clients/CommandLine"/>
         </pack>
         
-        <!-- Parent node for Mozilla clients -->
+<!--
+ 
         <pack name="Mozilla" parent="Clients" required="no">
             <description>Mozilla Plugins</description>
         </pack> 
         
-        <!--  Firefox plug-in with Mozilla as parent node -->
+
         <pack name="Firefox Plugin" parent="Mozilla" required="no">
             <description>Firefox Plugin base files</description>
 			<fileset dir="../Mozilla/FirefoxThunderbird/SemanticAssistants@ca.ca" targetdir="$INSTALL_PATH/Clients/Mozilla/Firefox/SemanticAssistants@ca.ca"/>
-			<!-- UNIX scripts --> 
+		
             <file src="script/FirefoxInstaller.sh" targetdir="$INSTALL_PATH/script">
 				<os family="unix"/>
 			</file>
@@ -298,7 +299,7 @@
 			<executable targetfile="$INSTALL_PATH/script/FirefoxInstaller.sh" stage="never" failure="abort" keep="true">
 				<os family="unix"/>
 			</executable>
-			<!-- Windows scripts -->
+		
 			<file src="script/FirefoxInstaller.bat" targetdir="$INSTALL_PATH\script">
 				<os family="windows"/>
 			</file>
@@ -310,11 +311,11 @@
 			</executable>
         </pack> 
         
-        <!--  Thunderbird plug-in with Mozilla as parent node -->
+
         <pack name="Thunderbird Plugin" parent="Mozilla" required="no">
             <description>Thunderbird Plugin base files</description>
 			<fileset dir="../Mozilla/FirefoxThunderbird/SemanticAssistants@ca.ca" targetdir="$INSTALL_PATH/Clients/Mozilla/Thunderbird/SemanticAssistants@ca.ca"/>
-			<!-- UNIX scripts --> 
+	
             <file src="script/ThunderbirdInstaller.sh" targetdir="$INSTALL_PATH/script">
 				<os family="unix"/>
 			</file>
@@ -324,7 +325,7 @@
             <executable targetfile="$INSTALL_PATH/script/ThunderbirdInstaller.sh" stage="never" failure="abort" keep="true">
 				<os family="unix"/>
             </executable>
-            <!-- Windows scripts -->
+     
 			<file src="script/ThunderbirdInstaller.bat" targetdir="$INSTALL_PATH\script">
 				<os family="windows"/>
 			</file>
@@ -335,6 +336,7 @@
 				<os family="windows"/>
 			</executable>
         </pack>   
+-->
            
         <!-- OpenOffice plug-in files -->
         <pack name="OpenOffice Plugin" parent="Clients" required="no">
