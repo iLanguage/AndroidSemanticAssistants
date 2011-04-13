@@ -26,18 +26,20 @@ import org.eclipse.ui.PlatformUI;
  *
  */
 public class ServerResponseHandler {
-	
+		static int annID = 0;
 		public static void createAnnotation(SemanticServiceResult current){
+			
+			int counter = 0;
+			/** List of annotations that maps document IDs to annotation instances */
 			HashMap<String, AnnotationVector> annotationsVector = current.mAnnotations;
 			Set<String> keys = annotationsVector.keySet();
-				for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); )
-		        {
+
+			for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); ){
 		            String docID = it2.next();
-		            
 		            AnnotationVector annotsVector = annotationsVector.get(docID);
 		            Vector<Annotation> annots = annotsVector.mAnnotationVector;
 		            for(int i=0; i < annots.size(); i++){
-		            	AnnotationInstance annotation = new AnnotationInstance("0", annots.get(i).mContent, annotsVector.mType, String.valueOf(annots.get(i).mStart), String.valueOf(annots.get(i).mEnd));
+		            	AnnotationInstance annotation = new AnnotationInstance(Integer.toString(annID), annots.get(i).mContent, annotsVector.mType, String.valueOf(annots.get(i).mStart), String.valueOf(annots.get(i).mEnd));
 		            	Set<String> featureNames = annots.get(i).mFeatures.keySet();
 		            	            	
 		            	for(Iterator<String> it3 = featureNames.iterator(); it3.hasNext();){
@@ -46,9 +48,11 @@ public class ServerResponseHandler {
 		            		annotation.addFeatureMap(name, value);
 		            	}
 		
-		            	EvaluationSession.getResources().get(Integer.parseInt(docID)).getAnnotations().add(annotation);
+		            	EvaluationSession.getResources().get(counter).getAnnotations().add(annotation);
+		            	annID++;
 		            }
-		        }
+		            counter++;
+		     }
 		}
 		
 		public static void createFile(String fileContent, String fileExt){
