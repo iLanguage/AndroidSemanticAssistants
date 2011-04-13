@@ -222,38 +222,31 @@ public class SemanticAssistantsView extends ViewPart {
 				Object obj = ((IStructuredSelection)selection).getFirstElement();
 				
 				String featuresLine =  ((Result)obj).getFeatures();
+				int lineNum = getLineNumber(featuresLine);
+				if(lineNum != -1){
+							Path ResourcePath = new Path(((Result)obj).getRelativePath());
+							ifile = FileSelectionHandler.workspace.getRoot().getFile(ResourcePath);
+							
+							if(!markerExists(ifile,Integer.parseInt(((Result)obj).getID()))){
+								addMarker(Integer.parseInt(((Result)obj).getID()) ,ifile, lineNum , ((Result)obj).getFeatures());
+							}
 
-				int index = featuresLine.indexOf("line");
-				if(index != -1){
-					featuresLine = featuresLine.substring(index+5);
-					//FIXME hard coded feature name
-					index = featuresLine.indexOf("|");
-						featuresLine = featuresLine.substring(0, index-1);
-						
-						Path ResourcePath = new Path(((Result)obj).getRelativePath());
-						
-						ifile = FileSelectionHandler.workspace.getRoot().getFile(ResourcePath);
-						
-						if(!markerExists(ifile,Integer.parseInt(((Result)obj).getID()))){
-							addMarker(Integer.parseInt(((Result)obj).getID()) ,ifile, Integer.parseInt(featuresLine), ((Result)obj).getFeatures());
-						}
-						
-						File fileToOpen = new File(((Result)obj).getFilePath());
-						 
-						if (fileToOpen.exists() && fileToOpen.isFile()) {
-						    IFileStore fileStore = EFS.getLocalFileSystem().getStore(fileToOpen.toURI());
-						 
-						    try {
-						        IDE.openEditorOnFileStore(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), fileStore);
-						        IDE.gotoMarker(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor(), marker);
-						    } catch ( PartInitException e ) {
-						        System.err.println(e.getMessage());
-						    }
-						} else {
-						  	System.err.println("File does not exist!");
-						}
-
+							File fileToOpen = new File(((Result)obj).getFilePath());
+							 
+							if (fileToOpen.exists() && fileToOpen.isFile()) {
+							    IFileStore fileStore = EFS.getLocalFileSystem().getStore(fileToOpen.toURI());
+							 
+							    try {
+							        IDE.openEditorOnFileStore(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage(), fileStore);
+							        IDE.gotoMarker(PlatformUI.getWorkbench().getActiveWorkbenchWindow().getActivePage().getActiveEditor(), marker);
+							    } catch ( PartInitException e ) {
+							        System.err.println(e.getMessage());
+							    }
+							} else {
+							  	System.err.println("File does not exist!");
+							}
 				}else{
+
 					File fileToOpen = new File(((Result)obj).getFilePath());
 					 
 					if (fileToOpen.exists() && fileToOpen.isFile()) {
@@ -317,7 +310,7 @@ public class SemanticAssistantsView extends ViewPart {
 	 * @param lineNumber The line number of which the annotation should attach itself
 	 * @param features The annotation features
 	 */
-	private void addMarker(int annotID, IFile file, int lineNumber, String features) {	
+	private void addMarker(int annotID, IFile file, int lineNumber, String features) {			
 		try {
 			marker = file.createMarker(MARKER_TYPE);
             if (lineNumber == -1) {
@@ -353,5 +346,38 @@ public class SemanticAssistantsView extends ViewPart {
 			System.out.println(e.getMessage());
 		}
 		return exists;
+	}
+	
+	private int getLineNumber(String featuresLine){
+		int lineNum;
+		
+		//FIXME hard coded feature name		
+		int index = featuresLine.indexOf("line");
+		
+		// if there is no "line" feature in the list
+		if(index == -1){
+			lineNum = -1 ;
+		}else{
+			// if the line feature has no value, i.e. "line=|"
+			featuresLine = featuresLine.substring(index+5);
+			// we know that features are separated by pipe characters
+			index = featuresLine.indexOf("|");
+			// this should bring back just the number
+			featuresLine = featuresLine.substring(0, index-1);
+				
+			// FIXME Nasty hack for the case of "line=|"
+			if(featuresLine.length() == 0){
+				lineNum = -1;
+			}else{
+				try{
+					lineNum = Integer.parseInt(featuresLine);
+				}catch(NumberFormatException e){
+					e.printStackTrace();
+					lineNum = -1;
+				}
+			}
+		}
+		
+		return lineNum;
 	}
 }
