@@ -285,7 +285,7 @@ public class ServiceInvocationJob extends Job{
               while( it.hasNext() )
               {
                   GateRuntimeParameter p = it.next();
-                  //FIX buggy, returns null
+                  //FIXME buggy, returns null
                   System.out.println( "------   Parameter: " + p.getParamName() + " = " + p.getStringValue());
               }
 
@@ -334,14 +334,16 @@ public class ServiceInvocationJob extends Job{
 	 private void handleResponse(String serviceResponse){
 		  String documentString="";
 		  boolean isDocument = false;
-		  // returns result is sorted by type
+		  // returns result is sorted by annotation type
 	      Vector<SemanticServiceResult> results = ClientUtils.getServiceResults( serviceResponse );
-	          if( results == null ) {
-	                System.err.println( "No results retrieved in response message" );
+	       
+	      if( results == null ) {
+	                System.err.println( "No results retrieved in the response message." );
+		            SemanticAssistantsStatusViewModel.addLog("No results retrieved in the response message.");
 	                return;
-		      }
-
-	          for( Iterator<SemanticServiceResult> it = results.iterator(); it.hasNext();){
+		  }
+	      
+	      for( Iterator<SemanticServiceResult> it = results.iterator(); it.hasNext();){
 	                SemanticServiceResult current = it.next();
 	                if(current.mResultType.equals(SemanticServiceResult.FILE)){
 	                	String fileContent = broker.getResultFile(current.mFileUrl);
@@ -361,10 +363,11 @@ public class ServiceInvocationJob extends Job{
 	                	documentString += current.mFileUrl + System.getProperty("line.separator");
 	                	isDocument = true;
 	                }
-	            }
+	      }
 	            
-	          	if(isDocument){
+	      // FIXME Dirty hack!
+	      if(isDocument){
 	            	ServerResponseHandler.createDocument(documentString);
-	            }
+	      }
 	  }
 }

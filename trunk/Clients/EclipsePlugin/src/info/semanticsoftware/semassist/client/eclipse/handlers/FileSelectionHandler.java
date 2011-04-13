@@ -89,7 +89,7 @@ public class FileSelectionHandler extends AbstractHandler{
                 if(src.getType() != IResource.FILE ) continue;
    
                 //add the file to the session resources list
-                EvaluationSession.getResources().add(new Resource(((IFile) src)));
+                EvaluationSession.getResources().add(new Resource((IFile) src));
             }
     		
            if(EvaluationSession.getResources().size() == 0){
@@ -136,7 +136,7 @@ public class FileSelectionHandler extends AbstractHandler{
 		 }
 	}
 	
-	private void showError(String errorMessage) {
+	public static void showError(String errorMessage) {
 		MessageDialog.openInformation(window.getShell(),"Semantic Assistants",errorMessage);
 	}
 }
