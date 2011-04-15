@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- selected-->
+    <item android:drawable="@drawable/wrench"
+          android:state_selected="true" />
+    <!-- not selected-->
+    <item android:drawable="@drawable/wrench_orange" />
+</selector>
