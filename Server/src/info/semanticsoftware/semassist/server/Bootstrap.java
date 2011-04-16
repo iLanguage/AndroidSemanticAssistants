@@ -35,6 +35,8 @@ public class Bootstrap{
 
     /**
      * The main method that starts the web service
+     * @param args main method arguments
+     * @throws Exception when a broker cannot be instantiated
      * */
 	public static void main( String[] args ) throws Exception{
     	
