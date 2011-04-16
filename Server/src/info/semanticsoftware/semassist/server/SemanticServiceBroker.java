@@ -32,18 +32,15 @@ import info.semanticsoftware.semassist.server.util.UserContext;
 
 import java.io.*;
 import java.util.*;
-//import javax.xml.ws.Endpoint;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jws.*;
 import java.net.*;
 
-
 import javax.jws.soap.SOAPBinding;
 
 import edu.stanford.smi.protegex.owl.jena.*;
-
 
 import edu.stanford.smi.protegex.owl.inference.reasoner.ProtegeReasoner;
 
@@ -58,14 +55,9 @@ import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.ResultSet;
 import com.hp.hpl.jena.query.QuerySolution;
 
-
-
-
 import info.semanticsoftware.semassist.server.output.OutputBuilder;
 import info.semanticsoftware.semassist.server.output.XMLOutputBuilder;
 import info.semanticsoftware.semassist.server.util.*;
-//import info.semanticsoftware.semassist.server.output.*;
-
 
 import gate.*;
 import gate.creole.*;
@@ -73,6 +65,11 @@ import gate.creole.*;
 //import gate.util.*;
 import gate.gui.MainFrame;
 
+/**
+ * This class implements the Semantic Assistants web service
+ * @author Tom Gitzinger
+ * @author Nikolaos Papadakis
+ * */
 @WebService()
 @SOAPBinding( style = SOAPBinding.Style.RPC )
 public class SemanticServiceBroker
@@ -80,12 +77,14 @@ public class SemanticServiceBroker
 
     // Some constants related to GATE
     private static boolean mGateInited = false;
-    // private HashMap<String, String> serviceToDirectory = new HashMap<String, String>();
+    // private HashMap<String, String> serviceToDirectory = new HashMap<String, String>();9
     private HashMap<String, ServiceInfo> mAvailableServices = new HashMap<String, ServiceInfo>();
+    
     /**
-	 * @return the mAvailableServices
+	 * Returns the list of available services
+	 * @return list of available services
 	 */
-	protected HashMap<String, ServiceInfo> getmAvailableServices() {
+    protected HashMap<String, ServiceInfo> getmAvailableServices() {
 		return mAvailableServices;
 	}
 
@@ -96,6 +95,10 @@ public class SemanticServiceBroker
     // A mReasoner instance
     private ProtegeReasoner mReasoner = null;
     
+    /**
+     * The web service constructor. 
+     * Reads the metadata of available services and prepares the environment.
+     * */
     public SemanticServiceBroker() throws Exception
     {
         // Let's see what we have to offer
@@ -129,7 +132,11 @@ public class SemanticServiceBroker
     	}
  	}
 
-	@WebMethod()
+	/**
+	 * The web method that returns the list of available services.
+	 * @return list of available services
+	 * */
+    @WebMethod()
     public ServiceInfoForClient[] getAvailableServices()
     {
         // Initialize GATE
@@ -178,6 +185,7 @@ public class SemanticServiceBroker
      * passed as parameter into account. Reasoning is performed,
      * and the individuals (language services) that are eligible
      * will be looked up in the availableServices map.
+     * @return list of recommended services considering the user context
      */
     @WebMethod()
     public ServiceInfoForClient[] recommendServices( @WebParam( name = "ctx" ) UserContext ctx )
@@ -235,6 +243,8 @@ public class SemanticServiceBroker
     }
 
     /**
+     * The web method that invokes a service.
+     * <br>
      * Apply the service named <code>mServiceName</code> to the passed documents.
      * Documents that are passed literally (i.e. normal Strings) must be passed
      * in the <code>literalDocs</code> array. In that case, give the special URI
@@ -242,9 +252,14 @@ public class SemanticServiceBroker
      * the agent knows that it should look for the document in the <code>literalDocs</code>
      * array. Order matters, i.e. the first document specified via <code>LITERAL_DOC_URI</code>
      * is taken from the first position in the array, etc.
-     *
-     * The number connID serves as a connection identifier.
-     */
+     * @param serviceName the service name
+     * @param documents list of document URIs
+     * @param literalDocs list of literal strings
+     * @param connID connection identifier
+     * @param gateParams GATE runtime parameters
+     * @param userCtx the user context object
+     * @return the service response message in XML format
+     * */
     @WebMethod()
     public String invokeService( @WebParam( name = "serviceName" ) String serviceName,
                                  @WebParam( name = "documents" ) URIList documents,
@@ -373,6 +388,10 @@ public class SemanticServiceBroker
         return finalResult;
     }
     
+    /**
+     * Returns the result file URL
+     * @return URL of the result output file
+     * */
     @WebMethod()
     public String getResultFile( @WebParam( name = "resultFileUrl" ) URL url )
     {
@@ -853,7 +872,13 @@ public class SemanticServiceBroker
     return finalResult;
     }
      */
-    public Object loadGateApp( File serviceAppFile )
+	
+	/**
+	 * Loads an application file inside GATE
+	 * @param serviceAppFile GATE application file
+	 * @return the loaded GATE application file
+	 * */
+	public Object loadGateApp( File serviceAppFile )
     {
         Object result;
         try
@@ -870,7 +895,10 @@ public class SemanticServiceBroker
         return result;
     }
 
-    @WebMethod( exclude = true )
+    /**
+     * Initializes a GATE instance and prepares the environment
+     * */
+	@WebMethod( exclude = true )
     public static void initGate()
     {
 
@@ -911,7 +939,10 @@ public class SemanticServiceBroker
 
     }
 
-    protected void readServiceMetadata() throws Exception
+    /**
+     * Reads the available service description files in the repository
+     * */
+	protected void readServiceMetadata() throws Exception
     {
         // Try to acquire the location of the service repository
         try
@@ -984,7 +1015,10 @@ public class SemanticServiceBroker
         }
     }
 
-    protected void getOWLModel() throws Exception
+    /**
+     * Creates an OWL service model by reading service description files
+     * */
+	protected void getOWLModel() throws Exception
     {
         // Try to acquire the location of the service repository
         try
@@ -1044,7 +1078,12 @@ public class SemanticServiceBroker
         }
     }
 
-    protected String buildQueryString( UserContext ctx )
+    /**
+     * Builds a query with the user context attributes to find appropriate services
+     * @param ctx user context object
+     * @return service query statement
+     * */
+	protected String buildQueryString( UserContext ctx )
     {
         String result = "PREFIX cu: <http://localhost/ConceptUpper.owl#>\n";
         result += "PREFIX sa: <http://localhost/SemanticAssistants.owl#>\n";
@@ -1104,7 +1143,12 @@ public class SemanticServiceBroker
         return result;
     }
 
-    protected Corpus getCorpusFromString( String argument )
+    /**
+     * Creates a corpus from the input string content
+     * @param argument content string
+     * @return corpus created from the string
+     * */
+	protected Corpus getCorpusFromString( String argument )
     {
         Corpus corpus = null;
         try
@@ -1118,7 +1162,13 @@ public class SemanticServiceBroker
         return corpus;
     }
 
-    protected Corpus getCorpusFromURIs( URIList documents, String[] literalDocs )
+    /**
+     * Creates a corpus from the provided resources
+     * @param documents list of document URIs
+     * @param literalDocs an array of strings containing literal documents
+     * @return corpus created from the provided resources
+     * */
+	protected Corpus getCorpusFromURIs( URIList documents, String[] literalDocs )
     {
         Corpus corpus = null;
         try
@@ -1206,9 +1256,14 @@ public class SemanticServiceBroker
     }
 
     /**
+     * Assembles the GATE runtime parameters for a service
+     * <br>
      * Attention: Do not use this method if mParams contains
      * parameters for multiple GATE pipelines. This method does not
      * check pipeline affiliation.
+     * 
+     * @param info the service information object
+     * @param params the list of GATE runtime parameters
      */
     protected GATERuntimeParameter[] addDefaultParamValues( ServiceInfo info, GATERuntimeParameter[] params )
     {
@@ -1327,6 +1382,8 @@ public class SemanticServiceBroker
      * Checks if, according to the service description data
      * given in <code>info</info>, the <code>gateParams</code>
      * array contains all the required parameters.
+     * @param gateParams list of GATE runtime parameters
+     * @return <code>true</code> if the <code>gateParams</code> array contains all the required parameters, <code>false</code> otherwise
      */
     protected boolean checkRuntimeParameters( ServiceInfo info, GATERuntimeParameter[] gateParams )
     {
@@ -1418,8 +1475,12 @@ public class SemanticServiceBroker
     }
 
     /**
-     * This function has a builder assemble the response for the
-     * client.
+     * Creates and returns service output for the client.
+     * This function has a builder assemble the response.
+     * @param builder the output builder
+     * @param outputs list of GATE pipeline outputs
+     * @param corpus the corpus
+     * @return the service output in XML format
      */
     protected String getOutputInfo( OutputBuilder builder, Vector<GATEPipelineOutput> outputs, Corpus corpus )
     {
@@ -1451,7 +1512,8 @@ public class SemanticServiceBroker
 
 
     /**
-     * Cleanup documents and corpus after service execution
+     * Cleans up documents and corpora after service execution
+     * @param status the service execution status
      */
     protected void cleanup( ServiceExecutionStatus status ) {
 
