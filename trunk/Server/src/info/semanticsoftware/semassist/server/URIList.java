@@ -26,10 +26,14 @@ import java.net.URI;
 import java.util.ArrayList;
 
 /**
- *
- * @author nikolaos
+ * This class defines a wrapper class for
+ * a list of document URIs to be processed by a pipeline
+ * 
+ * @author Tom Gitzinger
+ * @author Nikolaos Papadakis
  */
 public class URIList {
-   public ArrayList<URI> uriList = new ArrayList<URI>();
-
+	
+	/** A list of document URIs to be processed */
+	public ArrayList<URI> uriList = new ArrayList<URI>();
 }
