@@ -22,21 +22,28 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package info.semanticsoftware.semassist.server;
 
-
 import javax.xml.ws.Endpoint;
-import info.semanticsoftware.semassist.server.util.MasterData;
 import javax.xml.ws.WebServiceException;
+import info.semanticsoftware.semassist.server.util.MasterData;
 
-public class Bootstrap
-{
+/**
+ * This class publishes the web service in the specified context
+ * @author Tom Gitzinger
+ * @author Nikolaos Papadakis
+ * */
+public class Bootstrap{
 
-    public static void main( String[] args ) throws Exception
-    {
-        SemanticServiceBroker broker = new SemanticServiceBroker();
+    /**
+     * The main method that starts the web service
+     * */
+	public static void main( String[] args ) throws Exception{
+    	
+        // The web service implementation class instance
+		SemanticServiceBroker broker = new SemanticServiceBroker();
 
         try
         {
-            Endpoint endpoint = Endpoint.publish( MasterData.getWSPublishURL(), broker );
+            Endpoint.publish( MasterData.getWSPublishURL(), broker );
         }
         catch( WebServiceException e )
         {
