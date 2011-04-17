@@ -93,7 +93,7 @@
     -->
     <resources>
         <res id="Logo" src="logo.jpg"/>
-        <res id="LicencePanel.licence" src="License.txt"/>
+        <res id="LicencePanel.licence" src="LICENSE.txt"/>
         <res id="HTMLInfoPanel.info" src="HTMLInfoPanel.html"/>
 		<res id="HTMLInfoPanel.info_fra" src="HTMLInfoPanel.html_fra"/>
 		<res id="HTMLInfoPanel.info_deu" src="HTMLInfoPanel.html_deu"/>
