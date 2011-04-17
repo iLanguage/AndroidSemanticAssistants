@@ -52,19 +52,21 @@
     <property name="ontology.repository"      value="${semassist.home}/Resources/ont-repository/" />
     <property name="gate.pipeline.repository" value="${semassist.home}/Resources/GatePipelines/" />
 
-    <property name="runtime.maxmem"           value="1638m" />
+    <property name="runtime.maxmem"           value="1238m" />
     <property name="runtime.heap.initial"     value="128m" />
-    <property name="runtime.heap.max"         value="1638m" />
+    <property name="runtime.heap.max"         value="1238m" />
 
     <!-- Server Pipeline Property Settings (ie # of Threads allowed) -->
     <property name="server.threads.allowed"        value="3"/>
-<!--
+
     <property name="server.pipeline.1.name"        value="ANNIE"/>
-    <property name="server.pipeline.1.number.pooled"        value="2"/>
+    <property name="server.pipeline.1.number.pooled"        value="1"/>
+    <property name="server.pipeline.1.max.concurrent"        value="3"/>
     <property name="server.pipeline.1.max.concurrent"        value="2"/>
     <property name="server.pipeline.1.startup"        value="false"/>
     <property name="server.pipeline.1.fullpath"        value="${gate.pipeline.repository}Annie/application.xgapp"/>
 
+<!--
     <property name="server.pipeline.2.name"        value="Organism"/>
     <property name="server.pipeline.2.number.pooled"        value="1"/>
     <property name="server.pipeline.2.max.concurrent"        value="1"/>
@@ -101,6 +103,8 @@
     <property name="checkstyle.classpath"     value="${checkstyle.home}/checkstyle-5.3-all.jar" />
     <property name="checkstyle.report"        value="checkstyle-result.xml" />
     <property name="pmd.home"                 value="${durmtools}/pmd" />
+    <property name="findbugs.home"            value="${durmtools}/findbugs" />
+    <property name="findbugs.classpath"       value="${findbugs.home}/lib/findbugs-ant.jar" />
     <property name="pmd.lib"                  value="${pmd.home}/lib" />
     <path id="pmd.classpath">
       <pathelement location="${build}"/>

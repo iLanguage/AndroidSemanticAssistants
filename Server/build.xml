@@ -140,6 +140,7 @@
         <java classname="info.semanticsoftware.semassist.server.Bootstrap" fork="true" maxmemory="${runtime.maxmem}" >
             <jvmarg value="-Xms${runtime.heap.initial}"/>
             <jvmarg value="-Xmx${runtime.heap.max}"/>
+	    <jvmarg value="-Dcom.sun.xml.ws.transport.http.client.HttpTransportPipe.dump=true"/>
             <jvmarg value="-Xdebug"/>
             <jvmarg value="-Xrunjdwp:transport=dt_socket,server=y,address=${server.port.debug},suspend=n"/>
             <classpath>
@@ -169,11 +170,24 @@
         <bottom><![CDATA[<i>Copyright © 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
           </javadoc>
     </target>
+
+    <!-- Findbugs analysis -->
+    <target name="findbugs" depends="compile">
+      <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
+            classpath="${findbugs.classpath}" />
+      <findbugs home="${findbugs.home}"      
+            output="xml:withMessages"
+            outputFile="findbugsXml.SA.xml" >
+	<auxClasspath path="${ant.jar}:${gate.jar}:${gate-home}/lib/log4j-1.2.14.jar:${protege.jar}:${protege-owl.home}/protege-owl.jar:${protege-owl.home}/jena.jar:${protege-owl.home}/iri.jar:${protege-owl.home}/orphanNodesAlg.jar:${protege-owl.home}/arq.jar:${commons-lang.jar}" />
+	<sourcePath path="${basedir}/src" />
+	<class location="${basedir}/bin/" />
+      </findbugs>
+    </target>
   
     <!-- Clear all build output -->
     <target name="clean">
       <delete includeemptydirs="true" quiet="true">
-	<fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
+<fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
       </delete>
     </target>
 
