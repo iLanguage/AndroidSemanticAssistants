@@ -161,7 +161,7 @@
       	<pack name="Core" required="yes"> 
             <description>Core Resources</description> 
             <fileset dir="../Resources" targetdir="$INSTALL_PATH/Resources"/>
-            <file src="License.txt" targetdir="$INSTALL_PATH"/>
+            <file src="LICENSE.txt" targetdir="$INSTALL_PATH"/>
 			<file src="../LocalProperties.xml" targetdir="$INSTALL_PATH" override="true"/>
 			<fileset dir="../Lib" targetdir="$INSTALL_PATH/Lib"/>
             <file src="varfile/SemassistProperties.xml" targetdir="$INSTALL_PATH" override="true"/>
