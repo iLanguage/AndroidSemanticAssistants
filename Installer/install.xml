@@ -34,10 +34,10 @@
         <appversion>1.0.0.0</appversion>
 		
 		<authors>
-            <author name="Dr. René Witte" email=""/>
+            <author name="Semantic Software Lab" email=""/>
         </authors>
 
-        <url>http://www.semanticsoftware.info/semantic-assistants-project/</url>  
+        <url>http://www.semanticsoftware.info/semantic-assistants</url>  
         <javaversion>
         	1.5       	
         </javaversion>
@@ -76,7 +76,7 @@
         <langpack iso3="deu"/>
         <langpack iso3="spa"/>
         <langpack iso3="ita"/>
-		<langpack iso3="chn"/>
+	<langpack iso3="chn"/>
     </locale>
     
     <!--
@@ -154,7 +154,7 @@
         We specify here our packs.
     -->
     <packs>
-   	    <!--  Core files for the installtion -->
+   	<!--  Core files for the installtion -->
       	<pack name="Core" required="yes"> 
             <description>Core Resources</description> 
             <fileset dir="../Resources" targetdir="$INSTALL_PATH/Resources"/>
@@ -166,12 +166,12 @@
         </pack>  
        
         <!-- CSAL files -->
-		<pack name="CSAL"  parent="Core" required="yes">
+	<pack name="CSAL"  parent="Core" required="yes">
             <description>The Client Abstraction Layer (CSAL)</description>
             <fileset dir="../CSAL" targetdir="$INSTALL_PATH/CSAL"/>
 			<file src="varfile/build.xml" targetdir="$INSTALL_PATH/CSAL" override="true"/>
             <parsable targetfile="$INSTALL_PATH/CSAL/build.xml"/>
-			<!-- UNIX scripts --> 
+	    <!-- UNIX scripts --> 
             <file src="script/CSAL.sh" targetdir="$INSTALL_PATH/script">
 				<os family="unix"/>
 			</file>
@@ -225,11 +225,12 @@
     		</executable>
        	</pack>	
 
-		<!-- GATE empty pack -->
+	<!-- GATE empty pack -->
         <pack name="GATE" parent="ServerPack" required="no">
             <description>
             General Architecture for Text Engineering (GATE)
-			Must be downloaded and installed in order to install the server on the local machine
+	    Must be downloaded and installed in order to install the server on the local machine
+
             Download from: http://gate.ac.uk/
             </description>
             <!-- <fileset dir="/usr/local/GATE-6.0-beta1" targetdir="$INSTALL_PATH/durmtools/GATE-6.0-beta1"/>   -->  
