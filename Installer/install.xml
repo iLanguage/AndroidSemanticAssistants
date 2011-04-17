@@ -105,17 +105,19 @@
 		<res id="Win_shortcutSpec.xml" src="win_shortcut_specification.xml" parse="yes" type="xml"/>
 		<res id="shortcutSpec.xml" src="unix_shortcut_specification.xml" parse="yes" type="xml"/>
 		<res id="SemassistProperties.xml" src="varfile/SemassistProperties.xml" parse="yes" type="xml"/>	
-		<res id="CSALBuild.xml" src="varfile/build.xml" parse="yes" type="xml"/>    
+<!--		<res id="CSALBuild.xml" src="varfile/build.xml" parse="yes" type="xml"/>    
 		<res id="CSAL.sh" src="script/CSAL.sh" parse="yes" type="plain"/>
 		<res id="CSAL.bat" src="script/CSAL.bat" parse="yes" type="plain"/>
 		<res id="ANTpath.sh" src="script/ANTpath.sh" parse="yes" type="plain"/>
 		<res id="ANTpath.bat" src="script/ANTpath.sh" parse="yes" type="plain"/>
+-->
 		<res id="FirefoxInstaller.sh" src="script/FirefoxInstaller.sh" parse="yes" type="plain"/>
 		<res id="FirefoxInstaller.bat" src="script/FirefoxInstaller.bat" parse="yes" type="plain"/>
 		<res id="ThunderbirdInstaller.sh" src="script/ThunderbirdInstaller.sh" parse="yes" type="plain"/>
 		<res id="ThunderbirdInstaller.bat" src="script/ThunderbirdInstaller.bat" parse="yes" type="plain"/>
-		<res id="RunServer.sh" src="script/RunServer.sh" parse="yes" type="plain"/>
+<!--		<res id="RunServer.sh" src="script/RunServer.sh" parse="yes" type="plain"/>
 		<res id="RunServer.bat" src="script/RunServer.bat" parse="yes" type="plain"/>
+-->
     </resources>
 
     <!-- 
@@ -134,9 +136,10 @@
         <panel classname="UserInputPanel" id="UserInputPanelOpenOffice"/>
 		<panel classname="UserInputPanel" id="UserInputPanelEcplise"/>	
 		<panel classname="SummaryPanel"/>
-        <panel classname="InstallPanel"/>
+<!--        <panel classname="InstallPanel"/>
 		<panel classname="ProcessPanel"/>
 		<panel classname="ShortcutPanel"/>	
+-->
         <panel classname="FinishPanel"/>
     </panels>
 
