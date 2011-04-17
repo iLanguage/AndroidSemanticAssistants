@@ -96,6 +96,19 @@
         <bottom><![CDATA[<i>Copyright © 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
           </javadoc>
     </target>
+
+    <!-- Findbugs analysis -->
+    <target name="findbugs" depends="compile">
+      <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
+            classpath="${findbugs.classpath}" />
+      <findbugs home="${findbugs.home}"      
+            output="xml:withMessages"
+            outputFile="findbugsXml.SA.xml" >
+	<auxClasspath path="${ant.jar}:${gate.jar}:${gate-home}/lib/log4j-1.2.14.jar:${csal.home}/dist/${csal.name}" />
+	<sourcePath path="${basedir}/src" />
+	<class location="${basedir}/bin/" />
+      </findbugs>
+    </target>
     
     <!-- Clear all build output -->
     <target name="clean" depends="properties" description="Cleaning the build outputs">
