@@ -77,6 +77,19 @@
           </javadoc>
     </target>
 
+    <!-- Findbugs analysis -->
+    <target name="findbugs" depends="compile">
+      <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
+            classpath="${findbugs.classpath}" />
+      <findbugs home="${findbugs.home}"      
+            output="xml:withMessages"
+            outputFile="findbugsXml.SA.xml" >
+	<auxClasspath path="${ant.jar}:${gate.jar}:${gate-home}/lib/log4j-1.2.14.jar:${csal.jar}" />
+	<sourcePath path="${basedir}/src" />
+	<class location="${basedir}/bin/" />
+      </findbugs>
+    </target>
+
     <!-- Clear all build output -->
     <target name="clean">
         <delete includeemptydirs="true" quiet="true">
