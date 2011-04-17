@@ -1,28 +1,28 @@
 <?xml version="1.0" encoding="iso-8859-1" standalone="yes" ?>
 
-	<!--
-	   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+<!--
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+   
+   This file is part of the Semantic Assistants architecture.
+   Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
 
-	   This file is part of the Semantic Assistants architecture.
-
-	   Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
-	   Document   : install.xml
-       Created on : April 11, 2010, 1:10 PM
-       Created by : Albert Trinh
+   Document   : install.xml
+   Created on : April 11, 2010, 1:10 PM
+   Created by : Albert Trinh
        
-	   The Semantic Assistants architecture is free software: you can
-	   redistribute and/or modify it under the terms of the GNU Affero General
-	   Public License as published by the Free Software Foundation, either
-	   version 3 of the License, or (at your option) any later version.
-	   
-	   This program is distributed in the hope that it will be useful,
-	   but WITHOUT ANY WARRANTY; without even the implied warranty of
-	   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	   GNU Affero General Public License for more details.
-	   
-	   You should have received a copy of the GNU Affero General Public License
-	   along with this program.  If not, see <http://www.gnu.org/licenses/>.
-	-->
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+   
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
 
 <installation version="1.0">
 
@@ -170,11 +170,13 @@
        
         <!-- CSAL files -->
 	<pack name="CSAL"  parent="Core" required="yes">
-            <description>The Client Abstraction Layer (CSAL)</description>
+            <description>The Client-Side Abstraction Layer (CSAL)</description>
             <fileset dir="../CSAL" targetdir="$INSTALL_PATH/CSAL"/>
-			<file src="varfile/build.xml" targetdir="$INSTALL_PATH/CSAL" override="true"/>
+<!--	<file src="varfile/build.xml" targetdir="$INSTALL_PATH/CSAL" override="true"/>
             <parsable targetfile="$INSTALL_PATH/CSAL/build.xml"/>
+-->
 	    <!-- UNIX scripts --> 
+<!--
             <file src="script/CSAL.sh" targetdir="$INSTALL_PATH/script">
 				<os family="unix"/>
 			</file>
@@ -184,8 +186,9 @@
 			<executable targetfile="$INSTALL_PATH/script/CSAL.sh" stage="never" failure="abort">
 				<os family="unix"/>
             </executable>
+-->
 			<!-- Windows scripts -->
-            <file src="script/CSAL.bat" targetdir="$INSTALL_PATH\script">
+<!--            <file src="script/CSAL.bat" targetdir="$INSTALL_PATH\script">
 				<os family="windows"/>
 			</file>
             <parsable targetfile="$INSTALL_PATH\script\CSAL.bat">
@@ -195,6 +198,7 @@
 				<os family="windows"/>
 			</executable> 
 			<depends packname = "JAXWS"/>
+-->
         </pack>   
       
         <!-- JDK empty pack -->
