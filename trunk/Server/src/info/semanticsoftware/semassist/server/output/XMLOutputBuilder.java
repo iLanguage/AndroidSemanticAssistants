@@ -24,44 +24,64 @@ package info.semanticsoftware.semassist.server.output;
 
 import java.util.*;
 import java.net.URL;
-
 import gate.*;
 import gate.util.InvalidOffsetException;
-
 import info.semanticsoftware.semassist.server.util.*;
-import java.util.regex.*;
 
+/**
+ * This class transforms a GATE pipeline output object into an equivalent XML representation.
+ * 
+ * @author Nikolaos Papadakis
+ * @author Tom Gitzinger
+ * */
 public class XMLOutputBuilder extends OutputBuilder
 {
 
-    private StringBuffer mTotalResult = new StringBuffer();
+    /** The output XML buffer */
+	private StringBuffer mTotalResult = new StringBuffer();
 
+    /**
+     * Resets the output builder buffer
+     * */
     @Override
     public void reset()
     {
         mTotalResult = new StringBuffer();
     }
 
+    /**
+     * Returns the XML Prolog and starting response tag
+     * @return the XML Prolog and starting response tag
+     * */
     @Override
     protected String startResponse()
     {
         //return "<?xml version=\"1.0\"?>\n<saResponse>\n";
-	return "<?xml version=\"1.0\"?><saResponse>";
+    	return "<?xml version=\"1.0\"?><saResponse>";
     }
 
+    /**
+     * Returns an ending response tag
+     * @return an ending response tag
+     * */
     @Override
     protected String endResponse()
     {
         //return "</saResponse>\n";
-	return "</saResponse>";
+    	return "</saResponse>";
     }
 
+    
+    /**
+     * Transforms a GATE pipeline output object into its equivalent XML representation. 
+     * @param o a GATE pipeline output object
+     * */
     @Override
     public void addOutput( GATEPipelineOutput o )
     {
         Logging.log( "---------------- Adding output " + o.getHRFormat() );
 
-        // ***** Annotation case
+        // Annotation case
         if( o.isAnnotation() )
         {
             if( corpusNotSet() )
@@ -76,7 +96,6 @@ public class XMLOutputBuilder extends OutputBuilder
             mTotalResult.append( ResponseFormatXML.openAnnotationTag( a ) );
 
             // Iterate over the documents of the mCorpus
-
             for( Iterator<Document> it = mCorpus.iterator(); it.hasNext(); )
             {
                 Logging.log( "---------------- Iterating... " );
@@ -125,7 +144,7 @@ public class XMLOutputBuilder extends OutputBuilder
         // Logging.log(getActualContents());
         }
 
-        // ***** File case
+        // File case
         else if( o.getParameterForFileURL() != null && o.getFileURL() != null )
         {
             // TODO: consider isPerDocument. Already during the invocation!
@@ -141,7 +160,7 @@ public class XMLOutputBuilder extends OutputBuilder
                 mTotalResult.append( ResponseFormatXML.outputDocument( it.next() ) );
             }
         }
-        // ***** Out of ideas...
+        // Out of ideas...
         else
         {
             Logging.log( MasterData.WARNING_ANNOUNCEMENT + "XMLOutputBuilder::addOutput: Don't " +
@@ -151,11 +170,22 @@ public class XMLOutputBuilder extends OutputBuilder
     }
     
     
+    /**
+     * Transforms the XML buffer into a String object
+     * @return a String object containing the result XML buffer contents
+     * */
     protected String getActualContents()
     {
         return mTotalResult.toString();
     }
 
+    /**
+     * Returns the equivalent XML representation of an annotation
+     * @param doc the document
+     * @param a the GATE annotation type object
+     * @param currAnnot the Semantic Assistants annotation type object
+     * @return the equivalent XML representation of an annotation
+     * */
     protected String oneAnnotation( Document doc, GATEAnnotation a, Annotation currAnnot )
     {
         StringBuffer result = new StringBuffer();
@@ -207,6 +237,3 @@ public class XMLOutputBuilder extends OutputBuilder
     }
 
 }
-
-
-
