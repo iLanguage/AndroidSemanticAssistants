@@ -130,15 +130,15 @@
         <panel classname="LicencePanel"/>     
         <panel classname="TargetPanel"/>
         <panel classname="TreePacksPanel"/>
-		<panel classname="JDKPathPanel"/>
+	<panel classname="JDKPathPanel"/>
         <panel classname="UserInputPanel" id="UserInputPanelGATE"/> 
-		<panel classname="UserInputPanel" id="UserInputPanelCSAL"/>
+	<panel classname="UserInputPanel" id="UserInputPanelCSAL"/>
         <panel classname="UserInputPanel" id="UserInputPanelOpenOffice"/>
-		<panel classname="UserInputPanel" id="UserInputPanelEcplise"/>	
-		<panel classname="SummaryPanel"/>
-<!--        <panel classname="InstallPanel"/>
-		<panel classname="ProcessPanel"/>
-		<panel classname="ShortcutPanel"/>	
+	<panel classname="UserInputPanel" id="UserInputPanelEcplise"/>	
+	<panel classname="SummaryPanel"/>
+        <panel classname="InstallPanel"/>
+<!--	<panel classname="ProcessPanel"/>
+	<panel classname="ShortcutPanel"/>	
 -->
         <panel classname="FinishPanel"/>
     </panels>
@@ -207,11 +207,14 @@
 		</pack>
         
         <!-- ANT files -->
+
+<!--
         <pack name="ANT" parent="ServerPack" required="no">
            	<description>Build utility</description>
            	<fileset dir="../Lib" targetdir="$INSTALL_PATH/ant"/>
+-->
 			<!-- UNIX scripts -->        		
-           	<file src="script/ANTpath.sh" targetdir="$INSTALL_PATH/script">
+<!--           	<file src="script/ANTpath.sh" targetdir="$INSTALL_PATH/script">
 				<os family="unix"/>
 			</file>
            	<parsable targetfile="$INSTALL_PATH/script/ANTpath.sh">
@@ -220,8 +223,9 @@
            	<executable targetfile="$INSTALL_PATH/script/ANTpath.sh" stage="never" failure="abort">
     			<os family="unix"/>
 			</executable>
+ -->
 			<!-- Windows scripts -->
-			<file src="script/ANTpath.bat" targetdir="$INSTALL_PATH\script">
+<!--			<file src="script/ANTpath.bat" targetdir="$INSTALL_PATH\script">
 				<os family="windows"/>
 			</file>
            	<parsable targetfile="$INSTALL_PATH\script\ANTpath.bat">
@@ -231,7 +235,7 @@
     		   	<os family="windows"/>
     		</executable>
        	</pack>	
-
+-->
 	<!-- GATE empty pack -->
         <pack name="GATE" parent="ServerPack" required="no">
             <description>
@@ -240,7 +244,6 @@
 
             Download from: http://gate.ac.uk/
             </description>
-            <!-- <fileset dir="/usr/local/GATE-6.0-beta1" targetdir="$INSTALL_PATH/durmtools/GATE-6.0-beta1"/>   -->  
         </pack>
         
         <!--  Server files -->
@@ -269,13 +272,14 @@
 			</executable>		  
 			<depends packname = "GATE"/>
         </pack>			
-        
+
         <!--  JAX-WS files -->
+<!-- we cannot distribute JAX-WS, needs to be downloaded separately
         <pack name="JAXWS" parent="CSAL" required="no">
             <description>Java API for XML Web Services</description>
             <fileset dir="/usr/local/durmtools/jaxws-ri" targetdir="$INSTALL_PATH/durmtools/jaxws-ri"/>
         </pack>
-      
+-->     
       	<!-- Parent node for Clients -->
         <pack name="Clients" required="no">
             <description>NLP Clients</description>
