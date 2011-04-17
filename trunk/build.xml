@@ -27,6 +27,7 @@
     <!-- Machine specific settings should go in SemassistProperties.xml -->
     <import file ="${semassist.home}/SemassistProperties.xml"/>
 	
+
   <!-- Checkstyle analysis -->
   <target name="checkstyle" description="Source code analysis using checkstyle">
     <taskdef resource="checkstyletask.properties"
@@ -38,7 +39,6 @@
     </checkstyle>
   </target>
   
-
   <!-- PMD analysis -->
   <target name="pmd">
     <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.classpath"/>
@@ -59,6 +59,8 @@
         </fileset>
     </cpd>
   </target>
+
+  <!-- Findbugs analysis: see each component's build.xml -->
 
 </project>
 
