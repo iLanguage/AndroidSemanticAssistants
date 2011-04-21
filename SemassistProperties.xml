@@ -35,6 +35,8 @@
     <property name="gate-home"                value="${durmtools}/GATE/gate" />
     <property name="gate.jar"                 value="${gate-home}/bin/gate.jar" />
     <property name="jdk.home"                 value="${durmtools}/jdk" />
+     <property name="junit.home"                 value="${durmtools}/junit" />
+     
     <!-- Used by Open Office Writer Plug-In-->
     <property name="office.home.dir"          value="${durmtools}/OpenOffice"/>
     <property name="uno-copy-dest"  	      value="${user.home}/Documents/uno-components" />

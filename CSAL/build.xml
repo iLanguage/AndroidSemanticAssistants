@@ -45,6 +45,9 @@
     <property name="csal.jar"      value="${csal.home}/dist/CSAL.jar" />
     <property name="gate.jar"      value="${gate-home}/bin/gate.jar" />
    
+   <!-- Used for testing -->
+    <property name="test.src"	   value="${basedir}/test.src"/>
+    <property name="test.result"   value="${basedir}/test.result"/>
 
     <description>
         Client side Java code of the semantic text assistants infrastructure
@@ -54,6 +57,7 @@
     <path id="compile.classpath">
         <pathelement location="${gate.jar}"/>
         <pathelement location="${jaxws.home}/lib/jaxws-tools.jar"/>
+        <pathelement location="${junit.home}/junit.jar" />
     </path>
 
     <target name="init" >
@@ -126,6 +130,39 @@ destdir="${build.home}" includeantruntime="${antruntime}">
         <bottom><![CDATA[<i>Copyright © 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
           </javadoc>
     </target>
+    
+    <!-- JUnit Tests -->
+    <target name="junit" depends="compile" description="Performs unit tests.">
+        <javac srcdir="test.src" destdir="${build.home}" debug="true" deprecation="true" includeantruntime="${antruntime}">
+        	<classpath refid="compile.classpath"/>
+        </javac>
+        <mkdir dir="${test.result}"/>
+
+        <junit failureproperty="junit.failed"  printsummary="yes">
+            <formatter type="xml"/>
+            <batchtest todir="${test.result}">
+                <fileset dir="${build.home}">
+                   <include name="**/*Test.class"/>
+                   <include name="**/Test*.class"/>
+                </fileset>
+            </batchtest>
+            <classpath>
+                <path refid="compile.classpath"/>
+		  <pathelement location="${build.home}"/>
+		  <pathelement location="${gate.jar}" />
+		  <pathelement location="${protege.jar}" />
+		  <pathelement location="${protege-owl.home}/protege-owl.jar" />
+		  <pathelement location="${protege-owl.home}/iri.jar" />
+		  <pathelement location="${protege-owl.home}/jena.jar" />
+		  <pathelement location="${protege-owl.home}/orphanNodesAlg.jar" />
+		  <pathelement location="${protege-owl.home}/arq.jar" />
+                <fileset dir="${gate-home}/lib" >
+                    <include name="*.jar" />
+                </fileset>
+            </classpath>
+        </junit>
+        <fail message="JUnit test failure." if="junit.failed"/>  	
+    </target>
 
     <!-- Findbugs analysis -->
     <target name="findbugs" depends="compile">
@@ -144,6 +181,7 @@ destdir="${build.home}" includeantruntime="${antruntime}">
     <target name="clean">
         <delete includeemptydirs="true" quiet="true">
             <fileset dir="${build.home}"/>
+            <fileset dir="${test.result}"/>
         </delete>
         <delete file="${dist.home}/CSAL.jar" />
     </target>
