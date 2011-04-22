@@ -4,7 +4,7 @@
    Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
    
    This file is part of the Semantic Assistants architecture.
-   Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
+   Copyright (C) 2011 Semantic Software Lab, http://www.semanticsoftware.info
 
    Document   : install.xml
    Created on : April 11, 2010, 1:10 PM
@@ -30,25 +30,23 @@
         The info section.
     -->
     <info>
-        <appname>Semantic Assistants</appname>
-        <appversion>1.0.0.0</appversion>
-		
-		<authors>
+        <appname>SemanticAssistants</appname>
+        <appversion>1.0-beta</appversion>
+	<authors>
             <author name="Semantic Software Lab" email=""/>
         </authors>
 
         <url>http://www.semanticsoftware.info/semantic-assistants</url>  
         <javaversion>
         	1.5       	
-        </javaversion>
-		
+        </javaversion>	
     </info>
 
     <!-- 
         The gui preferences indication.
         Sets the installer window to 800x600. It will not be able to change the size.
     -->
-    <guiprefs width="800" height="600" resizable="no">
+    <guiprefs width="800" height="620" resizable="no">
 		<modifier key="allXGap" value="5"/>
 		<modifier key="allYGap" value="5"/>
 		<modifier key="paragraphYGap" value="15"/>
@@ -58,25 +56,27 @@
 		<modifier key="headingBackgroundColor" value="0x00ffffff"/>
 		<modifier key="headingPanelCounter" value="text"/>
 		<modifier key="headingPanelCounterPos" value="inHeading"/>
-		<laf name="liquid">  <!-- Look and Feel in UNIX/Linux -->
-			<os family="unix" />
+		<!-- Look and Feel in UNIX/Linux -->
+		<laf name="kunststoff">  
+		  <os family="unix" />
 		</laf>
-		<laf name="looks"> <!-- Look and Feel in Windows -->
-			<os family="windows" />
-			<param name="variant" value="extwin" />
+		<!-- Look and Feel in Windows -->
+		<laf name="looks"> 
+		  <os family="windows" />
+		  <param name="variant" value="extwin" />
 		</laf>
     </guiprefs>
     
     <!-- 
-        The locale section. Refer to documentation for more language
+        The locale section. Refer to documentation for more languages.
     -->
     <locale>
         <langpack iso3="eng"/>
-        <langpack iso3="fra"/>
+<!--        <langpack iso3="fra"/>
         <langpack iso3="deu"/>
         <langpack iso3="spa"/>
         <langpack iso3="ita"/>
-	<langpack iso3="chn"/>
+	<langpack iso3="chn"/> -->
     </locale>
     
     <!--
@@ -93,31 +93,34 @@
     -->
     <resources>
         <res id="Logo" src="logo.jpg"/>
+        <res id="sa" src="sa.jpg"/>
         <res id="LicencePanel.licence" src="LICENSE.txt"/>
         <res id="HTMLInfoPanel.info" src="HTMLInfoPanel.html"/>
-		<res id="HTMLInfoPanel.info_fra" src="HTMLInfoPanel.html_fra"/>
-		<res id="HTMLInfoPanel.info_deu" src="HTMLInfoPanel.html_deu"/>
-		<res id="HTMLInfoPanel.info_spa" src="HTMLInfoPanel.html_spa"/>
-		<res id="HTMLInfoPanel.info_ita" src="HTMLInfoPanel.html_ita"/>
-		<res id="HTMLInfoPanel.info_chn" src="HTMLInfoPanel.html_chn"/>
-		<res id="userInputSpec.xml" src="userInputSpec.xml" parse="yes" type="xml"/>
-		<res id="ProcessPanel.Spec.xml" src="ProcessPanel.Spec.xml"  parse="yes" type="xml"/>
-		<res id="Win_shortcutSpec.xml" src="win_shortcut_specification.xml" parse="yes" type="xml"/>
-		<res id="shortcutSpec.xml" src="unix_shortcut_specification.xml" parse="yes" type="xml"/>
-		<res id="SemassistProperties.xml" src="varfile/SemassistProperties.xml" parse="yes" type="xml"/>	
+	<res id="HTMLInfoPanel.info_fra" src="HTMLInfoPanel.html_fra"/>
+	<res id="HTMLInfoPanel.info_deu" src="HTMLInfoPanel.html_deu"/>
+	<res id="HTMLInfoPanel.info_spa" src="HTMLInfoPanel.html_spa"/>
+	<res id="HTMLInfoPanel.info_ita" src="HTMLInfoPanel.html_ita"/>
+	<res id="HTMLInfoPanel.info_chn" src="HTMLInfoPanel.html_chn"/>
+	<res id="userInputSpec.xml" src="userInputSpec.xml" parse="yes" type="xml"/>
+	<res id="ProcessPanel.Spec.xml" src="ProcessPanel.Spec.xml"  parse="yes" type="xml"/>
+	<res id="Win_shortcutSpec.xml" src="win_shortcut_specification.xml" parse="yes" type="xml"/>
+	<res id="shortcutSpec.xml" src="unix_shortcut_specification.xml" parse="yes" type="xml"/>
+	<res id="SemassistProperties.xml" src="varfile/SemassistProperties.xml" parse="yes" type="xml"/>	
 <!--		<res id="CSALBuild.xml" src="varfile/build.xml" parse="yes" type="xml"/>    
 		<res id="CSAL.sh" src="script/CSAL.sh" parse="yes" type="plain"/>
 		<res id="CSAL.bat" src="script/CSAL.bat" parse="yes" type="plain"/>
-		<res id="ANTpath.sh" src="script/ANTpath.sh" parse="yes" type="plain"/>
-		<res id="ANTpath.bat" src="script/ANTpath.sh" parse="yes" type="plain"/>
 -->
+
+        <res id="ANTpath.sh" src="script/ANTpath.sh" parse="yes" type="plain"/>
+	<res id="ANTpath.bat" src="script/ANTpath.sh" parse="yes" type="plain"/>
+<!--
 		<res id="FirefoxInstaller.sh" src="script/FirefoxInstaller.sh" parse="yes" type="plain"/>
 		<res id="FirefoxInstaller.bat" src="script/FirefoxInstaller.bat" parse="yes" type="plain"/>
 		<res id="ThunderbirdInstaller.sh" src="script/ThunderbirdInstaller.sh" parse="yes" type="plain"/>
 		<res id="ThunderbirdInstaller.bat" src="script/ThunderbirdInstaller.bat" parse="yes" type="plain"/>
-<!--		<res id="RunServer.sh" src="script/RunServer.sh" parse="yes" type="plain"/>
-		<res id="RunServer.bat" src="script/RunServer.bat" parse="yes" type="plain"/>
 -->
+	<res id="RunServer.sh" src="script/RunServer.sh" parse="yes" type="plain"/>
+	<res id="RunServer.bat" src="script/RunServer.bat" parse="yes" type="plain"/>
     </resources>
 
     <!-- 
@@ -125,31 +128,41 @@
         We indicate here which panels we want to use. The order will be respected.
     -->
     <panels>
-        <panel classname="HelloPanel"/>
+        <!-- <panel classname="HelloPanel"/> -->
+	<!-- Welcome Information -->
         <panel classname="HTMLInfoPanel"/>
+	<!-- License acceptance -->
         <panel classname="LicencePanel"/>     
+	<!-- Install location -->
         <panel classname="TargetPanel"/>
+	<!-- Package selection -->
         <panel classname="TreePacksPanel"/>
+	<!-- JDK selection -->
 	<panel classname="JDKPathPanel"/>
+	<!-- Select Location of GATE -->
         <panel classname="UserInputPanel" id="UserInputPanelGATE"/> 
-	<panel classname="UserInputPanel" id="UserInputPanelCSAL"/>
-        <panel classname="UserInputPanel" id="UserInputPanelOpenOffice"/>
-	<panel classname="UserInputPanel" id="UserInputPanelEcplise"/>	
+	<!-- CSAL -->
+	<!-- <panel classname="UserInputPanel" id="UserInputPanelCSAL"/> -->
+	<!-- JAX-WS -->
+        <panel classname="UserInputPanel" id="UserInputPanelJAXWS"/> 
+	<!-- OpenOffice -->
+        <!-- <panel classname="UserInputPanel" id="UserInputPanelOpenOffice"/> -->
+	<!-- Eclipse -->
+	<!-- <panel classname="UserInputPanel" id="UserInputPanelEcplise"/>< -->
 	<panel classname="SummaryPanel"/>
         <panel classname="InstallPanel"/>
-<!--	<panel classname="ProcessPanel"/>
+<!--	<panel classname="ProcessPanel"/> -->
 	<panel classname="ShortcutPanel"/>	
--->
         <panel classname="FinishPanel"/>
     </panels>
 
     <!-- Variables -->
     <variables>
-		<variable name="InstallerFrame.logfilePath" value="$INSTALL_PATH/install.log" />
-		<variable name="desktopshortcutcheckboxenabled" value="true" />
-		<variable name="JDKPathPanel.minVersion" value="1.5.1" />
-		<variable name="JDKPathPanel.maxVersion" value="1.6.99" />
-		<variable name="JDKPathPanel.skipIfValid" value="yes" />
+      <variable name="InstallerFrame.logfilePath" value="$INSTALL_PATH/install.log" />
+      <variable name="desktopshortcutcheckboxenabled" value="true" />
+      <variable name="JDKPathPanel.minVersion" value="1.5.1" />
+      <variable name="JDKPathPanel.maxVersion" value="1.6.99" />
+      <variable name="JDKPathPanel.skipIfValid" value="yes" />
     </variables>
 
     <!-- 
@@ -170,78 +183,73 @@
        
         <!-- CSAL files -->
 	<pack name="CSAL"  parent="Core" required="yes">
-            <description>The Client-Side Abstraction Layer (CSAL)</description>
-            <fileset dir="../CSAL" targetdir="$INSTALL_PATH/CSAL"/>
-<!--	<file src="varfile/build.xml" targetdir="$INSTALL_PATH/CSAL" override="true"/>
-            <parsable targetfile="$INSTALL_PATH/CSAL/build.xml"/>
--->
-	    <!-- UNIX scripts --> 
+          <description>The Client-Side Abstraction Layer (CSAL)</description>
+          <fileset dir="../CSAL" targetdir="$INSTALL_PATH/CSAL"/>
+	  <!-- <file src="varfile/build.xml" targetdir="$INSTALL_PATH/CSAL" override="true"/> 
+          <parsable targetfile="$INSTALL_PATH/CSAL/build.xml"/> -->
+	  <!-- UNIX scripts --> 
 <!--
-            <file src="script/CSAL.sh" targetdir="$INSTALL_PATH/script">
-				<os family="unix"/>
-			</file>
-            <parsable targetfile="$INSTALL_PATH/script/CSAL.sh">
-				<os family="unix"/>
-			</parsable>
-			<executable targetfile="$INSTALL_PATH/script/CSAL.sh" stage="never" failure="abort">
-				<os family="unix"/>
-            </executable>
+          <file src="script/CSAL.sh" targetdir="$INSTALL_PATH/bin">
+	    <os family="unix"/>
+	  </file>
+          <parsable targetfile="$INSTALL_PATH/script/CSAL.sh">
+	    <os family="unix"/>
+	  </parsable>
+	  <executable targetfile="$INSTALL_PATH/script/CSAL.sh" stage="never" failure="abort">
+	    <os family="unix"/>
+          </executable>
 -->
-			<!-- Windows scripts -->
-<!--            <file src="script/CSAL.bat" targetdir="$INSTALL_PATH\script">
-				<os family="windows"/>
-			</file>
-            <parsable targetfile="$INSTALL_PATH\script\CSAL.bat">
-				<os family="windows"/>
-			</parsable>
-			<executable targetfile="$INSTALL_PATH\script\CSAL.bat" stage="never" failure="abort">
-				<os family="windows"/>
-			</executable> 
-			<depends packname = "JAXWS"/>
+	  <!-- Windows scripts -->
+<!--
+          <file src="script/CSAL.bat" targetdir="$INSTALL_PATH\script">
+	    <os family="windows"/>
+	  </file>
+          <parsable targetfile="$INSTALL_PATH\script\CSAL.bat">
+	    <os family="windows"/>
+	  </parsable>
+	  <executable targetfile="$INSTALL_PATH\script\CSAL.bat" stage="never" failure="abort">
+	    <os family="windows"/>
+	  </executable> 
 -->
+	  <depends packname = "JAXWS"/>
         </pack>   
       
         <!-- JDK empty pack -->
         <pack name="JDK" id="JDKPack" parent="Core" required="yes">
             <description>Java Developer Kit</description>
-		</pack>
+	</pack>
         
         <!-- ANT files -->
-
-<!--
         <pack name="ANT" parent="ServerPack" required="no">
-           	<description>Build utility</description>
-           	<fileset dir="../Lib" targetdir="$INSTALL_PATH/ant"/>
--->
-			<!-- UNIX scripts -->        		
-<!--           	<file src="script/ANTpath.sh" targetdir="$INSTALL_PATH/script">
-				<os family="unix"/>
-			</file>
-           	<parsable targetfile="$INSTALL_PATH/script/ANTpath.sh">
-				<os family="unix"/>
-			</parsable>  
-           	<executable targetfile="$INSTALL_PATH/script/ANTpath.sh" stage="never" failure="abort">
-    			<os family="unix"/>
-			</executable>
- -->
-			<!-- Windows scripts -->
-<!--			<file src="script/ANTpath.bat" targetdir="$INSTALL_PATH\script">
-				<os family="windows"/>
-			</file>
-           	<parsable targetfile="$INSTALL_PATH\script\ANTpath.bat">
-				<os family="windows"/>
-			</parsable>  
-			<executable targetfile="$INSTALL_PATH\script\ANTpath.bat" stage="never" failure="abort">
-    		   	<os family="windows"/>
-    		</executable>
+          <description>Build utility</description>
+          <!-- <fileset dir="../Lib" targetdir="$INSTALL_PATH/ant"/> -->
+	  <!-- UNIX scripts -->        		
+          <file src="script/ANTpath.sh" targetdir="$INSTALL_PATH/script">
+	    <os family="unix"/>
+	  </file>
+          <parsable targetfile="$INSTALL_PATH/script/ANTpath.sh">
+	    <os family="unix"/>
+	  </parsable>  
+          <executable targetfile="$INSTALL_PATH/script/ANTpath.sh" stage="never" failure="abort">
+    	    <os family="unix"/>
+	  </executable>
+	  <!-- Windows scripts -->
+	  <file src="script/ANTpath.bat" targetdir="$INSTALL_PATH\script">
+	    <os family="windows"/>
+	  </file>
+          <parsable targetfile="$INSTALL_PATH\script\ANTpath.bat">
+	    <os family="windows"/>
+	  </parsable>  
+	  <executable targetfile="$INSTALL_PATH\script\ANTpath.bat" stage="never" failure="abort">
+    	    <os family="windows"/>
+    	  </executable>
        	</pack>	
--->
+
 	<!-- GATE empty pack -->
         <pack name="GATE" parent="ServerPack" required="no">
             <description>
             General Architecture for Text Engineering (GATE)
-	    Must be downloaded and installed in order to install the server on the local machine
-
+	    Required for the Semantic Assistants Server
             Download from: http://gate.ac.uk/
             </description>
         </pack>
@@ -250,36 +258,38 @@
         <pack name="Server" id="ServerPack" required="no">
             <description>Server base files needed to run the server</description>
             <fileset dir="../Server" targetdir="$INSTALL_PATH/Server"/>
-			<!-- UNIX scripts -->   
-			<file src="script/RunServer.sh" targetdir="$INSTALL_PATH/script">
-				<os family="unix"/>
-			</file> 
-			<parsable targetfile="$INSTALL_PATH/script/RunServer.sh">
-				<os family="unix"/>
-			</parsable> 
+	    <!-- UNIX scripts -->   
+	    <file src="script/RunServer.sh" targetdir="$INSTALL_PATH/script">
+	      <os family="unix"/>
+	    </file> 
+	    <parsable targetfile="$INSTALL_PATH/script/RunServer.sh">
+	      <os family="unix"/>
+	    </parsable> 
             <executable targetfile="$INSTALL_PATH/script/RunServer.sh" stage="never" failure="abort" keep="true">
-				<os family="unix"/>
-			</executable>		
-			<!-- Windows scripts -->
-			<file src="script/RunServer.bat" targetdir="$INSTALL_PATH\script">
+	      <os family="unix"/>
+	    </executable>		
+	    <!-- Windows scripts -->
+	    <file src="script/RunServer.bat" targetdir="$INSTALL_PATH\script">
 				<os family="windows"/>
-			</file> 
-			<parsable targetfile="$INSTALL_PATH\script\RunServer.bat">
-				<os family="windows"/>
-			</parsable> 
-			<executable targetfile="$INSTALL_PATH\script\RunServer.bat" stage="never" failure="abort"  keep="true">
-				<os family="windows"/>
-			</executable>		  
-			<depends packname = "GATE"/>
+	    </file> 
+	    <parsable targetfile="$INSTALL_PATH\script\RunServer.bat">
+	      <os family="windows"/>
+	    </parsable> 
+	    <executable targetfile="$INSTALL_PATH\script\RunServer.bat" stage="never" failure="abort"  keep="true">
+	      <os family="windows"/>
+	    </executable>		  
+	    <depends packname = "GATE"/>
         </pack>			
 
         <!--  JAX-WS files -->
-<!-- we cannot distribute JAX-WS, needs to be downloaded separately
-        <pack name="JAXWS" parent="CSAL" required="no">
-            <description>Java API for XML Web Services</description>
-            <fileset dir="/usr/local/durmtools/jaxws-ri" targetdir="$INSTALL_PATH/durmtools/jaxws-ri"/>
+        <pack name="JAXWS" parent="Core" required="yes">
+            <description>
+            Java API for XML Web Services (JAX-WS) v.2.1.7
+
+            Download from: http://jax-ws.java.net/2.1.7/
+            </description>
         </pack>
--->     
+     
       	<!-- Parent node for Clients -->
         <pack name="Clients" required="no">
             <description>NLP Clients</description>
@@ -356,16 +366,16 @@
             <fileset dir="../Clients/OpenOffice" targetdir="$INSTALL_PATH/Clients/OpenOffice"/>
         </pack>
 
-		<!-- Eclipse plug-in files -->
+	<!-- Eclipse plug-in files -->
         <pack name="Eclipse Plugin" parent="Clients" required="no">
             <description>Eclipse Plugin base files</description>
             <fileset dir="../Clients/EclipsePlugin" targetdir="$INSTALL_PATH/Clients/EclipsePlugin"/> 
         </pack>
          
-        <!--  Semantic Assistants Documentation and Installer Documentation -->
-    	<pack name="Documentations" required="no">
-            <description>The documentation and user manual</description>
-			<fileset dir="docs/" targetdir="$INSTALL_PATH/docs"/>
-		</pack>		
+        <!--  Semantic Assistants Documentation -->
+    	<pack name="Documentation" required="no">
+          <description>The documentation and user manual</description>
+	  <fileset dir="../Doc" targetdir="$INSTALL_PATH/Doc"/>
+	</pack>		
     </packs>
 </installation>

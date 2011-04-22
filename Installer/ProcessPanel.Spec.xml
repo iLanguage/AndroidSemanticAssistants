@@ -1,32 +1,33 @@
 <!-- 
-	   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
-
-	   This file is part of the Semantic Assistants architecture.
-
-	   Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
-	   Document   : ProcessPanel.Spec.xml
-       Created on : April 11, 2010, 1:10 PM
-       Created by : Albert Trinh
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+   
+   This file is part of the Semantic Assistants architecture.
+   
+   Copyright (C) 2011 Semantic Software Lab, http://www.semanticsoftware.info
+   Document   : ProcessPanel.Spec.xml
+   Created on : April 11, 2010, 1:10 PM
+   Created by : Albert Trinh
        
-	   The Semantic Assistants architecture is free software: you can
-	   redistribute and/or modify it under the terms of the GNU Affero General
-	   Public License as published by the Free Software Foundation, either
-	   version 3 of the License, or (at your option) any later version.
-	   
-	   This program is distributed in the hope that it will be useful,
-	   but WITHOUT ANY WARRANTY; without even the implied warranty of
-	   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-	   GNU Affero General Public License for more details.
-	   
-	   You should have received a copy of the GNU Affero General Public License
-	   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+   
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
+
 <processing>
   <logfiledir>$INSTALL_PATH</logfiledir>
   <onFail previous="true" next="false" />
   <onSuccess previous="true" next="true"/>
   
-	<!-- Executing UNIX Scripts -->
+  <!-- Executing UNIX Scripts -->
   <job name="Adding ANT to the $PATH env. variable">
     <os family="unix"/>
     <executeForPack name="ANT"/>
@@ -59,7 +60,7 @@
     </executefile>
   </job> 
 
-	<!-- Executing Windows Scripts --> 
+  <!-- Executing Windows Scripts --> 
 
   <job name="Adding ANT to the $PATH env. variable">
     <os family="windows"/>
