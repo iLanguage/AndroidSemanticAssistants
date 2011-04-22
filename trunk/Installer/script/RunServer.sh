@@ -1,2 +1,3 @@
+#! /bin/bash
 cd "$INSTALL_PATH/Server"
-ant run
+$gate.location.dir/bin/ant run

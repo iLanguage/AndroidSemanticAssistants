@@ -1,12 +1,33 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+
+<!--
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+   This file is part of the Semantic Assistants architecture.
+   Copyright (C) 2011 Semantic Software Lab, http://www.semanticsoftware.info
+
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
 <shortcuts>
   <!--<skipIfNotSupported/>-->
   <programGroup defaultName="Semantic Assistants" location="applications"/>
   <shortcut
-    name="Run Server"
-    target="$INSTALL_PATH/Server/RunServer.sh"
+    name="Start SA Server"
+    target="$INSTALL_PATH/script/RunServer.sh"
     workingDirectory="$INSTALL_PATH/Server"
-    description="Run NLP server."
+    description="Run Semantic Assistants NLP Server"
     initialState="normal"
     applications="no"
     programGroup="yes"
@@ -19,12 +40,13 @@
     
     <createForPack name="Server"/>
   </shortcut>
+
   <shortcut
     name="Uninstall"
-    target="$INSTALL_PATH\\Uninstaller\uninstaller.jar"
-    commandLine="-jar $INSTALL_PATH\Uninstaller\uninstaller.jar"
+    target="$INSTALL_PATH/Uninstaller/uninstaller.jar"
+    commandLine="-jar $INSTALL_PATH/Uninstaller/uninstaller.jar"
     workingDirectory=""
-    description="Uninstall Semantic Assistant"
+    description="Uninstall Semantic Assistants"
     initialState="normal"
     iconFile="trashcan_full"
     programGroup="yes"
@@ -35,6 +57,4 @@
     encoding="UTF-8"
     startup="no">
   </shortcut>
-
-
 </shortcuts>

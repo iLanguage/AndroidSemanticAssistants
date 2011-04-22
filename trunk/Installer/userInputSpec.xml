@@ -1,25 +1,42 @@
 <userInput> 
-	<!-- Gate -->
+	<!-- GATE -->
 	<panel id="UserInputPanelGATE" order="0">          
         <createForPack name="GATE"/>
 		<field type="title" txt="GATE Location" bold="true" size="1" />
         <field type="divider" align="top"/>
-        <field type="staticText" align="left" txt="GATE"/>
+        <field type="staticText" align="left" txt="General Architecture for Text Engineering (GATE): Must be installed in order to run the Semantic Assistants Server on the local machine"/>
         <field type="dir" align="left" variable="gate.location.dir">
-			<!-- Testing Purpose --> 
-			<!-- <spec txt="Location to import:" size="25" set="/usr/local/GATE-6.0-beta1/"/>  -->
       	   	<spec txt="Location to import:" size="25" set=""/> 
 		</field>
         <field type="space"/>
-        <field type="staticText" align="left" txt="Download at: http://gate.ac.uk/download/"/>
+        <field type="staticText" align="left" txt="You can download GATE from: http://gate.ac.uk/download/"/>
         <field type="space"/> 
 		<str id="UserInputPanelGATE.dir.nodirectory.message"   txt="You must select a valid directory"/>
 		<str id="UserInputPanelGATE.dir.nodirectory.caption"   txt="No Directory Selected"/>
 		<str id="UserInputPanelGATE.dir.notdirectory.message"   txt="The directory you have chosen either does not exist or is not valid."/>
 		<str id="UserInputPanelGATE.dir.notdirectory.caption"   txt="Invalid Directory"/>		
 	</panel>
+
+	<!-- JAX-WS -->
+	<panel id="UserInputPanelJAXWS" order="0">          
+        <createForPack name="JAXWS"/>
+		<field type="title" txt="JAX-WS 2.1.7 Location" bold="true" size="1" />
+        <field type="divider" align="top"/>
+        <field type="staticText" align="left" txt="Java API for XML Web Services (JAX-WS) v.2.1.7: Required for running Semantic Assistants Server and Clients"/>
+        <field type="dir" align="left" variable="jaxws.location.dir">
+      	   	<spec txt="Location to import:" size="25" set=""/> 
+		</field>
+        <field type="space"/>
+        <field type="staticText" align="left" txt="You can download JAX-WS 2.1.7 from: http://jax-ws.java.net/2.1.7/"/>
+        <field type="space"/> 
+		<str id="UserInputPanelGATE.dir.nodirectory.message"   txt="You must select a valid directory"/>
+		<str id="UserInputPanelGATE.dir.nodirectory.caption"   txt="No Directory Selected"/>
+		<str id="UserInputPanelGATE.dir.notdirectory.message"   txt="The directory you have chosen either does not exist or is not valid."/>
+		<str id="UserInputPanelGATE.dir.notdirectory.caption"   txt="Invalid Directory"/>		
+	</panel>
+
 	<!-- CSAL server location -->
-    <panel id="UserInputPanelCSAL" order="1"> 
+	<panel id="UserInputPanelCSAL" order="1"> 
     	<createForPack name="CSAL"/>
     	<field type="title" txt="CSAL's Server Location" bold="true" size="1" />
         <field type="divider" align="top"/>
@@ -37,10 +54,10 @@
         <field type="space"/>
 		<field type="staticText" align="left" txt="Please Visit: http://www.semanticsoftware.info/semantic-assistants-project/ for the NLP server IP address"/>
         <field type="space"/>    
-    </panel>  
+	</panel>  
 
 	<!-- Open Office location -->
-    <panel id="UserInputPanelOpenOffice" order="2"> 
+	<panel id="UserInputPanelOpenOffice" order="2"> 
     	<createForPack name="OpenOffice Plugin"/>
     	<field type="title" txt="Open Office Location" bold="true" size="1" />
         <field type="divider" align="top"/>
@@ -57,25 +74,23 @@
 		<str id="UserInputPanelOpenOffice.dir.nodirectory.caption"   txt="No Directory Selected"/>
 		<str id="UserInputPanelOpenOffice.dir.notdirectory.message"   txt="The directory you have chosen either does not exist or is not valid."/>
 		<str id="UserInputPanelOpenOffice.dir.notdirectory.caption"   txt="Invalid Directory"/>  
-    </panel>  
+	</panel>  
 
 	<!-- Eclipse Location -->
-    <panel id="UserInputPanelEclipse" order="3">
+	<panel id="UserInputPanelEclipse" order="3">
     	<createForPack name="Eclipse Plugin"/>
     	<field type="title" txt="Eclipse Location" bold="true" size="1" />
         <field type="divider" align="top"/>
         <field type="staticText" align="left" txt="Eclipse"/>
         <field type="dir" align="left" variable="eclipse.location.dir">
-			<!-- Testing Purpose --> 
-			<!--<spec txt="Open Office Location:" size="25" set="/home/teamA/Desktop/eclipse/plugins"/> -->
-			<spec txt="Eclipse Location:" size="25"/>
-		</field>
-		<field type="space"/>
- 		<field type="staticText" align="left" txt="Download at: http://www.eclipse.org/downloads/"/>
+	  <spec txt="Eclipse Location:" size="25"/>
+	</field>
+	<field type="space"/>
+ 	<field type="staticText" align="left" txt="Download at: http://www.eclipse.org/downloads/"/>
         <field type="space"/>   
         <str id="UserInputPanelEclipse.dir.nodirectory.message"   txt="You must select a valid directory"/>
 		<str id="UserInputPanelEclipse.dir.nodirectory.caption"   txt="No Directory Selected"/>
 		<str id="UserInputPanelEclipse.dir.notdirectory.message"   txt="The directory you have chosen either does not exist or is not valid."/>
 		<str id="UserInputPanelEclipse.dir.notdirectory.caption"   txt="Invalid Directory"/>  -->
-    </panel>  
+	</panel>  
 </userInput>
