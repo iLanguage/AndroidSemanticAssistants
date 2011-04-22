@@ -6,9 +6,6 @@
    This file is part of the Semantic Assistants architecture.
 
    Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
-   Document   : SemassistProperties.xml
-   Created on : March 8, 2010, 7:52 PM
-   Created by : Nikolaos Papadakis
 
    The Semantic Assistants architecture is free software: you can
    redistribute and/or modify it under the terms of the GNU Affero General
@@ -27,7 +24,7 @@
     <property name="semassist.home"           value="${basedir}" />
     <property name="csal.home"                value="${semassist.home}/CSAL" />
     <property name="csal.name"                value="CSAL.jar" />
-    <property name="javadoc.home"                value="${semassist.home}/Javadoc" />
+    <property name="javadoc.home"             value="${semassist.home}/Javadoc" />
 
     <!-- Machine dependent properties. Need to be modified -->
     <property name="durmtools"                value="/usr/local/durmtools" />
@@ -35,7 +32,6 @@
     <property name="gate-home"                value="${durmtools}/GATE/gate" />
     <property name="gate.jar"                 value="${gate-home}/bin/gate.jar" />
     <property name="jdk.home"                 value="${durmtools}/jdk" />
-     <property name="junit.home"                 value="${durmtools}/junit" />
      
     <!-- Used by Open Office Writer Plug-In-->
     <property name="office.home.dir"          value="${durmtools}/OpenOffice"/>
@@ -100,6 +96,7 @@
     <property name="compile.args"	      value="-Xlint"/>
 
     <!-- Development tools.  Not needed for compiling or running the system -->
+    <property name="junit.home"               value="${durmtools}/junit" />
     <property name="checkstyle.home"          value="${durmtools}/checkstyle" />
     <property name="checkstyle.config"        value="${checkstyle.home}/durm_checks.xml" />
     <property name="checkstyle.classpath"     value="${checkstyle.home}/checkstyle-5.3-all.jar" />
