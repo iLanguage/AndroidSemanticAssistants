@@ -7,7 +7,7 @@
    Copyright (C) 2011 Semantic Software Lab, http://www.semanticsoftware.info
 
    Document   : install.xml
-   Created on : April 11, 2010, 1:10 PM
+   Created on : April 11, 2011, 1:10 PM
    Created by : Albert Trinh
        
    The Semantic Assistants architecture is free software: you can
@@ -33,38 +33,35 @@
         <appname>SemanticAssistants</appname>
         <appversion>1.0-beta</appversion>
 	<authors>
-            <author name="Semantic Software Lab" email=""/>
+          <author name="Semantic Software Lab" email=""/>
         </authors>
-
         <url>http://www.semanticsoftware.info/semantic-assistants</url>  
-        <javaversion>
-        	1.6     	
-        </javaversion>	
+	<requiresjdk>yes</requiresjdk>
+        <javaversion>1.6</javaversion>	
     </info>
 
     <!-- 
-        The gui preferences indication.
-        Sets the installer window to 800x600. It will not be able to change the size.
+        The install gui preferences
     -->
     <guiprefs width="800" height="620" resizable="no">
-		<modifier key="allXGap" value="5"/>
-		<modifier key="allYGap" value="5"/>
-		<modifier key="paragraphYGap" value="15"/>
-		<modifier key="useHeadingPanel" value="yes"/>
-		<modifier key="headingLineCount" value="1"/>
-		<modifier key="headingFontSize" value="2"/>
-		<modifier key="headingBackgroundColor" value="0x00ffffff"/>
-		<modifier key="headingPanelCounter" value="text"/>
-		<modifier key="headingPanelCounterPos" value="inHeading"/>
-		<!-- Look and Feel in UNIX/Linux -->
-		<laf name="kunststoff">  
-		  <os family="unix" />
-		</laf>
-		<!-- Look and Feel in Windows -->
-		<laf name="looks"> 
-		  <os family="windows" />
-		  <param name="variant" value="extwin" />
-		</laf>
+      <modifier key="allXGap" value="5"/>
+      <modifier key="allYGap" value="5"/>
+      <modifier key="paragraphYGap" value="15"/>
+      <modifier key="useHeadingPanel" value="yes"/>
+      <modifier key="headingLineCount" value="1"/>
+      <modifier key="headingFontSize" value="2"/>
+      <modifier key="headingBackgroundColor" value="0x00ffffff"/>
+      <modifier key="headingPanelCounter" value="text"/>
+      <modifier key="headingPanelCounterPos" value="inHeading"/>
+      <!-- Look and Feel in UNIX/Linux -->
+      <laf name="kunststoff">  
+	<os family="unix" />
+      </laf>
+      <!-- Look and Feel in Windows -->
+      <laf name="looks"> 
+	<os family="windows" />
+	<param name="variant" value="extwin" />
+      </laf>
     </guiprefs>
     
     <!-- 
@@ -94,6 +91,7 @@
     <resources>
         <res id="Logo" src="logo.jpg"/>
         <res id="sa" src="sa.jpg"/>
+	<res id="Heading.image" src="logo.jpg"/>
         <res id="LicencePanel.licence" src="LICENSE.txt"/>
         <res id="HTMLInfoPanel.info" src="HTMLInfoPanel.html"/>
 	<res id="HTMLInfoPanel.info_fra" src="HTMLInfoPanel.html_fra"/>
@@ -110,9 +108,10 @@
 		<res id="CSAL.sh" src="script/CSAL.sh" parse="yes" type="plain"/>
 		<res id="CSAL.bat" src="script/CSAL.bat" parse="yes" type="plain"/>
 -->
-
+<!--
         <res id="ANTpath.sh" src="script/ANTpath.sh" parse="yes" type="plain"/>
 	<res id="ANTpath.bat" src="script/ANTpath.sh" parse="yes" type="plain"/>
+-->
 <!--
 		<res id="FirefoxInstaller.sh" src="script/FirefoxInstaller.sh" parse="yes" type="plain"/>
 		<res id="FirefoxInstaller.bat" src="script/FirefoxInstaller.bat" parse="yes" type="plain"/>
@@ -153,37 +152,43 @@
         <panel classname="InstallPanel"/>
 <!--	<panel classname="ProcessPanel"/> -->
 	<panel classname="ShortcutPanel"/>	
-        <panel classname="FinishPanel"/>
+	<panel classname="SimpleFinishPanel"/>
     </panels>
 
     <!-- Variables -->
     <variables>
       <variable name="InstallerFrame.logfilePath" value="$INSTALL_PATH/install.log" />
       <variable name="desktopshortcutcheckboxenabled" value="true" />
-      <variable name="JDKPathPanel.minVersion" value="1.5.1" />
-      <variable name="JDKPathPanel.maxVersion" value="1.6.99" />
+      <variable name="JDKPathPanel.minVersion" value="1.6.0" />
       <variable name="JDKPathPanel.skipIfValid" value="yes" />
     </variables>
 
+    <!-- Conditions -->
+    <conditions>
+      <condition type="packselection" id="condclientselected">
+	<packid>Clients</packid>
+      </condition>
+    </conditions>
+
     <!-- 
         The packs section.
-        We specify here our packs.
     -->
     <packs>
-   	<!--  Core files for the installtion -->
-      	<pack name="Core" required="yes"> 
-            <description>Core Resources</description> 
-            <fileset dir="../Resources" targetdir="$INSTALL_PATH/Resources"/>
-            <file src="LICENSE.txt" targetdir="$INSTALL_PATH"/>
-			<file src="../LocalProperties.xml" targetdir="$INSTALL_PATH" override="true"/>
-			<fileset dir="../Lib" targetdir="$INSTALL_PATH/Lib"/>
-            <file src="varfile/SemassistProperties.xml" targetdir="$INSTALL_PATH" override="true"/>
-            <parsable targetfile="$INSTALL_PATH/SemassistProperties.xml"/>    
+   	<!--  Core files for the installation -->
+      	<pack name="Core" required="yes" > 
+          <description>Core Resources</description> 
+          <file src="LICENSE.txt" targetdir="$INSTALL_PATH"/>
+	  <file src="../LocalProperties.xml" targetdir="$INSTALL_PATH" override="true"/>
+	  <fileset dir="../Lib" targetdir="$INSTALL_PATH/Lib"/>
+          <file src="varfile/SemassistProperties.xml" targetdir="$INSTALL_PATH" override="true"/>
+          <parsable targetfile="$INSTALL_PATH/SemassistProperties.xml"/>    
         </pack>  
        
         <!-- CSAL files -->
-	<pack name="CSAL"  parent="Core" required="yes">
-          <description>The Client-Side Abstraction Layer (CSAL)</description>
+	<pack name="CSAL" parent="Clients" required="no" >
+          <description>The Client-Side Abstraction Layer (CSAL).
+
+Required for all SA clients.</description>
           <fileset dir="../CSAL" targetdir="$INSTALL_PATH/CSAL"/>
 	  <!-- <file src="varfile/build.xml" targetdir="$INSTALL_PATH/CSAL" override="true"/> 
           <parsable targetfile="$INSTALL_PATH/CSAL/build.xml"/> -->
@@ -211,7 +216,7 @@
 	    <os family="windows"/>
 	  </executable> 
 -->
-	  <depends packname = "JAXWS"/>
+	    <depends packname = "Clients"/>
         </pack>   
       
         <!-- JDK empty pack -->
@@ -219,11 +224,14 @@
             <description>Java Developer Kit</description>
 	</pack>
         
-        <!-- ANT files -->
-        <pack name="ANT" parent="ServerPack" required="no">
+       <!-- ANT files -->
+<!--
+        <pack name="ANT" parent="Server" required="no">
           <description>Build utility</description>
+-->
           <!-- <fileset dir="../Lib" targetdir="$INSTALL_PATH/ant"/> -->
 	  <!-- UNIX scripts -->        		
+<!--
           <file src="script/ANTpath.sh" targetdir="$INSTALL_PATH/script">
 	    <os family="unix"/>
 	  </file>
@@ -233,7 +241,9 @@
           <executable targetfile="$INSTALL_PATH/script/ANTpath.sh" stage="never" failure="abort">
     	    <os family="unix"/>
 	  </executable>
+-->
 	  <!-- Windows scripts -->
+<!--
 	  <file src="script/ANTpath.bat" targetdir="$INSTALL_PATH\script">
 	    <os family="windows"/>
 	  </file>
@@ -244,13 +254,14 @@
     	    <os family="windows"/>
     	  </executable>
        	</pack>	
-
+-->
 	<!-- GATE empty pack -->
         <pack name="GATE" parent="ServerPack" required="no">
             <description>
             General Architecture for Text Engineering (GATE)
-	    Required for the Semantic Assistants Server
-            Download from: http://gate.ac.uk/
+Required for the Semantic Assistants Server
+
+Download from: http://gate.ac.uk/
             </description>
         </pack>
         
@@ -258,6 +269,7 @@
         <pack name="Server" id="ServerPack" required="no">
             <description>Server base files needed to run the server</description>
             <fileset dir="../Server" targetdir="$INSTALL_PATH/Server"/>
+            <fileset dir="../Resources" targetdir="$INSTALL_PATH/Resources"/>
 	    <!-- UNIX scripts -->   
 	    <file src="script/RunServer.sh" targetdir="$INSTALL_PATH/script">
 	      <os family="unix"/>
@@ -270,7 +282,7 @@
 	    </executable>		
 	    <!-- Windows scripts -->
 	    <file src="script/RunServer.bat" targetdir="$INSTALL_PATH\script">
-				<os family="windows"/>
+	      <os family="windows"/>
 	    </file> 
 	    <parsable targetfile="$INSTALL_PATH\script\RunServer.bat">
 	      <os family="windows"/>
@@ -286,7 +298,7 @@
             <description>
             Java API for XML Web Services (JAX-WS) v.2.1.7
 
-            Download from: http://jax-ws.java.net/2.1.7/
+Nees to be downloaded from: http://jax-ws.java.net/2.1.7/
             </description>
         </pack>
      
@@ -301,8 +313,7 @@
             <fileset dir="../Clients/CommandLine" targetdir="$INSTALL_PATH/Clients/CommandLine"/>
         </pack>
         
-<!--
- 
+<!-- 
         <pack name="Mozilla" parent="Clients" required="no">
             <description>Mozilla Plugins</description>
         </pack> 
@@ -375,7 +386,7 @@
         <!--  Semantic Assistants Documentation -->
     	<pack name="Documentation" required="no">
           <description>The documentation and user manual</description>
-	  <fileset dir="../Doc" targetdir="$INSTALL_PATH/Doc"/>
+	  <file src="../Doc/semassist.pdf" targetdir="$INSTALL_PATH/Doc"/>
 	</pack>		
     </packs>
 </installation>

@@ -1,25 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
 
-<!--
-   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
-
-   This file is part of the Semantic Assistants architecture.
-   Copyright (C) 2011 Semantic Software Lab, http://www.semanticsoftware.info
-
-   The Semantic Assistants architecture is free software: you can
-   redistribute and/or modify it under the terms of the GNU Affero General
-   Public License as published by the Free Software Foundation, either
-   version 3 of the License, or (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU Affero General Public License for more details.
-
-   You should have received a copy of the GNU Affero General Public License
-   along with this program.  If not, see <http://www.gnu.org/licenses/>.
--->
-
 <shortcuts>
   <!--<skipIfNotSupported/>-->
   <programGroup defaultName="Semantic Assistants" location="applications"/>
@@ -29,17 +9,52 @@
     workingDirectory="$INSTALL_PATH/Server"
     description="Run Semantic Assistants NLP Server"
     initialState="normal"
-    applications="no"
     programGroup="yes"
     desktop="yes"
     type="Application"
     terminal="true"
     startMenu="yes"
     encoding="UTF-8"
-    startup="no">
-    
+    startup="no" >
+
     <createForPack name="Server"/>
   </shortcut>
+
+   <shortcut
+     name="SA Documentation"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target="kpdf"
+     workingDirectory=""
+     commandLine="$INSTALL_PATH/Doc/semassist.pdf"
+     initialState="noShow"
+     url="$INSTALL_PATH/Doc/semassist.pdf"
+     type="Application"
+     encoding="UTF-8"
+     description="Semantic Assistants documentation (PDF format)">
+
+     <createForPack name="Documentation"/>
+   </shortcut>
+
+  <shortcut
+     name="SA Homepage"
+     programGroup="yes"
+     desktop="yes"
+     applications="no"
+     startMenu="yes"
+     startup="no"
+     target="firefox"
+     workingDirectory=""
+     commandLine=""
+     initialState="noShow"
+     url="http://www.semanticsoftware.info/semantic-assistants"
+     type="Link"
+     encoding="UTF-8"
+     description="Semantic Assistants Homepage">
+   </shortcut>
 
   <shortcut
     name="Uninstall"
@@ -55,6 +70,6 @@
     startMenu="no"
     type="Application"
     encoding="UTF-8"
-    startup="no">
+    startup="no" >
   </shortcut>
 </shortcuts>
