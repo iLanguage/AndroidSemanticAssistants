@@ -37,7 +37,7 @@
     <property name="office.home.dir"          value="${durmtools}/OpenOffice"/>
     <property name="uno-copy-dest"  	      value="${user.home}/Documents/uno-components" />
     <property name="office.program.dir"       value="${office.home.dir}/program"/>
-    <property name="ooo-classes-basis"        value="${office.home.dir}/basis3.2/program/classes/" />
+    <property name="ooo-classes-basis"        value="${office.home.dir}/basis3.3/program/classes/" />
     <property name="ooo-classes-common"       value="${office.home.dir}/ure/share/java/" />
  
     <!-- Used by Eclipse Plug-In-->
