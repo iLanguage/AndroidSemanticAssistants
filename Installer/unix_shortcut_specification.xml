@@ -27,7 +27,7 @@
      applications="no"
      startMenu="yes"
      startup="no"
-     target="kpdf"
+     target="okular"
      workingDirectory=""
      commandLine="$INSTALL_PATH/Doc/semassist.pdf"
      initialState="noShow"
@@ -58,7 +58,7 @@
 
   <shortcut
     name="Uninstall"
-    target="$INSTALL_PATH/Uninstaller/uninstaller.jar"
+    target="$JDKPath/bin/java"
     commandLine="-jar $INSTALL_PATH/Uninstaller/uninstaller.jar"
     workingDirectory=""
     description="Uninstall Semantic Assistants"
