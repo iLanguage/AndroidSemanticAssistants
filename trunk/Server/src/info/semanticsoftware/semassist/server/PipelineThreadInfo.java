@@ -3,6 +3,16 @@ package info.semanticsoftware.semassist.server;
 import java.io.File;
 import java.io.FilenameFilter;
 
+/**
+ * Class is used to extend the information of the GateServiceProcess
+ * We store 
+ * 		pipelineName : name of the pipeline
+ * 		maxConcurrent : maximum number of threads we allow to run concurrently
+ * 		number_pooled : maximum number of threads we allow to stay resident in memory
+ * 		loadAtStatup : should the pipelines be loaded at server startup
+ * 		pipelineAppFileLocation : location of the .gapp file
+ *
+ */
 public class PipelineThreadInfo {
 	private String pipelineName;
 	private int maxConcurrent;

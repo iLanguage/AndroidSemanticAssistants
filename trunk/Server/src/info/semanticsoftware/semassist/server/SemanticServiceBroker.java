@@ -33,6 +33,8 @@ import info.semanticsoftware.semassist.server.util.UserContext;
 import java.io.*;
 import java.util.*;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.jws.*;
@@ -113,7 +115,7 @@ public class SemanticServiceBroker
         initGate();
         
         Logging.log("Server Started Loading Resources");
-        //MainFrame.getInstance().setVisible(true); // for debugging only
+        MainFrame.getInstance().setVisible(true); // for debugging only
         initThreadRegistry();
         Logging.log("Server Finished Loading Resources");
         Logging.log("Server Ready for Requests...");
@@ -121,17 +123,23 @@ public class SemanticServiceBroker
 
     private void initThreadRegistry() {
     	for(String[] s:MasterData.Instance().getPipelineThreadProperties()){
-    		PipelineThreadInfo pti = new PipelineThreadInfo(s[0], Integer.parseInt(s[1]), Boolean.parseBoolean(s[2]), s[3],Integer.parseInt(s[4]));
-    		GatePipelineRegistery.getInstance().addPipelineThreadInfo(pti);
-    		if(pti.isLoadAtStatup()){
-    			for(int iGAPI=0;iGAPI<pti.getNumberPooled();iGAPI++){
-    				GatePipelineRegistery.getInstance().addGateProcess(pti.getPipelineAppFile().getPath(), loadGateApp(pti.getPipelineAppFile()), ServiceStatus.STATUS_INACTIVE, pti, false);
-    				Logging.log("Pipeline (" + pti.getPipelineName() + ") loaded");
-    			}
+    		try{
+	    		PipelineThreadInfo pti = new PipelineThreadInfo(s[0], Integer.parseInt(s[1]), Boolean.parseBoolean(s[2]), s[3],Integer.parseInt(s[4]));
+	    		GatePipelineRegistery.getInstance().addPipelineThreadInfo(pti);
+	    		if(pti.isLoadAtStatup()){
+	    			for(int iGAPI=0;iGAPI<pti.getNumberPooled();iGAPI++){
+	    				GatePipelineRegistery.getInstance().addGateProcess(pti.getPipelineAppFile().getPath(), loadGateApp(pti.getPipelineAppFile()), ServiceStatus.STATUS_INACTIVE, pti, false);
+	    				Logging.log("Pipeline (" + pti.getPipelineName() + ") loaded");
+	    			}
+	    		}
+    		}catch(Exception ex){
+    			System.out.println("Unable to set pipeline information for " + s[0] + 
+    					"\nHave you set all parameter values correctly in the property file?" + 
+    					"\nConsult the documentation under server installation for more details.");
     		}
     	}
  	}
-
+	
 	/**
 	 * The web method that returns the list of available services.
 	 * @return list of available services
@@ -144,7 +152,6 @@ public class SemanticServiceBroker
 
         List<ServiceInfoForClient> resultList = new ArrayList<ServiceInfoForClient>();
         Set<String> keys = mAvailableServices.keySet();
-
 
         for( Iterator<String> it = keys.iterator(); it.hasNext(); )
         {
@@ -162,6 +169,16 @@ public class SemanticServiceBroker
         return resultList.toArray( result );
     }
 
+	@WebMethod()
+    public String getRunningServices()
+    {		
+		return GatePipelineRegistery.getInstance().getActivePipelines();
+    }
+	
+	@WebMethod()
+	public String getThreadPoolQueueStatus(){
+		return GatePipelineThreadPool.getInstance().getThreadPoolQueueStatus();
+	}
     private void testGatePathInit()
     {
         try
@@ -170,13 +187,11 @@ public class SemanticServiceBroker
             // MasterData.load();
             //String gateHomePath = MasterData.getGateHome();
            // XMLFileParser.readAnt();
-
         }
         catch( Exception ex )
         {
             Logger.getLogger( SemanticServiceBroker.class.getName() ).log( Level.SEVERE, null, ex );
         }
-
     }
 
     /**
@@ -252,6 +267,7 @@ public class SemanticServiceBroker
      * the agent knows that it should look for the document in the <code>literalDocs</code>
      * array. Order matters, i.e. the first document specified via <code>LITERAL_DOC_URI</code>
      * is taken from the first position in the array, etc.
+
      * @param serviceName the service name
      * @param documents list of document URIs
      * @param literalDocs list of literal strings
@@ -260,6 +276,7 @@ public class SemanticServiceBroker
      * @param userCtx the user context object
      * @return the service response message in XML format
      * */
+
     @WebMethod()
     public String invokeService( @WebParam( name = "serviceName" ) String serviceName,
                                  @WebParam( name = "documents" ) URIList documents,
@@ -274,14 +291,15 @@ public class SemanticServiceBroker
     	//create a new Thread that offers the call function
     	//it will allow the return of the future results once the thread has completed
 		CallableServiceThread cst = new CallableServiceThread(serviceName, documents, literalDocs, connID, gateParams, userCtx, this);
-		return GatePipelineThreadPool.getInstance().submitNewThread(cst);    	
+		//return GatePipelineThreadPool.getInstance().submitNewThread(cst);
+		return cst.call();
     }
     
     
     /*
      * Function created to pass the contents of the invokeService(webmethod) to a callable
      * protected function that could be referenced from another class in the same package.
-     * In this case we are refering to the CallableServiceThread.
+     * In this case we are referring to the CallableServiceThread.
      * 
      * This method was necessary to keep the SemanticServiceBroker class attributes from having to be redefined
      * to protected or public
@@ -350,14 +368,23 @@ public class SemanticServiceBroker
         ServiceInfo latestService = null;
         
         Runtime runtime = Runtime.getRuntime();
-        boolean compositeService = false;
-        if(descriptions.size()>1){
-        	compositeService=true;
-        }
         while( ito.hasNext() )
         {
             latestService = ito.next();
-            status = runOneService( latestService, status, compositeService );
+            //status = runOneService( latestService, status, compositeService );
+            
+            //status = runOneService( latestService, status, false);
+            
+            Future<ServiceExecutionStatus> futureSTATUS = GatePipelineThreadPool.getInstance().getThreadPool(latestService.getAppFileName()).submit(new CallableRunOneServiceThread(latestService, status, this));
+            try {
+				status = futureSTATUS.get();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
             Logging.log( "---------------- totalMemory: " + runtime.totalMemory() );
             Logging.log( "---------------- maxMemory  : " + runtime.maxMemory() );
             if( status == null )
@@ -387,6 +414,10 @@ public class SemanticServiceBroker
         cleanup( status );
         return finalResult;
     }
+    /**
+     * Returns the result file URL
+     * @return URL of the result output file
+     * */
     
     /**
      * Returns the result file URL
@@ -450,7 +481,7 @@ public class SemanticServiceBroker
         return result;
     }
     
-    protected ServiceExecutionStatus runOneService( ServiceInfo currentService, ServiceExecutionStatus status, boolean compositeService )
+    protected ServiceExecutionStatus runOneService( ServiceInfo currentService, ServiceExecutionStatus status)
     {
         // Get a handle of the application file
         File serviceAppFile = new File( currentService.getAppFileName() );
@@ -466,7 +497,7 @@ public class SemanticServiceBroker
         // Load the application
         Logging.log( "---------------- Preparing to load application..." );
         
-        Object serviceApp = retreiveGatePipeline(serviceAppFile, compositeService);
+        Object serviceApp = retreiveGatePipeline(serviceAppFile);
         
         Logging.log("++++++++++Process ID Started: " + serviceApp.hashCode());
         // Does the pipeline demand merged input documents?
@@ -486,7 +517,7 @@ public class SemanticServiceBroker
             String output = MasterData.ERROR_ANNOUNCEMENT + "Not all required runtime " +
                             "parameters were given for service \"" + currentService.getServiceName() + "\"";
             Logging.log( output );
-            inactivateCurrentPipeline(serviceApp,compositeService);
+            inactivateCurrentPipeline(serviceApp);
             return null;
         }
 
@@ -518,7 +549,7 @@ public class SemanticServiceBroker
             String message = "----------------" + MasterData.ERROR_ANNOUNCEMENT +
                              "Could not create temporary file for result output (IOException).";
             Logging.log( message );
-            inactivateCurrentPipeline(serviceApp,compositeService);
+            inactivateCurrentPipeline(serviceApp);
             return null;
         }
 
@@ -567,7 +598,7 @@ public class SemanticServiceBroker
                                  ") document and its text is supposed to be assigned to one or more runtime parameters. " +
                                  "Currently, this is not supported.";
                 Logging.log( warning );
-                inactivateCurrentPipeline(serviceApp,compositeService);
+                inactivateCurrentPipeline(serviceApp);
                 return null;
             }
             Logging.log( "---------------- Passing input document to parameters..." );
@@ -610,7 +641,7 @@ public class SemanticServiceBroker
                 serialCtrl.execute();
                 Logging.log( "---------------- Cleaning up controller..." );
                 
-                inactivateCurrentPipeline(serviceApp,compositeService);
+                inactivateCurrentPipeline(serviceApp);
                 Logging.log("++++++++++Process ID Stopped: " + serviceApp.hashCode());
                 
                 
@@ -627,7 +658,7 @@ public class SemanticServiceBroker
             {
                 Logging.exception( e );
                 // return MasterData.ERROR_ANNOUNCEMENT  + "ExecutionException on server";
-                inactivateCurrentPipeline(serviceApp,compositeService);
+                inactivateCurrentPipeline(serviceApp);
                 return null;
             }
 
@@ -646,14 +677,14 @@ public class SemanticServiceBroker
                 GateUtils.runApplicationOnCorpus( corpusController, status.getCorpus() );
                 Logging.log( "---------------- Cleaning up controller..." );
 
-                inactivateCurrentPipeline(serviceApp,compositeService);
+                inactivateCurrentPipeline(serviceApp);
                 Logging.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Process ID Stopped: " + serviceApp.hashCode());
                 //TODO:  Factory.deleteResource( corpusController );
             }
             catch( gate.creole.ExecutionException e )
             {
                 Logging.exception( e );
-                inactivateCurrentPipeline(serviceApp,compositeService);
+                inactivateCurrentPipeline(serviceApp);
                 // return MasterData.ERROR_ANNOUNCEMENT  + "ExecutionException on server";
                 return null;
             }
@@ -664,8 +695,9 @@ public class SemanticServiceBroker
         return status;
     }
 
-    synchronized private void inactivateCurrentPipeline(Object serviceApp, boolean compositeService) {
-		if(compositeService==false){
+    synchronized protected void inactivateCurrentPipeline(Object serviceApp) {
+		boolean compositeService=false;
+    	if(compositeService==false){
 	    	int positionOfCurrentService = GatePipelineRegistery.getInstance().getServicePosition(serviceApp);  
 			if(positionOfCurrentService < 0){
 				Logging.log("We have a problem with locating objects in Register!");
@@ -685,8 +717,8 @@ public class SemanticServiceBroker
 
     static int testX=1;
     
-    synchronized private Object retreiveGatePipeline(File serviceAppFile, boolean compositeService) {
-		 
+    synchronized protected Object retreiveGatePipeline(File serviceAppFile) {
+    	boolean compositeService = false; 
         Logging.log("Entering Sync Method " + testX);
         //check the to see if an already existing inactive service with the same type that is needed
         //can be used.   if so return it's position in the process register
@@ -872,6 +904,7 @@ public class SemanticServiceBroker
     return finalResult;
     }
      */
+
 	
 	/**
 	 * Loads an application file inside GATE
@@ -879,6 +912,7 @@ public class SemanticServiceBroker
 	 * @return the loaded GATE application file
 	 * */
 	public Object loadGateApp( File serviceAppFile )
+
     {
         Object result;
         try
@@ -894,6 +928,9 @@ public class SemanticServiceBroker
         }
         return result;
     }
+    /**
+     * Initializes a GATE instance and prepares the environment
+     * */
 
     /**
      * Initializes a GATE instance and prepares the environment
@@ -920,7 +957,6 @@ public class SemanticServiceBroker
                 Gate.setUserConfigFile( new File( gateUserFile ) );
                 Gate.init();
 
-
                 // Load plugins, for example...
                 //URL url = new URL("file://" + gatePluginDir + "/ANNIE");
                 // System.out.println("URL: " + url);
@@ -938,6 +974,9 @@ public class SemanticServiceBroker
         }
 
     }
+    /**
+     * Reads the available service description files in the repository
+     * */
 
     /**
      * Reads the available service description files in the repository
@@ -1014,6 +1053,9 @@ public class SemanticServiceBroker
             Logging.exception( e );
         }
     }
+    /**
+     * Creates an OWL service model by reading service description files
+     * */
 
     /**
      * Creates an OWL service model by reading service description files
@@ -1077,6 +1119,11 @@ public class SemanticServiceBroker
             Logging.exception( e );
         }
     }
+    /**
+     * Builds a query with the user context attributes to find appropriate services
+     * @param ctx user context object
+     * @return service query statement
+     * */
 
     /**
      * Builds a query with the user context attributes to find appropriate services
@@ -1142,6 +1189,11 @@ public class SemanticServiceBroker
 
         return result;
     }
+    /**
+     * Creates a corpus from the input string content
+     * @param argument content string
+     * @return corpus created from the string
+     * */
 
     /**
      * Creates a corpus from the input string content
@@ -1161,6 +1213,12 @@ public class SemanticServiceBroker
         }
         return corpus;
     }
+    /**
+     * Creates a corpus from the provided resources
+     * @param documents list of document URIs
+     * @param literalDocs an array of strings containing literal documents
+     * @return corpus created from the provided resources
+     * */
 
     /**
      * Creates a corpus from the provided resources
