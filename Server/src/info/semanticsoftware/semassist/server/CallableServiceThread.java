@@ -54,9 +54,9 @@ public class CallableServiceThread implements Callable<String> {
     	return(finalResult);
     }
     
-    public boolean isServiceComposite(){
-    	return si.isConcatenation();
-    }
+//    public boolean isServiceComposite(){
+//    	return false; 
+//    }
     
     public String getAppFileName(){
     	return si.getAppFileName();
