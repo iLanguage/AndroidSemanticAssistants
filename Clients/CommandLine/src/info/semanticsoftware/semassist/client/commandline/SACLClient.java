@@ -30,6 +30,7 @@ package info.semanticsoftware.semassist.client.commandline;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.net.*;
 
 import net.java.dev.jaxb.array.*;
@@ -112,9 +113,10 @@ public class SACLClient
         {
             UserContext ctx = buildUserContext( params );
 
-            p( "Retrieving service info from server..." );
+            
             try
             {
+            	
                 SemanticServiceBroker agent = ServiceAgentSingleton.getInstance();
                 ServiceInfoForClientArray sia = agent.recommendServices( ctx );
                 pl( "   done" );
@@ -158,6 +160,38 @@ public class SACLClient
                 pl( "\nConnection error. Possible reasons: Exception on server or server not running." );
             }
 
+
+        }
+        else if( cmd.equals("status")){
+            
+            try
+            {
+            	p( "Retrieving status info from server..." );
+                SemanticServiceBroker agent = ServiceAgentSingleton.getInstance();
+                String rs = agent.getRunningServices();
+                String qs = agent.getThreadPoolQueueStatus();
+                pl( "   done" );
+                String[] runningservices = rs.split(Pattern.quote(";"));
+                String[] queuedservices = qs.split(Pattern.quote(";"));
+                pl("Loaded Services and their status:");
+                for(int idx=0;idx<runningservices.length;idx++){
+                	//pl(runningservices[idx]);
+                	String[] rss = runningservices[idx].split(Pattern.quote("|"));
+                	pl( "\t" + rss[0] + " - " + rss[1]);
+                }
+                pl("Queued Services:");
+                for(int idx=0;idx<queuedservices.length;idx++){
+                	//pl(queuedservices[idx]);
+                	String[] qss = queuedservices[idx].split(Pattern.quote("|"));
+                	pl( "\t" + qss[0] + " - " + qss[1]);
+                }
+                
+                
+            }
+            catch( javax.xml.ws.WebServiceException e )
+            {
+                pl( "\nConnection error. Possible reasons: Exception on server or server not running." );
+            }
 
         }
         else if( cmd.equals( "quit" ) )
@@ -372,6 +406,8 @@ public class SACLClient
         pl( "         params=(p1=v1,p2=v2,...)    params specifies runtime parameters." );
         pl( "  printlast                        Print last command" );
         pl( "  again, last                      Execute last command" );
+        pl( "  status                           Display a list of loaded Pipelines" );
+        pl( "                                   Display a list of Queued(waiting) Pipelines" );
 
     }
 
