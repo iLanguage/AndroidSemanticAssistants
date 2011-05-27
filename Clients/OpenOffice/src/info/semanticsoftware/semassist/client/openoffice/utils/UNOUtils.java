@@ -96,6 +96,8 @@ public class UNOUtils
     private static final int HIGHLIGHT_OFF = 0xFFFFFF0A;
     private static int CURRENT_HIGHLIGHT = HIGHLIGHT_YELLOW;
     private static final String SEM_ASSIST = "Semantic Assistants:";
+    private static Boolean mShowAnnotationContent = false; /* Put annotaton content in side-notes. */
+    private static Boolean mEmptyFeatureFilter = true; /* Ignore empty-valued features by default. */
     private static String mServerHost = ClientUtils.defaultServerHost();
     private static String mServerPort = ClientUtils.defaultServerPort();
     private static Logger mLogger = Logger.getLogger( GUIUtils.class );
@@ -368,13 +370,25 @@ public class UNOUtils
             XPropertySet xPropertySet = (XPropertySet) UnoRuntime.queryInterface( XPropertySet.class, xAnnotation );
 
             Set<String> keys = annotation.mFeatures.keySet();
-            sideNoteContent = "type= " + annotation.mType + "\n" + "content= " + annotation.mContent + "\n";
+            sideNoteContent = "type= " + annotation.mType + "\n";
 
+            // If configured, dupplicate annotation content as part of the side-note.
+            if ( mShowAnnotationContent ) {
+               sideNoteContent += "content= " + annotation.mContent + "\n";
+            }
 
+            // Append all feature key/value pairs to the side-note possibly ignoring
+            // empty valued features if configured.
             for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); )
             {
-                String currentKey = it2.next();
-                sideNoteContent += currentKey + "= " + annotation.mFeatures.get( currentKey );
+                final String currentKey = it2.next();
+                final String currentVal = annotation.mFeatures.get( currentKey );
+
+                if ( !mEmptyFeatureFilter || !"".equals( currentVal ) ) {
+                  sideNoteContent += currentKey + "= " + currentVal;
+                } else {
+                  System.out.println( "---------------- Ignoring empty valued feature: "+ currentKey );
+                }
             }
 
             xPropertySet.setPropertyValue( "Content", sideNoteContent );
@@ -575,6 +589,41 @@ public class UNOUtils
             return false;
         }
     }
+
+   /**
+    * @param status true to allow filtering of empty-valued
+    *               features or false otherwise.
+    */
+   public static void setEmptyFeatureFilter( boolean status )
+   {
+      mEmptyFeatureFilter = status;
+   }
+
+   /**
+    * @return the mEmptyFeatureFilter status.
+    */
+   public static boolean isEmptyFeatureFilter()
+   {
+      return mEmptyFeatureFilter;
+   }
+
+   /**
+    * @param status true to show annotation content within side-notes,
+    *               or false otherwise.
+    */
+   public static void setShowAnnotationContent( boolean status )
+   {
+      mShowAnnotationContent = status;
+   }
+
+   /**
+    * @return the mShowAnnotationContent status.
+    */
+   public static boolean isShowAnnotationContent()
+   {
+      return mShowAnnotationContent;
+   }
+
 
     /**
      * @return the mServerHost

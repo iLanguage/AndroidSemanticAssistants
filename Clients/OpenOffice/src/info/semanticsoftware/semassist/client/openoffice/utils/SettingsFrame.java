@@ -13,7 +13,7 @@ package info.semanticsoftware.semassist.client.openoffice.utils;
 import info.semanticsoftware.semassist.csal.ClientUtils;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JOptionPane;
+import javax.swing.*;
 
 /**
  *
@@ -47,6 +47,8 @@ public class SettingsFrame extends javax.swing.JFrame
 
         jSeparator1 = new javax.swing.JSeparator();
         jCheckBox1 = new javax.swing.JCheckBox(null,null,UNOUtils.getCURRENT_HIGHLIGHT());
+        jCheckBox2 = new JCheckBox("Filter Empty Features", UNOUtils.isEmptyFeatureFilter());
+        jCheckBox3 = new JCheckBox("Show Annotation Content", UNOUtils.isShowAnnotationContent());
         jRadioButtonDefault = new javax.swing.JRadioButton( null, null, mDefaultServerSelect);
         jRadioButtonCustom = new javax.swing.JRadioButton(null, null, !mDefaultServerSelect);
         okButton = new javax.swing.JButton();
@@ -169,6 +171,12 @@ public class SettingsFrame extends javax.swing.JFrame
                             .addContainerGap()
                             .addComponent(jCheckBox1))
                         .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jCheckBox2))
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jCheckBox3))
+                        .addGroup(layout.createSequentialGroup()
                             .addGap(197, 197, 197)
                             .addComponent(jLabel6))
                         .addGroup(layout.createSequentialGroup()
@@ -188,6 +196,10 @@ public class SettingsFrame extends javax.swing.JFrame
                     .addComponent(jLabel6)
                     .addGap(18, 18, 18)
                     .addComponent(jCheckBox1)
+                    .addGap(18, 18, 18)
+                    .addComponent(jCheckBox2)
+                    .addGap(18, 18, 18)
+                    .addComponent(jCheckBox3)
                     .addGap(27, 27, 27)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(12, 12, 12)
@@ -253,6 +265,7 @@ public class SettingsFrame extends javax.swing.JFrame
 
     private void updateCheckBoxStatus()
     {
+        boolean status;
 
         if( jCheckBox1.isSelected() )
         {
@@ -264,6 +277,16 @@ public class SettingsFrame extends javax.swing.JFrame
             System.out.println( "------ Highlight Disabled" );
             UNOUtils.disableHighlighting();
         }
+
+        // Empty feature filtering option.
+        status = jCheckBox2.isSelected();
+        System.out.println( "------ Filter Empty Features " + (status ? "Enabled" : "Disabled") );
+        UNOUtils.setEmptyFeatureFilter( status );
+
+        // Show annotation content option.
+        status = jCheckBox3.isSelected();
+        System.out.println( "------ Show Annotation Content " + (status ? "Enabled" : "Disabled") );
+        UNOUtils.setShowAnnotationContent( status );
     }
 
     private void updateRadioButtonsStatus()
@@ -296,6 +319,8 @@ public class SettingsFrame extends javax.swing.JFrame
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
     private javax.swing.JCheckBox jCheckBox1;
+    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JTextField jCustomHostField;
     private javax.swing.JTextField jCustomPortField;
     private javax.swing.JTextField jDefaultHostField;
