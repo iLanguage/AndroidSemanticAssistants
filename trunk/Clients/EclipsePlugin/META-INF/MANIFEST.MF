@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: info.semanticsoftware.semassist.client.eclipse
 Bundle-SymbolicName: info.semanticsoftware.semassist.client.eclipse;singleton:=true
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.0
 Bundle-ClassPath: .,
  lib/CSAL.jar
 Bundle-Activator: info.semanticsoftware.semassist.client.eclipse.Activator
