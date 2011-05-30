@@ -112,7 +112,7 @@
     
     <!-- Clear all build output -->
     <target name="clean" depends="properties" description="Cleaning the build outputs">
-      <delete dir="${docs.home}"/>
+      <delete dir="${javadoc.home}/Eclipse"/>
       <delete dir="${build.home}"/>
       <delete file="${plugins.home}/${bundleName}"/>
       <delete file="${basedir}/lib/${csal.name}"/>
