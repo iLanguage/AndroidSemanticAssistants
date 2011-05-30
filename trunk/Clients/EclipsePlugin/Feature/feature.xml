@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="info.semanticsoftware.semassist.client.eclipse"
+      label="Semantic Assistants Eclipse Plug-in"
+      version="1.0.0"
+      provider-name="Semantic Software Lab">
+
+   <description url="http://www.semanticsoftware.info/semantic-assistants">
+      The Semantic Assistants Eclipse plug-in provides an integration of the Eclipse development environment into the Semantic Assistants architecture. It provides a user interface for offering various Natural Language Processing services to users.
+   </description>
+
+   <copyright>
+      This plug-in is part of the Semantic Assistants architecture.
+   Copyright (C) 2009 - 2011 Semantic Software Lab, http://www.semanticsoftware.info
+   </copyright>
+
+<license>
+      Semantic Assistants
+
+The Semantic Assistants architecture is free software: you can redistribute and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. 
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU Affero General Public License for more details. 
+
+You should have received a copy of the GNU Affero General Public
+License along with this program.  If not, see &lt;http://www.gnu.org/licenses/&gt;.
+   </license>
+
+   <url>
+      <discovery label="Semantic Assistants" url="http://www.semanticsoftware.info/semantic-assistants"/>
+   </url>
+
+   <plugin
+         id="info.semanticsoftware.semassist.client.eclipse"
+         download-size="0"
+         install-size="0"
+         version="1.0.0"
+         unpack="false"/>
+
+</feature>

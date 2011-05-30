@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="info.semanticsoftware.semassist.client.eclipse" default="build.update.jar" basedir=".">
+
+	<target name="init">
+		<property name="feature.id" value="info.semanticsoftware.semassist.client.eclipse_1.0.0"/>
+		<property name="feature.temp.folder" value="${basedir}/feature.temp.folder"/>
+		<property name="feature.destination" value="${basedir}"/>
+	</target>
+
+	<target name="build.update.jar" depends="init" description="Build the feature jar of: info.semanticsoftware.semassist.client.eclipse for an update site.">
+		
+		<property name="feature.base" value="${feature.temp.folder}"/>
+		<delete dir="${feature.temp.folder}"/>
+		<mkdir dir="${feature.temp.folder}"/>
+		<mkdir dir="${feature.temp.folder}/features/${feature.id}"/>
+		<antcall target="gather.bin.parts" inheritAll="false">
+			<param name="os" value="*"/>
+			<param name="feature.base" value="${feature.temp.folder}"/>
+			<param name="updateJar.omitRootfiles" value="true"/>
+			<param name="ws" value="*"/>
+			<param name="arch" value="*"/>
+			<param name="nl" value="*"/>
+		</antcall>
+		<jar destfile="${feature.destination}/${feature.id}.jar" basedir="${feature.temp.folder}/features/${feature.id}"/>
+		<delete dir="${feature.temp.folder}"/>
+  		<!-- Copying feature jar to update site -->
+      	<copy file="${feature.destination}/${feature.id}.jar" todir="../Update/features" overwrite="true"/>
+        <!-- Copying plugin jar to update site -->
+      	
+      	<copy file="../plugins/info.semanticsoftware.semassist.client.eclipse.1.0.0.jar" tofile="../Update/plugins/${feature.id}.jar" overwrite="true"/>
+	</target>
+
+	<target name="gather.bin.parts" depends="init" if="feature.base">
+		<mkdir dir="${feature.base}/features/${feature.id}"/>
+		<copy todir="${feature.base}/features/${feature.id}" failonerror="true" overwrite="false">
+			<fileset dir="${basedir}">
+				<include name="feature.xml"/>
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="clean" depends="init" description="Clean the jar files from Feature and Update folders">
+		<delete dir="${feature.temp.folder}"/>
+		<delete file="${feature.destination}/${feature.id}.jar"/>
+		<delete file="../Update/features/${feature.id}.jar"/>
+		<delete file="../Update/plugins/${feature.id}.jar"/>
+		
+	</target>
+</project>
