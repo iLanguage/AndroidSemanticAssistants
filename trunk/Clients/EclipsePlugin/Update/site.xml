@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/info.semanticsoftware.semassist.client.eclipse_1.0.0.jar" id="info.semanticsoftware.semassist.client.eclipse" version="1.0.0">
+      <category name="SemanticAssistants"/>
+   </feature>
+   <category-def name="SemanticAssistants" label="Semantic Assistants">
+      <description>
+         The Semantic Assistants project aims to bring natural language processing (NLP) techniques directly to end users by integrating them with common desktop applications, such as word processors, email clients, or Web browsers. The Semantic Assistants Eclipse plug-in provides an integration of the Eclipse development environment into the Semantic Assistants architecture. It provides a user interface for offering various Natural Language Processing services to users.
+      </description>
+   </category-def>
+</site>
