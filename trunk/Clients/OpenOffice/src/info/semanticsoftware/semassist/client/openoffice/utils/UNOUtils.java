@@ -385,7 +385,7 @@ public class UNOUtils
                 final String currentVal = annotation.mFeatures.get( currentKey );
 
                 if ( !mEmptyFeatureFilter || !"".equals( currentVal ) ) {
-                  sideNoteContent += currentKey + "= " + currentVal;
+                  sideNoteContent += currentKey + "= " + currentVal + "\n";
                 } else {
                   System.out.println( "---------------- Ignoring empty valued feature: "+ currentKey );
                 }
