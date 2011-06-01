@@ -218,7 +218,7 @@ The OpenOffice.org plug-in can be found in
     \emph{Add$\ldots$} button on the bottom. Navigate to your local
     copy of the \sa\ architecture and then to
     \texttt{Clients/OpenOffice}. Select the file
-    \texttt{SemassistOpenOfficePlugIn.uno.zip} and click \emph{Open}.
+    \texttt{SemassistOpenOfficePlugIn.oxt} and click \emph{Open}.
 
   \item Leave the dialog and open a new text document. You should have
     a new menu bar entry labelled \emph{Semantic Assistants}. Now you
@@ -240,7 +240,7 @@ If you want to build the plugin yourself, follow these steps:
   \item Type \texttt{ant run}, or \texttt{ant run-gui}. Note that the
     client-side abstraction layer must have already been built and
     packaged. Both \texttt{ant run} and \texttt{ant run-gui} provide
-    an UNO package named \url{SemassistOpenOfficePlugIn.uno.zip}. Both
+    an UNO package named \url{SemassistOpenOfficePlugIn.oxt}. Both
     targets additionally copy it to \url{~/Documents/uno-components}.
     If \texttt{ant run-gui} is issued the OpenOffice.org
     \emph{Extension Manager} will pop up and prompt the user to
@@ -286,6 +286,7 @@ following files:
         "application/vnd.sun.star.uno-component;type=Java" 
      manifest:full-path=
         "ProtocolHandlerAddon_java.uno.jar"/>
+   <!-- Add any other plug-in required jar files here. -->
 </manifest:manifest> 
 \end{lstlisting}
 \caption{The \emph{manifest.xml} file for our plug-in}
