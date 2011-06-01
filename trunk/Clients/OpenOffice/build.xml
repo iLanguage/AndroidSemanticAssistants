@@ -39,7 +39,7 @@
     <property name="office.soffice"   value="${office.program.dir}${file.separator}soffice"/>
     
     <!-- Other -->
-    <property name="uno-target-file"  value="SemassistOpenOfficePlugIn.uno.zip" />
+    <property name="uno-target-file"  value="SemassistOpenOfficePlugIn.oxt" />
     <property name="compile.debug"    value="true" />
 
     <description>
