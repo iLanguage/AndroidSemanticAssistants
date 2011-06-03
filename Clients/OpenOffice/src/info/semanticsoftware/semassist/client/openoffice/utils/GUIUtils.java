@@ -23,7 +23,6 @@
 
 package info.semanticsoftware.semassist.client.openoffice.utils;
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 
 import com.sun.star.awt.XToolkit;
@@ -49,7 +48,7 @@ public class GUIUtils
 	       XToolkit m_xToolkit = null;
 
 	       try {
-		    m_xToolkit = (XToolkit)UnoRuntime.queryInterface(
+		    m_xToolkit = UnoRuntime.queryInterface(
 			 XToolkit.class,
 			 ctx.getServiceManager().createInstanceWithContext("com.sun.star.awt.Toolkit",
 									  ctx));     
@@ -67,11 +66,11 @@ public class GUIUtils
 			 aDescriptor.Type              = WindowClass.MODALTOP;
 			 aDescriptor.WindowServiceName = new String("infobox");
 			 aDescriptor.ParentIndex       = -1;
-			 aDescriptor.Parent            = (XWindowPeer)UnoRuntime.queryInterface(
+			 aDescriptor.Parent            = UnoRuntime.queryInterface(
 			    XWindowPeer.class, frame.getContainerWindow());
 
 			 // Position relative to parent window
-			 XWindow parentWindow = (XWindow) UnoRuntime.queryInterface(
+			 final XWindow parentWindow = UnoRuntime.queryInterface(
 			      XWindow.class, frame.getContainerWindow());
 			 Rectangle pwRect = parentWindow.getPosSize();
 
@@ -84,7 +83,7 @@ public class GUIUtils
 			 
 			 XWindowPeer xPeer = m_xToolkit.createWindow(aDescriptor);
 			 if (null != xPeer) {
-			      XMessageBox xMsgBox = (XMessageBox)UnoRuntime.queryInterface(
+			      final XMessageBox xMsgBox = UnoRuntime.queryInterface(
 				   XMessageBox.class, xPeer);
 			      if (null != xMsgBox)
 			      {

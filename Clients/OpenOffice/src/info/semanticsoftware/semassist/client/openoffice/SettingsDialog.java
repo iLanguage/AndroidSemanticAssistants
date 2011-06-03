@@ -36,26 +36,17 @@ import org.apache.log4j.Logger;
 import info.semanticsoftware.semassist.client.openoffice.utils.*;
 
 //import com.sun.star.awt.ActionEvent;
-import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.FontDescriptor;
-import com.sun.star.awt.XActionListener;
-import com.sun.star.awt.XButton;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDialog;
-import com.sun.star.awt.XListBox;
-import com.sun.star.awt.XToolkit;
-import com.sun.star.awt.XWindow;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.lang.EventObject;
-import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-import java.awt.Dialog.ModalExclusionType;
 
 public class SettingsDialog
 {
@@ -104,7 +95,7 @@ public class SettingsDialog
         mLog.log( Level.DEBUG, "Create the dialog model and set the properties" );
         Object dialogModel = xMultiComponentFactory.createInstanceWithContext(
                 "com.sun.star.awt.UnoControlDialogModel", mxComponentContext );
-        XPropertySet xPSetDialog = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetDialog = UnoRuntime.queryInterface(
                 XPropertySet.class, dialogModel );
         xPSetDialog.setPropertyValue( "Width", new Integer( DIALOG_WIDTH ) );
         xPSetDialog.setPropertyValue( "Height", new Integer( DIALOG_HEIGHT ) );
@@ -115,7 +106,7 @@ public class SettingsDialog
 
         // Get the service manager from the dialog model
         mLog.log( Level.DEBUG, "Get the service manager from the dialog model" );
-        XMultiServiceFactory xMultiServiceFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(
+        final XMultiServiceFactory xMultiServiceFactory = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, dialogModel );
 
 
@@ -125,7 +116,7 @@ public class SettingsDialog
         Object labelNameModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlButtonModel" );
 
-        XPropertySet xPSetLabelName = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetLabelName = UnoRuntime.queryInterface(
                 XPropertySet.class, labelNameModel );
 
         xPSetLabelName.setPropertyValue( "PositionX", new Integer( 5 ) );
@@ -142,7 +133,7 @@ public class SettingsDialog
         mLog.log( Level.DEBUG, "Create the list model and set the properties" );
         Object listModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlListBoxModel" );
-        XPropertySet xPSetList = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetList = UnoRuntime.queryInterface(
                 XPropertySet.class, listModel );
 
         xPSetList.setPropertyValue( "PositionX", new Integer( 5 ) );
@@ -162,7 +153,7 @@ public class SettingsDialog
          */
         Object labelStatusModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlFixedTextModel" );
-        XPropertySet xPSetStatusLabel = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetStatusLabel = UnoRuntime.queryInterface(
                 XPropertySet.class, labelStatusModel );
         xPSetStatusLabel.setPropertyValue( "PositionX", new Integer( 5 ) );
         xPSetStatusLabel.setPropertyValue( "PositionY", new Integer( LBOX_TOP + LBOX_HEIGHT + 8 ) );
@@ -178,7 +169,7 @@ public class SettingsDialog
          */
         Object labelInfoModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlFixedTextModel" );
-        XPropertySet xPSetInfoLabel = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetInfoLabel = UnoRuntime.queryInterface(
                 XPropertySet.class, labelInfoModel );
         xPSetInfoLabel.setPropertyValue( "PositionX", new Integer( 5 ) );
         xPSetInfoLabel.setPropertyValue( "PositionY", new Integer( LBOX_TOP - 25 ) );
@@ -196,7 +187,7 @@ public class SettingsDialog
         mLog.log( Level.DEBUG, "Create the OK button model and set the properties" );
         Object OkModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlButtonModel" );
-        XPropertySet xPSetOk = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetOk = UnoRuntime.queryInterface(
                 XPropertySet.class, OkModel );
         xPSetOk.setPropertyValue( "PositionX", new Integer( 5 + LBOX_WIDTH - 42 ) );
         xPSetOk.setPropertyValue( "PositionY", new Integer( LBOX_TOP + LBOX_HEIGHT + 4 ) );
@@ -210,7 +201,7 @@ public class SettingsDialog
 
         // Insert the control models into the dialog model
         mLog.log( Level.DEBUG, "Insert the control models into the dialog model" );
-        XNameContainer xNameCont = (XNameContainer) UnoRuntime.queryInterface(
+        final XNameContainer xNameCont = UnoRuntime.queryInterface(
                 XNameContainer.class, dialogModel );
         xNameCont.insertByName( mLabelInfo, labelInfoModel );
         xNameCont.insertByName( mLabelName, labelNameModel );
@@ -225,14 +216,14 @@ public class SettingsDialog
         mLog.log( Level.DEBUG, "Create the dialog control and set the model" );
         Object dialog = xMultiComponentFactory.createInstanceWithContext(
                 "com.sun.star.awt.UnoControlDialog", mxComponentContext );
-        XControl xControl = (XControl) UnoRuntime.queryInterface(
+        final XControl xControl = UnoRuntime.queryInterface(
                 XControl.class, dialog );
-        XControlModel xControlModel = (XControlModel) UnoRuntime.queryInterface(
+        final XControlModel xControlModel = UnoRuntime.queryInterface(
                 XControlModel.class, dialogModel );
         xControl.setModel( xControlModel );
 
         // Events...
-        XControlContainer xControlCont = (XControlContainer) UnoRuntime.queryInterface(
+        final XControlContainer xControlCont = UnoRuntime.queryInterface(
                 XControlContainer.class, dialog );
 
 
@@ -245,29 +236,29 @@ public class SettingsDialog
         // Add an action listener to the OK button control
         mLog.log( Level.DEBUG, "Add an action listener to the OK button control" );
         Object objectClose = xControlCont.getControl( mBtnOKName );
-        XButton xClose = (XButton) UnoRuntime.queryInterface( XButton.class, objectClose );
+        final XButton xClose = UnoRuntime.queryInterface( XButton.class, objectClose );
         xClose.addActionListener( new OnOkClick( xControlCont ) );
 
         // Create a peer
         mLog.log( Level.DEBUG, "Create a peer" );
         Object toolkit = xMultiComponentFactory.createInstanceWithContext(
                 "com.sun.star.awt.ExtToolkit", mxComponentContext );
-        XToolkit xToolkit = (XToolkit) UnoRuntime.queryInterface(
+        final XToolkit xToolkit = UnoRuntime.queryInterface(
                 XToolkit.class, toolkit );
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(
+        final XWindow xWindow = UnoRuntime.queryInterface(
                 XWindow.class, xControl );
         xWindow.setVisible( false );
         xControl.createPeer( xToolkit, null );
 
         // Execute the dialog
         mLog.log( Level.DEBUG, "Execute the dialog" );
-        mxDialog = (XDialog) UnoRuntime.queryInterface(
+        final mxDialog = UnoRuntime.queryInterface(
                 XDialog.class, dialog );
         mxDialog.execute();
 
         // Dispose the dialog
         mLog.log( Level.DEBUG, "Dispose the dialog" );
-        XComponent xComponent = (XComponent) UnoRuntime.queryInterface(
+        final XComponent xComponent = UnoRuntime.queryInterface(
                 XComponent.class, dialog );
         xComponent.dispose();*/
 
@@ -371,7 +362,7 @@ public class SettingsDialog
             /*
             // Find out which service is selected and save this
             // information to the settings class
-            XListBox x = (XListBox) UnoRuntime.queryInterface(
+            final XListBox x = UnoRuntime.queryInterface(
             XListBox.class, mxControlCont.getControl( mListName ) );
 
             short pos = x.getSelectedItemPos();

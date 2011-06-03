@@ -23,13 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package info.semanticsoftware.semassist.client.openoffice;
 
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.Date;
 import java.util.Iterator;
-import java.util.Locale;
 import java.util.Vector;
 import java.util.List;
 import java.util.HashMap;
@@ -44,39 +38,24 @@ import info.semanticsoftware.semassist.client.openoffice.utils.*;
 //import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.ActionEvent;
 import com.sun.star.awt.FontDescriptor;
-import com.sun.star.awt.ItemEvent;
 import com.sun.star.awt.XActionListener;
 import com.sun.star.awt.XButton;
-import com.sun.star.awt.XComboBox;
 import com.sun.star.awt.XControl;
 import com.sun.star.awt.XControlContainer;
 import com.sun.star.awt.XControlModel;
 import com.sun.star.awt.XDialog;
-import com.sun.star.awt.XItemListener;
 import com.sun.star.awt.XListBox;
 import com.sun.star.awt.XProgressBar;
-import com.sun.star.awt.XTextComponent;
 import com.sun.star.awt.XToolkit;
 import com.sun.star.awt.XWindow;
-import com.sun.star.beans.PropertyValue;
 import com.sun.star.beans.XPropertySet;
-import com.sun.star.comp.loader.FactoryHelper;
 import com.sun.star.container.XNameContainer;
-import com.sun.star.document.XDocumentInfo;
-import com.sun.star.document.XDocumentInfoSupplier;
-import com.sun.star.frame.XComponentLoader;
 import com.sun.star.frame.XFrame;
 import com.sun.star.frame.XDesktop;
 import com.sun.star.lang.EventObject;
-import com.sun.star.lang.IllegalArgumentException;
 import com.sun.star.lang.XComponent;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XMultiServiceFactory;
-import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XSingleServiceFactory;
-import com.sun.star.lib.uno.helper.WeakBase;
-import com.sun.star.registry.XRegistryKey;
-import com.sun.star.task.XJobExecutor;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
@@ -138,7 +117,7 @@ public class ListServicesDialog
         log.log( Level.DEBUG, "Create the dialog model and set the properties" );
         Object dialogModel = xMultiComponentFactory.createInstanceWithContext(
                 "com.sun.star.awt.UnoControlDialogModel", _xComponentContext );
-        XPropertySet xPSetDialog = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetDialog = UnoRuntime.queryInterface(
                 XPropertySet.class, dialogModel );
         xPSetDialog.setPropertyValue( "Width", new Integer( DIALOG_WIDTH ) );
         xPSetDialog.setPropertyValue( "Height", new Integer( DIALOG_HEIGHT ) );
@@ -149,7 +128,7 @@ public class ListServicesDialog
 
         // Get the service manager from the dialog model
         log.log( Level.DEBUG, "Get the service manager from the dialog model" );
-        XMultiServiceFactory xMultiServiceFactory = (XMultiServiceFactory) UnoRuntime.queryInterface(
+        final XMultiServiceFactory xMultiServiceFactory = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, dialogModel );
 
 
@@ -159,7 +138,7 @@ public class ListServicesDialog
         Object labelNameModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlButtonModel" );
 
-        XPropertySet xPSetLabelName = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetLabelName = UnoRuntime.queryInterface(
                 XPropertySet.class, labelNameModel );
 
         xPSetLabelName.setPropertyValue( "PositionX", new Integer( 5 ) );
@@ -176,7 +155,7 @@ public class ListServicesDialog
         log.log( Level.DEBUG, "Create the list model and set the properties" );
         Object listModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlListBoxModel" );
-        XPropertySet xPSetList = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetList = UnoRuntime.queryInterface(
                 XPropertySet.class, listModel );
 
         xPSetList.setPropertyValue( "PositionX", new Integer( 5 ) );
@@ -195,7 +174,7 @@ public class ListServicesDialog
          */
         Object labelStatusModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlFixedTextModel" );
-        XPropertySet xPSetStatusLabel = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetStatusLabel = UnoRuntime.queryInterface(
                 XPropertySet.class, labelStatusModel );
         xPSetStatusLabel.setPropertyValue( "PositionX", new Integer( 5 ) );
         xPSetStatusLabel.setPropertyValue( "PositionY", new Integer( LBOX_TOP + LBOX_HEIGHT + 8 ) );
@@ -211,7 +190,7 @@ public class ListServicesDialog
          */
         Object labelInfoModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlFixedTextModel" );
-        XPropertySet xPSetInfoLabel = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetInfoLabel = UnoRuntime.queryInterface(
                 XPropertySet.class, labelInfoModel );
         xPSetInfoLabel.setPropertyValue( "PositionX", new Integer( 5 ) );
         xPSetInfoLabel.setPropertyValue( "PositionY", new Integer( LBOX_TOP - 25 ) );
@@ -227,7 +206,7 @@ public class ListServicesDialog
         log.log( Level.DEBUG, "Create the Progress bar and set the properties" );
         Object progressModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlProgressBarModel" );
-        XPropertySet xPSetProgress = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetProgress = UnoRuntime.queryInterface(
                 XPropertySet.class, progressModel );
         xPSetProgress.setPropertyValue( "PositionX", new Integer( 60 ) );
         xPSetProgress.setPropertyValue( "PositionY", new Integer( LBOX_TOP + LBOX_HEIGHT + 4 ) );
@@ -241,7 +220,7 @@ public class ListServicesDialog
         log.log( Level.DEBUG, "Create the Ok button model and set the properties" );
         Object okModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlButtonModel" );
-        XPropertySet xPSetOk = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetOk = UnoRuntime.queryInterface(
                 XPropertySet.class, okModel );
         xPSetOk.setPropertyValue( "PositionX", new Integer( 5 + LBOX_WIDTH - 90 ) );
         xPSetOk.setPropertyValue( "PositionY", new Integer( LBOX_TOP + LBOX_HEIGHT + 4 ) );
@@ -256,7 +235,7 @@ public class ListServicesDialog
         log.log( Level.DEBUG, "Create the Cancel button model and set the properties" );
         Object cancelModel = xMultiServiceFactory.createInstance(
                 "com.sun.star.awt.UnoControlButtonModel" );
-        XPropertySet xPSetCancel = (XPropertySet) UnoRuntime.queryInterface(
+        final XPropertySet xPSetCancel = UnoRuntime.queryInterface(
                 XPropertySet.class, cancelModel );
         xPSetCancel.setPropertyValue( "PositionX", new Integer( 5 + LBOX_WIDTH - 42 ) );
         xPSetCancel.setPropertyValue( "PositionY", new Integer( LBOX_TOP + LBOX_HEIGHT + 4 ) );
@@ -272,7 +251,7 @@ public class ListServicesDialog
 
         // Insert the control models into the dialog model
         log.log( Level.DEBUG, "Insert the control models into the dialog model" );
-        XNameContainer xNameCont = (XNameContainer) UnoRuntime.queryInterface(
+        final XNameContainer xNameCont = UnoRuntime.queryInterface(
                 XNameContainer.class, dialogModel );
         xNameCont.insertByName( _labelInfo, labelInfoModel );
         xNameCont.insertByName( _labelName, labelNameModel );
@@ -287,14 +266,14 @@ public class ListServicesDialog
         log.log( Level.DEBUG, "Create the dialog control and set the model" );
         Object dialog = xMultiComponentFactory.createInstanceWithContext(
                 "com.sun.star.awt.UnoControlDialog", _xComponentContext );
-        XControl xControl = (XControl) UnoRuntime.queryInterface(
+        final XControl xControl = UnoRuntime.queryInterface(
                 XControl.class, dialog );
-        XControlModel xControlModel = (XControlModel) UnoRuntime.queryInterface(
+        final XControlModel xControlModel = UnoRuntime.queryInterface(
                 XControlModel.class, dialogModel );
         xControl.setModel( xControlModel );
 
         // Events...
-        XControlContainer xControlCont = (XControlContainer) UnoRuntime.queryInterface(
+        final XControlContainer xControlCont = UnoRuntime.queryInterface(
                 XControlContainer.class, dialog );
 
         updateServiceList( xControlCont );
@@ -303,36 +282,36 @@ public class ListServicesDialog
         // Add an action listener to the OK button control
         log.log( Level.DEBUG, "Add an action listener to the OK button control" );
         Object objectOk = xControlCont.getControl( _btnOKName );
-        XButton xOkBtn = (XButton) UnoRuntime.queryInterface( XButton.class, objectOk );
+        final XButton xOkBtn = UnoRuntime.queryInterface( XButton.class, objectOk );
         xOkBtn.addActionListener( new OnOkClick( xControlCont ) );
 
 
         // Add an action listener to the OK button control
         log.log( Level.DEBUG, "Add an action listener to the Cancel button control" );
         Object objectCancel = xControlCont.getControl( _btnCancelName );
-        XButton xCancelBtn = (XButton) UnoRuntime.queryInterface( XButton.class, objectCancel );
+        final XButton xCancelBtn = UnoRuntime.queryInterface( XButton.class, objectCancel );
         xCancelBtn.addActionListener( new OnCancelClick( xControlCont ) );
 
         // Create a peer
         log.log( Level.DEBUG, "Create a peer" );
         Object toolkit = xMultiComponentFactory.createInstanceWithContext(
                 "com.sun.star.awt.ExtToolkit", _xComponentContext );
-        XToolkit xToolkit = (XToolkit) UnoRuntime.queryInterface(
+        final XToolkit xToolkit = UnoRuntime.queryInterface(
                 XToolkit.class, toolkit );
-        XWindow xWindow = (XWindow) UnoRuntime.queryInterface(
+        final XWindow xWindow = UnoRuntime.queryInterface(
                 XWindow.class, xControl );
         xWindow.setVisible( false );
         xControl.createPeer( xToolkit, null );
 
         // Execute the dialog
         log.log( Level.DEBUG, "Execute the dialog" );
-        xDialog = (XDialog) UnoRuntime.queryInterface(
+        xDialog = UnoRuntime.queryInterface(
                 XDialog.class, dialog );
         xDialog.execute();
 
         // Dispose the dialog
         log.log( Level.DEBUG, "Dispose the dialog" );
-        XComponent xComponent = (XComponent) UnoRuntime.queryInterface(
+        final XComponent xComponent = UnoRuntime.queryInterface(
                 XComponent.class, dialog );
         xComponent.dispose();
     }
@@ -350,11 +329,11 @@ public class ListServicesDialog
     private void setStatusText( XControlContainer m_c, String s )
     {
         // Get the model of the status label
-        XControl xControl = (XControl) UnoRuntime.queryInterface(
+        final XControl xControl = UnoRuntime.queryInterface(
                 XControl.class, m_c.getControl( _labelStatus ) );
-        XControlModel xControlModel = (XControlModel) UnoRuntime.queryInterface(
+        XControlModel xControlModel = UnoRuntime.queryInterface(
                 XControlModel.class, xControl.getModel() );
-        XPropertySet ps = (XPropertySet) UnoRuntime.queryInterface(
+        XPropertySet ps = UnoRuntime.queryInterface(
                 XPropertySet.class, xControlModel );
 
         try
@@ -385,7 +364,7 @@ public class ListServicesDialog
         }
 
         // Query the desktop interface from the object
-        XDesktop m_xDesktop = (XDesktop) UnoRuntime.queryInterface(
+        final XDesktop m_xDesktop = UnoRuntime.queryInterface(
                 XDesktop.class, m_oDesktop );
 
         // return (XFrame)UnoRuntime.queryInterface(XFrame.class, xDialog);
@@ -484,7 +463,7 @@ public class ListServicesDialog
 
             // Find out which service is selected and save this
             // information to the settings class
-            XListBox x = (XListBox) UnoRuntime.queryInterface(
+            final XListBox x = UnoRuntime.queryInterface(
                     XListBox.class, _xControlCont.getControl( _listName ) );
 
             short pos = x.getSelectedItemPos();
@@ -547,12 +526,12 @@ public class ListServicesDialog
             m_to.start();
 
             // Disable widgets
-            ((XWindow) UnoRuntime.queryInterface(
-                    XWindow.class, m_c.getControl( _listName ) )).setEnable( false );
+            UnoRuntime.queryInterface(
+                    XWindow.class, m_c.getControl( _listName ) ).setEnable( false );
 
 
             // Update the list box
-            XListBox x = (XListBox) UnoRuntime.queryInterface(
+            final XListBox x = UnoRuntime.queryInterface(
                     XListBox.class, m_c.getControl( _listName ) );
 
             log.log( Level.DEBUG, "x.removeItems((short)0, " + String.valueOf( x.getItemCount() ) + ")" );
@@ -560,7 +539,7 @@ public class ListServicesDialog
 
             log.log( Level.DEBUG, "Getting available services" );
 
-            XPropertySet ps = (XPropertySet) UnoRuntime.queryInterface(
+            final XPropertySet ps = UnoRuntime.queryInterface(
                     XPropertySet.class, m_c.getControl( _labelStatus ) );
 
 
@@ -639,8 +618,8 @@ public class ListServicesDialog
                 }
 
                 // Enable widgets
-                ((XWindow) UnoRuntime.queryInterface(
-                        XWindow.class, m_c.getControl( _listName ) )).setEnable( true );
+                UnoRuntime.queryInterface(
+                        XWindow.class, m_c.getControl( _listName ) ).setEnable( true );
 
                  // Abort timeout
                 m_to.stop();
@@ -729,15 +708,15 @@ public class ListServicesDialog
 
                     if( end == true )
                     {
-                        ((XWindow) UnoRuntime.queryInterface(
-                                XWindow.class, m_c.getControl( _progressName ) )).setVisible( false );
+                        UnoRuntime.queryInterface(
+                                XWindow.class, m_c.getControl( _progressName ) ).setVisible( false );
                         return;
                     }
                     Thread.sleep( sleepTime );
 
-                    ((XWindow) UnoRuntime.queryInterface(
-                            XWindow.class, m_c.getControl( _progressName ) )).setVisible( true );
-                    XProgressBar p = (XProgressBar) UnoRuntime.queryInterface(
+                    UnoRuntime.queryInterface(
+                            XWindow.class, m_c.getControl( _progressName ) ).setVisible( true );
+                    final XProgressBar p = UnoRuntime.queryInterface(
                             XProgressBar.class, m_c.getControl( _progressName ) );
 
                     // Update the progress bar
