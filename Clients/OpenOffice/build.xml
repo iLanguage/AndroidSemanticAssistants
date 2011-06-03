@@ -152,7 +152,7 @@
     <target name="clean">
         <delete includeemptydirs="true" quiet="true">
             <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
-            <fileset dir="${dist.home}" excludes="**/*.xcu,**/CVS,**/CVS/**,**/.cvsignore"/>
+            <fileset dir="${dist.home}" excludes="**/description.xml,**/META-INF/manifest.xml,**/*.xcu,**/CVS,**/CVS/**,**/.cvsignore"/>
 	    <fileset file="${uno-target-file}"/>
 	    <fileset file="${dist.home}/${csal.name}"/>
         </delete>
