@@ -22,13 +22,8 @@
 */
 package info.semanticsoftware.semassist.client.openoffice.utils;
 
-import java.util.*;
-import java.net.*;
 import javax.swing.*;
 import java.awt.event.*;
-
-import info.semanticsoftware.semassist.server.*;
-import info.semanticsoftware.semassist.csal.*;
 
 /**
  *

@@ -33,31 +33,21 @@ import info.semanticsoftware.semassist.client.openoffice.*;
 import info.semanticsoftware.semassist.client.openoffice.utils.*;
 
 
-import org.apache.log4j.Level;
 import org.apache.log4j.Logger;
 import org.apache.log4j.BasicConfigurator;
 
 
-import com.sun.star.awt.Rectangle;
-import com.sun.star.awt.WindowAttribute;
-import com.sun.star.awt.WindowClass;
-import com.sun.star.awt.WindowDescriptor;
-import com.sun.star.awt.XMessageBox;
 import com.sun.star.awt.XToolkit;
-import com.sun.star.awt.XWindowPeer;
 import com.sun.star.frame.DispatchDescriptor;
 import com.sun.star.frame.XDispatch;
 import com.sun.star.frame.XDispatchProvider;
 import com.sun.star.frame.XFrame;
-import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XStatusListener;
 
 
 //import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XInitialization;
 import com.sun.star.lang.XServiceInfo;
-import com.sun.star.lang.XComponent;
-import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XSingleComponentFactory;
 import com.sun.star.lib.uno.helper.Factory;
 import com.sun.star.lib.uno.helper.WeakBase;
@@ -65,11 +55,6 @@ import com.sun.star.registry.XRegistryKey;
 import com.sun.star.uno.Exception;
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
-
-import com.sun.star.frame.XModel;
-import com.sun.star.text.XTextDocument;
-import com.sun.star.text.XTextRange;
-import com.sun.star.text.XText;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -131,12 +116,12 @@ public class ProtocolHandlerAddon
 
             if( object.length > 0 )
             {
-                mxFrame = (XFrame) UnoRuntime.queryInterface(
+                mxFrame = UnoRuntime.queryInterface(
                         XFrame.class, object[0] );
             }
 
             // Create the toolkit to have access to it later
-            mxToolkit = (XToolkit) UnoRuntime.queryInterface(
+            mxToolkit = UnoRuntime.queryInterface(
                     XToolkit.class,
                     mxCmpCtx.getServiceManager().createInstanceWithContext( "com.sun.star.awt.Toolkit",
                     mxCmpCtx ) );

@@ -34,7 +34,6 @@ import info.semanticsoftware.semassist.server.*;
 
 import com.sun.star.uno.XComponentContext;
 import javax.swing.JOptionPane;
-import org.apache.commons.lang.StringUtils;
 
 public class ServiceInvocationHandler implements Runnable
 {
