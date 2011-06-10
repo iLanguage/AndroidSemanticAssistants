@@ -141,10 +141,10 @@
 	<panel classname="JDKPathPanel"/>
 	<!-- Select Location of GATE -->
         <panel classname="UserInputPanel" id="UserInputPanelGATE"/> 
-	<!-- CSAL -->
-	<!-- <panel classname="UserInputPanel" id="UserInputPanelCSAL"/> -->
 	<!-- JAX-WS -->
         <panel classname="UserInputPanel" id="UserInputPanelJAXWS"/> 
+	<!-- CSAL (Server host/port definition for Clients) -->
+	<panel classname="UserInputPanel" id="UserInputPanelCSAL"/>
 	<!-- OpenOffice -->
         <!-- <panel classname="UserInputPanel" id="UserInputPanelOpenOffice"/> -->
 	<!-- Eclipse -->

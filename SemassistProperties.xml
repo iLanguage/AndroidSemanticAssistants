@@ -21,12 +21,13 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <project name="share">
+    <!-- General properties. You should not need to change these. -->
     <property name="semassist.home"           value="${basedir}" />
     <property name="csal.home"                value="${semassist.home}/CSAL" />
     <property name="csal.name"                value="CSAL.jar" />
     <property name="javadoc.home"             value="${semassist.home}/Javadoc" />
 
-    <!-- Machine dependent properties. Need to be modified -->
+    <!-- Machine dependent properties. Need to be modified. -->
     <property name="durmtools"                value="/usr/local/durmtools" />
     <property name="jaxws.home"               value="${durmtools}/jaxws-ri" />
     <property name="gate-home"                value="${durmtools}/GATE/gate" />
@@ -44,7 +45,7 @@
     <property name="eclipse.program.dir"      value="${durmtools}/eclipse"/>
     <property name="eclipse.plugins"          value="${eclipse.program.dir}/plugins"/>
 
-    <!-- Used by the server at runtime as properties -->
+    <!-- Used by the Server at runtime as properties -->
     <property name="gate.plugin.dir"          value="${gate-home}/plugins/"/>
     <property name="gate.user.file"           value="${semassist.home}/Server/gate-home/user-gate.xml" />
     <property name="ontology.repository"      value="${semassist.home}/Resources/ont-repository/" />
@@ -83,6 +84,10 @@
     <property name="server.pipeline.4.startup"        value="true"/>
     <property name="server.pipeline.4.fullpath"        value="${gate.pipeline.repository}Yahoo/application.xgapp"/>
 -->
+    <!-- Default Semantic Assistants server to connect to -->
+    <property name="csal.server.name"         value="assistant.cs.concordia.ca"/>
+    <property name="csal.server.port"         value="8879"/>
+
     <!-- Port for which the Server listens for debugers to be attached -->
     <property name="server.port.debug"        value="8885"/>
     
