@@ -404,7 +404,7 @@ public class ServiceInvocationHandler implements Runnable
    /**
     * Open an URI through a browser.
     *
-    * @param URI HTML document.
+    * @param uri HTML document.
     * @return true if successful, false otherwise.
     */
    private boolean spawnBrowser(URI uri)
