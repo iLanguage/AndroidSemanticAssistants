@@ -28,7 +28,7 @@
 
     <!-- Put machine dependent settings here -->
     <exec executable="hostname" osfamily="unix" failifexecutionfails="false" outputproperty="env.COMPUTERNAME"/>
-    <property name="env.HOSTNAME" value="${env.COMPUTERNAME}"/>
+    <!--property name="env.HOSTNAME" value="${env.COMPUTERNAME}"/-->
 
     <property environment="env"/>
 
@@ -39,7 +39,7 @@
     <property name="src.home"      value="${basedir}/src"/>
 
     <!-- Tool Directories -->
-    <property name="wsdl.source"   value="http://${env.HOSTNAME}:${server.port.wsdl}/SemAssist?wsdl" />
+    <property name="wsdl.source"   value="http://${csal.server.name}:${csal.server.port}/SemAssist?wsdl" />
     
     <!-- Library Files -->
     <property name="csal.jar"      value="${csal.home}/dist/CSAL.jar" />
