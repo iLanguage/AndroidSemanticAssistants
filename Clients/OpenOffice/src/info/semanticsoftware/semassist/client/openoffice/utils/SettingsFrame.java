@@ -30,7 +30,7 @@ public class SettingsFrame extends javax.swing.JFrame
     private static String mCustomServerHost;
 
 
-    /** Creates new form SettingsFrame */
+    /*isExternalResultHandling* Creates new form SettingsFrame */
     public SettingsFrame()
     {
         initComponents();
@@ -45,10 +45,10 @@ public class SettingsFrame extends javax.swing.JFrame
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jSeparator1 = new javax.swing.JSeparator();
         jCheckBox1 = new javax.swing.JCheckBox(null,null,UNOUtils.getCURRENT_HIGHLIGHT());
         jCheckBox2 = new JCheckBox("Filter Empty Features", UNOUtils.isEmptyFeatureFilter());
         jCheckBox3 = new JCheckBox("Show Annotation Content", UNOUtils.isShowAnnotationContent());
+        jCheckBox4 = new JCheckBox("External Result Handling", UNOUtils.isExternalResultHandling());
         jRadioButtonDefault = new javax.swing.JRadioButton( null, null, mDefaultServerSelect);
         jRadioButtonCustom = new javax.swing.JRadioButton(null, null, !mDefaultServerSelect);
         okButton = new javax.swing.JButton();
@@ -141,6 +141,9 @@ public class SettingsFrame extends javax.swing.JFrame
                             .addContainerGap()
                             .addComponent(jSeparator1, javax.swing.GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE))
                         .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jSeparator2, GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE))
+                        .addGroup(layout.createSequentialGroup()
                             .addGap(25, 25, 25)
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                 .addComponent(jRadioButtonDefault)
@@ -180,6 +183,12 @@ public class SettingsFrame extends javax.swing.JFrame
                             .addGap(197, 197, 197)
                             .addComponent(jLabel6))
                         .addGroup(layout.createSequentialGroup()
+                            .addGap(197, 197, 197)
+                            .addComponent(jLabel7))
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            .addComponent(jCheckBox4))
+                        .addGroup(layout.createSequentialGroup()
                             .addGap(207, 207, 207)
                             .addComponent(jLabel1))
                         .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
@@ -203,6 +212,12 @@ public class SettingsFrame extends javax.swing.JFrame
                     .addGap(27, 27, 27)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(12, 12, 12)
+                    .addComponent(jLabel7)
+                    .addGap(12, 12, 12)
+                    .addComponent(jCheckBox4)
+                    .addGap(27, 27, 27)
+                    .addComponent(jSeparator2, GroupLayout.PREFERRED_SIZE, 10, GroupLayout.PREFERRED_SIZE)
+                    .addGap(19, 19, 19)
                     .addComponent(jLabel1)
                     .addGap(12, 12, 12)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -287,6 +302,11 @@ public class SettingsFrame extends javax.swing.JFrame
         status = jCheckBox3.isSelected();
         System.out.println( "------ Show Annotation Content " + (status ? "Enabled" : "Disabled") );
         UNOUtils.setShowAnnotationContent( status );
+
+        // Handle results with external programs option.
+        status = jCheckBox4.isSelected();
+        System.out.println( "------ Enable External Result Handling " + (status ? "Enabled" : "Disabled") );
+        UNOUtils.setExternalResultHandling(status);
     }
 
     private void updateRadioButtonsStatus()
@@ -321,6 +341,7 @@ public class SettingsFrame extends javax.swing.JFrame
     private javax.swing.JCheckBox jCheckBox1;
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
+    private javax.swing.JCheckBox jCheckBox4;
     private javax.swing.JTextField jCustomHostField;
     private javax.swing.JTextField jCustomPortField;
     private javax.swing.JTextField jDefaultHostField;
@@ -331,9 +352,11 @@ public class SettingsFrame extends javax.swing.JFrame
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
+    private final JLabel jLabel7 = new JLabel("Client Settings");
     private javax.swing.JRadioButton jRadioButtonCustom;
     private javax.swing.JRadioButton jRadioButtonDefault;
-    private javax.swing.JSeparator jSeparator1;
+    private final JSeparator jSeparator1 = new JSeparator();
+    private final JSeparator jSeparator2 = new JSeparator();
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
 

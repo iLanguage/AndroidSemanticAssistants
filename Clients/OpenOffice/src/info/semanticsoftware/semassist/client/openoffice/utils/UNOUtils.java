@@ -63,10 +63,14 @@ public class UNOUtils
     private static final int HIGHLIGHT_OFF = 0xFFFFFF0A;
     private static int CURRENT_HIGHLIGHT = HIGHLIGHT_YELLOW;
     private static final String SEM_ASSIST = "Semantic Assistants:";
-    private static Boolean mShowAnnotationContent = false; /* Put annotaton content in side-notes. */
+
+    // Configuration Defaults
+    private static Boolean mExternalResultHandling = true; /* Handle results with suitable external programs. */
+    private static Boolean mShowAnnotationContent = false; /* Put annotation content in side-notes. */
     private static Boolean mEmptyFeatureFilter = true; /* Ignore empty-valued features by default. */
     private static String mServerHost = ClientUtils.defaultServerHost();
     private static String mServerPort = ClientUtils.defaultServerPort();
+
     private static Logger mLogger = Logger.getLogger( GUIUtils.class );
     private static XMultiServiceFactory mxDocFactory = null;
     private static XTextCursor mxDocCursor = null;
@@ -556,6 +560,26 @@ public class UNOUtils
             return false;
         }
     }
+
+   /**
+    * @param status true to allow external software to handle document
+    *        results or false otherwise.
+    */
+   public static void setExternalResultHandling( boolean status )
+   {
+      mExternalResultHandling = status;
+   }
+
+   /**
+    * @return the mExternalResultHandling status.
+    *
+    * @note Which external software and how the document is handled is
+    *       left up to the caller's discretion.
+    */
+   public static boolean isExternalResultHandling()
+   {
+      return mExternalResultHandling;
+   }
 
    /**
     * @param status true to allow filtering of empty-valued

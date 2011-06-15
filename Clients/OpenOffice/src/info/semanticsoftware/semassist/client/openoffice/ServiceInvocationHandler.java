@@ -22,8 +22,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 package info.semanticsoftware.semassist.client.openoffice;
 
+import java.awt.Desktop;
 import java.util.*;
 import java.io.*;
+import java.net.URI;
 
 import info.semanticsoftware.semassist.csal.*;
 import net.java.dev.jaxb.array.*;
@@ -135,34 +137,22 @@ public class ServiceInvocationHandler implements Runnable
                     System.out.println( "------------ fileExt: " + fileExt );
                     File f = ClientUtils.writeStringToFile( fileString, fileExt );
 
-                    // Try to open HTML file in browser
-                    boolean browserSuccess = false;
-
-                    if( fileString.startsWith( "<!DOCTYPE HTML" ) )
+                    if ( UNOUtils.isExternalResultHandling() )
                     {
-                        try
-                        {
-                            String command = "firefox " + f.getCanonicalPath();
-                            System.out.println( "---------------- Executing " + command );
-                            Process p = Runtime.getRuntime().exec( command );
-                            System.out.println( "---------------- Command executed" );
-
-                            // Get annotation hold of the potential error output of the program
-                            BufferedReader error = new BufferedReader( new InputStreamReader( p.getErrorStream() ) );
-                            browserSuccess = true;
-                        }
-                        catch( java.io.IOException e )
-                        {
-                            browserSuccess = false;
-                        }
+                       // Attempt to open HTML files through an external browser,
+                       // else open the file through the default word-processor.
+                       if (fileString.startsWith( "<!DOCTYPE HTML" )) {
+                           if (!spawnBrowser( f.toURI() )) {
+                              System.out.println( "---------------- Defaulting to word-processor handling." );
+                              UNOUtils.createNewDoc( compCtx, f );
+                           }
+                       }
                     }
-
-                    if( !browserSuccess )
+                    else
                     {
-                        System.out.println( "---------------- browserSuccess is false" );
-                        UNOUtils.createNewDoc( compCtx, f );
+                       // Default word-processor handling.
+                       UNOUtils.createNewDoc( compCtx, f );
                     }
-
                 }
                 else if( current.mResultType.equals( SemanticServiceResult.ANNOTATION_IN_WHOLE ) )
                 {
@@ -411,4 +401,28 @@ public class ServiceInvocationHandler implements Runnable
 
     }
 
+   /**
+    * Open an URI through a browser.
+    *
+    * @param URI HTML document.
+    * @return true if successful, false otherwise.
+    */
+   private boolean spawnBrowser(URI uri)
+   {
+      boolean status = true;
+
+      final Desktop desktop = Desktop.getDesktop();
+      if (desktop.isSupported(Desktop.Action.BROWSE)) {
+         try {
+            desktop.browse(uri);
+         } catch (IOException ex) {
+            System.out.println( "---------------- Failed to launch browser");
+            status = false;
+         }
+      } else {
+         System.out.println( "---------------- Browsing is not supported");
+         status = false;
+      }
+      return status;
+   }
 }
