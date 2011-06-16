@@ -85,7 +85,7 @@
     <property name="server.pipeline.4.fullpath"        value="${gate.pipeline.repository}Yahoo/application.xgapp"/>
 -->
     <!-- Default Semantic Assistants server to connect to -->
-    <property name="csal.server.name"         value="assistant.cs.concordia.ca"/>
+    <property name="csal.server.name"         value="minion.cs.concordia.ca"/>
     <property name="csal.server.port"         value="8879"/>
 
     <!-- Port for which the Server listens for debugers to be attached -->
