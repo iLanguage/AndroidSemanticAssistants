@@ -129,9 +129,16 @@ public class ServiceInvocationHandler implements Runnable
                     String fileString = broker.getResultFile( current.mFileUrl );
                     String fileExt = ClientUtils.getFileNameExt( current.mFileUrl );
 
+                    // TODO: This file type hack by side-effect needs to be
+                    // resolved at the CSAL level via the mime-type server results.
+                    final String HTML_EXTENSION = ".html";
                     if( fileExt == null )
-                    {
+                    {    
                         fileExt = ".txt";
+                    }      
+                    if( fileString.startsWith( "<!DOCTYPE HTML" ) )
+                    {
+                        fileExt = HTML_EXTENSION;
                     }
 
                     System.out.println( "------------ fileExt: " + fileExt );
@@ -141,8 +148,8 @@ public class ServiceInvocationHandler implements Runnable
                     {
                        // Attempt to open HTML files through an external browser,
                        // else open the file through the default word-processor.
-                       if (fileString.startsWith( "<!DOCTYPE HTML" )) {
-                           if (!spawnBrowser( f.toURI() )) {
+                       if (HTML_EXTENSION.equals( fileExt )) {
+                           if (!spawnBrowser( f )) {
                               System.out.println( "---------------- Defaulting to word-processor handling." );
                               UNOUtils.createNewDoc( compCtx, f );
                            }
@@ -402,25 +409,24 @@ public class ServiceInvocationHandler implements Runnable
     }
 
    /**
-    * Open an URI through a browser.
+    * Open an file through a browser.
     *
-    * @param uri HTML document.
+    * @param file HTML document.
     * @return true if successful, false otherwise.
     */
-   private boolean spawnBrowser(URI uri)
+   private boolean spawnBrowser(File f)
    {
       boolean status = true;
+      try {
+         String command = "firefox " + f.getCanonicalPath();
+         System.out.println( "---------------- Executing " + command );
+         Process p = Runtime.getRuntime().exec( command );
+         System.out.println( "---------------- Command executed" );
 
-      final Desktop desktop = Desktop.getDesktop();
-      if (desktop.isSupported(Desktop.Action.BROWSE)) {
-         try {
-            desktop.browse(uri);
-         } catch (IOException ex) {
-            System.out.println( "---------------- Failed to launch browser");
-            status = false;
-         }
-      } else {
-         System.out.println( "---------------- Browsing is not supported");
+         // Get annotation hold of the potential error output of the program
+         BufferedReader error = new BufferedReader( new InputStreamReader( p.getErrorStream() ) );
+      } catch( java.io.IOException e ) {
+         System.out.println( "---------------- Failed to launch browser");
          status = false;
       }
       return status;
