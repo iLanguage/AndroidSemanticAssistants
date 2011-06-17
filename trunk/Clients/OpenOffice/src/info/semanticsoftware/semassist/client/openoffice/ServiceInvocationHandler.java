@@ -137,7 +137,7 @@ public class ServiceInvocationHandler implements Runnable
                     System.out.println( "------------ fileExt: " + fileExt );
                     File f = ClientUtils.writeStringToFile( fileString, fileExt );
 
-                    if ( UNOUtils.isExternalResultHandling() )
+                    if ( UNOUtils.isBrowserResultHandling() )
                     {
                        // Attempt to open HTML files through an external browser,
                        // else open the file through the default word-processor.

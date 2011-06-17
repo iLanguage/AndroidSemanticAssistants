@@ -65,7 +65,7 @@ public class UNOUtils
     private static final String SEM_ASSIST = "Semantic Assistants:";
 
     // Configuration Defaults
-    private static Boolean mExternalResultHandling = true; /* Handle results with suitable external programs. */
+    private static Boolean mBrowserResultHandling = true; /* Handle results with an external browser. */
     private static Boolean mShowAnnotationContent = false; /* Put annotation content in side-notes. */
     private static Boolean mEmptyFeatureFilter = true; /* Ignore empty-valued features by default. */
     private static String mServerHost = ClientUtils.defaultServerHost();
@@ -562,23 +562,20 @@ public class UNOUtils
     }
 
    /**
-    * @param status true to allow external software to handle document
+    * @param status true to allow an external browser to handle the document
     *        results or false otherwise.
     */
-   public static void setExternalResultHandling( boolean status )
+   public static void setBrowserResultHandling( boolean status )
    {
-      mExternalResultHandling = status;
+      mBrowserResultHandling = status;
    }
 
    /**
-    * @return the mExternalResultHandling status.
-    *
-    * @note Which external software and how the document is handled is
-    *       left up to the caller's discretion.
+    * @return the mBrowserResultHandling status.
     */
-   public static boolean isExternalResultHandling()
+   public static boolean isBrowserResultHandling()
    {
-      return mExternalResultHandling;
+      return mBrowserResultHandling;
    }
 
    /**

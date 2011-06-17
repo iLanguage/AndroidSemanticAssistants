@@ -30,7 +30,7 @@ public class SettingsFrame extends javax.swing.JFrame
     private static String mCustomServerHost;
 
 
-    /*isExternalResultHandling* Creates new form SettingsFrame */
+    /** Creates new form SettingsFrame */
     public SettingsFrame()
     {
         initComponents();
@@ -48,7 +48,7 @@ public class SettingsFrame extends javax.swing.JFrame
         jCheckBox1 = new javax.swing.JCheckBox(null,null,UNOUtils.getCURRENT_HIGHLIGHT());
         jCheckBox2 = new JCheckBox("Filter Empty Features", UNOUtils.isEmptyFeatureFilter());
         jCheckBox3 = new JCheckBox("Show Annotation Content", UNOUtils.isShowAnnotationContent());
-        jCheckBox4 = new JCheckBox("External Result Handling", UNOUtils.isExternalResultHandling());
+        jCheckBox4 = new JCheckBox("Open HTML results in external Browser", UNOUtils.isBrowserResultHandling());
         jRadioButtonDefault = new javax.swing.JRadioButton( null, null, mDefaultServerSelect);
         jRadioButtonCustom = new javax.swing.JRadioButton(null, null, !mDefaultServerSelect);
         okButton = new javax.swing.JButton();
@@ -302,10 +302,10 @@ public class SettingsFrame extends javax.swing.JFrame
         System.out.println( "------ Show Annotation Content " + (status ? "Enabled" : "Disabled") );
         UNOUtils.setShowAnnotationContent( status );
 
-        // Handle results with external programs option.
+        // Handle HTML results with external borwser option.
         status = jCheckBox4.isSelected();
-        System.out.println( "------ Enable External Result Handling " + (status ? "Enabled" : "Disabled") );
-        UNOUtils.setExternalResultHandling(status);
+        System.out.println( "------ Enable Browser Result Handling " + (status ? "Enabled" : "Disabled") );
+        UNOUtils.setBrowserResultHandling( status );
     }
 
     private void updateRadioButtonsStatus()
