@@ -201,7 +201,8 @@ Server information (Host and Port) of a local or distant server.
 \subsection{Installation}
 \label{subsec:oo-inst}
 The OpenOffice.org plug-in can be found in
-\url{SemanticAssistants/Clients/OpenOffice}. To use it, do the following:
+\url{SemanticAssistants/Clients/OpenOffice} and it is compatible with 
+OpenOffice versions greater than 2.0.4. To use it, do the following:
 
 \begin{enumerate}
   % TODO: what about the OO SDK installation? 
@@ -258,7 +259,10 @@ If you want to build the plugin yourself, follow these steps:
 \end{itemize}
 
 \subsubsection{OpenOffice.org Plug-in Specifics}
-Every plug-in has to include a
+Every plug-in has to include a \emph{description.xml} that describes the 
+package's meta details like publisher, license, download url and version dependencies.
+See \href{http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/Extensions/Description_of_XML_Elements}{OpenOffice Developer's Guide}
+for a list of available elements. The plug-in package also includes a
 \emph{META-INF} directory, which contains a file called
 \emph{manifest.xml}. This XML file lists the elements that come with
 this plug-in;  The concrete manifest file for our plug-in is listed in
