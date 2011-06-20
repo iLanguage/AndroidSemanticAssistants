@@ -127,28 +127,22 @@ public class ServiceInvocationHandler implements Runnable
 
                     System.out.println( "------------ Result type: " + SemanticServiceResult.FILE );
                     String fileString = broker.getResultFile( current.mFileUrl );
-                    String fileExt = ClientUtils.getFileNameExt( current.mFileUrl );
 
-                    // TODO: This file type hack by side-effect needs to be
-                    // resolved at the CSAL level via the mime-type server results.
-                    final String HTML_EXTENSION = ".html";
+                    // Get file extension from MIME type or default to text if unknown.
+                    String fileExt = ClientUtils.getFileNameExt( current.mMimeType );
                     if( fileExt == null )
                     {    
-                        fileExt = ".txt";
+                        fileExt = ClientUtils.FILE_EXT_TEXT;
                     }      
-                    if( fileString.startsWith( "<!DOCTYPE HTML" ) )
-                    {
-                        fileExt = HTML_EXTENSION;
-                    }
 
                     System.out.println( "------------ fileExt: " + fileExt );
-                    File f = ClientUtils.writeStringToFile( fileString, fileExt );
+                    final File f = ClientUtils.writeStringToFile( fileString, fileExt );
 
                     if ( UNOUtils.isBrowserResultHandling() )
                     {
                        // Attempt to open HTML files through an external browser,
                        // else open the file through the default word-processor.
-                       if (HTML_EXTENSION.equals( fileExt )) {
+                       if (ClientUtils.MIME_TEXT_HTML.equalsIgnoreCase( current.mMimeType )) {
                            if (!spawnBrowser( f )) {
                               System.out.println( "---------------- Defaulting to word-processor handling." );
                               UNOUtils.createNewDoc( compCtx, f );
