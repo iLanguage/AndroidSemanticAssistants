@@ -347,7 +347,11 @@ public class ServiceInvocationJob extends Job{
 	                SemanticServiceResult current = it.next();
 	                if(current.mResultType.equals(SemanticServiceResult.FILE)){
 	                	String fileContent = broker.getResultFile(current.mFileUrl);
-	                	String fileExt = ClientUtils.getFileNameExt(current.mFileUrl);
+	                	// Get file extension from MIME type or default to text if unknown.
+	                	String fileExt = ClientUtils.getFileNameExt(current.mMimeType);
+	                	if(fileExt == null){
+                        fileExt = ClientUtils.FILE_EXT_TEXT;
+	                	}
 						ServerResponseHandler.createFile(fileContent, fileExt);
 	                }
 	                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION_IN_WHOLE)){

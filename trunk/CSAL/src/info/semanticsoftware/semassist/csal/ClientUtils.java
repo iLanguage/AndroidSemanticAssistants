@@ -40,6 +40,23 @@ public class ClientUtils
     protected static Comparator<Annotation> mByStartCharacter = new CompareByStart();
     protected static byte[] ILLEGAL_XML_1_0_CHARS;
 
+    // Symbolic names for supported MIME-types.
+    public static final String MIME_TEXT_HTML = "text/html";
+    public static final String MIME_TEXT_PLAIN = "text/plain";
+
+    // Symbolic names for supported file-extensions.
+    public static final String FILE_EXT_HTML = ".html";
+    public static final String FILE_EXT_TEXT = ".txt";
+
+    // Supported immutable MIME-type to file-extension mapping.
+    private static final Map<String, String> mMimeToExtMap;
+    static {
+      final Map<String, String> map = new HashMap<String, String>();
+      map.put(MIME_TEXT_HTML, FILE_EXT_HTML);
+      map.put(MIME_TEXT_PLAIN, FILE_EXT_TEXT);
+      mMimeToExtMap = Collections.unmodifiableMap(map);
+    };
+
     public static boolean paramHasValue( GateRuntimeParameter p )
     {
         return paramHasValue( p, false );
@@ -156,20 +173,20 @@ public class ClientUtils
         return writeStringToFile( s, ".xml" );
     }
 
-    public static String getFileNameExt( String s )
+    public static String getFileNameExt( String mimetype )
     {
-        if( s == null )
-        {
+        if (mimetype == null) {
             return null;
         }
 
-        int i = s.lastIndexOf( '.' );
-        if( i < 0 )
-        {
-            return null;
+        final Iterator<String> iter = mMimeToExtMap.keySet().iterator();
+        while (iter.hasNext()) {
+            final String key = iter.next();
+            if (key.equalsIgnoreCase(mimetype)) {
+               return mMimeToExtMap.get(key);
+            }
         }
-
-        return s.substring( i );
+        return null;
     }
 
     public static File writeStringToFile( String s, String ext )
@@ -284,9 +301,9 @@ public class ClientUtils
             result.mResultType = SemanticServiceResult.FILE;
             NamedNodeMap nm = node.getAttributes();
 
-            // Get file URL on server
-            Node urlNode = nm.getNamedItem( "url" );
-            result.mFileUrl = urlNode.getNodeValue();
+            // Get the document url & mime-type on server.
+            result.mFileUrl = nm.getNamedItem( "url" ).getNodeValue();
+            result.mMimeType = nm.getNamedItem( "mimeType" ).getNodeValue();
         }
         // Document / Corpus
         else if( nodeName.equals( SemanticServiceResult.CORPUS ) )

@@ -46,6 +46,9 @@ public class SemanticServiceResult
     /** The URL of the retrieved result file */
     public String mFileUrl;
 
+    /** The mime type of the retrieved result file */
+    public String mMimeType;
+
     /** Corpus case */
     public Vector<RetrievedDocument> mCorpus = new Vector<RetrievedDocument>();
 }
