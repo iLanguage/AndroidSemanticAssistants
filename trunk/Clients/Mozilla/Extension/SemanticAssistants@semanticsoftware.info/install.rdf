@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+     xmlns:em="http://www.mozilla.org/2004/em-rdf#">
+
+  <Description about="urn:mozilla:install-manifest">
+   
+    <em:id>SemanticAssistants@semanticsoftware.info</em:id>
+    <em:name>Semantic Assistants</em:name>
+    <em:version>1.0</em:version>
+    <em:description>Extension to use Semantic Assistants services for Firefox and Thunderbird</em:description>
+    <em:creator>Semantic Software Lab</em:creator>
+    <!-- optional items -->
+    <!-- <em:contributor></em:contributor> -->
+    
+    <em:homepageURL>http://www.semanticsoftware.info/</em:homepageURL>
+    
+    <em:optionsURL>chrome://SemanticAssistants/content/SAGlobalSettings.xul</em:optionsURL>
+    
+    <!-- <em:aboutURL>chrome://.../content/about.xul</em:aboutURL> -->
+    
+    <em:iconURL>chrome://SemanticAssistants/skin/semanticAssistantsLogo.png</em:iconURL>
+    
+    <!-- <em:updateURL>http://site/update.rdf</em:updateURL> -->
+    
+    <!-- Firefox -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{ec8030f7-c20a-464f-9b0e-13a3a9e97384}</em:id>
+        <em:minVersion>1.5</em:minVersion>
+        <em:maxVersion>9.9</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+    
+    <!-- Thunderbird -->
+    <em:targetApplication>
+      <Description>
+        <em:id>{3550f703-e582-4d05-9a08-453d09bdfdc6}</em:id>
+        <em:minVersion>1.5</em:minVersion>
+        <em:maxVersion>4.9</em:maxVersion>
+      </Description>
+    </em:targetApplication>
+    
+  </Description>
+
+</RDF>
