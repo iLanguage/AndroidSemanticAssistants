@@ -44,7 +44,9 @@ import com.sun.star.text.XTextViewCursorSupplier;
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XComponent;
 
+import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.PropertyValue;
+import com.sun.star.beans.UnknownPropertyException;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextCursor;
@@ -65,6 +67,7 @@ public class UNOUtils
     private static final String SEM_ASSIST = "Semantic Assistants:";
 
     // Configuration Defaults
+    private static float mSideNoteFontSize = 10; /* Default annotation font-size. */
     private static Boolean mBrowserResultHandling = true; /* Handle results with an external browser. */
     private static Boolean mShowAnnotationContent = false; /* Put annotation content in side-notes. */
     private static Boolean mEmptyFeatureFilter = true; /* Ignore empty-valued features by default. */
@@ -365,6 +368,12 @@ public class UNOUtils
             xPropertySet.setPropertyValue( "Content", sideNoteContent );
             xPropertySet.setPropertyValue( "Author", mCurrentPipeline + SEM_ASSIST );
 
+            // Extract annotation text range to apply format & styling.
+            final XTextRange xAnnotRange = UnoRuntime.queryInterface(
+                    XTextRange.class, xPropertySet.getPropertyValue( "TextRange" ) );
+            xAnnotRange.setString(sideNoteContent);
+            setFontSize(xAnnotRange, getSideNoteFontSize());
+
             mxAnnotText.insertTextContent( mxDocCursor, xAnnotation, false );
         }
         catch( Exception e )
@@ -374,6 +383,30 @@ public class UNOUtils
 
         // Highlight annotated field
         highlightField();
+    }
+
+    /**
+     * Configure the font-size of a range of text.
+     *
+     * @param range of text to change the font.
+     * @param size value of the new font.
+     */
+    private static void setFontSize(XTextRange range, float size)
+    {
+        // Extract the cursor properties & change its font-size.
+        final XTextCursor cursor = range.getText().createTextCursorByRange(range);
+        final XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class, cursor);
+        try {
+            props.setPropertyValue("CharHeight", size);
+        } catch (UnknownPropertyException e) {
+            e.printStackTrace();
+        } catch (PropertyVetoException e) {
+            e.printStackTrace();
+        } catch (com.sun.star.lang.WrappedTargetException e) {
+            e.printStackTrace();
+        } catch (com.sun.star.lang.IllegalArgumentException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void highlightField()
@@ -560,6 +593,22 @@ public class UNOUtils
             return false;
         }
     }
+
+   /**
+    * @param size value of the side-note font.
+    */
+   public static void setSideNoteFontSize( float size )
+   {
+      mSideNoteFontSize = size;
+   }
+
+   /**
+    * @return the font-size for side-note content.
+    */
+   public static float getSideNoteFontSize()
+   {
+      return mSideNoteFontSize;
+   }
 
    /**
     * @param status true to allow an external browser to handle the document
