@@ -49,6 +49,8 @@ public class SettingsFrame extends javax.swing.JFrame
         jCheckBox2 = new JCheckBox("Filter Empty Features", UNOUtils.isEmptyFeatureFilter());
         jCheckBox3 = new JCheckBox("Show Annotation Content", UNOUtils.isShowAnnotationContent());
         jCheckBox4 = new JCheckBox("Open HTML results in external Browser", UNOUtils.isBrowserResultHandling());
+        jSideNoteFontSizeField = new JTextField(
+            new Float(UNOUtils.getSideNoteFontSize()).toString());
         jRadioButtonDefault = new javax.swing.JRadioButton( null, null, mDefaultServerSelect);
         jRadioButtonCustom = new javax.swing.JRadioButton(null, null, !mDefaultServerSelect);
         okButton = new javax.swing.JButton();
@@ -179,6 +181,18 @@ public class SettingsFrame extends javax.swing.JFrame
                             .addContainerGap()
                             .addComponent(jCheckBox3))
                         .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
+                            // Position the side-note font-size label & text elements.
+                            .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                        .addComponent(jSideNoteFontSizeLabel))
+                                    .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                        .addComponent(jSideNoteFontSizeField)))
+                            )
+                        )
+                        .addGroup(layout.createSequentialGroup()
                             .addGap(197, 197, 197)
                             .addComponent(jLabel6))
                         .addGroup(layout.createSequentialGroup()
@@ -208,6 +222,10 @@ public class SettingsFrame extends javax.swing.JFrame
                     .addComponent(jCheckBox2)
                     .addGap(18, 18, 18)
                     .addComponent(jCheckBox3)
+                    .addGap(18, 18, 18)
+                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
+                        .addComponent(jSideNoteFontSizeLabel)
+                        .addComponent(jSideNoteFontSizeField, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                     .addGap(27, 27, 27)
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGap(12, 12, 12)
@@ -250,6 +268,7 @@ public class SettingsFrame extends javax.swing.JFrame
         updateCheckBoxStatus();
         updateRadioButtonsStatus();
         updateServerInfo();
+        updateAnnotationInfo();
 
         dispose();
         setVisible( false );
@@ -334,6 +353,26 @@ public class SettingsFrame extends javax.swing.JFrame
         }
     }
 
+    private void updateAnnotationInfo()
+    {
+      // Sanity check font-size field & keep previous value on error.
+      final String fontSizeStr = jSideNoteFontSizeField.getText();
+      if (fontSizeStr.isEmpty()) {
+         System.out.println("Ignoring missing font-size");
+      } else {
+         try {
+            final float fontSizeNum = new Float(fontSizeStr).floatValue();
+            if (fontSizeNum > 0) {
+               UNOUtils.setSideNoteFontSize(fontSizeNum);
+            } else {
+               System.out.println("Ignoring non-positive font-size");
+            }
+         } catch (NumberFormatException e) {
+            System.out.println("Ignoring non-numeric font-size");
+         }
+      }
+    }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
@@ -341,6 +380,7 @@ public class SettingsFrame extends javax.swing.JFrame
     private javax.swing.JCheckBox jCheckBox2;
     private javax.swing.JCheckBox jCheckBox3;
     private javax.swing.JCheckBox jCheckBox4;
+    private JTextField jSideNoteFontSizeField;
     private javax.swing.JTextField jCustomHostField;
     private javax.swing.JTextField jCustomPortField;
     private javax.swing.JTextField jDefaultHostField;
@@ -352,6 +392,7 @@ public class SettingsFrame extends javax.swing.JFrame
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private final JLabel jLabel7 = new JLabel("Client Settings");
+    private final JLabel jSideNoteFontSizeLabel = new JLabel("Font size:");
     private javax.swing.JRadioButton jRadioButtonCustom;
     private javax.swing.JRadioButton jRadioButtonDefault;
     private final JSeparator jSeparator1 = new JSeparator();
