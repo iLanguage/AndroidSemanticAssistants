@@ -5,7 +5,7 @@
 
    This file is part of the Semantic Assistants architecture.
 
-   Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
+   Copyright (C) 2011 Semantic Software Lab, http://www.semanticsoftware.info
 
    The Semantic Assistants architecture is free software: you can
    redistribute and/or modify it under the terms of the GNU Affero General
@@ -28,15 +28,15 @@
     <import file ="${semassist.home}/SemassistProperties.xml"/>
     
     <!-- Top directories -->
-    <property name="build.home"     value="${basedir}/build"/>
-    <property name="src.home"       value="${basedir}/JavaCode/Mozilla/src"/>
-    <property name="extension.home" value="${basedir}/Extension"/>
-    <property name="distintermediate.home"      value="${basedir}/distintermediate"/>
-    <property name="dist.home"      value="${basedir}/dist"/>
+    <property name="build.home"            value="${basedir}/build"/>
+    <property name="src.home"              value="${basedir}/JavaCode/Mozilla/src"/>
+    <property name="extension.home"        value="${basedir}/Extension"/>
+    <property name="distintermediate.home" value="${basedir}/distintermediate"/>
+    <property name="dist.home"             value="${basedir}/dist"/>
     
-    <property name="extension.dir.name"   value="SemanticAssistants@semanticsoftware.info"/>
-    <property name="sacontrollerjar.name" value="SAController.jar"/>
-    <property name="xpi.name"             value="semantic_assistants-1.0-fx+tb.xpi"/>
+    <property name="extension.dir.name"    value="SemanticAssistants@semanticsoftware.info"/>
+    <property name="sacontrollerjar.name"  value="SAController.jar"/>
+    <property name="xpi.name"              value="semantic_assistants-1.0-fx+tb.xpi"/>
     
     <description>
         Mozilla (Firefox and Thunderbird) extension for the Semantic Assistants architecture
@@ -103,5 +103,17 @@
         <zip destfile="${dist.home}/${xpi.name}" 
                 basedir="${distintermediate.home}/${extension.dir.name}" />
     </target>
-    
+
+    <!-- Findbugs analysis -->
+    <target name="findbugs" depends="compile">
+      <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
+            classpath="${findbugs.classpath}" />
+      <findbugs home="${findbugs.home}"      
+            output="xml:withMessages"
+            outputFile="findbugsXml.SA.xml" >
+	<auxClasspath path="${ant.jar}:${gate.jar}:${gate-home}/lib/log4j-1.2.14.jar:${csal.home}/dist/${csal.name}:${commons-lang.jar}" />
+	<sourcePath path="${src.home}" />
+	<class location="${basedir}/build/" />
+      </findbugs>
+    </target>    
 </project>
