@@ -49,8 +49,7 @@ public class SettingsFrame extends javax.swing.JFrame
         jCheckBox2 = new JCheckBox("Filter Empty Features", UNOUtils.isEmptyFeatureFilter());
         jCheckBox3 = new JCheckBox("Show Annotation Content", UNOUtils.isShowAnnotationContent());
         jCheckBox4 = new JCheckBox("Open HTML results in external Browser", UNOUtils.isBrowserResultHandling());
-        jSideNoteFontSizeField = new JTextField(
-            new Float(UNOUtils.getSideNoteFontSize()).toString());
+        jSideNoteFontSizeField = new JTextField(Float.toString(UNOUtils.getSideNoteFontSize()));
         jRadioButtonDefault = new javax.swing.JRadioButton( null, null, mDefaultServerSelect);
         jRadioButtonCustom = new javax.swing.JRadioButton(null, null, !mDefaultServerSelect);
         okButton = new javax.swing.JButton();

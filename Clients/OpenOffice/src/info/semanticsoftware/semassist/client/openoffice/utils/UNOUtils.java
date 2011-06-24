@@ -67,7 +67,7 @@ public class UNOUtils
     private static final String SEM_ASSIST = "Semantic Assistants:";
 
     // Configuration Defaults
-    private static float mSideNoteFontSize = 10; /* Default annotation font-size. */
+    private static float mSideNoteFontSize = 8; /* Default annotation font-size. */
     private static Boolean mBrowserResultHandling = true; /* Handle results with an external browser. */
     private static Boolean mShowAnnotationContent = false; /* Put annotation content in side-notes. */
     private static Boolean mEmptyFeatureFilter = true; /* Ignore empty-valued features by default. */
