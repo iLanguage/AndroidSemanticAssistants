@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+
+<!--
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+   This file is part of the Semantic Assistants architecture.
+
+   Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
+
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+   
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<project name="Mozilla extension" default="run" basedir=".">
+    <property name="semassist.home"           value="../../" />
+    
+    <!-- Machine-specific settings should go in SemassistProperties.xml -->
+    <import file ="${semassist.home}/SemassistProperties.xml"/>
+    
+    <!-- Top directories -->
+    <property name="build.home"     value="${basedir}/build"/>
+    <property name="src.home"       value="${basedir}/JavaCode/Mozilla/src"/>
+    <property name="extension.home" value="${basedir}/Extension"/>
+    <property name="distintermediate.home"      value="${basedir}/distintermediate"/>
+    <property name="dist.home"      value="${basedir}/dist"/>
+    
+    <property name="extension.dir.name"   value="SemanticAssistants@semanticsoftware.info"/>
+    <property name="sacontrollerjar.name" value="SAController.jar"/>
+    <property name="xpi.name"             value="semantic_assistants-1.0-fx+tb.xpi"/>
+    
+    <description>
+        Mozilla (Firefox and Thunderbird) extension for the Semantic Assistants architecture
+    </description>
+
+    <path id="compile.classpath">
+        <pathelement location="${distintermediate.home}/${csal.name}" />
+    </path>
+    
+    <!-- Delete all build and dist output -->
+    <target name="clean">
+        <delete includeemptydirs="true" quiet="true">
+            <fileset dir="${build.home}"/>
+            <fileset dir="${distintermediate.home}"/>
+            <fileset dir="${dist.home}"/>
+        </delete>
+        <!-- <delete file="${distintermediate.home}/${csal.name}" /> -->
+    </target>
+    
+    <!-- Copies the CSAL.jar file to the distintermediate folder -->
+    <target name="copycsal" 
+            description="Copies the CSAL.jar file to the distintermediate folder" >
+        <copy file="${csal.home}/dist/${csal.name}" 
+                todir="${distintermediate.home}"/>
+    </target>
+    
+    <!-- Compiles the Java source classes -->  
+    <target name="compile" depends="copycsal" 
+            description="Compiles the Java source classes" >
+        <mkdir dir="${build.home}" />
+        <javac srcdir="${src.home}/" 
+                destdir="${build.home}" 
+                debug="true" debuglevel="lines,vars,source" 
+                classpath="${build.home}"
+                includeantruntime="${antruntime}" >
+            <compilerarg value="${compile.args}" />
+            <classpath refid="compile.classpath" />
+        </javac>
+    </target>
+    
+    <!-- Pack the compiled classes into a .jar archive -->
+    <target name="distsub1" depends="compile"  
+            description="Pack the compiled classes into a .jar archive" >
+        <mkdir dir="${distintermediate.home}"/>
+        <jar destfile="${distintermediate.home}/${sacontrollerjar.name}">
+            <fileset dir="${build.home}" />
+        </jar>
+    </target>
+    
+    <!-- Assemble the extension folder -->
+    <target name="distsub2" depends="distsub1"  
+            description="Assemble the extension folder" >
+        <copy todir="${distintermediate.home}/${extension.dir.name}">
+            <fileset dir="${extension.home}/${extension.dir.name}"/>
+        </copy>
+        <copy file="${distintermediate.home}/${csal.name}"     todir="${distintermediate.home}/${extension.dir.name}/java"/>
+        <copy file="${distintermediate.home}/SAController.jar" todir="${distintermediate.home}/${extension.dir.name}/java"/>
+    </target>
+    
+    <!-- Archive into a .zip file with a .xpi file extension -->
+    <target name="dist" depends="distsub2"  
+            description="Archive into a .zip file with a .xpi file extension" >
+        <mkdir dir="${dist.home}"/>
+        <zip destfile="${dist.home}/${xpi.name}" 
+                basedir="${distintermediate.home}/${extension.dir.name}" />
+    </target>
+    
+</project>
