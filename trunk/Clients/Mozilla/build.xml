@@ -93,7 +93,7 @@
             <fileset dir="${extension.home}/${extension.dir.name}"/>
         </copy>
         <copy file="${distintermediate.home}/${csal.name}"     todir="${distintermediate.home}/${extension.dir.name}/java"/>
-        <copy file="${distintermediate.home}/SAController.jar" todir="${distintermediate.home}/${extension.dir.name}/java"/>
+        <copy file="${distintermediate.home}/${sacontrollerjar.name}" todir="${distintermediate.home}/${extension.dir.name}/java"/>
     </target>
     
     <!-- Archive into a .zip file with a .xpi file extension -->
