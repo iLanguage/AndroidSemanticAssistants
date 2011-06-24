@@ -104,6 +104,14 @@
                 basedir="${distintermediate.home}/${extension.dir.name}" />
     </target>
 
+    <!-- Generates Javadoc output -->
+    <target name="javadoc">
+        <javadoc sourcepath="${src.home}" destdir="${javadoc.home}/Mozilla" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: Mozilla (Firefox/Thunderbird) Plug-ins">
+        <doctitle><![CDATA[<h1>Semantic Assistants: Mozilla (Firefox/Thunderbird) Plug-ins</h1>]]></doctitle>
+        <bottom><![CDATA[<i>Copyright © 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
+          </javadoc>
+    </target>
+
     <!-- Findbugs analysis -->
     <target name="findbugs" depends="compile">
       <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
