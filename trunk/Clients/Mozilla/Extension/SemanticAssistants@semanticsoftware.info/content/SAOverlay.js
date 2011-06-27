@@ -71,7 +71,9 @@ var SAOverlay = {
         //once text has been selected, the rangeCount will remain 1 even if all text is unselected
         //if (userSelection.rangeCount == 0) {
         if (userSelection == "") {
-            userSelection = content.document.body.innerHTML;
+            //userSelection = content.document.body.innerHTML;
+            userSelection = content.document.body.textContent;
+            
             allText = true;
         }
         //call java classes
