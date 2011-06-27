@@ -469,7 +469,8 @@ request the result file itself by using the identifier sent to it. The
 server then sends the actual file. Again, we have an example response
 in Figure~\ref{list:response3}. The \texttt{outputFile} element holds
 format information, both in form of a MIME type string and a human
-readable one. The identifier for the result file is given through the
+readable one. This MIME type can be used by clients to decide the best suitable
+presentation method. The identifier for the result file is given through the
 \texttt{url} attribute which refers to the server's file system.
 
 \begin{figure}
