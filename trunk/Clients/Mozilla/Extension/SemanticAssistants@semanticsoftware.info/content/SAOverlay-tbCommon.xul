@@ -45,7 +45,6 @@
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
   
     <script src="SAOverlayHelper-tb.js"/>
-    <script src="SAOverlayExtensionLocationHelper-fx3-tb.js"/>
     
     <broadcasterset> 
         <broadcaster id="SASidebarBroadcaster" 

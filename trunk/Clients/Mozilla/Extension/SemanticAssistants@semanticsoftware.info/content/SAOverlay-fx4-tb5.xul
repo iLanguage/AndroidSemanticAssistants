@@ -42,6 +42,6 @@
 <overlay id="SemanticAssistants"
         xmlns="http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul">
     
-    <script src="SAOverlayExtensionLocationHelper-fx4.js"/>
+    <script src="SAOverlayExtensionLocationHelper-fx4-tb5.js"/>
     
 </overlay>
