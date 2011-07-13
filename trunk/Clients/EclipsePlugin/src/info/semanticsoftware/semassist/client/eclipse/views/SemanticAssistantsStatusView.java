@@ -44,7 +44,7 @@ public class SemanticAssistantsStatusView extends ViewPart {
 		table.setLinesVisible(false);
 		
 		String[] columnNames = {"Log Details"};
-		int[] columnWidths = new int[] {100};
+		int[] columnWidths = new int[] {500};
 		for(int i=0; i < columnNames.length; i++){
 			final TableViewerColumn tableColumn = new TableViewerColumn(viewer, SWT.LEFT);
 			tableColumn.getColumn().setText(columnNames[i]);
