@@ -355,12 +355,14 @@ public class ServiceInvocationJob extends Job{
 						ServerResponseHandler.createFile(fileContent, fileExt);
 	                }
 	                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION_IN_WHOLE)){
+	                	//TODO find a way to handle annotation_in_whole type
 	                	System.out.println("Annotation Case (Append to data structure). I don't know how to handle this!");
 	                }
 	                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
 	                	ServerResponseHandler.createAnnotation(current);
 	                }
 	                else if(current.mResultType.equals(SemanticServiceResult.CORPUS)){
+	                	//TODO find a way to handle corpus type
 	                	System.out.println("Corpus Case. I don't know how to handle this!");
 	                }
 	                else if(current.mResultType.equals(SemanticServiceResult.DOCUMENT)){
