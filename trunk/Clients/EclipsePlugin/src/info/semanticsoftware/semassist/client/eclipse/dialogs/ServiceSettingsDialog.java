@@ -44,9 +44,6 @@ public class ServiceSettingsDialog extends Dialog {
     
     /** If checked, dialog saves the host name and port value to a properties file */
 	private Button checkbox;
-    
-    /** True if user wants to save the settings, otherwise false by default */
-	private boolean defaultSettings = false;
 
     /** Text box component to store host name value */
 	private Text txtServerHost;
@@ -76,20 +73,17 @@ public class ServiceSettingsDialog extends Dialog {
     /** Checks if OK button has been pressed and decides to save the values to a properties file */
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
-            if(defaultSettings){
-            	Utils.propertiesWriter();
-            	Utils.propertiesReader();
-        		super.buttonPressed(buttonId);
-            }else{
             	if(txtServerHost.getText().equals("") || txtServerPort.getText().equals("")){
             		setErrorMessage("Please fill the server host and port number values");
             	}else{
-            		Utils.propertiesWriter(txtServerHost.getText(), txtServerPort.getText());
+            		if(checkbox.getSelection()){
+                		Utils.propertiesWriter();
+            		}else{
+            			Utils.propertiesWriter(txtServerHost.getText(), txtServerPort.getText());
+            		}
             		Utils.propertiesReader();
-            		defaultSettings = false;    
             		super.buttonPressed(buttonId);
             	}
-            }
         }
         
         if (buttonId == IDialogConstants.CANCEL_ID) {
@@ -162,8 +156,10 @@ public class ServiceSettingsDialog extends Dialog {
         checkbox = new Button(checkboxComposite, SWT.CHECK);
         checkbox.setText("Use defaults");
         
-        if(ServiceAgentSingleton.getServerHost().equals("")){
+        if(Utils.defaultSettings){
         	defaultMode();
+        }else{
+        	customMode();
         }
         
         SelectionListener listener = new SelectionAdapter() {
@@ -196,7 +192,6 @@ public class ServiceSettingsDialog extends Dialog {
          lblServerHost.setText("Server Host: ");
          txtServerHost = new Text(serverSettingsComposite, SWT.SINGLE | SWT.BORDER);
          txtServerHost.setSize(300, 70);
-         //txtServerHost.setText(host);
          txtServerHost.setText(ServiceAgentSingleton.getServerHost());
          txtServerHost.addModifyListener(new ModifyListener() {
              public void modifyText(ModifyEvent e) {
@@ -211,7 +206,6 @@ public class ServiceSettingsDialog extends Dialog {
          lblServerPort.setText("Server Port: ");
          txtServerPort = new Text(serverSettingsComposite, SWT.SINGLE | SWT.BORDER);
          txtServerPort.setText(ServiceAgentSingleton.getServerPort());
-         //txtServerPort.setText(port);
          txtServerPort.setSize(300, 70);
          txtServerPort.addModifyListener(new ModifyListener() {
              public void modifyText(ModifyEvent e) {
@@ -255,7 +249,6 @@ public class ServiceSettingsDialog extends Dialog {
      * Convenience method to handle the default status of dialogs widgets
      * */
     private void defaultMode(){
-		defaultSettings = true;
     	checkbox.setSelection(true);
     	txtServerHost.setEnabled(false);
     	txtServerPort.setEnabled(false);
@@ -265,7 +258,7 @@ public class ServiceSettingsDialog extends Dialog {
      * Convenience method to handle the custom status of dialogs widgets
      * */
     private void customMode(){
-		defaultSettings = false;
+    	checkbox.setSelection(false);
 		txtServerHost.setEnabled(true);
 		txtServerPort.setEnabled(true);
     }   
