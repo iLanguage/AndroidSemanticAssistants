@@ -332,57 +332,112 @@ public class UNOUtils
 
     private static void annotateField( Annotation annotation )
     {
-        String sideNoteContent;
-        try
-        {
-            // Use the text document's factory to create an Annotation text field
-            final XTextField xAnnotation = UnoRuntime.queryInterface(
-                    XTextField.class, mxDocFactory.createInstance(
-                    "com.sun.star.text.TextField.Annotation" ) );
-
-            // get the properties of the field
-            final XPropertySet xPropertySet = UnoRuntime.queryInterface( XPropertySet.class, xAnnotation );
-
-            Set<String> keys = annotation.mFeatures.keySet();
-            sideNoteContent = "type= " + annotation.mType + "\n";
-
-            // If configured, dupplicate annotation content as part of the side-note.
-            if ( mShowAnnotationContent ) {
-               sideNoteContent += "content= " + annotation.mContent + "\n";
-            }
-
-            // Append all feature key/value pairs to the side-note possibly ignoring
-            // empty valued features if configured.
-            for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); )
-            {
-                final String currentKey = it2.next();
-                final String currentVal = annotation.mFeatures.get( currentKey );
-
-                if ( !mEmptyFeatureFilter || !"".equals( currentVal ) ) {
-                  sideNoteContent += currentKey + "= " + currentVal + "\n";
-                } else {
-                  System.out.println( "---------------- Ignoring empty valued feature: "+ currentKey );
-                }
-            }
-
-            xPropertySet.setPropertyValue( "Content", sideNoteContent );
-            xPropertySet.setPropertyValue( "Author", mCurrentPipeline + SEM_ASSIST );
-
-            // Extract annotation text range to apply format & styling.
-            final XTextRange xAnnotRange = UnoRuntime.queryInterface(
-                    XTextRange.class, xPropertySet.getPropertyValue( "TextRange" ) );
-            xAnnotRange.setString(sideNoteContent);
-            setFontSize(xAnnotRange, getSideNoteFontSize());
-
-            mxAnnotText.insertTextContent( mxDocCursor, xAnnotation, false );
-        }
-        catch( Exception e )
-        {
+        try {
+            mxAnnotText.insertTextContent(mxDocCursor, makeAnnotation(annotation), false);
+        } catch(Exception e) {
             e.printStackTrace();
         }
 
         // Highlight annotated field
         highlightField();
+    }
+
+    /**
+     * Create an annotation (side-note) textfield object.
+     *
+     * @param Annotation Memory representation of the annotation.
+     *
+     * @throws Exception
+     */
+    private static XTextField makeAnnotation(final Annotation annotation)
+      throws Exception
+    {
+      // Create a side-note object & get its properties to be modified.
+      final XTextField annot = UnoRuntime.queryInterface(
+         XTextField.class, mxDocFactory.createInstance(
+         "com.sun.star.text.TextField.Annotation"));
+      final XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class, annot);
+
+      // Keep track of side-note text & content with the same information but for
+      // different purposes. Text is for embedding complex objects into side-notes,
+      // while content is for side-note mandatory properties. Should investigate
+      // how to leverage of OpenOffice's (unknown) internal defaults to not have
+      // multiple representation of the same information.
+      final XText text = UnoRuntime.queryInterface(
+         XText.class, props.getPropertyValue("TextRange"));
+      String content = "";
+
+      // Configure look-&-feel of side-note information.
+      setFontSize(text, getSideNoteFontSize());
+
+      // If configured, duplicate annotation content as part of the side-note.
+      if (mShowAnnotationContent) {
+         content += "content= "+ annotation.mContent +"\n";
+      }
+
+      // Iterate through annotation features.
+      final Set<String> keys = annotation.mFeatures.keySet();
+      final Iterator<String> iter = keys.iterator();
+
+      while (iter.hasNext()) {
+         final String key = iter.next();
+         final String val = annotation.mFeatures.get(key);
+
+         // If configured, suppress empty-valued features.
+         if (mEmptyFeatureFilter && "".equals(val)) {
+            System.out.println("---------------- Ignoring empty valued feature: "+ key);
+            continue;
+         }
+
+         // Make URL features hyper-linkable.
+         if ("URL".equals(key)) {
+            text.insertString(text, key +"= ", false);
+            text.insertTextContent(text, makeHyperLink(val, val), false);
+            text.insertString(text, "\n", false);
+         } else {
+            text.insertString(text, key +"= "+ val +"\n", false);
+         }
+      }
+
+      // Define side-note properties.
+      try {
+         props.setPropertyValue("Content", content);
+         props.setPropertyValue("Author", mCurrentPipeline + SEM_ASSIST);
+      } catch (UnknownPropertyException e) {
+         /* Thrown ONLY on programming/typo error of the try body! */
+         e.printStackTrace();
+      }
+
+      return annot;
+    }
+
+    /**
+     * Create a hyperlink textfield object.
+     *
+     * @param linkURL Address of the hyperlink including its protocol (ie: http://)
+     * @param linkName Symbolic name of the hyperlink.
+     *
+     * @throws Exception
+     */
+    private static XTextField makeHyperLink(final String linkURL, final String linkName)
+      throws Exception
+    {
+      //Create a URL object & gets its properties to be modified.
+      final XTextField link = UnoRuntime.queryInterface(
+         XTextField.class, mxDocFactory.createInstance(
+         "com.sun.star.text.TextField.URL"));
+      final XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class, link);
+
+      // Define URL properties.
+      try {
+         props.setPropertyValue("Representation", linkName);
+         props.setPropertyValue("URL", linkURL);
+      } catch (UnknownPropertyException e) {
+         /* Thrown ONLY on programming/typo error of the try body! */
+         e.printStackTrace();
+      }
+
+      return link;
     }
 
     /**
