@@ -46,8 +46,6 @@ public class ServiceAgentSingleton
 	
     /** Port number value */
 	private static String serverPort = "";
-	
-	public static boolean defaultSettings = true;
 
 	/**
 	 * This method is the global access point to the singleton instance of this class
@@ -56,21 +54,18 @@ public class ServiceAgentSingleton
 	 */
 	public static SemanticServiceBroker getInstance()
 	{
-		if(!defaultSettings){
-			Utils.propertiesReader();
-		}
-		System.out.println("serverPort is " + serverPort);
-		System.out.println("serverHost is " + serverHost);
-		
+
+		Utils.propertiesReader();
+
 		try
 	    {
-	        if( broker == null )
-	        {
-	            if( service == null )
-	            {
+//	        if( broker == null )
+//	        {
+//	            if( service == null )
+//	            {
 	                if( !serverHost.isEmpty() && !serverPort.isEmpty() )
 	                {
-	                    System.out.println( "Creating broker using params");
+	                    System.out.println("Creating broker using hostname " + serverHost + " and port "+ serverPort );
 	                    service = new SemanticServiceBrokerService( new URL( createURL() ),
 	                            new QName( "http://server.semassist.semanticsoftware.info/",
 	                            "SemanticServiceBrokerService" ) );
@@ -78,13 +73,13 @@ public class ServiceAgentSingleton
 	                }
 	                else
 	                {
-	                    System.out.println( "Creating broker not using params");
+	                    System.out.println( "Creating broker using default values");
 	              	  	service = new SemanticServiceBrokerService();                      
 	                }
 	
-	            }
+	            //}
 	            broker = service.getSemanticServiceBrokerPort();
-	        }
+	        //}
 	    }catch(WebServiceException e1){
 	    	System.err.println("Server not found. \nPlease check the Server Host and Port and if Server is Online");
 	    	FileSelectionDialog.CONNECTION_IS_FINE = false;

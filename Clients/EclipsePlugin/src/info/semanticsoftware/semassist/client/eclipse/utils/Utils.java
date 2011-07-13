@@ -2,6 +2,7 @@ package info.semanticsoftware.semassist.client.eclipse.utils;
 
 import info.semanticsoftware.semassist.client.eclipse.Activator;
 import info.semanticsoftware.semassist.client.eclipse.handlers.ServiceAgentSingleton;
+import info.semanticsoftware.semassist.csal.ClientUtils;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -23,11 +24,7 @@ public class Utils {
 	private static XMLStreamWriter writer;
 	private static XMLOutputFactory factory = XMLOutputFactory.newInstance();
 	private static final String PROPERTIES_FILE_PATH = Activator.metadata + System.getProperty("file.separator") + "settings.prefs";
-
-	
-	public Utils(){
-		
-	}
+	public static boolean defaultSettings = true;
 	
 	/** 
 	 * This method creates a properties file with the host and port values provided by the user.
@@ -71,7 +68,7 @@ public class Utils {
 	 */
 	public static void propertiesWriter(){
 		try{
-			writer = factory.createXMLStreamWriter(new FileWriter(Activator.metadata + System.getProperty("file.separator") + "settings.prefs"));
+			writer = factory.createXMLStreamWriter(new FileWriter(PROPERTIES_FILE_PATH));
 			
 			writer.writeStartDocument();
 			writer.writeStartElement("saProperties");
@@ -79,8 +76,8 @@ public class Utils {
 			writer.writeAttribute("default", "true");
 
 			writer.writeStartElement("server");
-			writer.writeAttribute("host", "");
-			writer.writeAttribute("port", "");
+			writer.writeAttribute("host", ClientUtils.defaultServerHost());
+			writer.writeAttribute("port", ClientUtils.defaultServerPort());
 			
 			writer.writeEndElement();//server
 			writer.writeEndElement();//settings
@@ -114,21 +111,15 @@ public class Utils {
 				NodeList settings = doc.getElementsByTagName("settings");
 				
 				for(int i=0; i < settings.getLength(); i++){
-					if((settings.item(i).getAttributes().getNamedItem("default").getNodeValue()).equals("false")){
 						NodeList server = doc.getElementsByTagName("server");
 						for(int j=0; j < server.getLength(); j++){
 							String host = server.item(j).getAttributes().getNamedItem("host").getNodeValue();
 							ServiceAgentSingleton.setServerHost(host);
 							String port = server.item(j).getAttributes().getNamedItem("port").getNodeValue();
 							ServiceAgentSingleton.setServerPort(port);
+							defaultSettings = Boolean.parseBoolean(settings.item(i).getAttributes().getNamedItem("default").getNodeValue());
 						}
-					
-					}else{
-						ServiceAgentSingleton.setServerHost("");
-						ServiceAgentSingleton.setServerPort("");
-					}
 				}
-				
 			}else{
 				propertiesWriter();
 				propertiesReader();
