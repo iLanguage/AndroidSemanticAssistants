@@ -80,7 +80,6 @@ public class ServerResponseHandler {
 		public static void createDocument(String result){
 			
 			final File outputFile = ClientUtils.writeStringToFile(result,".txt");
-			System.err.println(outputFile.getAbsolutePath());
 			 // Open the output document in a new editor
 	        Display.getDefault().asyncExec(new Runnable() {
 							@Override
