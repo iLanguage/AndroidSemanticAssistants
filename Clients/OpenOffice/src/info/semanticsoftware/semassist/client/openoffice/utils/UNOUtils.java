@@ -390,7 +390,7 @@ public class UNOUtils
          }
 
          // Make URL features hyper-linkable.
-         if ("URL".equals(key)) {
+         if ("url".equalsIgnoreCase(key)) {
             text.insertString(text, key +"= ", false);
             text.insertTextContent(text, makeHyperLink(val, val), false);
             text.insertString(text, "\n", false);
