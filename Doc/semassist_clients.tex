@@ -171,13 +171,13 @@ examples are summarization or question-answering (see Figure~\ref{fig:oores}).
 Besides text annotation, we offer the option for enabling/disabling annotation
 highlighting for text that has been processed by GATE. This option can be
 found under the Semantic Assistants menu in ``Global Settings.''  See
-Figure~\ref{fig:highlight}) for an example.
+Figure~\ref{fig:highlight} for an example.
 
 \subsubsection{Filter Empty Features}
-This option found under the Semantic Assistants menu in ``Global Settings''
-allows the ability to enable/disable filtering of empty valued features in
-side-nodes. This can be useful to avoid cluttering or aid debugging annotations
-respectivelly.
+This option found under the Semantic Assistants menu in ``Global Settings'' (shown
+in Figure~\ref{fig:oosettings}) allows the ability to enable/disable filtering of
+empty valued features in side-nodes. This can be useful to avoid cluttering or aid
+debugging annotations respectivelly.
 
 \subsubsection{Show Annotation Content}
 This option in the ``Global Settings'' dialog can be used to include/exclude
@@ -192,6 +192,24 @@ to annotation highlighting.
   \label{fig:highlight}
   %\vspace*{0.5cm}
 \end{figure}
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=0.5\textwidth]{pictures/oosettings.jpg}
+  \caption{Configuration Dialog}
+  \label{fig:oosettings}
+\end{center}
+\end{figure}
+
+\subsubsection{Annotation Font Size}
+As shown in Figure~\ref{fig:oosettings}, the font size of annotations can be changed
+prior to invoking assistants. Due to the fixed width of side-notes, customizing the
+size can ease readability of features.
+
+\subsubsection{Browser Handling of HTML Results}
+Instead of returning annotations, some pipelines produce HTML documents. The
+"Open HTML results in external Browser" option shown in Figure~\ref{fig:oosettings},
+allows OpenOffice to invoke a local browser to display these results.
 
 \subsubsection{Server Settings}
 Another option found under the Semantic Assistants menu in ``Global
