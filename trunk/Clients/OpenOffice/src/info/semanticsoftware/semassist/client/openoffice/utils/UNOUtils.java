@@ -64,7 +64,6 @@ public class UNOUtils
     private static final int HIGHLIGHT_YELLOW = 0x00FFFD00;
     private static final int HIGHLIGHT_OFF = 0xFFFFFF0A;
     private static int CURRENT_HIGHLIGHT = HIGHLIGHT_YELLOW;
-    private static final String SEM_ASSIST = "Semantic Assistants:";
 
     // Configuration Defaults
     private static float mSideNoteFontSize = 8; /* Default annotation font-size. */
@@ -402,7 +401,7 @@ public class UNOUtils
       // Define side-note properties.
       try {
          props.setPropertyValue("Content", content);
-         props.setPropertyValue("Author", mCurrentPipeline + SEM_ASSIST);
+         props.setPropertyValue("Author", mCurrentPipeline);
       } catch (UnknownPropertyException e) {
          /* Thrown ONLY on programming/typo error of the try body! */
          e.printStackTrace();
