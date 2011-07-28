@@ -354,7 +354,7 @@ public class ServiceInvocationJob extends Job{
 	                	}
 						ServerResponseHandler.createFile(fileContent, fileExt);
 	                }
-	                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION_IN_WHOLE)){
+	                else if(current.mResultType.equals(SemanticServiceResult.BOUNDLESS_ANNOTATION)){
 	                	//TODO find a way to handle annotation_in_whole type
 	                	System.out.println("Annotation Case (Append to data structure). I don't know how to handle this!");
 	                }

@@ -155,7 +155,7 @@ public class ServiceInvocationHandler implements Runnable
                        UNOUtils.createNewDoc( compCtx, f );
                     }
                 }
-                else if( current.mResultType.equals( SemanticServiceResult.ANNOTATION_IN_WHOLE ) )
+                else if( current.mResultType.equals( SemanticServiceResult.BOUNDLESS_ANNOTATION ) )
                 {
                     // Annotation case => append to data structure
                     System.out.println( "---------------- Annotation case..." );
