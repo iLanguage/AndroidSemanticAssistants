@@ -214,24 +214,6 @@ public class ServiceInvocationHandler implements Runnable
                         getAnnotationsString( annotationsPerDocument );
                     }
                 }
-                else if( current.mResultType.equals( SemanticServiceResult.CORPUS ) )
-                {
-                    // Corpus case
-                    System.out.println( "---------------- Corpus case..." );
-                    Vector<RetrievedDocument> docs = current.mCorpus;
-                    StringBuffer sbCorpus = new StringBuffer();
-                    sbCorpus.append( "Documents:\n" );
-                    int count = 1;
-
-                    for( Iterator<RetrievedDocument> itCorpus = docs.iterator(); itCorpus.hasNext(); )
-                    {
-                        RetrievedDocument d = itCorpus.next();
-                        sbCorpus.append( count + ". " + d.url + "\n" );
-                        count++;
-                    }
-
-                    UNOUtils.createNewDoc( compCtx, sbCorpus.toString() );
-                }
                 else if( current.mResultType.equals( SemanticServiceResult.DOCUMENT ) )
                 {
                     // Corpus case

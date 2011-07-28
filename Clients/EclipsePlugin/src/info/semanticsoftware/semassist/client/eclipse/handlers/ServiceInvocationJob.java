@@ -361,10 +361,6 @@ public class ServiceInvocationJob extends Job{
 	                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
 	                	ServerResponseHandler.createAnnotation(current);
 	                }
-	                else if(current.mResultType.equals(SemanticServiceResult.CORPUS)){
-	                	//TODO find a way to handle corpus type
-	                	System.out.println("Corpus Case. I don't know how to handle this!");
-	                }
 	                else if(current.mResultType.equals(SemanticServiceResult.DOCUMENT)){
 	                	documentString += current.mFileUrl + System.getProperty("line.separator");
 	                	isDocument = true;
