@@ -162,7 +162,6 @@ public class ClientUtils
             return null;
         }
 
-
         Node root = xmlDoc.getDocumentElement();
         Vector<SemanticServiceResult> results = getServiceResults( root );
         return results;
@@ -274,10 +273,24 @@ public class ClientUtils
         if( nodeName.equals( SemanticServiceResult.ANNOTATION ) )
         {
             NamedNodeMap nm = node.getAttributes();
-            String annotationType = nm.getNamedItem( "annotationSet" ).getNodeValue();
+	    
+	    String isBoundless = "";	    
+	    try{
+		/* NB: This property is not mandatory for pipeline outputs 
+		* Therefore, if it's not there, we assume it is false
+		*/
+		isBoundless = nm.getNamedItem("isBoundless").getNodeValue();
+
+	    }catch(NullPointerException e){
+		isBoundless = "false";
+	    }
+	    
+            System.out.println( "------------- isBoundless = " + isBoundless );
+            
+	    String annotationType = nm.getNamedItem( "annotationSet" ).getNodeValue();
             System.out.println( "------------- annotationSet = " + annotationType );
 
-            if( !annotationType.equals( "Annotation" ) )
+	    if(isBoundless.equals("true"))
             {
                 result.mResultType = SemanticServiceResult.ANNOTATION_IN_WHOLE;
             }
@@ -286,6 +299,7 @@ public class ClientUtils
                 // for side-notes
                 result.mResultType = SemanticServiceResult.ANNOTATION;
             }
+
             // annotation vector, annotation sorted by type
 
             // annotvector by start

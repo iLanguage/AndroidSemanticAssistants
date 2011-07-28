@@ -39,6 +39,7 @@ public class GATEAnnotation
 
      public String mName = "";
      public String mSetName = "";
+     public String mIsBoundless = "";
      
      public Vector<String> mFeatures = new Vector<String>();
      
