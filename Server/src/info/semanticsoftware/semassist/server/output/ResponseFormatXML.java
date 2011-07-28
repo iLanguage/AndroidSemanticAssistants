@@ -34,8 +34,6 @@ public class ResponseFormatXML
 {
 
     /* We keep these strings for better readability while debugging
-    public static final String START_MARKING = "    <mark ";
-    public static final String END_MARKING = "</mark>\n";
     public static final String START_ANNOTATION = "    <annotation ";
     public static final String START_DOCUMENT = "      <document ";
     public static final String START_ANNOTATION_INSTANCE = "        <annotationInstance ";
@@ -43,8 +41,6 @@ public class ResponseFormatXML
     public static final String START_OUTPUT_DOCUMENT = "    <outputDocument ";
     public static final String START_FEATURE = "          <feature ";*/
 
-    public static final String START_MARKING = "<mark";
-    public static final String END_MARKING = "</mark>";
     public static final String START_ANNOTATION = "<annotation";
     public static final String START_DOCUMENT = "<document";
     public static final String START_ANNOTATION_INSTANCE = "<annotationInstance";
@@ -52,21 +48,6 @@ public class ResponseFormatXML
     public static final String START_OUTPUT_DOCUMENT = "<outputDocument";
     public static final String START_FEATURE = "<feature";
     
-    public static String createMarkingElement( String type,
-                                               String startOffset,
-                                               String endOffset,
-                                               String content )
-    {
-        StringBuffer result = new StringBuffer( START_MARKING );
-        result.append( specifyType( type ) );
-        result.append( specifyStartOffset( startOffset ) );
-        result.append( specifyEndOffset( endOffset ) );
-        result.append( ">" );
-        result.append( replaceIllegalCharacters(content) );
-        result.append( END_MARKING );
-
-        return result.toString();
-    }
 
     public static String openAnnotationTag( GATEAnnotation a )
     {
@@ -91,7 +72,7 @@ public class ResponseFormatXML
     public static String openAnnotationInstance( String content, long start, long end )
     {
         StringBuffer result = new StringBuffer( START_ANNOTATION_INSTANCE );
-        result.append( set( "content", replaceIllegalCharacters( content ) ) );
+        result.append( set( "content", content ) );
         result.append( set( "start", Long.toString( start ) ) );
         result.append( set( "end", Long.toString( end ) ) );
     	result.append( ">" );
@@ -109,28 +90,26 @@ public class ResponseFormatXML
 
         result.append( set( "name", name ) );
 
-        value = replaceIllegalCharacters( value );
-        
-        System.out.println( "--------Value after stripping out illegal characters: " + value );
         result.append( set( "value", value ) );
         result.append( "/>" );
 
         return result.toString();
     }
 
-    //function to modify the original string being input
     //it will replace the illegal characters with the XML entities so that it can be interpreted by
     //the xml parser correctly and conveyed correctly
     public static String replaceIllegalCharacters(String s){
-    	s = StringEscapeUtils.escapeXml(s);
-    	return s;
+      final String esc = StringEscapeUtils.escapeXml(s);
+      if (!esc.equals(s)) {
+         System.out.println("--------Escaping <"+ s +"> to <"+ esc +">");
+      }
+      return esc;
     }
     
     public static String openDocumentTag( URL docUrl )
     {
         StringBuffer result = new StringBuffer( START_DOCUMENT );
         String urlString = (docUrl == null) ? "" : docUrl.toString();
-        urlString = replaceIllegalCharacters(urlString);
         result.append( set( "url", urlString ) );
         //result.append( " >\n" );
 	result.append( ">");
@@ -148,9 +127,7 @@ public class ResponseFormatXML
         StringBuffer result = new StringBuffer( START_OUTPUT_FILE );
         if( u != null )
         {
-        	String rString = replaceIllegalCharacters(u.toString());
-            //result.append( set( "url", u.toString() ) );
-            result.append( set( "url", rString ) );
+            result.append( set( "url", u.toString() ) );
         }
 
         result.append( set( "mimeType", (mime == null ? "" : mime) ) );
@@ -168,9 +145,7 @@ public class ResponseFormatXML
             URL url = doc.getSourceUrl();
             if( url != null )
             {
-            	String rString = replaceIllegalCharacters(url.toString());
-                result.append( set( "url", rString ) );
-                //result.append( set( "url", url.toString() ) );
+                result.append( set( "url", url.toString() ) );
             }
         }
 
@@ -184,19 +159,10 @@ public class ResponseFormatXML
         return set( "type", type );
     }
 
-    public static String specifyStartOffset( String offset )
-    {
-        return set( "startOffset", offset );
-    }
-
-    public static String specifyEndOffset( String offset )
-    {
-        return set( "endOffset", offset );
-    }
-
+    // Sets an XML attriubte name & value.
     protected static String set( String attName, String value )
     {
-        return " " + attName + "=\"" + value + "\"";
+        return " " + attName + "=\"" + replaceIllegalCharacters(value) + "\"";
     }
 
 }
