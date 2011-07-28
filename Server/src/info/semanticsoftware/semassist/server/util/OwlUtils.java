@@ -67,7 +67,8 @@ public class OwlUtils
      protected static OWLProperty mimeTypeProperty;
      protected static OWLProperty hrFormatProperty;
      protected static OWLProperty valueProperty;     
-     protected static OWLProperty isPerDocumentProperty;     
+     protected static OWLProperty isPerDocumentProperty; 
+     protected static OWLProperty isBoundlessProperty;
 
      // Properties regarding potentional parameters for the pipeline
      protected static OWLObjectProperty hasParameterProperty;
@@ -137,6 +138,8 @@ public class OwlUtils
 	       OwlUtils.reportNull(isInAnnotationSetProperty, "isInAnnotationSetProperty");
 	       hasFeatureProperty        = model.getOWLProperty(SEMASSIST_NAMESPACE_PREFIX + ":hasFeature");
 	       OwlUtils.reportNull(hasFeatureProperty, "hasFeatureProperty");
+	       isBoundlessProperty        = model.getOWLProperty(SEMASSIST_NAMESPACE_PREFIX + ":isBoundless");
+	       OwlUtils.reportNull(isBoundlessProperty, "isBoundlessProperty");
 
 
 	       // Properties regarding potentional parameters for the pipeline
@@ -466,6 +469,7 @@ public class OwlUtils
 			 GATEAnnotation a = new GATEAnnotation();
 			 a.mName    = toStringIfNotNull(annotationInd.getPropertyValue(hasGATENameProperty));
 			 a.mSetName = toStringIfNotNull(annotationInd.getPropertyValue(isInAnnotationSetProperty));
+			 a.mIsBoundless = toStringIfNotNull(annotationInd.getPropertyValue(isBoundlessProperty));
 			 Collection features = annotationInd.getPropertyValueLiterals(hasFeatureProperty);
 			 Iterator itf = features.iterator();
 			 while (itf.hasNext()) {
