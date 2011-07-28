@@ -35,7 +35,7 @@ public class SemanticServiceResult
     public static final String FILE = "outputFile";
     public static final String DOCUMENT = "outputDocument";
     public static final String CORPUS = "corpus";
-    public static final String ANNOTATION_IN_WHOLE = "annotation in whole";
+    public static final String BOUNDLESS_ANNOTATION = "boundlessAnnotation";
     
     /** A result type. Must be one of the class constants */
     public String mResultType = "";

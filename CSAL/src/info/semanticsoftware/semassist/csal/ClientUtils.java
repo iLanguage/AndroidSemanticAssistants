@@ -292,7 +292,7 @@ public class ClientUtils
 
 	    if(isBoundless.equals("true"))
             {
-                result.mResultType = SemanticServiceResult.ANNOTATION_IN_WHOLE;
+                result.mResultType = SemanticServiceResult.BOUNDLESS_ANNOTATION;
             }
             else
             {
