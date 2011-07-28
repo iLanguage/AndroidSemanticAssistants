@@ -1,3 +1,5 @@
+package info.semanticsoftware.semassist.csal.test;
+
 import static org.junit.Assert.*;
 
 import java.util.HashMap;
