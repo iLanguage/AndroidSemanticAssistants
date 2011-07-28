@@ -37,7 +37,7 @@
     <property name="dist.home"     value="${basedir}/dist"/>
     <property name="docs.home"     value="${basedir}/docs"/>
     <property name="src.home"      value="${basedir}/src"/>
-    <property name="server.cache"  value="${basedir}/cache/server"/>
+    <property name="server.cache"  value="${basedir}/cache"/>
 
     <!-- Tool Directories -->
     <property name="wsdl.source"   value="http://${csal.server.name}:${csal.server.port}/SemAssist?wsdl" />
@@ -66,12 +66,20 @@
     </target>
 
     <target name="cacheServer" depends="wsimport">
-      <delete dir="${server.cache}"/>
+      <delete dir="${server.cache}/server"/>
       <mkdir dir="${server.cache}"/>
-      <copy todir="${server.cache}">  
+      <mkdir dir="${server.cache}/server"/>
+      <copy todir="${server.cache}/server">  
 	    <fileset dir="${src.home}/info/semanticsoftware/semassist/server">  
 	      <include name="**"/>  
-	    </fileset>  
+	    </fileset>
+	</copy> 
+      <delete dir="${server.cache}/net"/>
+      <mkdir dir="${server.cache}/net"/>
+	<copy todir="${server.cache}/net">  
+	    <fileset dir="${src.home}/net">  
+	      <include name="**"/>  
+	    </fileset>
 	</copy> 
     </target>
 
@@ -79,10 +87,18 @@
       <delete dir="${src.home}/info/semanticsoftware/semassist/server"/>
       <mkdir dir="${src.home}/info/semanticsoftware/semassist/server"/>
       <copy todir="${src.home}/info/semanticsoftware/semassist/server">  
-	    <fileset dir="${server.cache}">  
+	    <fileset dir="${server.cache}/server">  
 	      <include name="**"/>  
 	    </fileset>  
-	</copy> 
+      </copy> 
+      
+      <delete dir="${src.home}/net"/>
+      <mkdir dir="${src.home}/net"/>
+      <copy todir="${src.home}/net">  
+	    <fileset dir="${server.cache}/net">  
+	      <include name="**"/>  
+	    </fileset>  
+      </copy> 
     </target>
   
   <!-- Generate a client for the web service when online -->
