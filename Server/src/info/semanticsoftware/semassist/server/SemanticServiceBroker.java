@@ -4,8 +4,6 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 This file is part of the Semantic Assistants architecture.
 
 Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
-Nikolaos Papadakis
-Tom Gitzinger
 
 The Semantic Assistants architecture is free software: you can
 redistribute and/or modify it under the terms of the GNU Affero General
@@ -414,10 +412,6 @@ public class SemanticServiceBroker
         cleanup( status );
         return finalResult;
     }
-    /**
-     * Returns the result file URL
-     * @return URL of the result output file
-     * */
     
     /**
      * Returns the result file URL
@@ -497,9 +491,9 @@ public class SemanticServiceBroker
         // Load the application
         Logging.log( "---------------- Preparing to load application..." );
         
-        Object serviceApp = retreiveGatePipeline(serviceAppFile);
+        Object serviceApp = retrieveGatePipeline(serviceAppFile);
         
-        Logging.log("++++++++++Process ID Started: " + serviceApp.hashCode());
+        Logging.log("-------------------------------- Process ID Started: " + serviceApp.hashCode());
         // Does the pipeline demand merged input documents?
         if( currentService.getMergeInputDocs() )
         {
@@ -560,31 +554,7 @@ public class SemanticServiceBroker
         if( currentService.producesCorpus() )
         {
             Logging.log( "---------------- Language service produces a corpus..." );
-
-	    /* RW: don't do anything special here 
-            try
-            {
-                resultCorpus = Factory.newCorpus( "Result Corpus" );
-            }
-            catch( gate.creole.ResourceInstantiationException e )
-            {
-                Logging.exception( e );
-                return null;
-            }
-
-            Logging.log( "---------------- Trying to assign empty corpus..." );
-            boolean corpusAssigned = GateUtils.assignResultCorpus( serialCtrl,
-                    currentService, resultCorpus );
-            if( !corpusAssigned )
-            {
-                String message = "----------------" + MasterData.ERROR_ANNOUNCEMENT +
-                                 "No parameter to assign output corpus to found.";
-                Logging.log( message );
-                return null;
-            }
-	    */
         }
-
 
         // Give the input (should only be 1 document) to
         // the relevant parameters, if there are any such parameters.
@@ -606,34 +576,17 @@ public class SemanticServiceBroker
             GateUtils.passDocToParameters( serialCtrl, pti, doc );
         }
 
-        // Check if application accepts a corpus. Right now,
-        // there are two ways for the input document(s): //
-        //   1. The get assembled in a corpus and a corpus
-        //      controller runs on that corpus.
-        //   2. One document is passed to a runtime parameter
-        //      as a string.
+        /* Check if application accepts a corpus. The input documents
+        	get assembled in a corpus and a corpus 
+        	controller runs on that corpus.*/
+
         CorpusController corpusController = null;
         if( !(serviceApp instanceof CorpusController) )
         {
-	    //RW check if this can be fixed in the service description, commented out for now
-	    /*
-            if( currentService.mParamsTakingInput.size() == 0 )
-            {
-                String warning = MasterData.ERROR_ANNOUNCEMENT + "Stored application \"" +
-                                 currentService.getServiceName() + "\" is not a CorpusController, and no parameter " +
-                                 "is designated (giveInputToParameter property) to take the input. " +
-                                 "I do not know what to do with the input documents. Aborting...";
-                Logging.log( warning );
-                return null;
-            }
-	    */
-
-	    // RW: set the corpus
             Logging.log( "---------------- Assigning corpus to pipeline..." );
             boolean corpusAssigned = GateUtils.assignResultCorpus( serialCtrl, currentService, status.getCorpus() );
-	    // RW: maybe add the error handling from above...
 
-	    // Run the pipeline
+            // Run the pipeline
             try
             {
                 Logging.log( "---------------- Running application..." );
@@ -642,17 +595,7 @@ public class SemanticServiceBroker
                 Logging.log( "---------------- Cleaning up controller..." );
                 
                 inactivateCurrentPipeline(serviceApp);
-                Logging.log("++++++++++Process ID Stopped: " + serviceApp.hashCode());
-                
-                
-                // If a corpus was produced as result, let
-                // the execution status know
-                /* RW: commented out, since we use the same corpus as above
-		if( currentService.producesCorpus() )
-                {
-                    status.setCorpus( resultCorpus );
-                }
-		*/
+                Logging.log("-------------------------------- Process ID Stopped: " + serviceApp.hashCode());
             }
             catch( gate.creole.ExecutionException e )
             {
@@ -661,7 +604,6 @@ public class SemanticServiceBroker
                 inactivateCurrentPipeline(serviceApp);
                 return null;
             }
-
         }
         else
         {
@@ -678,8 +620,7 @@ public class SemanticServiceBroker
                 Logging.log( "---------------- Cleaning up controller..." );
 
                 inactivateCurrentPipeline(serviceApp);
-                Logging.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Process ID Stopped: " + serviceApp.hashCode());
-                //TODO:  Factory.deleteResource( corpusController );
+                Logging.log("-------------------------------- Process ID Stopped: " + serviceApp.hashCode());
             }
             catch( gate.creole.ExecutionException e )
             {
@@ -717,7 +658,7 @@ public class SemanticServiceBroker
 
     static int testX=1;
     
-    synchronized protected Object retreiveGatePipeline(File serviceAppFile) {
+    synchronized protected Object retrieveGatePipeline(File serviceAppFile) {
     	boolean compositeService = false; 
         Logging.log("Entering Sync Method " + testX);
         //check the to see if an already existing inactive service with the same type that is needed
@@ -794,7 +735,6 @@ public class SemanticServiceBroker
 		}
 	}
 
-
 	private void removeAndDeletePipeline(int inactiveProcessPosition) {
 		//we need to get it's reference and delete it from the GATE list of active processes (pipelines)
 		Object gateProcess = GatePipelineRegistery.getInstance().getGateProcessServiceStatus(inactiveProcessPosition).getGatePipeline();
@@ -807,104 +747,6 @@ public class SemanticServiceBroker
 		GatePipelineRegistery.getInstance().removeGateProcess(inactiveProcessPosition);
 			//remove the reference from the gate process register
 	}
-
-    /*
-    // Assemble corpus
-    Corpus corpus = getCorpusFromURIs(documents, literalDocs);
-    System.out.println("---------------- Corpus assembled. Size: " + corpus.size());
-    // if (corpus.size() > 0 || corpus.size() == 0) return "";
-
-
-    // For parameters that are not given, use the default value
-    gateParams = addDefaultParamValues(currentService, gateParams);
-
-    // Check if all necessary runtime parameters are given
-    if (!checkRuntimeParameters(currentService, gateParams)) {
-    String output = MasterData.ERROR_ANNOUNCEMENT + "Not all required runtime " +
-    "parameters were given for service \"" + currentService.getServiceName()  + "\"";
-    Logging.log(output);
-    return output;
-    }
-
-    // Possibly pass runtime parameters to the pipeline
-    SerialController serialCtrl = (SerialController) serviceApp;
-    if (gateParams != null && gateParams.length > 0) {
-    GateUtils.passRuntimeParameters(serialCtrl, gateParams);
-    }
-
-
-    // Not all output artifacts that the pipeline can theoretically
-    // produce are produced for any combination of input parameter values.
-    // Given the current input parameter values, check which output
-    // artifacts to expect.
-    Vector<GATEPipelineOutput> mExpectedOutputs = OwlUtils.getExpectedOutputs(currentService.mOutputArtifacts, gateParams);
-
-
-    // The pipeline might produce one or more files as (part of)
-    // its output. If so, create temporary files, whose URLs will
-    // be passed to the pipeline as targets for its output.
-    Iterator<GATEPipelineOutput> it_output = mExpectedOutputs.iterator();
-
-    while (it_output.hasNext()) {
-    GATEPipelineOutput o = it_output.next();
-    if (o == null) continue;
-
-    GATERuntimeParameter ofp = o.getParameterForFileURL();
-    if (ofp != null) {
-    Logging.log("------------- Setting output file parameter " + ofp.getParamName());
-
-    // Create a temporary file
-    File outFile = Utils.createTempFile();
-    if (outFile == null) {
-    return MasterData.ERROR_ANNOUNCEMENT +
-    "Could not create temporary file for result output (IOException).";
-    }
-
-
-    // Assign the file's URL as value of the runtime parameter
-    URL fileURL = null;
-    try {
-    fileURL = outFile.toURI().toURL();
-    ofp.setUrlValue(fileURL);
-    } catch (MalformedURLException e) {
-    Logging.exception(e);
-    return MasterData.ERROR_ANNOUNCEMENT +
-    "Caught MalformedURLException.";
-    } catch (Exception e) {
-    Logging.exception(e);
-    }
-
-    // Let the output object know where its file is
-    o.setFileURL(fileURL);
-    GateUtils.passRuntimeParameter(serialCtrl, ofp);
-    }
-    }
-
-
-    // Finally feed the corpus to the pipeline
-    try {
-    Logging.log("------------ Running application...");
-    GateUtils.runApplicationOnCorpus(corpusController, corpus);
-    } catch (gate.creole.ExecutionException e) {
-    Logging.exception(e);
-    return MasterData.ERROR_ANNOUNCEMENT  + "ExecutionException on server";
-    }
-    System.out.println("------------ Application executed. Retrieving results...");
-
-    // Process results
-    String finalResult = getOutputInfo(new XMLOutputBuilder(), mExpectedOutputs, corpus);
-
-    System.out.println("------------ Assembled output string. Cleaning up...");
-
-    System.out.println("------------ Cleaning up corpus...");
-    Factory.deleteResource(corpus);
-    System.out.println("------------ Cleaning up controller...");
-    Factory.deleteResource(corpusController);
-
-    return finalResult;
-    }
-     */
-
 	
 	/**
 	 * Loads an application file inside GATE
@@ -928,9 +770,6 @@ public class SemanticServiceBroker
         }
         return result;
     }
-    /**
-     * Initializes a GATE instance and prepares the environment
-     * */
 
     /**
      * Initializes a GATE instance and prepares the environment
@@ -974,9 +813,6 @@ public class SemanticServiceBroker
         }
 
     }
-    /**
-     * Reads the available service description files in the repository
-     * */
 
     /**
      * Reads the available service description files in the repository
@@ -995,15 +831,6 @@ public class SemanticServiceBroker
             while( it.hasNext() )
             {
                 File currentFile = it.next();
-                // Filter out .CVS
-                if( currentFile.getName().equals( ".CVS" ) )
-                {
-                    continue;
-                }
-                if( currentFile.getName().equals( "CVS" ) )
-                {
-                    continue;
-                }
 
                 // Is the current file an .owl file?
                 if( currentFile.getName().endsWith( ".owl" ) )
@@ -1053,11 +880,9 @@ public class SemanticServiceBroker
             Logging.exception( e );
         }
     }
-    /**
-     * Creates an OWL service model by reading service description files
-     * */
 
-    /**
+    //TODO check for duplicate code with readServiceMetadata method
+	/**
      * Creates an OWL service model by reading service description files
      * */
 	protected void getOWLModel() throws Exception
@@ -1075,16 +900,7 @@ public class SemanticServiceBroker
             while( it.hasNext() )
             {
                 File currentFile = it.next();
-                // Filter out .CVS
-                if( currentFile.getName().equals( ".CVS" ) )
-                {
-                    continue;
-                }
-                if( currentFile.getName().equals( "CVS" ) )
-                {
-                    continue;
-                }
-
+                
                 if( !currentFile.getName().endsWith( ".owl" ) )
                 {
                     continue;
@@ -1093,19 +909,6 @@ public class SemanticServiceBroker
                 System.out.println( "\n\n---------- Reading service description (for model) for " +
                                     currentFile.getName() + "  -------------\n\n" );
 
-                /*
-                String filePath = "";
-                try {
-                File f = OwlUtils.getServiceDescriptionFile(currentFile);
-                filePath = f.getCanonicalPath();
-                sdFiles.add(f);
-                } catch (NullPointerException e) {
-                System.out.println("\nNullPointerException: Failed adding OWL information for file " + filePath);
-                Logging.exception(e);
-                } catch (IOException e) {
-                Logging.exception(e);
-                }
-                 */
                 sdFiles.add( currentFile );
 
             } // while (for each service)
@@ -1119,11 +922,6 @@ public class SemanticServiceBroker
             Logging.exception( e );
         }
     }
-    /**
-     * Builds a query with the user context attributes to find appropriate services
-     * @param ctx user context object
-     * @return service query statement
-     * */
 
     /**
      * Builds a query with the user context attributes to find appropriate services
@@ -1189,11 +987,6 @@ public class SemanticServiceBroker
 
         return result;
     }
-    /**
-     * Creates a corpus from the input string content
-     * @param argument content string
-     * @return corpus created from the string
-     * */
 
     /**
      * Creates a corpus from the input string content
@@ -1213,14 +1006,8 @@ public class SemanticServiceBroker
         }
         return corpus;
     }
-    /**
-     * Creates a corpus from the provided resources
-     * @param documents list of document URIs
-     * @param literalDocs an array of strings containing literal documents
-     * @return corpus created from the provided resources
-     * */
 
-    /**
+	/**
      * Creates a corpus from the provided resources
      * @param documents list of document URIs
      * @param literalDocs an array of strings containing literal documents
@@ -1239,7 +1026,7 @@ public class SemanticServiceBroker
             return null;
         }
 
-        // System.out.println("--------- Creating corpus. Documnts: " + documents.length + ". Literal: " + literalDocs.length);
+        // System.out.println("--------- Creating corpus. Documents: " + documents.length + ". Literal: " + literalDocs.length);
 
         int literalIndex = 0;
         for( int i = 0; i < documents.uriList.size(); i++ )
