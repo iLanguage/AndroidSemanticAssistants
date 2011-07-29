@@ -5,6 +5,7 @@ import info.semanticsoftware.semassist.client.eclipse.model.SemanticAssistantsSt
 import info.semanticsoftware.semassist.csal.ClientUtils;
 import info.semanticsoftware.semassist.csal.result.Annotation;
 import info.semanticsoftware.semassist.csal.result.AnnotationVector;
+import info.semanticsoftware.semassist.csal.result.AnnotationVectorArray;
 import info.semanticsoftware.semassist.csal.result.SemanticServiceResult;
 
 import java.io.File;
@@ -87,5 +88,146 @@ public class ServerResponseHandler {
 								FileSelectionHandler.openEditor(outputFile);
 							}
 						}); 
-			}
+		}
+		
+	   public static String getAnnotationsString(SemanticServiceResult current){
+	       
+		   HashMap<String, AnnotationVectorArray> annotationsPerDocument = new HashMap<String, AnnotationVectorArray>();
+
+           // Keys are document IDs or URLs
+           HashMap<String, AnnotationVector> map = current.mAnnotations;
+           Set<String> keys = map.keySet();
+
+           for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); )
+           {
+               String docID = it2.next();
+
+               if( annotationsPerDocument.get( docID ) == null )
+               {
+                   annotationsPerDocument.put( docID, new AnnotationVectorArray() );
+               }
+
+               AnnotationVectorArray v = annotationsPerDocument.get( docID );
+               v.mAnnotVectorArray.add( map.get( docID ) );
+           }
+
+           // Assemble annotations string
+           if( annotationsPerDocument.size() > 0 )
+           {
+               return getAnnotationsString(annotationsPerDocument);
+           }
+           
+           return "Could not read the annotation content!";
+	       
+	     }
+	   
+	   static String getAnnotationsString( HashMap<String, AnnotationVectorArray> map )
+	    {
+	        if( map == null )
+	        {
+	            return "";
+	        }
+
+	        StringBuffer sb = new StringBuffer();
+
+	        // The key is annotation document ID (URL or number), the values are
+	        // annotation instances, basically
+	        Set<String> keys = map.keySet();
+
+
+	        for( Iterator<String> it = keys.iterator(); it.hasNext(); )
+	        {
+	            String docID = it.next();
+	            sb.append( "Annotations for document " + docID + ":\n\n" );
+	            AnnotationVectorArray va = map.get( docID );
+	            sb.append( getAnnotationsString( va ) );
+	        }
+
+
+	        return sb.toString();
+	    }
+	   
+	   static String getAnnotationsString( AnnotationVectorArray annotVectorArr )
+	    {
+
+	        StringBuffer strBuffer = new StringBuffer();
+
+
+	        if( annotVectorArr == null )
+	        {
+	            return "";
+	        }
+
+
+	        for( Iterator<AnnotationVector> it = annotVectorArr.mAnnotVectorArray.iterator(); it.hasNext(); )
+	        {
+	            AnnotationVector annotVector = it.next();
+
+	            strBuffer.append( "Type: " + annotVector.mType + "\n" );
+
+	            System.out.println( "Type: " + annotVector.mType + "\n" );
+
+	            strBuffer.append( listAnnotations( annotVector ) );
+
+	        }
+
+	        // sort annotations by start
+	        ClientUtils.SortAnnotations( annotVectorArr );
+	        //
+
+	        for( @SuppressWarnings("unchecked")
+			Iterator<Annotation> it2 = ClientUtils.mAnnotArray.iterator(); it2.hasNext(); )
+	        {
+	            // Create Side Notes
+	        }
+
+	        return strBuffer.toString();
+
+	    }
+
+	    static String listAnnotations( AnnotationVector as )
+	    {
+	        if( as == null )
+	        {
+	            return "";
+	        }
+
+	        StringBuffer sb = new StringBuffer();
+
+
+	        for( Iterator<Annotation> it = as.mAnnotationVector.iterator(); it.hasNext(); )
+	        {
+	            Annotation annotation = it.next();
+
+	            if( annotation.mContent != null && !annotation.mContent.equals( "" ) )
+	            {
+	                sb.append( "Start: " + annotation.mStart + ", end: " + annotation.mEnd + ", content: " + annotation.mContent + "\n" );
+	            }
+
+	            if( annotation.mFeatures == null || annotation.mFeatures.size() == 0 )
+	            {
+	                sb.append( "\n" );
+	                continue;
+	            }
+
+	            if( annotation.mFeatures.size() > 1 )
+	            {
+	                sb.append( "Features:\n" );
+	            }
+
+	            Set<String> keys = annotation.mFeatures.keySet();
+
+
+	            for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); )
+	            {
+	                String currentKey = it2.next();
+	                sb.append( currentKey + ": " + annotation.mFeatures.get( currentKey ) + "\n" );
+	            }
+
+	            sb.append( "\n" );
+	        }
+
+	        return sb.toString();
+	    }
+
 }

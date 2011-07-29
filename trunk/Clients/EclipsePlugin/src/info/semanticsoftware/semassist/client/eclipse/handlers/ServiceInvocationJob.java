@@ -308,8 +308,8 @@ public class ServiceInvocationJob extends Job{
 	            return;
 	        }
 	        
-	        System.out.println("");
-	        System.out.println(serviceResponse);
+	        // Prints out the server XML response
+	        //System.out.println(serviceResponse);
 	        
 	        // The response is ready, now let's decide how we're going to present it
 	        handleResponse(serviceResponse);
@@ -343,6 +343,7 @@ public class ServiceInvocationJob extends Job{
 	                return;
 		  }
 	      
+	      
 	      for( Iterator<SemanticServiceResult> it = results.iterator(); it.hasNext();){
 	                SemanticServiceResult current = it.next();
 	                if(current.mResultType.equals(SemanticServiceResult.FILE)){
@@ -355,8 +356,9 @@ public class ServiceInvocationJob extends Job{
 						ServerResponseHandler.createFile(fileContent, fileExt);
 	                }
 	                else if(current.mResultType.equals(SemanticServiceResult.BOUNDLESS_ANNOTATION)){
-	                	//TODO find a way to handle annotation_in_whole type
-	                	System.out.println("Annotation Case (Append to data structure). I don't know how to handle this!");
+	                	documentString = ServerResponseHandler.getAnnotationsString(current);
+	                	isDocument = true;
+	                	
 	                }
 	                else if(current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
 	                	ServerResponseHandler.createAnnotation(current);
