@@ -177,7 +177,7 @@ Figure~\ref{fig:highlight} for an example.
 This option found under the Semantic Assistants menu in ``Global Settings'' (shown
 in Figure~\ref{fig:oosettings}) allows the ability to enable/disable filtering of
 empty valued features in side-nodes. This can be useful to avoid cluttering or aid
-debugging annotations respectivelly.
+debugging annotations respectively.
 
 \subsubsection{Show Annotation Content}
 This option in the ``Global Settings'' dialog can be used to include/exclude
@@ -213,7 +213,7 @@ allows OpenOffice to invoke a local browser to display these results.
 
 \subsubsection{Server Settings}
 Another option found under the Semantic Assistants menu in ``Global
-Settings.''is \emph{Server Setings}.  There the user is able to specify the
+Settings.''is \emph{Server Settings}.  There the user is able to specify the
 Server information (Host and Port) of a local or distant server.
 
 \subsection{Installation}
@@ -240,7 +240,7 @@ OpenOffice versions greater than 2.0.4. To use it, do the following:
     \texttt{SemassistOpenOfficePlugIn.oxt} and click \emph{Open}.
 
   \item Leave the dialog and open a new text document. You should have
-    a new menu bar entry labelled \emph{Semantic Assistants}. Now you
+    a new menu bar entry labeled \emph{Semantic Assistants}. Now you
     can run services on the current document (remember the server must
     be running to be able to query or execute language services).
 \end{enumerate}
@@ -338,7 +338,7 @@ following files:
 \subsubsection{Implementation Details}
 A useful class called \url{UNOUtils} found in the \url{package
   info.semanticsoftware.semassist.client.openoffice.utils} contains most of
-the OO-Writer feature implmentations.  More specifically, the three methods in
+the OO-Writer feature implementations.  More specifically, the three methods in
 Figure~\ref{list:ssb} implement a major part of the above described features
 (Side-Notes, Highlighting and New Document Creation).
 
@@ -388,7 +388,7 @@ Section~\ref{sec:debug}.
  
 \section{Eclipse Plug-in}
 Eclipse is not a single monolithic program, but rather a small kernel containing
-a plug-in loader surrounded by hundreds of plug-ins. The behaviour of each
+a plug-in loader surrounded by hundreds of plug-ins. The behavior of each
 plug-in in this architecture is stored in its code, and its dependencies and
 services are declared in the plug-in's manifest file. On each Eclipse startup,
 the plug-in loader scans all the available manifest files in the Eclipse
@@ -445,17 +445,15 @@ any connected client.
 \end{center}
 \end{figure}
 
-Upon selecting the resource files and the desired service, the user can executed
-the selected service on the checked files in the tree. After the successful
-execution of the selected NLP service, a set of results with be shown to the
-user in the "Semantic Assistants" view. If the service execution fails, a
-description of the occured error will be shown to the user in the "Semantic
-Assistant Status" view and invocation will be aborted.
+Upon selecting the resource files and the desired service, the user can execute
+the selected service on the checked files in the tree. Consequently, the user will be informed about the status of the execution in the ``Semantic Assistant Status'' view. A successful execution of the selected NLP service, will let the user know on how to view the results. If the service execution fails, a description of the occurred error will be shown to the user and invocation will be aborted.
 
-\subsubsection{Annotations}
-The results of a successful service invocation are being shown to the user in an
+Now, let's look at how different types of outputs are handled in the plug-in:
+
+\paragraph{Annotations.}
+Annotations retrieved from a successful service invocation are being shown to the user in an
 Eclipse view part called "Semantic Assistants" view. In the mentioned view, a
-table will be generated dynamically based on the server response that contains
+table will be dynamically generated that contains
 all the parsed annotation instances. In Figure~\ref{fig:eclipse_saView} the
 result of an execution of the "Person and Location Extractor" service on two
 sample classes is shown.
@@ -475,7 +473,7 @@ JavadocMiner service has been invoked on a Java source code file. Some of the
 annotations returned by the server bear a \emph{lineNumber} feature, which
 attaches an annotation instance to a specific line in the java source file. Upon
 double-clicking on the annotation instance in the Semantic Assistant view, the
-corresponding resource - here, a .java file - will be opend in an editor and an
+corresponding resource - here, a .java file - will be opened in an editor and an
 Eclipse warning marker will appear next to the line defined by the annotation
 \emph{lineNumber} feature.
 
@@ -486,6 +484,15 @@ Eclipse warning marker will appear next to the line defined by the annotation
   \label{fig:eclipse_annotation}
 \end{center}
 \end{figure}
+
+\paragraph{Boundless Annotations.}
+Boundless Annotations are a special kind of Annotations that adhere to a whole document and thus have no start and end offset. The plug-in parses the annotation results, and then inserts the content of the annotations in a new document and opens it in a new editor inside the Eclipse environment.
+
+\paragraph{Documents.}
+Documents received from the server response carry a URL property where defines where they are located. The plug-in retrieves the URLs and inserts them into a new document that opens up in a new editor inside the Eclipse environment.
+
+\paragraph{Files.}
+When a file output type is received by the plug-in, it will try to open it up in a web browser. In Eclipse, users can configure whether they want to open URLs in the Eclipse built-in web browser or any other ones in the file system. Whichever defined as the default behavior in Eclipse by the user, will be used by the plug-in to present the result file to the user. In this case, a log message will be shown to the user in the ``Semantic Assistants Status'' view to inform the user that the file is opened in his browser.
 
 \subsubsection{Global Settings}
 The second option found under the Semantic Assistants menu is the "Global
@@ -511,7 +518,7 @@ plug-in will create a new one on the next startup of the plug-in.
 
 In the Semantic Assistants settings dialog, a "Use Defaults" option is also
 available. If this widget is checked, the default values will be overwritten on
-the values previosuly provided by the user and the Semantic Assistants plug-in
+the values previously provided by the user and the Semantic Assistants plug-in
 will use the default hostname and port number values to connect to the server
 and invoke services.
 \begin{figure}[htb]
