@@ -23,18 +23,34 @@ package info.semanticsoftware.semassist.csal;
 import java.io.*;
 import java.util.*;
 import java.text.DateFormat;
+
 import info.semanticsoftware.semassist.csal.result.*;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import javax.xml.parsers.*;
+import javax.xml.stream.XMLOutputFactory;
+import javax.xml.stream.XMLStreamException;
+import javax.xml.stream.XMLStreamWriter;
+//import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
+
 import info.semanticsoftware.semassist.server.*;
 
 public class ClientUtils
 {
 
-    public static ArrayList mAnnotArray;
+	public static final String XML_HOST_KEY = "host";
+	public static final String XML_PORT_KEY = "port";
+ 	public static final String PROPERTIES_FILE_PATH = System.getProperty("user.home")+ System.getProperty("file.separator") +"semassist-settings.xml";
+	
+    public static ArrayList<Annotation> mAnnotArray;
     protected static Comparator<Annotation> mByStartCharacter = new CompareByStart();
     protected static byte[] ILLEGAL_XML_1_0_CHARS;
 
@@ -692,10 +708,9 @@ public class ClientUtils
      *  is good for escaping to produce valid XML, but not for producing safe
      *  HTML.</span>
      */
-    @SuppressWarnings( "unchecked" )
     public static void SortAnnotations( AnnotationVectorArray annotVectorArr )
     {
-        mAnnotArray = new ArrayList();
+        mAnnotArray = new ArrayList<Annotation>();
 
         if( annotVectorArr == null )
         {
@@ -715,7 +730,6 @@ public class ClientUtils
 
     }
 
-    @SuppressWarnings( "unchecked" )
     protected static void CreateAnnotationsArray( AnnotationVector annotVector )
     {
 
@@ -732,7 +746,99 @@ public class ClientUtils
             }
         }
     }
+    
+    public static void setClientPreference(String client, String element, Map<String, String> map){
+    		try{		
+    			File propertiesFile = new File(PROPERTIES_FILE_PATH);
+    			if(propertiesFile.exists()){
+    				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
+    				DocumentBuilder docBuilder = builder.newDocumentBuilder();
+    				Document doc = docBuilder.parse(propertiesFile);
+    				doc.getDocumentElement().normalize();
 
+    				Element root = doc.getDocumentElement();
+    				Element clientTag;
+					NodeList clientElement = doc.getElementsByTagName(client);
+					if(clientElement.getLength() == 0){
+	    				clientTag = doc.createElement(client);
+					}else{
+	    				clientTag = (Element) clientElement.item(0);
+					}
+					
+					NodeList children = clientTag.getChildNodes();
+					Element elementNode = null;
+
+					for(int i=0; i < children.getLength(); i++){
+						if(children.item(i).getNodeName().equals(element)){
+							elementNode = (Element) children.item(i);
+		    				Set<String> keys = map.keySet();
+		        			for(Iterator<String> iterator = keys.iterator(); iterator.hasNext();){
+		        	    		String key = (String) iterator.next();
+		        	    		String value = map.get(key);
+		        	    		elementNode.setAttribute(key, value);
+		        	    	}
+						}
+					}
+
+					if(elementNode == null){
+						elementNode = doc.createElement(element);
+						Set<String> keys = map.keySet();
+	        			for(Iterator<String> iterator = keys.iterator(); iterator.hasNext();){
+	        	    		String key = (String) iterator.next();
+	        	    		String value = map.get(key);
+	        	    		elementNode.setAttribute(key, value);
+	        	    	}
+					}
+
+        			clientTag.appendChild(elementNode);
+    				root.appendChild(clientTag);
+
+    				DOMSource source = new DOMSource(doc);
+    				StreamResult result = new StreamResult(new FileOutputStream(PROPERTIES_FILE_PATH));
+
+    				TransformerFactory transFactory = TransformerFactory.newInstance();
+    				Transformer transformer = transFactory.newTransformer();
+    				//transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+    				transformer.transform(source, result);
+
+    			}else{
+    	    		createPropertiesFile();
+    	    		setClientPreference(client, element, map);
+    			}
+    		} catch(IOException e1){
+    			e1.printStackTrace();    		
+    		} catch (SAXException e2) {
+				e2.printStackTrace();
+			} catch (ParserConfigurationException e3) {
+				e3.printStackTrace();
+			} catch (TransformerConfigurationException e4) {
+				e4.printStackTrace();
+			} catch (TransformerException e5) {
+				e5.printStackTrace();
+			}
+    }
+    
+    private static void createPropertiesFile(){
+      	XMLStreamWriter writer = null;
+    	XMLOutputFactory factory = XMLOutputFactory.newInstance();
+    	try{
+			writer = factory.createXMLStreamWriter(new FileWriter(PROPERTIES_FILE_PATH));
+			writer.writeStartDocument();
+			writer.writeStartElement("saProperties");
+			writer.writeStartElement("global");
+			writer.writeStartElement("server");			
+			writer.writeAttribute("host", defaultServerHost());
+			writer.writeAttribute("port", defaultServerPort());
+			writer.writeEndElement();//server	
+			writer.writeEndElement();//global			
+			writer.writeEndElement();//saProperties		
+			writer.writeEndDocument();
+			writer.flush();
+			writer.close();
+		}catch(IOException e1){
+			System.err.println(e1.getMessage());	
+		}catch(XMLStreamException e2){
+			System.err.println(e2.getMessage());
+		}
+    }
 }
-
-
