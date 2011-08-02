@@ -52,38 +52,11 @@ public class RTParamFrame extends JFrame
 
         setAlwaysOnTop( true );
         
-        /*addWindowFocusListener( new WindowAdapter()
-		{
-            @Override
-			public void windowDeactivated(WindowEvent e)
-			{
-				e.getWindow().toFront();
-                requestFocus();
-			}
-		});
-        */
-        
 
         if( info != null )
         {
             setTitle( "Parameters for Service \"" + info.getServiceName() + "\"" );
         }
-    }
-
-    public class MyFocusListener implements WindowFocusListener
-    {
-        @Override
-        public void windowGainedFocus( WindowEvent arg0 )
-        {
-            requestFocus();
-        }
-
-        @Override
-        public void windowLostFocus( WindowEvent arg0 )
-        {
-            requestFocus();
-        }
-
     }
 
     private HashMap<GateRuntimeParameter, JComponent> paramMap =
