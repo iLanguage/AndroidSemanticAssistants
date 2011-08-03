@@ -1,8 +1,13 @@
 package info.semanticsoftware.semassist.client.eclipse.dialogs;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import info.semanticsoftware.semassist.client.eclipse.handlers.ServiceAgentSingleton;
 import info.semanticsoftware.semassist.client.eclipse.handlers.ServiceSettingsValidator;
 import info.semanticsoftware.semassist.client.eclipse.utils.Utils;
+import info.semanticsoftware.semassist.csal.ClientUtils;
+import info.semanticsoftware.semassist.csal.XMLElementHelper;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -15,6 +20,7 @@ import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
@@ -53,6 +59,13 @@ public class ServiceSettingsDialog extends Dialog {
 
     /** A string to tell the user about any invalidity in entered values */
 	private Text errorMessageText;
+	
+    /** Combobox containing available service names */
+    private Combo cmbServers;
+    
+    Button serversButton;
+    
+    Button customButton;
 
     /**
      * Creates an input dialog with OK and Cancel buttons.
@@ -65,7 +78,7 @@ public class ServiceSettingsDialog extends Dialog {
     public ServiceSettingsDialog(Shell parentShell, IInputValidator validator) {
         super(parentShell);
         this.title = "Semantic Assistants Settings";
-        this.message = "Please enter the server host name and port values:";
+        this.message = "Please select a server:";
         this.validator = validator;
         Utils.propertiesReader();
     }
@@ -73,7 +86,7 @@ public class ServiceSettingsDialog extends Dialog {
     /** Checks if OK button has been pressed and decides to save the values to a properties file */
     protected void buttonPressed(int buttonId) {
         if (buttonId == IDialogConstants.OK_ID) {
-            	if(txtServerHost.getText().equals("") || txtServerPort.getText().equals("")){
+            	/*if(txtServerHost.getText().equals("") || txtServerPort.getText().equals("")){
             		setErrorMessage("Please fill the server host and port number values");
             	}else{
             		if(checkbox.getSelection()){
@@ -83,7 +96,27 @@ public class ServiceSettingsDialog extends Dialog {
             		}
             		Utils.propertiesReader();
             		super.buttonPressed(buttonId);
+            	}*/
+        	
+        	if(serversButton.getSelection()){
+        		String address = cmbServers.getItem(cmbServers.getSelectionIndex());
+        		String[] tokens = address.split(":");
+        		ServiceAgentSingleton.setServerHost(tokens[0]);
+        		ServiceAgentSingleton.setServerPort(tokens[1]);
+        		super.buttonPressed(buttonId);
+        	}else if(customButton.getSelection()){
+        		if(txtServerHost.getText().equals("") || txtServerPort.getText().equals("")){
+            		setErrorMessage("Please fill the server host and port number values");
+            	}else{
+            		Map<String, String> map = new HashMap<String, String>();
+            		map.put(ClientUtils.XML_HOST_KEY, txtServerHost.getText());
+            		map.put(ClientUtils.XML_PORT_KEY, txtServerPort.getText());
+            		ClientUtils.setClientPreference("global", "server", map);
+            		super.buttonPressed(buttonId);
             	}
+        	}else{
+        		setErrorMessage("Please choose a pre-defined or a custom server by selecting a radiobutton.");
+        	}
         }
         
         if (buttonId == IDialogConstants.CANCEL_ID) {
@@ -127,13 +160,44 @@ public class ServiceSettingsDialog extends Dialog {
             label.setLayoutData(data);
             label.setFont(parent.getFont());
         }
+        serversButton = new Button(composite, SWT.RADIO);
+        serversButton.setText("Pre-defined Servers");
         
-        @SuppressWarnings("unused")
-		Control settingsArea = createSettingsArea(composite);
-        @SuppressWarnings("unused")
-		Control secondArea = createCheckbox(composite);
+        serversButton.addSelectionListener(new SelectionListener(){
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				defaultMode();
+			}
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				defaultMode();
+			}
+        });
+        
+        createServersArea(composite);
+    	Label separator = new Label(composite, SWT.SEPARATOR | SWT.HORIZONTAL);     	 
+    	separator.setBounds(50, 100, 150, 100);
+    	
+        customButton = new Button(composite, SWT.RADIO);
+        customButton.setText("Add A New Server");
+        
+        customButton.addSelectionListener(new SelectionListener(){
+			@Override
+			public void widgetDefaultSelected(SelectionEvent arg0) {
+				customMode();
+			}
+
+			@Override
+			public void widgetSelected(SelectionEvent arg0) {
+				customMode();
+			}
+        });
+        
+    	createSettingsArea(composite);
+		//createCheckbox(composite);
        
-        errorMessageText = new Text(composite, SWT.READ_ONLY);
+        errorMessageText = new Text(composite, SWT.NONE | SWT.READ_ONLY);
         errorMessageText.setForeground(composite.getDisplay().getSystemColor(SWT.COLOR_RED));
         errorMessageText.setLayoutData(new GridData(GridData.GRAB_HORIZONTAL | GridData.HORIZONTAL_ALIGN_FILL));
         errorMessageText.setBackground(errorMessageText.getDisplay().getSystemColor(SWT.COLOR_WIDGET_BACKGROUND));
@@ -180,43 +244,72 @@ public class ServiceSettingsDialog extends Dialog {
     /** Creates the text boxes component for host name and port number values */
     protected Composite createSettingsArea(Composite composite) {
     	 Composite serverSettingsComposite = new Composite(composite, SWT.RIGHT);
-         GridLayout layout = new GridLayout();
+    	 GridLayout layout = new GridLayout();
          layout.numColumns = 2;
          serverSettingsComposite.setLayout(layout);
          serverSettingsComposite.setFont(composite.getFont());
          GridData data = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL);
          data.grabExcessHorizontalSpace = true;
          serverSettingsComposite.setData(data);
-         
-         Label lblServerHost = new Label(serverSettingsComposite, SWT.NONE);
+         //serverSettingsComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
+
+     	 Label lblServerHost = new Label(serverSettingsComposite, SWT.NONE);
          lblServerHost.setText("Server Host: ");
          txtServerHost = new Text(serverSettingsComposite, SWT.SINGLE | SWT.BORDER);
          txtServerHost.setSize(300, 70);
-         txtServerHost.setText(ServiceAgentSingleton.getServerHost());
+         //txtServerHost.setText(ServiceAgentSingleton.getServerHost());
          txtServerHost.addModifyListener(new ModifyListener() {
              public void modifyText(ModifyEvent e) {
                  ServiceSettingsValidator.source="host";
             	 validateInput(txtServerHost.getText());
             	 ServiceSettingsValidator.source="";
-            	 checkbox.setSelection(false);
+            	 //checkbox.setSelection(false);
              }
          });
          
          Label lblServerPort = new Label(serverSettingsComposite, SWT.NONE);
          lblServerPort.setText("Server Port: ");
          txtServerPort = new Text(serverSettingsComposite, SWT.SINGLE | SWT.BORDER);
-         txtServerPort.setText(ServiceAgentSingleton.getServerPort());
+         //txtServerPort.setText(ServiceAgentSingleton.getServerPort());
          txtServerPort.setSize(300, 70);
          txtServerPort.addModifyListener(new ModifyListener() {
              public void modifyText(ModifyEvent e) {
                  ServiceSettingsValidator.source="port";
             	 validateInput(txtServerPort.getText());
             	 ServiceSettingsValidator.source="";
-            	 checkbox.setSelection(false);
+            	 //checkbox.setSelection(false);
              }
          });
          
          return serverSettingsComposite;
+	}
+    
+    /** Creates the text boxes component for host name and port number values */
+    protected Composite createServersArea(Composite composite) {
+    	 Composite serverListComposite = new Composite(composite, SWT.RIGHT);
+         GridLayout layout = new GridLayout();
+         layout.numColumns = 2;
+         serverListComposite.setLayout(layout);
+         serverListComposite.setFont(composite.getFont());
+         GridData data = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL);
+         data.grabExcessHorizontalSpace = true;
+         serverListComposite.setData(data);
+         //serverListComposite.setBackground(Display.getDefault().getSystemColor(SWT.COLOR_BLUE));
+         
+         Label lblServers = new Label(serverListComposite, SWT.NONE);
+         lblServers.setText("Available Servers:");
+         cmbServers = new Combo(serverListComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+         cmbServers.add("");
+         ArrayList<XMLElementHelper> result = ClientUtils.getClientPreference("global", "server");
+     	 for (int i = 0; i < result.size(); i++){
+ 	    		String key = result.get(i).getAttribute().get(ClientUtils.XML_HOST_KEY);
+ 	    		String value = result.get(i).getAttribute().get(ClientUtils.XML_PORT_KEY);
+ 	    		cmbServers.add(key + ":" + value);
+     	}
+
+         cmbServers.select(0);
+         
+         return serverListComposite;
 	}
 
     /**
@@ -249,17 +342,21 @@ public class ServiceSettingsDialog extends Dialog {
      * Convenience method to handle the default status of dialogs widgets
      * */
     private void defaultMode(){
-    	checkbox.setSelection(true);
+    	//checkbox.setSelection(true);
+		cmbServers.setEnabled(true);
     	txtServerHost.setEnabled(false);
     	txtServerPort.setEnabled(false);
+    	setErrorMessage(null);
     }
     
     /**
      * Convenience method to handle the custom status of dialogs widgets
      * */
     private void customMode(){
-    	checkbox.setSelection(false);
+    	//checkbox.setSelection(false);
 		txtServerHost.setEnabled(true);
 		txtServerPort.setEnabled(true);
+		cmbServers.setEnabled(false);
+    	setErrorMessage(null);
     }   
 }
