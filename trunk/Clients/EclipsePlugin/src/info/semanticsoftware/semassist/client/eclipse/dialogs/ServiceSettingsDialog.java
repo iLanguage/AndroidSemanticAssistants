@@ -7,7 +7,7 @@ import info.semanticsoftware.semassist.client.eclipse.handlers.ServiceAgentSingl
 import info.semanticsoftware.semassist.client.eclipse.handlers.ServiceSettingsValidator;
 import info.semanticsoftware.semassist.client.eclipse.utils.Utils;
 import info.semanticsoftware.semassist.csal.ClientUtils;
-import info.semanticsoftware.semassist.csal.XMLElementHelper;
+import info.semanticsoftware.semassist.csal.XMLElementModel;
 import org.eclipse.jface.dialogs.Dialog;
 import org.eclipse.jface.dialogs.IDialogConstants;
 import org.eclipse.jface.dialogs.IInputValidator;
@@ -300,7 +300,7 @@ public class ServiceSettingsDialog extends Dialog {
          lblServers.setText("Available Servers:");
          cmbServers = new Combo(serverListComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
          cmbServers.add("");
-         ArrayList<XMLElementHelper> result = ClientUtils.getClientPreference("global", "server");
+         ArrayList<XMLElementModel> result = ClientUtils.getClientPreference("global", "server");
      	 for (int i = 0; i < result.size(); i++){
  	    		String key = result.get(i).getAttribute().get(ClientUtils.XML_HOST_KEY);
  	    		String value = result.get(i).getAttribute().get(ClientUtils.XML_PORT_KEY);
