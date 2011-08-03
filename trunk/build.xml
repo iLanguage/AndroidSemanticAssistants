@@ -22,10 +22,10 @@
 -->
 
 <project name="SA" default="run" basedir=".">
-    <property name="semassist.home"           value="." />
+  <property name="semassist.home"           value="." />
 
-    <!-- Machine specific settings should go in SemassistProperties.xml -->
-    <import file ="${semassist.home}/SemassistProperties.xml"/>
+  <!-- Machine specific settings should go in SemassistProperties.xml -->
+  <import file ="${semassist.home}/SemassistProperties.xml"/>
 	
 
   <!-- Checkstyle analysis -->
@@ -35,7 +35,7 @@
     <checkstyle config="${checkstyle.config}"
 		failOnViolation="false" >
       <formatter type="xml" tofile="${checkstyle.report}"/>
-      <fileset dir="." includes="**/*.java"/>
+      <fileset dir="." includes="**/*.java" excludes="Resources/" />
     </checkstyle>
   </target>
   
@@ -47,6 +47,7 @@
       <formatter type="xml" toFile="pmd_report.xml"/>
         <fileset dir=".">
             <include name="**/*.java"/>
+	    <exclude name="Resources/" />
         </fileset>
     </pmd>
   </target>
@@ -56,6 +57,7 @@
     <cpd minimumTokenCount="100" format="xml" outputFile="cpd_report.xml">
         <fileset dir=".">
             <include name="**/*.java"/>
+	    <exclude name="Resources/" />
         </fileset>
     </cpd>
   </target>
