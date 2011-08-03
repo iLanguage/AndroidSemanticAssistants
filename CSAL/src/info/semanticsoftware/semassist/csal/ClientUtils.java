@@ -23,17 +23,11 @@ package info.semanticsoftware.semassist.csal;
 import java.io.*;
 import java.util.*;
 import java.text.DateFormat;
-
 import info.semanticsoftware.semassist.csal.result.*;
 import org.w3c.dom.*;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
-
 import javax.xml.parsers.*;
-import javax.xml.stream.XMLOutputFactory;
-import javax.xml.stream.XMLStreamException;
-import javax.xml.stream.XMLStreamWriter;
-//import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
@@ -670,23 +664,23 @@ public class ClientUtils
             }
             else
             {
-                System.out.println( "param not File or String " );
+                System.out.println("param not File or String ");
                 return null;
             }
 
         }
         catch( SAXException e )
         {
-            System.out.println( "Wrong XML file structure: " + e.getMessage() );
+            System.out.println("Wrong XML file structure: " + e.getMessage());
             e.printStackTrace();
             return null;
         }
         catch( Throwable e )
         {
-            System.out.println( "Could not read source string: " + e.getMessage() );
+            System.out.println("Could not read source string: " + e.getMessage());
         }
 
-        System.out.println( "---------------- XML string parsed" );
+        System.out.println("---------------- XML string parsed");
 
         return doc;
     }
@@ -709,21 +703,21 @@ public class ClientUtils
      *  is good for escaping to produce valid XML, but not for producing safe
      *  HTML.</span>
      */
-    public static void SortAnnotations( AnnotationVectorArray annotVectorArr )
+    public static void SortAnnotations(AnnotationVectorArray annotVectorArr)
     {
         mAnnotArray = new ArrayList<Annotation>();
 
-        if( annotVectorArr == null )
+        if(annotVectorArr == null)
         {
             return;
         }
 
-        for( Iterator<AnnotationVector> it = annotVectorArr.mAnnotVectorArray.iterator(); it.hasNext(); )
+        for(Iterator<AnnotationVector> it = annotVectorArr.mAnnotVectorArray.iterator(); it.hasNext();)
         {
             AnnotationVector annotVector = it.next();
 
             //Add Annotations to AnnotationArray in order to sort
-            CreateAnnotationsArray( annotVector );
+            CreateAnnotationsArray(annotVector);
         }
 
         // sort all mAnnotations by start offset
@@ -731,27 +725,27 @@ public class ClientUtils
 
     }
 
-    protected static void CreateAnnotationsArray( AnnotationVector annotVector )
+    protected static void CreateAnnotationsArray(AnnotationVector annotVector)
     {
 
-        for( Iterator<Annotation> it = annotVector.mAnnotationVector.iterator(); it.hasNext(); )
+        for(Iterator<Annotation> it = annotVector.mAnnotationVector.iterator(); it.hasNext();)
         {
             Annotation annotation = it.next();
 
-            if( annotation.mContent != null && !annotation.mContent.equals( "" ) )
+            if (annotation.mContent != null && !annotation.mContent.equals( "" ))
             {
                 annotation.mType = annotVector.mType;
-                System.out.println( "annotation.mType: " + annotation.mType );
+                System.out.println("annotation.mType: " + annotation.mType);
 
-                mAnnotArray.add( annotation );
+                mAnnotArray.add(annotation);
             }
         }
     }
-    
-    public static void setClientPreference(String client, String element, Map<String, String> map){
-    		try{		
+
+   /* public static void setClientPreference(String client, String element, Map<String, String> map){
+    		try {		
     			File propertiesFile = new File(PROPERTIES_FILE_PATH);
-    			if(propertiesFile.exists()){
+    			if (propertiesFile.exists()) {
     				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
     				DocumentBuilder docBuilder = builder.newDocumentBuilder();
     				Document doc = docBuilder.parse(propertiesFile);
@@ -760,12 +754,12 @@ public class ClientUtils
     				Element root = doc.getDocumentElement();
     				Element clientTag;
 					NodeList clientElement = doc.getElementsByTagName(client);
-					if(clientElement.getLength() == 0){
+					if (clientElement.getLength() == 0){
 	    				clientTag = doc.createElement(client);
-					}else{
+					} else {
 	    				clientTag = (Element) clientElement.item(0);
 					}
-					
+
 					NodeList children = clientTag.getChildNodes();
 					Element elementNode = null;
 
@@ -774,18 +768,18 @@ public class ClientUtils
 							elementNode = (Element) children.item(i);
 		    				Set<String> keys = map.keySet();
 		        			for(Iterator<String> iterator = keys.iterator(); iterator.hasNext();){
-		        	    		String key = (String) iterator.next();
+		        	    		String key = iterator.next();
 		        	    		String value = map.get(key);
 		        	    		elementNode.setAttribute(key, value);
 		        	    	}
 						}
 					}
 
-					if(elementNode == null){
+					if (elementNode == null){
 						elementNode = doc.createElement(element);
 						Set<String> keys = map.keySet();
-	        			for(Iterator<String> iterator = keys.iterator(); iterator.hasNext();){
-	        	    		String key = (String) iterator.next();
+	        			for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();){
+	        	    		String key = iterator.next();
 	        	    		String value = map.get(key);
 	        	    		elementNode.setAttribute(key, value);
 	        	    	}
@@ -802,12 +796,12 @@ public class ClientUtils
     				//transformer.setOutputProperty(OutputKeys.INDENT, "yes");
     				transformer.transform(source, result);
 
-    			}else{
-    	    		createPropertiesFile();
+    			} else {
+    	    		//createPropertiesFile();
     	    		setClientPreference(client, element, map);
     			}
-    		} catch(IOException e1){
-    			e1.printStackTrace();    		
+    		} catch (IOException e1){
+    			e1.printStackTrace();
     		} catch (SAXException e2) {
 				e2.printStackTrace();
 			} catch (ParserConfigurationException e3) {
@@ -817,29 +811,164 @@ public class ClientUtils
 			} catch (TransformerException e5) {
 				e5.printStackTrace();
 			}
+    }*/
+    
+    public static void setClientPreference(String client, String element, Map<String, String> map){
+		try {		
+			File propertiesFile = new File(PROPERTIES_FILE_PATH);
+			if (propertiesFile.exists()) {
+				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder = builder.newDocumentBuilder();
+				Document doc = docBuilder.parse(propertiesFile);
+				doc.getDocumentElement().normalize();
+
+				Element root = doc.getDocumentElement();
+				Element clientTag;
+				NodeList clientElement = doc.getElementsByTagName(client);
+				clientTag = (Element) clientElement.item(0);
+			
+				Element elementNode = doc.createElement(element);
+				Set<String> keys = map.keySet();
+    			for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();){
+    	    		String key = iterator.next();
+    	    		String value = map.get(key);
+    	    		elementNode.setAttribute(key, value);
+    	    	}
+
+    			clientTag.appendChild(elementNode);
+				root.appendChild(clientTag);
+
+				DOMSource source = new DOMSource(doc);
+				StreamResult result = new StreamResult(new FileOutputStream(PROPERTIES_FILE_PATH));
+
+				TransformerFactory transFactory = TransformerFactory.newInstance();
+				Transformer transformer = transFactory.newTransformer();
+				//transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+				transformer.transform(source, result);
+
+			} else {
+	    		System.out.println("Error: No properties file found at " + PROPERTIES_FILE_PATH);
+			}
+		} catch (IOException e1){
+			e1.printStackTrace();
+		} catch (SAXException e2) {
+			e2.printStackTrace();
+		} catch (ParserConfigurationException e3) {
+			e3.printStackTrace();
+		} catch (TransformerConfigurationException e4) {
+			e4.printStackTrace();
+		} catch (TransformerException e5) {
+			e5.printStackTrace();
+		}
+    }
+
+    public static String getClientPreference(String client, String element, String key){
+    	String value = "";
+    	File propertiesFile = new File(PROPERTIES_FILE_PATH);
+		if(propertiesFile.exists()){
+			try {
+				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder;
+				docBuilder = builder.newDocumentBuilder();
+				Document doc = docBuilder.parse(propertiesFile);
+				doc.getDocumentElement().normalize();
+
+				NodeList clientElement = doc.getElementsByTagName(client);
+				if(clientElement.getLength() != 0){
+    				Element clientTag = (Element) clientElement.item(0);
+    				NodeList children = clientTag.getChildNodes();
+					Element elementNode = null;
+
+					for(int i=0; i < children.getLength(); i++){
+						if(children.item(i).getNodeName().equals(element)){
+							elementNode = (Element) children.item(i);
+		        	    	value = elementNode.getAttribute(key);
+						}
+					}
+
+					if(elementNode == null){
+						System.out.println("Error: No such element.");
+						return "";
+					}else if(value.equals("")){
+						System.out.println("Error: No such key.");
+						return "";
+					}else{
+						return value;
+					}
+				}else{
+					System.out.println("Error: No such client.");
+					return "";
+				}
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return value; 
+		}else{
+			System.out.println("Error: No file found.");
+			return "";
+		}
     }
     
-    private static void createPropertiesFile(){
-      	XMLStreamWriter writer = null;
-    	XMLOutputFactory factory = XMLOutputFactory.newInstance();
-    	try{
-			writer = factory.createXMLStreamWriter(new FileWriter(PROPERTIES_FILE_PATH));
-			writer.writeStartDocument();
-			writer.writeStartElement("saProperties");
-			writer.writeStartElement("global");
-			writer.writeStartElement("server");			
-			writer.writeAttribute("host", defaultServerHost());
-			writer.writeAttribute("port", defaultServerPort());
-			writer.writeEndElement();//server	
-			writer.writeEndElement();//global			
-			writer.writeEndElement();//saProperties		
-			writer.writeEndDocument();
-			writer.flush();
-			writer.close();
-		}catch(IOException e1){
-			System.err.println(e1.getMessage());	
-		}catch(XMLStreamException e2){
-			System.err.println(e2.getMessage());
+    public static ArrayList<XMLElementModel> getClientPreference(String client, String element){
+    	ArrayList<XMLElementModel> result = new ArrayList<XMLElementModel>();
+    	File propertiesFile = new File(PROPERTIES_FILE_PATH);
+		if(propertiesFile.exists()){
+			try {
+				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder;
+				docBuilder = builder.newDocumentBuilder();
+				Document doc = docBuilder.parse(propertiesFile);
+				doc.getDocumentElement().normalize();
+
+				// Check if such client exists in the XML file or if there are more than one target
+				NodeList clientElement = doc.getElementsByTagName(client);
+				if(clientElement.getLength() == 0 || clientElement.getLength() > 1){
+					System.out.println("Error: No such client.");
+					return result;
+				}else{
+					Element clientTag = (Element) clientElement.item(0);
+    				NodeList children = clientTag.getChildNodes();
+					Element elementNode = null;
+
+					for(int i=0; i < children.getLength(); i++){
+						// check if the client has the element
+						if(children.item(i).getNodeName().equals(element)){							
+							XMLElementModel candid = new XMLElementModel();
+							candid.setName(element);
+							elementNode = (Element) children.item(i);
+
+							// Get all the attributes and put each pair in the hash map
+							NamedNodeMap attrs = elementNode.getAttributes();
+							for (int j = 0; j < attrs.getLength(); j++){
+								candid.setAttribute(attrs.item(j).getNodeName(), attrs.item(j).getNodeValue());
+							}
+
+							result.add(candid);
+						}
+					}
+
+					// if there is no such element in the XML file, this object is null
+					if (elementNode == null) {
+						System.out.println("Error: No such element.");
+						return result;
+					}
+				}
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		} else {
+			System.out.println("Error: No file found.");
+			return result;
 		}
+		return result;
     }
 }
