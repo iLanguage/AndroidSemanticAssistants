@@ -19,12 +19,8 @@ import javax.swing.*;
  *
  * @author nick
  */
-public class SettingsFrame extends javax.swing.JFrame
+public class SettingsFrame extends JFrame
 {
-
-    private static final String HIGHLIGHT_ON = "Disable Annotation Highlighting";
-    private static final String HIGHLIGHT_OFF = "Enable Annotation Highlighting";
-    private static String CURRENT_HIGHLIGHT = HIGHLIGHT_OFF;
     private static boolean mDefaultServerSelect = true;
     private static String mCustomServerPort;
     private static String mCustomServerHost;
