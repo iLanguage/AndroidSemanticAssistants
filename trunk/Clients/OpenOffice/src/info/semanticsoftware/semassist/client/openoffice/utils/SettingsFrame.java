@@ -45,10 +45,6 @@ public class SettingsFrame extends javax.swing.JFrame
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jCheckBox1 = new javax.swing.JCheckBox(null,null,UNOUtils.getCURRENT_HIGHLIGHT());
-        jCheckBox2 = new JCheckBox("Filter Empty Features", UNOUtils.isEmptyFeatureFilter());
-        jCheckBox3 = new JCheckBox("Show Annotation Content", UNOUtils.isShowAnnotationContent());
-        jCheckBox4 = new JCheckBox("Open HTML results in external Browser", UNOUtils.isBrowserResultHandling());
         jSideNoteFontSizeField = new JTextField(Float.toString(UNOUtils.getSideNoteFontSize()));
         jRadioButtonDefault = new javax.swing.JRadioButton( null, null, mDefaultServerSelect);
         jRadioButtonCustom = new javax.swing.JRadioButton(null, null, !mDefaultServerSelect);
@@ -68,8 +64,6 @@ public class SettingsFrame extends javax.swing.JFrame
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Global Settings");
         setAlwaysOnTop(true);
-
-        jCheckBox1.setText("Annotation Highlighting");
 
         jRadioButtonDefault.setText("Default");
         jRadioButtonDefault.addActionListener(new java.awt.event.ActionListener() {
@@ -172,6 +166,9 @@ public class SettingsFrame extends javax.swing.JFrame
                             )
                         .addGroup(layout.createSequentialGroup()
                             .addContainerGap()
+                            .addComponent(jCheckBox0))
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
                             .addComponent(jCheckBox1))
                         .addGroup(layout.createSequentialGroup()
                             .addContainerGap()
@@ -215,6 +212,8 @@ public class SettingsFrame extends javax.swing.JFrame
                 .addGroup(layout.createSequentialGroup()
                     .addGap(12, 12, 12)
                     .addComponent(jLabel6)
+                    .addGap(18, 18, 18)
+                    .addComponent(jCheckBox0)
                     .addGap(18, 18, 18)
                     .addComponent(jCheckBox1)
                     .addGap(18, 18, 18)
@@ -298,31 +297,30 @@ public class SettingsFrame extends javax.swing.JFrame
     private void updateCheckBoxStatus()
     {
         boolean status;
+        
+        // Interactive annotation result handling option.
+        status = jCheckBox0.isSelected();
+        System.out.println( "------ Interactive Annotation Handling: " + (status ? "Enabled" : "Disabled") );
+        UNOUtils.setInteractiveResultHandling( status );
 
-        if( jCheckBox1.isSelected() )
-        {
-            System.out.println( "------ Highlight Enabled" );
-            UNOUtils.enableHighlighting();
-        }
-        else
-        {
-            System.out.println( "------ Highlight Disabled" );
-            UNOUtils.disableHighlighting();
-        }
+        // Annotation highlighting in text option.
+        status = jCheckBox0.isSelected();
+        System.out.println( "------ Text Highlight: " + (status ? "Enabled" : "Disabled") );
+        UNOUtils.setTextHighlighting( status );
 
         // Empty feature filtering option.
         status = jCheckBox2.isSelected();
-        System.out.println( "------ Filter Empty Features " + (status ? "Enabled" : "Disabled") );
+        System.out.println( "------ Filter Empty Features: " + (status ? "Enabled" : "Disabled") );
         UNOUtils.setEmptyFeatureFilter( status );
 
         // Show annotation content option.
         status = jCheckBox3.isSelected();
-        System.out.println( "------ Show Annotation Content " + (status ? "Enabled" : "Disabled") );
+        System.out.println( "------ Show Annotation Content: " + (status ? "Enabled" : "Disabled") );
         UNOUtils.setShowAnnotationContent( status );
 
         // Handle HTML results with external borwser option.
         status = jCheckBox4.isSelected();
-        System.out.println( "------ Enable Browser Result Handling " + (status ? "Enabled" : "Disabled") );
+        System.out.println( "------ Enable Browser Result Handling: " + (status ? "Enabled" : "Disabled") );
         UNOUtils.setBrowserResultHandling( status );
     }
 
@@ -375,10 +373,16 @@ public class SettingsFrame extends javax.swing.JFrame
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton cancelButton;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
-    private javax.swing.JCheckBox jCheckBox3;
-    private javax.swing.JCheckBox jCheckBox4;
+    private final JCheckBox jCheckBox0 =
+      new JCheckBox("Allow Interactive Handling", UNOUtils.isInteractiveResultHandling());
+    private final JCheckBox jCheckBox1 =
+      new JCheckBox("Annotation Highligting", UNOUtils.getCURRENT_HIGHLIGHT());
+    private final JCheckBox jCheckBox2 =
+      new JCheckBox("Filter Empty Features", UNOUtils.isEmptyFeatureFilter());
+    private final JCheckBox jCheckBox3 =
+      new JCheckBox("Show Annotation Content", UNOUtils.isShowAnnotationContent());
+    private final JCheckBox jCheckBox4 =
+      new JCheckBox("Open HTML results in external Browser", UNOUtils.isBrowserResultHandling());
     private JTextField jSideNoteFontSizeField;
     private javax.swing.JTextField jCustomHostField;
     private javax.swing.JTextField jCustomPortField;
@@ -399,4 +403,8 @@ public class SettingsFrame extends javax.swing.JFrame
     private javax.swing.JButton okButton;
     // End of variables declaration//GEN-END:variables
 
+   /* For backwards compatibility, increment this serialization value ONLY when the
+    * public interface of this class is changed, otherwise keep it fixed!
+    */
+   private static final long serialVersionUID = 1L;
 }

@@ -67,6 +67,7 @@ public class UNOUtils
 
     // Configuration Defaults
     private static float mSideNoteFontSize = 8; /* Default annotation font-size. */
+    private static Boolean mInteractiveResultHandling = false; /* Alterate results with a custom dialog. */
     private static Boolean mBrowserResultHandling = true; /* Handle results with an external browser. */
     private static Boolean mShowAnnotationContent = false; /* Put annotation content in side-notes. */
     private static Boolean mEmptyFeatureFilter = true; /* Ignore empty-valued features by default. */
@@ -193,17 +194,14 @@ public class UNOUtils
         createInvisibleCursor( ctx, annotation );
     }
 
-    public static void enableHighlighting()
-    {
-        CURRENT_HIGHLIGHT = HIGHLIGHT_YELLOW;
-        System.out.println( "---------------- Enable highlight: " + getCURRENT_HIGHLIGHT() );
 
-    }
-
-    public static void disableHighlighting()
+    /**
+     * @param status true to allow emphasising annotation span on the document
+     * text or false otherwise.
+     */
+    public static void setTextHighlighting( boolean status )
     {
-        CURRENT_HIGHLIGHT = HIGHLIGHT_OFF;
-        System.out.println( "---------------- Disbale highlight: " + getCURRENT_HIGHLIGHT() );
+       CURRENT_HIGHLIGHT = status ? HIGHLIGHT_YELLOW : HIGHLIGHT_OFF;
     }
 
     public static void initializeCursor( XComponentContext ctx )
@@ -679,6 +677,23 @@ public class UNOUtils
    public static boolean isBrowserResultHandling()
    {
       return mBrowserResultHandling;
+   }
+
+   /**
+    * @param status true to allow alteration of resulting annotation responses
+    *        or false otherwise.
+    */
+   public static void setInteractiveResultHandling( boolean status )
+   {
+      mInteractiveResultHandling = status;
+   }
+
+   /**
+    * @return the mInteractiveResultHandling status.
+    */
+   public static boolean isInteractiveResultHandling()
+   {
+      return mInteractiveResultHandling;
    }
 
    /**
