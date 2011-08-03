@@ -175,8 +175,7 @@ public class ServerResponseHandler {
 	        ClientUtils.SortAnnotations( annotVectorArr );
 	        //
 
-	        for( @SuppressWarnings("unchecked")
-			Iterator<Annotation> it2 = ClientUtils.mAnnotArray.iterator(); it2.hasNext(); )
+	        for ( Iterator<Annotation> it2 = ClientUtils.mAnnotArray.iterator(); it2.hasNext(); )
 	        {
 	            // Create Side Notes
 	        }

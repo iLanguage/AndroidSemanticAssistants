@@ -24,7 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 import info.semanticsoftware.semassist.client.eclipse.dialogs.FileSelectionDialog;
-import info.semanticsoftware.semassist.client.eclipse.utils.Utils;
+//import info.semanticsoftware.semassist.client.eclipse.utils.Utils;
 import info.semanticsoftware.semassist.server.SemanticServiceBroker;
 import info.semanticsoftware.semassist.server.SemanticServiceBrokerService;
 import java.net.MalformedURLException;
@@ -55,7 +55,7 @@ public class ServiceAgentSingleton
 	public static SemanticServiceBroker getInstance()
 	{
 
-		Utils.propertiesReader();
+		//Utils.propertiesReader();
 
 		try
 	    {
