@@ -56,7 +56,7 @@ public class InteractiveAnnotationFrame extends JFrame {
     */
    public InteractiveAnnotationFrame(final Annotation[] annots,
       final String contextFeature, final String targetFeature,
-      final ExecuteCallback callback) throws IllegalArgumentException {
+      final ExecuteCallback<String> callback) throws IllegalArgumentException {
 
       // Validate arguments
       if (annots == null || callback == null) {
@@ -364,7 +364,7 @@ public class InteractiveAnnotationFrame extends JFrame {
 
    // GUI ELEMENTS
    private final JTextArea inputTxt = new JTextArea(); // Annotation content.
-   private final JTextArea contextTxt = new JTextArea(); // Problem description.
+   private final JTextArea contextTxt = new JTextArea(); // Annotation context description.
    private final JList optionLst = new JList(); // Option lits.
    private final JButton ignoreBtn = new JButton("Ignore"); // Do not execute on this annotation.
    private final JButton modifyBtn = new JButton("Modify"); // Execute callback on this annotation.
@@ -376,7 +376,7 @@ public class InteractiveAnnotationFrame extends JFrame {
    private ImmutableCollection<Annotation> annots;
    private String contextFeature;
    private String targetFeature;
-   private ExecuteCallback callback;
+   private ExecuteCallback<String> callback;
 
    /* For backwards compatibility, increment this serialization value ONLY when the
     * public interface of this class is changed, otherwise keep it fixed!
