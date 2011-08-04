@@ -42,21 +42,21 @@ public class InteractiveAnnotationFrame extends JFrame {
     * Constructor to invoke a dialog that iterates through a set of
     * annotations prompting users to choose between a set of actions.
     *
-    * @param descr    Optional context description of what the callback does.
-    * @param annots   Non-empty list of annotations to prompt for changes.
-    * @param feature  Feature name indicating which elements are accepted to
-    *                 be displayed in the option list. If null, no feature
-    *                 filtering is pefromed.
-    * @param callback Invokes the callback when the execute button is pressed
-    *                 with a selected list element. The passed argument to
-    *                 the callback.execute() is the String of the selected
-    *                 list elemement.
+    * @param annots Non-empty list of annotations to prompt for changes.
+    * @param contextFeature Feature name indicating the context of the @a targetFeature.
+    * @param targetFeature Feature name indicating which elements are accepted
+    *        to be displayed in the option list. If null, no feature filtering
+    *        is pefromed.
+    * @param callback Invokes the callback when the modify button is pressed with
+    *        a selected list element. The passed argument to the callback.execute()
+    *        is the String of the selected list elemement.
     *
     * @throws IllegalArgumentException if @a annots are empty, in which case
     * caller should do proper dialog handling (show msg box).
     */
-   public InteractiveAnnotationFrame(final String descr, final Annotation[] annots,
-      final String feature, final ExecuteCallback callback) throws IllegalArgumentException {
+   public InteractiveAnnotationFrame(final Annotation[] annots,
+      final String contextFeature, final String targetFeature,
+      final ExecuteCallback callback) throws IllegalArgumentException {
 
       // Validate arguments
       if (annots == null || callback == null) {
@@ -64,12 +64,12 @@ public class InteractiveAnnotationFrame extends JFrame {
       }
 
       this.annots = new ImmutableCollection<Annotation>(annots);
-      this.feature = feature;
+      this.contextFeature = contextFeature;
+      this.targetFeature = targetFeature;
       this.callback = callback;
 
-      contextLbl.setText(descr);
-      populateFields(this.annots.current());
       init();
+      populateFields(this.annots.current());
    }
 
 
@@ -80,8 +80,31 @@ public class InteractiveAnnotationFrame extends JFrame {
     */
    private void init() {
 
-      // Configure event listeners.
-      ignoreBtn.setToolTipText("Do not apply these changes & analyze the next annotation.");
+      // Configure list-item event listeners.
+      optionLst.setToolTipText("Select an item to try these text changes.");
+      optionLst.addMouseListener(new MouseAdapter() {
+         @Override
+         public void mouseClicked(final MouseEvent evnt) {
+            // Handle double clicks.
+            if (evnt.getClickCount() == 2) {
+               System.out.println("List option selection");
+               selectedItem();
+            }
+         }
+      });
+      optionLst.addKeyListener(new KeyAdapter() {
+         @Override
+         public void keyReleased(final KeyEvent evnt) {
+            // Handle enter-key
+            if (evnt.getKeyCode() == KeyEvent.VK_ENTER) {
+               System.out.println("List option selection");
+               selectedItem();
+            }
+         }
+      });
+
+      // Configure button event listeners.
+      ignoreBtn.setToolTipText("Do not apply text changes & analyze the next annotation.");
       ignoreBtn.addActionListener(new ActionListener() {
          @Override
          public void actionPerformed(final ActionEvent evnt) {
@@ -90,12 +113,21 @@ public class InteractiveAnnotationFrame extends JFrame {
          }
       });
 
-      executeBtn.setToolTipText("Apply selected changes & analyze the next annotation.");
-      executeBtn.addActionListener(new ActionListener() {
+      modifyBtn.setToolTipText("Apply text changes & analyze the next annotation.");
+      modifyBtn.addActionListener(new ActionListener() {
          @Override
          public void actionPerformed(final ActionEvent evnt) {
-            System.out.println("Execute Button Pressed");
+            System.out.println("Modify Button Pressed");
             handleItem();
+         }
+      });
+
+      resetBtn.setToolTipText("Restore original annotation text changes.");
+      resetBtn.addActionListener(new ActionListener() {
+         @Override
+         public void actionPerformed(final ActionEvent evnt) {
+            System.out.println("Reset Button Pressed");
+            resetItem();
          }
       });
 
@@ -111,19 +143,40 @@ public class InteractiveAnnotationFrame extends JFrame {
       final Container mainContent = getContentPane();
       mainContent.setLayout(new GridBagLayout());
 
-      // Layout GUI input panel components.
-      mainContent.add(contextLbl, new GridBagConstraints(
-         0, 0, 4, 1, 0.2, 1.0,
-         GridBagConstraints.NORTH,
+      // Layout GUI context description panel components.
+      final JPanel contextPnl = new JPanel();
+      final JScrollPane contextScrl = new JScrollPane(contextTxt,
+         JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED,
+         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+      contextScrl.setBorder(BorderFactory.createEmptyBorder());
+      contextTxt.setEditable(false);
+      contextTxt.setLineWrap(true);
+      contextTxt.setPreferredSize(new Dimension(400, 30));
+      //dbg>> hack to get the look-&-feel of a label.
+      final JLabel dummyLbl = new JLabel();
+      contextTxt.setFont(dummyLbl.getFont());
+      contextTxt.setForeground(dummyLbl.getForeground());
+      contextTxt.setBackground(dummyLbl.getBackground());
+      contextPnl.setLayout(new GridBagLayout());
+      contextPnl.add(contextScrl, new GridBagConstraints(
+         0, 0, 1, 1, 1.0, 1.0,
+         GridBagConstraints.CENTER,
+         GridBagConstraints.BOTH,
+         new Insets(0, 0, 0, 0), 0, 0
+      ));
+      mainContent.add(contextScrl, new GridBagConstraints(
+         0, 0, 4, 1, 1.0, 0.01,
+         GridBagConstraints.CENTER,
          GridBagConstraints.BOTH,
          new Insets(10, 10, 5, 10), 0, 0
       ));
 
+      // Layout GUI input panel components.
       final JPanel inputPnl = new JPanel();
       final JScrollPane scrollTxt = new JScrollPane(inputTxt,
          JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
          JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
-      inputTxt.setEditable(false);
+      inputTxt.setEditable(true);
       inputTxt.setLineWrap(true);
       inputTxt.setPreferredSize(new Dimension(300, 30));
       inputPnl.setBorder(BorderFactory.createTitledBorder("Input Text"));
@@ -172,14 +225,20 @@ public class InteractiveAnnotationFrame extends JFrame {
          GridBagConstraints.HORIZONTAL,
          new Insets(0, 0, 5, 0), 0, 0
       ));
-      buttonPnl.add(executeBtn, new GridBagConstraints(
+      buttonPnl.add(modifyBtn, new GridBagConstraints(
          0, 1, 1, 1, 0.0, 0.0,
          GridBagConstraints.CENTER,
          GridBagConstraints.HORIZONTAL,
          new Insets(5, 0, 5, 0), 0, 0
       ));
-      buttonPnl.add(cancelBtn, new GridBagConstraints(
+      buttonPnl.add(resetBtn, new GridBagConstraints(
          0, 2, 1, 1, 0.0, 0.0,
+         GridBagConstraints.CENTER,
+         GridBagConstraints.HORIZONTAL,
+         new Insets(5, 0, 5, 0), 0, 0
+      ));
+      buttonPnl.add(cancelBtn, new GridBagConstraints(
+         0, 3, 1, 1, 0.0, 0.0,
          GridBagConstraints.CENTER,
          GridBagConstraints.HORIZONTAL,
          new Insets(5, 0, 0, 0), 0, 0
@@ -203,15 +262,24 @@ public class InteractiveAnnotationFrame extends JFrame {
     * @param annot Annotation from which to populate input and option panels.
     */
    private void populateFields(final Annotation annot) {
-      inputTxt.setText(annot.mContent);
+      // Show context description if any.
+      if (annot.mFeatures.containsKey(contextFeature)) {
+         contextTxt.setText(annot.mFeatures.get(contextFeature));
+      }
+
+      resetItem();
 
       // Filter out all annotation features not specified.
-      final Set<String> keys = annot.mFeatures.keySet();
       final Vector<String> vtr = new Vector<String>();
-      for (Iterator<String> iter = keys.iterator(); iter.hasNext(); ) {
-         final String key = iter.next();
-         final String val = annot.mFeatures.get(key);
-         if (feature == null || feature.equals(key)) {
+      final Set<String> keys = annot.mFeatures.keySet();
+      for (final String key : keys) {
+         // NOTE: Due to the server's response for annotations having feature
+         // keys with multiple values encoded as a comma separated string,
+         // this dialog cannot (& should not) dissambiguate these multiple
+         // values. Once this is enhanced in the server's response & client's
+         // datamodel this should automagically work!
+         if (targetFeature == null || targetFeature.equals(key)) {
+            final String val = annot.mFeatures.get(key);
             vtr.add(val);
          }
       }
@@ -234,6 +302,14 @@ public class InteractiveAnnotationFrame extends JFrame {
       }
    }
 
+   /**
+    * @param selection Index of the selected option list-item.
+    */
+   private void selectedItem() {
+      // NOTE: This assumes multi-list selection is not configured.
+      inputTxt.setText(optionLst.getSelectedValue().toString());
+   }
+
    private void handleItem() {
       // Do nothing until an option is explicitly selected from the list.
       if (optionLst.isSelectionEmpty()) {
@@ -244,9 +320,13 @@ public class InteractiveAnnotationFrame extends JFrame {
          return;
       }
 
-      // This assumes multi-list selection is not configured.
-      callback.execute(optionLst.getSelectedValue());
+      // Pass (possibly tweeked) input text to the callback.
+      callback.execute(inputTxt.getText());
       nextItem();
+   }
+
+   private void resetItem() {
+      inputTxt.setText(annots.current().mContent);
    }
 
    private void closeDialog() {
@@ -283,17 +363,19 @@ public class InteractiveAnnotationFrame extends JFrame {
 
 
    // GUI ELEMENTS
-   private final JLabel contextLbl = new JLabel(); // Description of modification context.
    private final JTextArea inputTxt = new JTextArea(); // Annotation content.
+   private final JTextArea contextTxt = new JTextArea(); // Problem description.
    private final JList optionLst = new JList(); // Option lits.
    private final JButton ignoreBtn = new JButton("Ignore"); // Do not execute on this annotation.
-   private final JButton executeBtn = new JButton("Modify"); // Execute callback on this annotation.
+   private final JButton modifyBtn = new JButton("Modify"); // Execute callback on this annotation.
+   private final JButton resetBtn = new JButton("Reset"); // Set input text to original value.
    private final JButton cancelBtn = new JButton("Cancel"); // Abort the dialog.
 
 
    // MEMBER VARIABLES
    private ImmutableCollection<Annotation> annots;
-   private String feature;
+   private String contextFeature;
+   private String targetFeature;
    private ExecuteCallback callback;
 
    /* For backwards compatibility, increment this serialization value ONLY when the
