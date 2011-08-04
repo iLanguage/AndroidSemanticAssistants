@@ -22,7 +22,7 @@
 package info.semanticsoftware.semassist.csal;
 
 
-public interface ExecuteCallback {
+public interface ExecuteCallback<T> {
 
    /**
     * Overwritable method implementing context specific execute
@@ -31,5 +31,5 @@ public interface ExecuteCallback {
     * @param param General parameter(s) to be used to be used in callback.
     * @return True if the call was successful, false otherwise.
     */
-   abstract public boolean execute(final Object param);
+   abstract public boolean execute(final T param);
 }
