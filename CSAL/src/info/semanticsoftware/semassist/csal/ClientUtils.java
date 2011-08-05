@@ -825,9 +825,21 @@ public class ClientUtils
 				Element root = doc.getDocumentElement();
 				Element clientTag;
 				NodeList clientElement = doc.getElementsByTagName(client);
-				clientTag = (Element) clientElement.item(0);
-			
-				Element elementNode = doc.createElement(element);
+				Element elementNode = null;
+				if(clientElement.getLength() != 0){
+    				clientTag = (Element) clientElement.item(0);
+    				NodeList children = clientTag.getChildNodes();
+					for(int i=0; i < children.getLength(); i++){
+						if(children.item(i).getNodeName().equals(element)){
+							elementNode = (Element) children.item(i);
+						}
+					}
+    				
+  				}else{
+  					clientTag = doc.createElement(client);
+  					elementNode = doc.createElement(element);
+  				}
+				
 				Set<String> keys = map.keySet();
     			for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();){
     	    		String key = iterator.next();
