@@ -99,11 +99,19 @@ public class ServiceSettingsDialog extends Dialog {
             	}*/
         	
         	if(serversButton.getSelection()){
-        		String address = cmbServers.getItem(cmbServers.getSelectionIndex());
-        		String[] tokens = address.split(":");
-        		ServiceAgentSingleton.setServerHost(tokens[0]);
-        		ServiceAgentSingleton.setServerPort(tokens[1]);
-        		super.buttonPressed(buttonId);
+        		if (cmbServers.getSelectionIndex() == 0){
+        			setErrorMessage("Please select a server from the list.");
+        		}else{
+        			String address = cmbServers.getItem(cmbServers.getSelectionIndex());
+            		String[] tokens = address.split(":");
+            		ServiceAgentSingleton.setServerHost(tokens[0]);
+            		ServiceAgentSingleton.setServerPort(tokens[1]);
+            		Map<String, String> map = new HashMap<String, String>();
+            		map.put(ClientUtils.XML_HOST_KEY, tokens[0]);
+            		map.put(ClientUtils.XML_PORT_KEY, tokens[1]);
+            		ClientUtils.setClientPreference("eclipse", "server", map);
+            		super.buttonPressed(buttonId);
+        		}
         	}else if(customButton.getSelection()){
         		if(txtServerHost.getText().equals("") || txtServerPort.getText().equals("")){
             		setErrorMessage("Please fill the server host and port number values");
@@ -266,6 +274,7 @@ public class ServiceSettingsDialog extends Dialog {
             	 //checkbox.setSelection(false);
              }
          });
+         txtServerHost.setEnabled(false);
          
          Label lblServerPort = new Label(serverSettingsComposite, SWT.NONE);
          lblServerPort.setText("Server Port: ");
@@ -280,6 +289,7 @@ public class ServiceSettingsDialog extends Dialog {
             	 //checkbox.setSelection(false);
              }
          });
+         txtServerPort.setEnabled(false);
          
          return serverSettingsComposite;
 	}
@@ -299,6 +309,18 @@ public class ServiceSettingsDialog extends Dialog {
          Label lblServers = new Label(serverListComposite, SWT.NONE);
          lblServers.setText("Available Servers:");
          cmbServers = new Combo(serverListComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+         cmbServers.addSelectionListener(new SelectionListener() {
+			
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+    			setErrorMessage(null);				
+			}
+			
+			@Override
+			public void widgetDefaultSelected(SelectionEvent e) {
+    			setErrorMessage(null);				
+			}
+		});
          cmbServers.add("");
          ArrayList<XMLElementModel> result = ClientUtils.getClientPreference("global", "server");
      	 for (int i = 0; i < result.size(); i++){
@@ -308,7 +330,7 @@ public class ServiceSettingsDialog extends Dialog {
      	}
 
          cmbServers.select(0);
-         
+         cmbServers.setEnabled(false);
          return serverListComposite;
 	}
 
