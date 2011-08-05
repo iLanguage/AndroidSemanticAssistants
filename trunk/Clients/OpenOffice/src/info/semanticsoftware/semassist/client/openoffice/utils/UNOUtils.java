@@ -52,7 +52,7 @@ import com.sun.star.lang.XMultiServiceFactory;
 import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextField;
 import com.sun.star.util.XSearchDescriptor;
-import com.sun.star.util.XSearchable;
+import com.sun.star.util.XReplaceable;
 import info.semanticsoftware.semassist.csal.ClientUtils;
 import info.semanticsoftware.semassist.csal.result.Annotation;
 import java.util.Iterator;
@@ -78,7 +78,9 @@ public class UNOUtils
     private static XMultiServiceFactory mxDocFactory = null;
     private static XTextCursor mxDocCursor = null;
     private static XSearchDescriptor mxSearchDescr = null;
-    private static XSearchable mxSearchable = null;
+   
+    private static XReplaceable mxSearchable = null;  /* both for search & replace */
+   
     private static XText mxAnnotText = null;
     private static String mCurrentPipeline;
     private static boolean mServerInfoChanged;
@@ -191,7 +193,7 @@ public class UNOUtils
         mxDocFactory = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, doc );
 
-        createInvisibleCursor( ctx, annotation );
+        createInvisibleCursor(annotation);
     }
 
 
@@ -212,20 +214,9 @@ public class UNOUtils
         mxDocFactory = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, doc );
 
-        mxSearchable = UnoRuntime.queryInterface( XSearchable.class, doc );
+        mxSearchable = UnoRuntime.queryInterface( XReplaceable.class, doc );
 
         mxSearchDescr = mxSearchable.createSearchDescriptor();
-    }
-
-    public static short getActiveDocCharCount( XComponentContext ctx )
-    {
-
-        // get the active document
-        XTextDocument doc = getActiveTextDocument( ctx );
-        XText docText = doc.getText();
-
-        return (short) docText.getString().length();
-
     }
 
     /**
@@ -536,11 +527,8 @@ public class UNOUtils
         return false;
     }
 
-    private static void createInvisibleCursor( XComponentContext ctx, Annotation annotation )
+    private static void createInvisibleCursor(final Annotation annotation)
     {
-        // get the active document
-        XTextDocument doc = getActiveTextDocument( ctx );
-        XText docText = doc.getText();
         boolean isMoreElements = true;
 
         try
@@ -636,14 +624,7 @@ public class UNOUtils
      */
     public static boolean getCURRENT_HIGHLIGHT()
     {
-        if( CURRENT_HIGHLIGHT == HIGHLIGHT_YELLOW )
-        {
-            return true;
-        }
-        else
-        {
-            return false;
-        }
+      return (CURRENT_HIGHLIGHT == HIGHLIGHT_YELLOW);
     }
 
    /**
