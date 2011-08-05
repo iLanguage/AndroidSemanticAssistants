@@ -74,7 +74,7 @@ public class ServiceInvocationJob extends Job{
 	 */
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-        monitor.beginTask("Retrieving annotations...", 1000000000);
+        monitor.beginTask("Executing the service...", 1000000000);
 		try
          {
              System.out.println( "Invoking " + serviceName + "..." );
