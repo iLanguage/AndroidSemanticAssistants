@@ -1,6 +1,7 @@
 package info.semanticsoftware.semassist.client.eclipse.dialogs;
 
 import info.semanticsoftware.semassist.client.eclipse.handlers.FileSelectionHandler;
+import info.semanticsoftware.semassist.client.eclipse.handlers.ServiceAgentSingleton;
 import info.semanticsoftware.semassist.client.eclipse.handlers.ServiceInformationThread;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -27,6 +28,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Tree;
@@ -368,7 +370,10 @@ public class FileSelectionDialog extends SelectionStatusDialog {
         composite.setData(data);
 		Label lblServices = new Label(composite, SWT.LEFT);
 		lblServices.setText("Step 2: Please choose one of the available services:");
-        cmbServices = new Combo(composite, SWT.DROP_DOWN | SWT.READ_ONLY);
+		Label lblServerNote = new Label(composite, SWT.LEFT);
+		lblServerNote.setForeground(Display.getDefault().getSystemColor(SWT.COLOR_DARK_GRAY));
+		lblServerNote.setText("Connected to http://" + ServiceAgentSingleton.getServerHost() + ":" + ServiceAgentSingleton.getServerPort());
+		cmbServices = new Combo(composite, SWT.DROP_DOWN | SWT.READ_ONLY);
 	    cmbServices.add("");
 
 		 for(int i=0; i < servicesThread.servicesNames.size(); i++){
@@ -376,6 +381,7 @@ public class FileSelectionDialog extends SelectionStatusDialog {
 		 }
 
 		cmbServices.select(0);
+		
         return cmbComposite;
     }
 }
