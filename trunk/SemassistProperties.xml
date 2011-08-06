@@ -85,7 +85,7 @@
     <property name="server.pipeline.4.fullpath"        value="${gate.pipeline.repository}Yahoo/application.xgapp"/>
 -->
     <!-- Default Semantic Assistants server to connect to -->
-    <property name="csal.server.name"         value="minion.cs.concordia.ca"/>
+    <property name="csal.server.name"         value="assistant.cs.concordia.ca"/>
     <property name="csal.server.port"         value="8879"/>
 
     <!-- Port for which the Server listens for debugers to be attached -->
@@ -102,6 +102,7 @@
 
     <!-- Development tools.  Not needed for compiling or running the system -->
     <property name="junit.home"               value="${durmtools}/junit" />
+    <property name="junit.classpath"          value="${junit.home}/junit.jar" />
     <property name="checkstyle.home"          value="${durmtools}/checkstyle" />
     <property name="checkstyle.config"        value="${checkstyle.home}/durm_checks.xml" />
     <property name="checkstyle.classpath"     value="${checkstyle.home}/checkstyle-5.3-all.jar" />
