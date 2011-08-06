@@ -5,7 +5,7 @@
 
   Copyright (C) 2009 Semantic Software Lab, http://www.semanticsoftware.info
 
-  The Semantic Assistants architecture is free software: you can
+  The Semantic Assistants CSAL is free software: you can
   redistribute and/or modify it under the terms of the GNU Lesser General
   Public License as published by the Free Software Foundation, either
   version 3 of the License, or (at your option) any later version.
