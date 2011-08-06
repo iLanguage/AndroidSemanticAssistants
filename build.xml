@@ -27,6 +27,25 @@
   <!-- Machine specific settings should go in SemassistProperties.xml -->
   <import file ="${semassist.home}/SemassistProperties.xml"/>
 	
+  <!-- Create Javadoc for Server, CSAL, and Clients -->
+  <target name="javadoc">
+    <javadoc 
+       destdir="${javadoc.home}"
+       defaultexcludes="yes" author="true" version="true"
+       use="false" link="true" encoding="UTF-8" 
+       windowtitle="Semantic Assistants"
+       breakiterator="true"
+       linksource="yes">
+      <fileset dir="${semassist.home}"
+       includes="CSAL/**/*.java,Server/**/*.java,Clients/**/*.java"
+       excludes="CSAL/cache/,Clients/Android/"/>
+      <classpath>
+	<pathelement location="${junit.classpath}" />
+      </classpath>
+      <doctitle><![CDATA[<h1>Semantic Assistants</h1>]]></doctitle>
+      <bottom><![CDATA[<i>Copyright &copy; 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
+    </javadoc>
+  </target>
 
   <!-- Checkstyle analysis -->
   <target name="checkstyle" description="Source code analysis using checkstyle">
