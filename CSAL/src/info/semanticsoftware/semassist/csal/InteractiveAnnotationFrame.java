@@ -23,6 +23,8 @@ package info.semanticsoftware.semassist.csal;
 
 
 import info.semanticsoftware.semassist.csal.result.Annotation;
+import info.semanticsoftware.semassist.csal.callback.Callback;
+import info.semanticsoftware.semassist.csal.callback.AnnotModifyCallbackParam;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -56,10 +58,11 @@ public class InteractiveAnnotationFrame extends JFrame {
     */
    public InteractiveAnnotationFrame(final Annotation[] annots,
       final String contextFeature, final String targetFeature,
-      final ExecuteCallback<String> callback) throws IllegalArgumentException {
+      final Callback<AnnotModifyCallbackParam> callback)
+      throws IllegalArgumentException {
 
       // Validate arguments
-      if (annots == null || callback == null) {
+      if (annots == null || contextFeature == null || callback == null) {
          throw new NullPointerException();
       }
 
@@ -311,17 +314,14 @@ public class InteractiveAnnotationFrame extends JFrame {
    }
 
    private void handleItem() {
-      // Do nothing until an option is explicitly selected from the list.
-      if (optionLst.isSelectionEmpty()) {
-         JOptionPane.showMessageDialog(this,
-            "No option was selected to modify.",
-            "Missing Selection",
-            JOptionPane.ERROR_MESSAGE);
-         return;
-      }
+      // Prepare callback argument with (possibly tweeked) input text.
+      final String text = inputTxt.getText();
+      final AnnotModifyCallbackParam param =
+         new AnnotModifyCallbackParam(annots.current(), text);
 
-      // Pass (possibly tweeked) input text to the callback.
-      callback.execute(inputTxt.getText());
+      if (!callback.execute(param)) {
+         System.err.println("Problems modifying text <"+ text +">");
+      }
       nextItem();
    }
 
@@ -373,10 +373,10 @@ public class InteractiveAnnotationFrame extends JFrame {
 
 
    // MEMBER VARIABLES
-   private ImmutableCollection<Annotation> annots;
-   private String contextFeature;
-   private String targetFeature;
-   private ExecuteCallback<String> callback;
+   private final ImmutableCollection<Annotation> annots;
+   private final String contextFeature;
+   private final String targetFeature;
+   private final Callback<AnnotModifyCallbackParam> callback;
 
    /* For backwards compatibility, increment this serialization value ONLY when the
     * public interface of this class is changed, otherwise keep it fixed!

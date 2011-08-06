@@ -28,6 +28,8 @@ import java.io.*;
 import java.net.URI;
 
 import info.semanticsoftware.semassist.csal.*;
+import info.semanticsoftware.semassist.csal.callback.*;
+
 import net.java.dev.jaxb.array.*;
 import info.semanticsoftware.semassist.csal.result.*;
 import info.semanticsoftware.semassist.client.openoffice.utils.*;
@@ -258,14 +260,13 @@ public class ServiceInvocationHandler implements Runnable
             sb.append( "Annotations for document " + docID + ":\n\n" );
             AnnotationVectorArray va = map.get( docID );
             sb.append( getAnnotationsString( va ) );
+            handleAnnotations(va);
         }
 
 
         return sb.toString();
     }
 
-    ///
-    @SuppressWarnings( "unchecked" )
     protected String getAnnotationsString( AnnotationVectorArray annotVectorArr )
     {
 
@@ -290,27 +291,46 @@ public class ServiceInvocationHandler implements Runnable
 
         }
 
-
-
-
-        // sort annotations by start
-        ClientUtils.SortAnnotations( annotVectorArr );
-        //
-
-        // create enumeration of existing sidenotes in the text
-
-        UNOUtils.initializeCursor( compCtx );
-
-        for( Iterator<Annotation> it2 = ClientUtils.mAnnotArray.iterator(); it2.hasNext(); )
-        {
-            // Create Side Notes
-
-            CreateSideNotes( it2.next() );
-        }
-
         return strBuffer.toString();
 
     }
+
+   private void handleAnnotations(final AnnotationVectorArray annotVectorArr) {
+      // sort annotations by start
+      ClientUtils.SortAnnotations(annotVectorArr);
+
+      // create enumeration of existing sidenotes in the text
+      UNOUtils.initializeCursor( compCtx );
+
+      // Divide annotations into interactive & non-interactive ones.
+      final Collection<Annotation> sideNoteAnnots = new ArrayList<Annotation>();
+      final Collection<Annotation> dialogAnnots = new ArrayList<Annotation>();
+      final String contextFeature = "problem";
+      for (final Annotation annot : ClientUtils.mAnnotArray) {
+         if (UNOUtils.isInteractiveResultHandling() && annot.mFeatures.containsKey(contextFeature)) {
+            dialogAnnots.add(annot);
+         } else {
+            sideNoteAnnots.add(annot);
+         }
+      }
+
+      // Handle interactive annotations (if any) through a modify dialog.
+      if (UNOUtils.isInteractiveResultHandling()) {
+        if (!dialogAnnots.isEmpty()) {
+            final InteractiveAnnotationFrame dialog = new InteractiveAnnotationFrame(
+               dialogAnnots.toArray(new Annotation[dialogAnnots.size()]),
+               contextFeature, "suggestion", new ReplaceAnnotCallback<AnnotModifyCallbackParam>());
+         } else {
+            System.out.println("Found no interactive annotations with <"+ contextFeature +"> features");
+         }
+      }
+
+      // Default annotation handling.
+      for (final Annotation annot : sideNoteAnnots) {
+         CreateSideNotes(annot);
+      }
+   }
+
 
     protected String listAnnotations( AnnotationVector as )
     {
@@ -406,5 +426,13 @@ public class ServiceInvocationHandler implements Runnable
          status = false;
       }
       return status;
+   }
+}
+
+// Helper Class
+class ReplaceAnnotCallback<T extends AnnotModifyCallbackParam> implements Callback<T> {
+   @Override
+   public boolean execute(final T param) {
+      return UNOUtils.replaceAnnotation(param.getAffectedAnnotation(), param.getContext());
    }
 }
