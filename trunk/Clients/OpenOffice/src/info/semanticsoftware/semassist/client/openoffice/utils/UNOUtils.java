@@ -477,6 +477,27 @@ public class UNOUtils
 
     }
 
+    private static boolean isTextAnnotated(final XTextCursor cursor) {
+      boolean result = false;
+      final XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class, cursor);
+      try {
+         final Object property = props.getPropertyValue("CharBackColor");
+         result = (property.equals( HIGHLIGHT_OFF ) || property.equals( HIGHLIGHT_YELLOW ));
+      } catch (final Exception ex) {
+          ex.printStackTrace();
+      }
+      return result;
+    }
+
+    /**
+     * @deprecated This method checks if the text at the current position of
+     * the document cursor is highlighted. However, if it is not, this method
+     * has the side effect of highlighting it.
+     *
+     * @see isTextAnnotated
+     * @see highlightField 
+     */
+    @Deprecated
     private static boolean IsTextAnnotated()
     {
         try
@@ -525,6 +546,96 @@ public class UNOUtils
         }
 
         return false;
+    }
+
+    /**
+     * Searches the document for the occurrence of the annotation.
+     *
+     * @param annot Annotation to search in the document
+     * @return TextRange of the occurring annotation in the document
+     *         if it is found, null otherwise.
+     *
+     * @note The implemented annotation occurrence resolution strategy
+     * simply relies on string matching. This will fail in cases when
+     * a string pattern occurs multiple times in the document but not
+     * all have the same annotation (if any).
+     */
+    private static XTextRange findAnnotation(final Annotation annot) {
+      // Configure search settings.
+      try {
+         mxSearchDescr.setPropertyValue("SearchWords", new Boolean(true));
+         mxSearchDescr.setPropertyValue("SearchCaseSensitive", new Boolean(true));
+         mxSearchDescr.setSearchString(annot.mContent);
+      } catch (final Exception ex) {
+         // Interested in: UnknownProperty, WrappedTarget & IllegalArgument exceptions.
+         System.err.println("Could not configure search.");
+         ex.printStackTrace();
+         return null;
+      }
+
+      // Do the search.
+      Object search = null;
+      try {
+         search = mxSearchable.findFirst(mxSearchDescr);
+      } catch (final com.sun.star.uno.RuntimeException ex) {
+         System.out.println("No more annotations to search for.");
+         return null;
+      }
+
+      /* NOTE: The following error-reduction strategy may not be needed
+         nor suitable for all search usages.
+
+      // Convert to proper type.
+      final XTextRange result = UnoRuntime.queryInterface(XTextRange.class, search);
+      if (result == null) {
+         return null;
+      }
+
+      // Position cursor on annotation span.
+      final XText annotTxt = result.getText();
+      final XTextCursor cursor = annotTxt.createTextCursor();
+      cursor.gotoRange(result, false);
+      cursor.gotoRange(result, true);
+
+      // Keep searching if any hits are not annotation instances.
+      while (!isTextAnnotated(cursor)) {
+         try {
+            search = mxSearchable.findNext(search, mxSearchDescr);
+         } catch (final com.sun.star.uno.RuntimeException ex) {
+            System.out.println("No more annotations to search for.");
+            break;
+         }
+      }
+      */
+
+      // Convert to proper type.
+      return (search == null) ? null :
+         UnoRuntime.queryInterface(XTextRange.class, search);
+    }
+
+
+    public static boolean replaceAnnotation(final Annotation annot, final String str) {
+      // Search for the annotation.
+      final XTextRange found = findAnnotation(annot);
+      if (found == null) {
+         System.err.println("Annotation not found in document.");
+         return false;
+      }
+
+      // Position document cursor on searched annotation.
+      final XText text = found.getText();
+      final XTextCursor cursor = text.createTextCursor();
+      cursor.gotoRange(found, false);
+      cursor.gotoRange(found, true);
+
+      // Replace its content.
+      try {
+         text.insertString(cursor, str, true);
+      } catch (final Exception ex) {
+         System.err.println("Could not replace annotation text in document.");
+         return false;
+      }
+      return true;
     }
 
     private static void createInvisibleCursor(final Annotation annotation)
