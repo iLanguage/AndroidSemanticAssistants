@@ -33,18 +33,16 @@
     <property name="src.home"         value="${basedir}/src"/>
     <property name="dist.home"        value="${basedir}/dist"/>
 	
-	<!-- Used for testing -->
-	<property name="test.src"		  value="${basedir}/test.src"/>
-	<property name="junitDir" value="${build.home}/JUnit"/>
-	<property name="tempDir" value="${basedir}/tmp"/>
-	<mkdir dir="${junitDir}"/>
-	
+    <!-- Used for testing -->
+    <property name="test.src"		  value="${basedir}/test.src"/>
+    <property name="junitDir" value="${build.home}/JUnit"/>
+    <property name="tempDir" value="${basedir}/tmp"/>
+    <mkdir dir="${junitDir}"/>	
 	
     <!-- ___________________ You should not have to edit anything below this line ________________________  -->
     <description>
         Server side Java code of the semantic text assistants infrastructure
     </description>
-
   
     <path id="compile.classpath">
         <pathelement location="${gate.jar}" />
@@ -67,7 +65,7 @@
         </javac>
     </target>
 
-  <!-- Generate a web service -->
+    <!-- Generate a web service -->
     <target name="wsgen" depends="compile" description="Generate a web service">
         <taskdef name="wsgen" classname="com.sun.tools.ws.ant.WsGen">
             <classpath>
@@ -112,8 +110,7 @@
             </batchtest>
             <classpath>
                 <path refid="compile.classpath"/>
-                <pathelement location="${build.home}"/>
-            	
+                <pathelement location="${build.home}"/>            	
                 <pathelement location="${gate.jar}" />
                 <pathelement location="${protege.jar}" />
                 <pathelement location="${protege-owl.home}/protege-owl.jar" />
