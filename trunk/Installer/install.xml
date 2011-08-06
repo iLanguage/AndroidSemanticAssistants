@@ -144,7 +144,7 @@
 	<!-- JAX-WS -->
         <panel classname="UserInputPanel" id="UserInputPanelJAXWS"/> 
 	<!-- CSAL (Server host/port definition for Clients) -->
-	<panel classname="UserInputPanel" id="UserInputPanelCSAL"/>
+	<!-- <panel classname="UserInputPanel" id="UserInputPanelCSAL"/> -->
 	<!-- OpenOffice -->
         <!-- <panel classname="UserInputPanel" id="UserInputPanelOpenOffice"/> -->
 	<!-- Eclipse -->
@@ -388,6 +388,7 @@ Nees to be downloaded from: http://jax-ws.java.net/2.1.7/
     	<pack name="Documentation" required="no">
           <description>The documentation and user manual</description>
 	  <file src="../Doc/semassist.pdf" targetdir="$INSTALL_PATH/Doc"/>
+	  <file src="../Javadoc" targetdir="$INSTALL_PATH/"/>
 	</pack>		
     </packs>
 </installation>
