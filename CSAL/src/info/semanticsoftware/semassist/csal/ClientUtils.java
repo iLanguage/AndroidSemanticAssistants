@@ -741,78 +741,15 @@ public class ClientUtils
             }
         }
     }
-
-   /* public static void setClientPreference(String client, String element, Map<String, String> map){
-    		try {		
-    			File propertiesFile = new File(PROPERTIES_FILE_PATH);
-    			if (propertiesFile.exists()) {
-    				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
-    				DocumentBuilder docBuilder = builder.newDocumentBuilder();
-    				Document doc = docBuilder.parse(propertiesFile);
-    				doc.getDocumentElement().normalize();
-
-    				Element root = doc.getDocumentElement();
-    				Element clientTag;
-					NodeList clientElement = doc.getElementsByTagName(client);
-					if (clientElement.getLength() == 0){
-	    				clientTag = doc.createElement(client);
-					} else {
-	    				clientTag = (Element) clientElement.item(0);
-					}
-
-					NodeList children = clientTag.getChildNodes();
-					Element elementNode = null;
-
-					for(int i=0; i < children.getLength(); i++){
-						if(children.item(i).getNodeName().equals(element)){
-							elementNode = (Element) children.item(i);
-		    				Set<String> keys = map.keySet();
-		        			for(Iterator<String> iterator = keys.iterator(); iterator.hasNext();){
-		        	    		String key = iterator.next();
-		        	    		String value = map.get(key);
-		        	    		elementNode.setAttribute(key, value);
-		        	    	}
-						}
-					}
-
-					if (elementNode == null){
-						elementNode = doc.createElement(element);
-						Set<String> keys = map.keySet();
-	        			for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();){
-	        	    		String key = iterator.next();
-	        	    		String value = map.get(key);
-	        	    		elementNode.setAttribute(key, value);
-	        	    	}
-					}
-
-        			clientTag.appendChild(elementNode);
-    				root.appendChild(clientTag);
-
-    				DOMSource source = new DOMSource(doc);
-    				StreamResult result = new StreamResult(new FileOutputStream(PROPERTIES_FILE_PATH));
-
-    				TransformerFactory transFactory = TransformerFactory.newInstance();
-    				Transformer transformer = transFactory.newTransformer();
-    				//transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-    				transformer.transform(source, result);
-
-    			} else {
-    	    		//createPropertiesFile();
-    	    		setClientPreference(client, element, map);
-    			}
-    		} catch (IOException e1){
-    			e1.printStackTrace();
-    		} catch (SAXException e2) {
-				e2.printStackTrace();
-			} catch (ParserConfigurationException e3) {
-				e3.printStackTrace();
-			} catch (TransformerConfigurationException e4) {
-				e4.printStackTrace();
-			} catch (TransformerException e5) {
-				e5.printStackTrace();
-			}
-    }*/
     
+    /**
+     * Finds and sets the attribute values of the specified element in the client scope.
+     * If the client does not exist, it first creates the client and then adds the element.
+     * If the client, element and attributes all exist, it just updates the attributes with the provided values in the map.
+     * @param client the target client scope
+     * @param element the target element
+     * @param map a hash map of element attributes in form of <key,value> pairs
+     */
     public static void setClientPreference(String client, String element, Map<String, String> map){
 		try {		
 			File propertiesFile = new File(PROPERTIES_FILE_PATH);
@@ -833,6 +770,11 @@ public class ClientUtils
 						if(children.item(i).getNodeName().equals(element)){
 							elementNode = (Element) children.item(i);
 						}
+					}
+					
+					// if the client is there, but there is no element tag, let's create it
+					if(elementNode == null){
+						elementNode = doc.createElement(element);
 					}
     				
   				}else{
@@ -859,7 +801,7 @@ public class ClientUtils
 				transformer.transform(source, result);
 
 			} else {
-	    		System.out.println("Error: No properties file found at " + PROPERTIES_FILE_PATH);
+	    		System.out.println("WARNING: No properties file found at " + PROPERTIES_FILE_PATH);
 			}
 		} catch (IOException e1){
 			e1.printStackTrace();
@@ -874,57 +816,14 @@ public class ClientUtils
 		}
     }
 
-    public static String getClientPreference(String client, String element, String key){
-    	String value = "";
-    	File propertiesFile = new File(PROPERTIES_FILE_PATH);
-		if(propertiesFile.exists()){
-			try {
-				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
-				DocumentBuilder docBuilder;
-				docBuilder = builder.newDocumentBuilder();
-				Document doc = docBuilder.parse(propertiesFile);
-				doc.getDocumentElement().normalize();
-
-				NodeList clientElement = doc.getElementsByTagName(client);
-				if(clientElement.getLength() != 0){
-    				Element clientTag = (Element) clientElement.item(0);
-    				NodeList children = clientTag.getChildNodes();
-					Element elementNode = null;
-
-					for(int i=0; i < children.getLength(); i++){
-						if(children.item(i).getNodeName().equals(element)){
-							elementNode = (Element) children.item(i);
-		        	    	value = elementNode.getAttribute(key);
-						}
-					}
-
-					if(elementNode == null){
-						System.out.println("Error: No such element.");
-						return "";
-					}else if(value.equals("")){
-						System.out.println("Error: No such key.");
-						return "";
-					}else{
-						return value;
-					}
-				}else{
-					System.out.println("Error: No such client.");
-					return "";
-				}
-			} catch (ParserConfigurationException e) {
-				e.printStackTrace();
-			} catch (SAXException e) {
-				e.printStackTrace();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return value; 
-		}else{
-			System.out.println("Error: No file found.");
-			return "";
-		}
-    }
-    
+    /**
+     * Returns a list of elements in the client scope in form of XMLElementModel objects.
+     * If the client or element does not exist, it returns an empty list.
+     * @see XMLElementModel
+     * @param client the target client scope
+     * @param element the target element
+     * @return a list of elements or an empty list if no such client or element exists
+     */
     public static ArrayList<XMLElementModel> getClientPreference(String client, String element){
     	ArrayList<XMLElementModel> result = new ArrayList<XMLElementModel>();
     	File propertiesFile = new File(PROPERTIES_FILE_PATH);
@@ -939,7 +838,7 @@ public class ClientUtils
 				// Check if such client exists in the XML file or if there are more than one target
 				NodeList clientElement = doc.getElementsByTagName(client);
 				if(clientElement.getLength() == 0 || clientElement.getLength() > 1){
-					System.out.println("Error: No such client.");
+					System.out.println("WARNING: No such client: \"" + client + "\"");
 					return result;
 				}else{
 					Element clientTag = (Element) clientElement.item(0);
@@ -965,7 +864,7 @@ public class ClientUtils
 
 					// if there is no such element in the XML file, this object is null
 					if (elementNode == null) {
-						System.out.println("Error: No such element.");
+						System.out.println("WARNING: No \"" + element + "\" element found for client \"" + client + "\"");
 						return result;
 					}
 				}
@@ -978,7 +877,7 @@ public class ClientUtils
 			}
 
 		} else {
-			System.out.println("Error: No file found.");
+			System.out.println("WARNING: No properties file found at " + PROPERTIES_FILE_PATH);
 			return result;
 		}
 		return result;
