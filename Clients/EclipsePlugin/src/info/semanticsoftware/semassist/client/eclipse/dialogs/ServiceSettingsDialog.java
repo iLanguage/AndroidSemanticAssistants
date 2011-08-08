@@ -3,7 +3,6 @@ package info.semanticsoftware.semassist.client.eclipse.dialogs;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
-import info.semanticsoftware.semassist.client.eclipse.handlers.ServiceAgentSingleton;
 import info.semanticsoftware.semassist.client.eclipse.handlers.ServiceSettingsValidator;
 import info.semanticsoftware.semassist.client.eclipse.utils.Utils;
 import info.semanticsoftware.semassist.csal.ClientUtils;
@@ -80,7 +79,7 @@ public class ServiceSettingsDialog extends Dialog {
         this.title = "Semantic Assistants Settings";
         this.message = "Please select a server:";
         this.validator = validator;
-        Utils.propertiesReader();
+        //Utils.propertiesReader();
     }
 
     /** Checks if OK button has been pressed and decides to save the values to a properties file */
@@ -104,8 +103,6 @@ public class ServiceSettingsDialog extends Dialog {
         		}else{
         			String address = cmbServers.getItem(cmbServers.getSelectionIndex());
             		String[] tokens = address.split(":");
-            		ServiceAgentSingleton.setServerHost(tokens[0]);
-            		ServiceAgentSingleton.setServerPort(tokens[1]);
             		Map<String, String> map = new HashMap<String, String>();
             		map.put(ClientUtils.XML_HOST_KEY, tokens[0]);
             		map.put(ClientUtils.XML_PORT_KEY, tokens[1]);
@@ -119,7 +116,8 @@ public class ServiceSettingsDialog extends Dialog {
             		Map<String, String> map = new HashMap<String, String>();
             		map.put(ClientUtils.XML_HOST_KEY, txtServerHost.getText());
             		map.put(ClientUtils.XML_PORT_KEY, txtServerPort.getText());
-            		ClientUtils.setClientPreference("global", "server", map);
+            		//ClientUtils.setClientPreference("global", "server", map);
+            		ClientUtils.addNewServer(map);
             		super.buttonPressed(buttonId);
             	}
         	}else{
