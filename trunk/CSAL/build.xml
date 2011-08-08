@@ -57,7 +57,6 @@
 
     <path id="compile.classpath">
         <pathelement location="${gate.jar}"/>
-        <pathelement location="${jaxws.home}/lib/jaxws-tools.jar"/>
         <pathelement location="${junit.home}/junit.jar" />
     </path>
 
