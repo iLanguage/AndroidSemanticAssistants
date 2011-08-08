@@ -882,4 +882,63 @@ public class ClientUtils
 		}
 		return result;
     }
+    
+    /**
+     * Adds a new server element to the global scope
+     * @param map a hash map of server attributes in form of <key,value> pairs
+     * */
+    public static void addNewServer(Map<String, String> map){
+    	try {		
+			File propertiesFile = new File(PROPERTIES_FILE_PATH);
+			if (propertiesFile.exists()) {
+				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder = builder.newDocumentBuilder();
+				Document doc = docBuilder.parse(propertiesFile);
+				doc.getDocumentElement().normalize();
+
+				Element root = doc.getDocumentElement();
+				Element clientTag;
+				NodeList clientElement = doc.getElementsByTagName("global");
+
+				if(clientElement.getLength() != 0){
+    				clientTag = (Element) clientElement.item(0);
+  				}else{
+  					clientTag = doc.createElement("global");
+  				}
+
+				//FIXME should prevent adding duplication
+				Element elementNode = doc.createElement("server");
+				Set<String> keys = map.keySet();
+    			for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();){
+    	    		String key = iterator.next();
+    	    		String value = map.get(key);
+    	    		elementNode.setAttribute(key, value);
+    	    	}
+				
+    			clientTag.appendChild(elementNode);
+				root.appendChild(clientTag);
+
+				DOMSource source = new DOMSource(doc);
+				StreamResult result = new StreamResult(new FileOutputStream(PROPERTIES_FILE_PATH));
+
+				TransformerFactory transFactory = TransformerFactory.newInstance();
+				Transformer transformer = transFactory.newTransformer();
+				//transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+				transformer.transform(source, result);
+
+			} else {
+	    		System.out.println("WARNING: No properties file found at " + PROPERTIES_FILE_PATH);
+			}
+		} catch (IOException e1){
+			e1.printStackTrace();
+		} catch (SAXException e2) {
+			e2.printStackTrace();
+		} catch (ParserConfigurationException e3) {
+			e3.printStackTrace();
+		} catch (TransformerConfigurationException e4) {
+			e4.printStackTrace();
+		} catch (TransformerException e5) {
+			e5.printStackTrace();
+		}
+    }
 }
