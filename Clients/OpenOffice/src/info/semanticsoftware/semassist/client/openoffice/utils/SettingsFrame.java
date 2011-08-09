@@ -300,7 +300,7 @@ public class SettingsFrame extends JFrame
         UNOUtils.setInteractiveResultHandling( status );
 
         // Annotation highlighting in text option.
-        status = jCheckBox0.isSelected();
+        status = jCheckBox1.isSelected();
         System.out.println( "------ Text Highlight: " + (status ? "Enabled" : "Disabled") );
         UNOUtils.setTextHighlighting( status );
 
