@@ -33,6 +33,7 @@
     <property name="extension.home"        value="${basedir}/Extension"/>
     <property name="distintermediate.home" value="${basedir}/distintermediate"/>
     <property name="dist.home"             value="${basedir}/dist"/>
+    <property name="docs.home"             value="${basedir}/Javadoc"/>
     
     <property name="extension.dir.name"    value="SemanticAssistants@semanticsoftware.info"/>
     <property name="sacontrollerjar.name"  value="SAController.jar"/>
@@ -45,16 +46,6 @@
     <path id="compile.classpath">
         <pathelement location="${distintermediate.home}/${csal.name}" />
     </path>
-    
-    <!-- Delete all build and dist output -->
-    <target name="clean">
-        <delete includeemptydirs="true" quiet="true">
-            <fileset dir="${build.home}"/>
-            <fileset dir="${distintermediate.home}"/>
-            <fileset dir="${dist.home}"/>
-        </delete>
-        <!-- <delete file="${distintermediate.home}/${csal.name}" /> -->
-    </target>
     
     <!-- Copies the CSAL.jar file to the distintermediate folder -->
     <target name="copycsal" 
@@ -106,7 +97,7 @@
 
     <!-- Generates Javadoc output -->
     <target name="javadoc">
-        <javadoc sourcepath="${src.home}" destdir="${javadoc.home}/Mozilla" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: Mozilla (Firefox/Thunderbird) Plug-ins">
+        <javadoc sourcepath="${src.home}" destdir="${docs.home}" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: Mozilla (Firefox/Thunderbird) Plug-ins">
         <doctitle><![CDATA[<h1>Semantic Assistants: Mozilla (Firefox/Thunderbird) Plug-ins</h1>]]></doctitle>
         <bottom><![CDATA[<i>Copyright © 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
           </javadoc>
@@ -124,4 +115,15 @@
 	<class location="${basedir}/build/" />
       </findbugs>
     </target>    
+    
+    <!-- Delete all build and dist output -->
+    <target name="clean">
+        <delete includeemptydirs="true" quiet="true">
+            <fileset dir="${build.home}"/>
+            <fileset dir="${distintermediate.home}"/>
+            <fileset dir="${dist.home}"/>
+        </delete>
+        <delete dir="${docs.home}"/>
+        <!-- <delete file="${distintermediate.home}/${csal.name}" /> -->
+    </target>
 </project>

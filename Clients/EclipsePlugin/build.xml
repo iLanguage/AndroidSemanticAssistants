@@ -34,6 +34,7 @@
       <!-- Top Directories -->
       <property name="build.home" value="${basedir}/bin"/>
       <property name="src.home"   value="${basedir}/src"/>
+      <property name="docs.home"  value="${basedir}/Javadoc"/>
       <property name="plugins.home"   value="${basedir}/plugins"/>
       <property name="plugins.temp" value="${basedir}/temp"/>
       <property name="bundleName" value="info.semanticsoftware.semassist.client.eclipse.1.0.0.jar"/>
@@ -91,7 +92,7 @@
     
     <!-- Generates Javadoc output -->
     <target name="javadoc" depends="properties">
-        <javadoc sourcepath="${src.home}" destdir="${javadoc.home}/Eclipse" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: Eclipse Plug-in">
+        <javadoc sourcepath="${src.home}" destdir="${docs.home}" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: Eclipse Plug-in">
         <doctitle><![CDATA[<h1>Semantic Assistants: Eclipse Plug-in</h1>]]></doctitle>
         <bottom><![CDATA[<i>Copyright © 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
           </javadoc>
@@ -112,7 +113,7 @@
     
     <!-- Clear all build output -->
     <target name="clean" depends="properties" description="Cleaning the build outputs">
-      <delete dir="${javadoc.home}/Eclipse"/>
+      <delete dir="${docs.home}"/>
       <delete dir="${build.home}"/>
       <delete file="${plugins.home}/${bundleName}"/>
       <delete file="${basedir}/lib/${csal.name}"/>

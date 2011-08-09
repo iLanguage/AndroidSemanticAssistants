@@ -29,7 +29,7 @@
 
     <!-- Top Directories -->
     <property name="build.home" value="${basedir}/bin"/>
-    <property name="docs.home"  value="${basedir}/docs"/>
+    <property name="docs.home"  value="${basedir}/Javadoc"/>
     <property name="src.home"   value="${basedir}/src"/>
     <property name="dist.home"  value="${basedir}/dist"/>
 
@@ -69,7 +69,7 @@
         <copy file="${log4j.jar}" todir="${dist.home}"/>
         <javac srcdir="${src.home}/" destdir="${build.home}" debug="true" debuglevel="lines,vars,source"  classpath="${build.home}"  includeantruntime="${antruntime}">
             <compilerarg value="${compile.args}" />
-            <classpath refid="compile.classpath" />
+            <classpath refid="compile.classpath" />SDL
         </javac>
     </target>
 
@@ -130,7 +130,7 @@
     <!-- Generates Javadoc output -->
     <target name="javadoc">
         <javadoc sourcepath="${src.home}"
-		 destdir="${javadoc.home}/OpenOffice"
+		 destdir="${docs.home}"
 		 defaultexcludes="yes" author="true" version="true"
 		 use="true" link="true" encoding="UTF-8" 
 		 windowtitle="Semantic Assistants: OpenOffice.org Writer Plug-in">
@@ -163,6 +163,7 @@
 	    <fileset file="${uno-target-file}"/>
 	    <fileset file="${dist.home}/${csal.name}"/>
         </delete>
+        <delete dir="${docs.home}"/>
     </target>
 </project>
 
