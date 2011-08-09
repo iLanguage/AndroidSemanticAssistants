@@ -6,6 +6,8 @@ import info.semanticsoftware.semassist.client.eclipse.handlers.ServiceInformatio
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.dialogs.IDialogConstants;
@@ -15,10 +17,13 @@ import org.eclipse.jface.viewers.CheckboxTreeViewer;
 import org.eclipse.jface.viewers.ICheckStateListener;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.ITreeContentProvider;
+import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerComparator;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.BusyIndicator;
+import org.eclipse.swt.events.ModifyEvent;
+import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.SelectionListener;
@@ -88,9 +93,14 @@ public class FileSelectionDialog extends SelectionStatusDialog {
     /** Combobox containing available service names */
     public Combo cmbServices;
     
+    /** Combobox containing file format filters */
+    public Combo cmbExtensions;
+    
     public static boolean CONNECTION_IS_FINE;
     
     private ServiceInformationThread servicesThread;
+    
+    private ViewerFilter filter;
 
     /**
      * Constructs an instance of CheckedTreeSelectionDialog.
@@ -305,7 +315,46 @@ public class FileSelectionDialog extends SelectionStatusDialog {
         buttonComposite.setFont(composite.getFont());
         GridData data = new GridData(GridData.HORIZONTAL_ALIGN_END | GridData.GRAB_HORIZONTAL);
         data.grabExcessHorizontalSpace = true;
-        composite.setData(data);
+        buttonComposite.setData(data);
+        
+        Label lblExtensions = new Label(buttonComposite, SWT.NONE);
+        lblExtensions.setText("File Format:");
+        cmbExtensions = new Combo(buttonComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
+        cmbExtensions.add("");
+        cmbExtensions.add(".java");
+        cmbExtensions.add(".cpp");
+        cmbExtensions.select(0);
+        
+        cmbExtensions.addModifyListener(new ModifyListener() {
+			@Override
+			public void modifyText(ModifyEvent e) {
+				ViewerFilter[] filters = fViewer.getFilters();
+				for (int i=0; i < filters.length; i++){
+					fViewer.removeFilter(filters[i]);
+				}
+				
+				String extTemp = cmbExtensions.getItem(cmbExtensions.getSelectionIndex());
+	        	if(!extTemp.equals("")){
+		        	extTemp = extTemp.substring(1);
+		        	final String extension = extTemp;
+		        	filter = new ViewerFilter() {
+						@Override
+						public boolean select(Viewer viewer, Object parent, Object element) {
+			               IResource src = (IResource) element;
+			                
+			               if(src.getType() == IResource.PROJECT || src.getType() == IResource.FOLDER || ((src.getType() == IResource.FILE) && src.getFileExtension().equals(extension))){
+			            		   return true;   
+			               }else{
+			                	 return false;
+			               }
+						}
+			        };
+					fViewer.addFilter(filter);
+	        	}
+	        	setInput(FileSelectionHandler.workspace.getRoot());
+			}
+		});
+   
         Button selectButton = createButton(buttonComposite,
                 IDialogConstants.SELECT_ALL_ID, "Select All",
                 false);
