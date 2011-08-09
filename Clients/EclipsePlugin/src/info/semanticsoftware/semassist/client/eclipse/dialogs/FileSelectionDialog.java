@@ -101,6 +101,8 @@ public class FileSelectionDialog extends SelectionStatusDialog {
     private ServiceInformationThread servicesThread;
     
     private ViewerFilter filter;
+    
+    private String[] extensionList = {".java", ".cpp", ".txt"};
 
     /**
      * Constructs an instance of CheckedTreeSelectionDialog.
@@ -321,8 +323,11 @@ public class FileSelectionDialog extends SelectionStatusDialog {
         lblExtensions.setText("File Format:");
         cmbExtensions = new Combo(buttonComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
         cmbExtensions.add("");
-        cmbExtensions.add(".java");
-        cmbExtensions.add(".cpp");
+        
+        for(int i=0; i < extensionList.length; i++){
+        	cmbExtensions.add(extensionList[i]);
+        }
+        
         cmbExtensions.select(0);
         
         cmbExtensions.addModifyListener(new ModifyListener() {
