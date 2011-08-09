@@ -941,4 +941,253 @@ public class ClientUtils
 			e5.printStackTrace();
 		}
     }
+    
+    /**
+     * Finds and sets the attribute values of the specified element in the client scope.
+     * If the client does not exist, it first creates the client and then adds the element.
+     * If the client, element and attributes all exist, it just updates the attributes with the provided values in the map.
+     * @param client the target client scope
+     * @param element the target element
+     * @param map a hash map of element attributes in form of <key,value> pairs
+     */
+    public static void setClientPreference(String client, String element, Map<String, String> map){
+		try {		
+			File propertiesFile = new File(PROPERTIES_FILE_PATH);
+			if (propertiesFile.exists()) {
+				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder = builder.newDocumentBuilder();
+				Document doc = docBuilder.parse(propertiesFile);
+				doc.getDocumentElement().normalize();
+
+				Element root = doc.getDocumentElement();
+				Element clientTag;
+				NodeList clientElement = doc.getElementsByTagName(client);
+				Element elementNode = null;
+				if(clientElement.getLength() != 0){
+    				clientTag = (Element) clientElement.item(0);
+    				NodeList children = clientTag.getChildNodes();
+					for(int i=0; i < children.getLength(); i++){
+						if(children.item(i).getNodeName().equals(element)){
+							elementNode = (Element) children.item(i);
+						}
+					}
+					
+					// if the client is there, but there is no element tag, let's create it
+					if(elementNode == null){
+						elementNode = doc.createElement(element);
+					}
+    				
+  				}else{
+  					clientTag = doc.createElement(client);
+  					elementNode = doc.createElement(element);
+  				}
+				
+				Set<String> keys = map.keySet();
+    			for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();){
+    	    		String key = iterator.next();
+    	    		String value = map.get(key);
+    	    		elementNode.setAttribute(key, value);
+    	    	}
+
+    			clientTag.appendChild(elementNode);
+				root.appendChild(clientTag);
+
+				DOMSource source = new DOMSource(doc);
+				StreamResult result = new StreamResult(new FileOutputStream(PROPERTIES_FILE_PATH));
+
+				TransformerFactory transFactory = TransformerFactory.newInstance();
+				Transformer transformer = transFactory.newTransformer();
+				//transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+				transformer.transform(source, result);
+
+			} else {
+		    	createPropertiesFile();
+		    	setClientPreference(client,element,map);
+			}
+		} catch (IOException e1){
+			e1.printStackTrace();
+		} catch (SAXException e2) {
+			e2.printStackTrace();
+		} catch (ParserConfigurationException e3) {
+			e3.printStackTrace();
+		} catch (TransformerConfigurationException e4) {
+			e4.printStackTrace();
+		} catch (TransformerException e5) {
+			e5.printStackTrace();
+		}
+    }
+
+    /**
+     * Returns a list of elements in the client scope in form of XMLElementModel objects.
+     * If the client or element does not exist, it returns an empty list.
+     * @see XMLElementModel
+     * @param client the target client scope
+     * @param element the target element
+     * @return a list of elements or an empty list if no such client or element exists
+     */
+    public static ArrayList<XMLElementModel> getClientPreference(String client, String element){
+    	ArrayList<XMLElementModel> result = new ArrayList<XMLElementModel>();
+    	File propertiesFile = new File(PROPERTIES_FILE_PATH);
+		if(propertiesFile.exists()){
+			try {
+				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder;
+				docBuilder = builder.newDocumentBuilder();
+				Document doc = docBuilder.parse(propertiesFile);
+				doc.getDocumentElement().normalize();
+
+				// Check if such client exists in the XML file or if there are more than one target
+				NodeList clientElement = doc.getElementsByTagName(client);
+				if(clientElement.getLength() == 0 || clientElement.getLength() > 1){
+					System.out.println("WARNING: No such client: \"" + client + "\"");
+					return result;
+				}else{
+					Element clientTag = (Element) clientElement.item(0);
+    				NodeList children = clientTag.getChildNodes();
+					Element elementNode = null;
+
+					for(int i=0; i < children.getLength(); i++){
+						// check if the client has the element
+						if(children.item(i).getNodeName().equals(element)){							
+							XMLElementModel candid = new XMLElementModel();
+							candid.setName(element);
+							elementNode = (Element) children.item(i);
+
+							// Get all the attributes and put each pair in the hash map
+							NamedNodeMap attrs = elementNode.getAttributes();
+							for (int j = 0; j < attrs.getLength(); j++){
+								candid.setAttribute(attrs.item(j).getNodeName(), attrs.item(j).getNodeValue());
+							}
+
+							result.add(candid);
+						}
+					}
+
+					// if there is no such element in the XML file, this object is null
+					if (elementNode == null) {
+						System.out.println("WARNING: No \"" + element + "\" element found for client \"" + client + "\"");
+						return result;
+					}
+				}
+			} catch (ParserConfigurationException e) {
+				e.printStackTrace();
+			} catch (SAXException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
+		} else {
+	    	createPropertiesFile();
+	    	getClientPreference(client, element);
+		}
+		return result;
+    }
+    
+    /**
+     * Adds a new server element to the global scope
+     * @param map a hash map of server attributes in form of <key,value> pairs
+     * */
+    public static void addNewServer(Map<String, String> map){
+    	try {		
+			File propertiesFile = new File(PROPERTIES_FILE_PATH);
+			if (propertiesFile.exists()) {
+				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
+				DocumentBuilder docBuilder = builder.newDocumentBuilder();
+				Document doc = docBuilder.parse(propertiesFile);
+				doc.getDocumentElement().normalize();
+
+				Element root = doc.getDocumentElement();
+				Element clientTag;
+				NodeList clientElement = doc.getElementsByTagName("global");
+
+				if(clientElement.getLength() != 0){
+    				clientTag = (Element) clientElement.item(0);
+  				}else{
+  					clientTag = doc.createElement("global");
+  				}
+
+				//FIXME should prevent adding duplication
+				Element elementNode = doc.createElement("server");
+				Set<String> keys = map.keySet();
+    			for (Iterator<String> iterator = keys.iterator(); iterator.hasNext();){
+    	    		String key = iterator.next();
+    	    		String value = map.get(key);
+    	    		elementNode.setAttribute(key, value);
+    	    	}
+				
+    			clientTag.appendChild(elementNode);
+				root.appendChild(clientTag);
+
+				DOMSource source = new DOMSource(doc);
+				StreamResult result = new StreamResult(new FileOutputStream(PROPERTIES_FILE_PATH));
+
+				TransformerFactory transFactory = TransformerFactory.newInstance();
+				Transformer transformer = transFactory.newTransformer();
+				//transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+				transformer.transform(source, result);
+
+			} else {
+		    	createPropertiesFile();
+		    	addNewServer(map);
+			}
+		} catch (IOException e1){
+			e1.printStackTrace();
+		} catch (SAXException e2) {
+			e2.printStackTrace();
+		} catch (ParserConfigurationException e3) {
+			e3.printStackTrace();
+		} catch (TransformerConfigurationException e4) {
+			e4.printStackTrace();
+		} catch (TransformerException e5) {
+			e5.printStackTrace();
+		}
+    }
+    
+    /**
+     * Creates a new preference file in the user home directory
+     * */
+    public static void createPropertiesFile(){
+		try {
+	    	DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
+	    	DocumentBuilder documentBuilder;
+			documentBuilder = documentBuilderFactory.newDocumentBuilder();
+			Document document = documentBuilder.newDocument();
+			
+			Element root = document.createElement("saProperties");
+			Element globalNode = document.createElement("global");
+			
+			Element lastServer = document.createElement("lastCalledServer");
+			lastServer.setAttribute("host", "minion.cs.concordia.ca");
+			lastServer.setAttribute("port", "8879");
+			
+			Element serverOne = document.createElement("server");
+			serverOne.setAttribute("host", "minion.cs.concordia.ca");
+			serverOne.setAttribute("port", "8879");
+			
+			Element serverTwo = document.createElement("server");
+			serverTwo.setAttribute("host", "assistant.cs.concordia.ca");
+			serverTwo.setAttribute("port", "8879");
+
+			globalNode.appendChild(lastServer);
+			globalNode.appendChild(serverOne);
+			globalNode.appendChild(serverTwo);
+			root.appendChild(globalNode);
+			document.appendChild(root);
+	    	
+			TransformerFactory transformerFactory = TransformerFactory.newInstance();
+	    	Transformer transformer = transformerFactory.newTransformer();
+	    	DOMSource source = new DOMSource(document);
+	    	StreamResult result =  new StreamResult(new FileOutputStream(PROPERTIES_FILE_PATH));
+	    	transformer.transform(source, result);
+		} catch (ParserConfigurationException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (TransformerConfigurationException e) {
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		}
+    }
 }
