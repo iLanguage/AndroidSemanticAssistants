@@ -30,7 +30,7 @@
     <!-- Top Directories -->
     <property name="build.home"    value="${basedir}/bin"/>
     <property name="dist.home"     value="${basedir}/dist"/>
-    <property name="docs.home"     value="${basedir}/docs"/>
+    <property name="docs.home"     value="${basedir}/Javadoc"/>
     <property name="src.home"      value="${basedir}/src"/>
 
      <!-- Library Files -->
@@ -71,7 +71,7 @@
     
     <!-- Generates Javadoc output -->
     <target name="javadoc">
-        <javadoc sourcepath="${src.home}" destdir="${javadoc.home}/CommandLine" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: Command Line Client">
+        <javadoc sourcepath="${src.home}" destdir="${docs.home}" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: Command Line Client">
         <doctitle><![CDATA[<h1>Semantic Assistants: Command Line Client</h1>]]></doctitle>
         <bottom><![CDATA[<i>Copyright © 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
           </javadoc>
@@ -95,6 +95,7 @@
         <delete includeemptydirs="true" quiet="true">
             <fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
         </delete>
+        <delete dir="${docs.home}"/>
     </target>
 </project>
 
