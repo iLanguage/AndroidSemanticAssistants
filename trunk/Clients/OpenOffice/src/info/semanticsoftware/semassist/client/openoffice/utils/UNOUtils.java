@@ -67,7 +67,7 @@ public class UNOUtils
 
     // Configuration Defaults
     private static float mSideNoteFontSize = 8; /* Default annotation font-size. */
-    private static Boolean mInteractiveResultHandling = false; /* Alterate results with a custom dialog. */
+    private static Boolean mInteractiveResultHandling = true; /* Alterate results with a custom dialog. */
     private static Boolean mBrowserResultHandling = true; /* Handle results with an external browser. */
     private static Boolean mShowAnnotationContent = false; /* Put annotation content in side-notes. */
     private static Boolean mEmptyFeatureFilter = true; /* Ignore empty-valued features by default. */

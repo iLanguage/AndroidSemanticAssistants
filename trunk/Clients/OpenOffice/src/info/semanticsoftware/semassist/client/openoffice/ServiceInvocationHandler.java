@@ -161,23 +161,7 @@ public class ServiceInvocationHandler implements Runnable
                 {
                     // Annotation case => append to data structure
                     System.out.println( "---------------- Annotation case..." );
-
-                    // Keys are document IDs or URLs
-                    HashMap<String, AnnotationVector> map = current.mAnnotations;
-                    Set<String> keys = map.keySet();
-
-                    for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); )
-                    {
-                        String docID = it2.next();
-
-                        if( annotationsPerDocument.get( docID ) == null )
-                        {
-                            annotationsPerDocument.put( docID, new AnnotationVectorArray() );
-                        }
-
-                        AnnotationVectorArray v = annotationsPerDocument.get( docID );
-                        v.mAnnotVectorArray.add( map.get( docID ) );
-                    }
+                    annotationsPerDocument = appendResults(current.mAnnotations, annotationsPerDocument);
 
                     // Assemble annotations string
                     if( annotationsPerDocument.size() > 0 )
@@ -191,23 +175,7 @@ public class ServiceInvocationHandler implements Runnable
                 {
                     // Sidenote case => append to data structure
                     System.out.println( "---------------- Sidenote case..." );
-
-                    // Keys are document IDs or URLs
-                    HashMap<String, AnnotationVector> map = current.mAnnotations;
-                    Set<String> keys = map.keySet();
-
-                    for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); )
-                    {
-                        String docID = it2.next();
-
-                        if( annotationsPerDocument.get( docID ) == null )
-                        {
-                            annotationsPerDocument.put( docID, new AnnotationVectorArray() );
-                        }
-
-                        AnnotationVectorArray v = annotationsPerDocument.get( docID );
-                        v.mAnnotVectorArray.add( map.get( docID ) );
-                    }
+                    annotationsPerDocument = appendResults(current.mAnnotations, annotationsPerDocument);
 
                     // Assemble annotations string
                     if( annotationsPerDocument.size() > 0 )
@@ -237,6 +205,34 @@ public class ServiceInvocationHandler implements Runnable
             }
 
         }
+
+    /**
+     * Appends new source map elements to the destination map accounting for
+     * type differences between the map values.
+     *
+     * @param srcMap Source map to be searched.
+     * @param dstMap Destination map to be modified.
+     *
+     * @return Reference to the appended @dstMap if any.
+     */
+    public static HashMap<String, AnnotationVectorArray> appendResults(
+      final HashMap<String, AnnotationVector> srcMap,
+      final HashMap<String, AnnotationVectorArray> dstMap)
+    {
+      // Keys are document IDs or URLs
+      final Set<String> keys = srcMap.keySet();
+      
+      for (final String key : keys) {
+          if ( dstMap.get( key ) == null ) {
+              dstMap.put( key, new AnnotationVectorArray() );
+          }
+
+          final AnnotationVectorArray v = dstMap.get( key );
+          v.mAnnotVectorArray.add( srcMap.get( key ) );
+      }
+      return dstMap;
+    }
+
 
     protected
 
@@ -317,7 +313,7 @@ public class ServiceInvocationHandler implements Runnable
       // Handle interactive annotations (if any) through a modify dialog.
       if (UNOUtils.isInteractiveResultHandling()) {
         if (!dialogAnnots.isEmpty()) {
-            final InteractiveAnnotationFrame dialog = new InteractiveAnnotationFrame(
+            new InteractiveAnnotationFrame(
                dialogAnnots.toArray(new Annotation[dialogAnnots.size()]),
                contextFeature, "suggestion", new ReplaceAnnotCallback<AnnotModifyCallbackParam>());
          } else {

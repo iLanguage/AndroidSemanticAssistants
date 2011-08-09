@@ -154,12 +154,13 @@ public class InteractiveAnnotationFrame extends JFrame {
       contextScrl.setBorder(BorderFactory.createEmptyBorder());
       contextTxt.setEditable(false);
       contextTxt.setLineWrap(true);
-      contextTxt.setPreferredSize(new Dimension(400, 30));
-      //dbg>> hack to get the look-&-feel of a label.
+      contextTxt.setWrapStyleWord(true);
+      // NOTE: hack to get the look-&-feel of a label.
       final JLabel dummyLbl = new JLabel();
       contextTxt.setFont(dummyLbl.getFont());
       contextTxt.setForeground(dummyLbl.getForeground());
       contextTxt.setBackground(dummyLbl.getBackground());
+      contextTxt.setPreferredSize(new Dimension(600, 30));
       contextPnl.setLayout(new GridBagLayout());
       contextPnl.add(contextScrl, new GridBagConstraints(
          0, 0, 1, 1, 1.0, 1.0,
@@ -167,10 +168,10 @@ public class InteractiveAnnotationFrame extends JFrame {
          GridBagConstraints.BOTH,
          new Insets(0, 0, 0, 0), 0, 0
       ));
-      mainContent.add(contextScrl, new GridBagConstraints(
-         0, 0, 4, 1, 1.0, 0.01,
+      mainContent.add(contextPnl, new GridBagConstraints(
+         0, 0, 6, 1, 1.0, 0.0,
          GridBagConstraints.CENTER,
-         GridBagConstraints.BOTH,
+         GridBagConstraints.HORIZONTAL,
          new Insets(10, 10, 5, 10), 0, 0
       ));
 
@@ -179,9 +180,11 @@ public class InteractiveAnnotationFrame extends JFrame {
       final JScrollPane scrollTxt = new JScrollPane(inputTxt,
          JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
          JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+      inputTxt.setToolTipText("Editable content for annotation text changes.");
       inputTxt.setEditable(true);
       inputTxt.setLineWrap(true);
-      inputTxt.setPreferredSize(new Dimension(300, 30));
+      inputTxt.setWrapStyleWord(true);
+      inputTxt.setPreferredSize(new Dimension(500, 30));
       inputPnl.setBorder(BorderFactory.createTitledBorder("Input Text"));
       inputPnl.setLayout(new GridBagLayout());
       inputPnl.add(scrollTxt, new GridBagConstraints(
@@ -191,7 +194,7 @@ public class InteractiveAnnotationFrame extends JFrame {
          new Insets(0, 0, 0, 0), 0, 0
       ));
       mainContent.add(inputPnl, new GridBagConstraints(
-         0, 1, 3, 2, 1.0, 0.4,
+         0, 1, 5, 2, 1.0, 0.4,
          GridBagConstraints.CENTER,
          GridBagConstraints.BOTH,
          new Insets(5, 10, 5, 5), 0, 0
@@ -203,7 +206,7 @@ public class InteractiveAnnotationFrame extends JFrame {
          JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
          JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
       optionLst.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-      optionLst.setPreferredSize(new Dimension(300, 50));
+      optionLst.setPreferredSize(new Dimension(500, 50));
       optionPnl.setBorder(BorderFactory.createTitledBorder("Available Options"));
       optionPnl.setLayout(new GridBagLayout());
       optionPnl.add(optionLst, new GridBagConstraints(
@@ -213,7 +216,7 @@ public class InteractiveAnnotationFrame extends JFrame {
          new Insets(0, 0, 0, 0), 0, 0
       ));
       mainContent.add(optionPnl, new GridBagConstraints(
-         0, 3, 3, 2, 1.0, 0.6,
+         0, 3, 5, 2, 1.0, 0.6,
          GridBagConstraints.EAST,
          GridBagConstraints.BOTH,
          new Insets(5, 10, 10, 5), 0, 0
@@ -247,7 +250,7 @@ public class InteractiveAnnotationFrame extends JFrame {
          new Insets(5, 0, 0, 0), 0, 0
       ));
       mainContent.add(buttonPnl, new GridBagConstraints(
-         3, 1, 1, 4, 0.0, 0.0,
+         5, 1, 1, 4, 0.0, 0.0,
          GridBagConstraints.WEST,
          GridBagConstraints.NONE,
          new Insets(5, 5, 10, 10), 0, 0

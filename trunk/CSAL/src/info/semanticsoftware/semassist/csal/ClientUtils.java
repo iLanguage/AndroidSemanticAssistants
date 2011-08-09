@@ -248,7 +248,7 @@ public class ClientUtils
         return prefix + ds + ".";
     }
 
-    public static Vector<SemanticServiceResult> getServiceResults( Node root )
+    private static Vector<SemanticServiceResult> getServiceResults( Node root )
     {
         Vector<SemanticServiceResult> result = new Vector<SemanticServiceResult>();
         Node child;
