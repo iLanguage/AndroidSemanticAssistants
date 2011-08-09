@@ -15,8 +15,6 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.jface.dialogs.MessageDialog;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PartInitException;
@@ -33,8 +31,6 @@ import org.eclipse.ui.model.WorkbenchLabelProvider;
  */
 public class FileSelectionHandler extends AbstractHandler{
 	
-	/** The acceptable file extension to be sent through the pipeline */
-	final private String extension = "java";
 	public static IWorkspace workspace;
 	public static String serviceName;
 	public static IWorkbenchWindow window;
@@ -51,26 +47,13 @@ public class FileSelectionHandler extends AbstractHandler{
 	 */
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		window = HandlerUtil.getActiveWorkbenchWindowChecked(event);
-        workspace = ResourcesPlugin.getWorkspace();
+		workspace = ResourcesPlugin.getWorkspace();
        
-        FileSelectionDialog dialog = new FileSelectionDialog(window.getShell(), new WorkbenchLabelProvider(), new BaseWorkbenchContentProvider());
-        dialog.setTitle("Semantic Assistants - File Selection");
-        dialog.addFilter(new ViewerFilter() {
-			@Override
-			public boolean select(Viewer viewer, Object parent, Object element) {
-               IResource src = (IResource) element;
-                
-               if(src.getType() == IResource.PROJECT || src.getType() == IResource.FOLDER || ((src.getType() == IResource.FILE) && src.getFileExtension().equals(extension))){
-            		   return true;   
-               }else{
-                	 return false;
-               }
-                 
-			}
-        });
+		FileSelectionDialog dialog = new FileSelectionDialog(window.getShell(), new WorkbenchLabelProvider(), new BaseWorkbenchContentProvider());
+		dialog.setTitle("Semantic Assistants - File Selection");
       
-       dialog.setInput(workspace.getRoot());   
-       dialog.open();
+		dialog.setInput(workspace.getRoot());   
+		dialog.open();
 
        /* Wait for the user to select files and press a button. 
        	  selection variable contains the list of selections made by the user, or null if the selection was canceled
