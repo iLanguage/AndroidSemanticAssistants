@@ -44,14 +44,14 @@
       <key
             commandId="SemanticAssistants.commands.sampleCommand"
             contextId="org.eclipse.ui.contexts.window"
-            sequence=""
+            sequence="ALT+S"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
       
             <key
             commandId="SemanticAssistants.commands.settingsCommand"
             contextId="org.eclipse.ui.contexts.window"
-            sequence=""
+            sequence="CTRL+ALT+S"
             schemeId="org.eclipse.ui.defaultAcceleratorConfiguration">
       </key>
    </extension>
