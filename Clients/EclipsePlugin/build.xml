@@ -37,7 +37,7 @@
       <property name="docs.home"  value="${basedir}/Javadoc"/>
       <property name="plugins.home"   value="${basedir}/plugins"/>
       <property name="plugins.temp" value="${basedir}/temp"/>
-      <property name="bundleName" value="info.semanticsoftware.semassist.client.eclipse.1.0.0.jar"/>
+      <property name="bundleName" value="info.semanticsoftware.semassist.client.eclipse.1.1.0.jar"/>
     </target>
 	
     <!-- This target makes the environment ready for compiling. -->  
