@@ -2,7 +2,7 @@
 <feature
       id="info.semanticsoftware.semassist.client.eclipse"
       label="Semantic Assistants Eclipse Plug-in"
-      version="1.0.0"
+      version="1.1.0"
       provider-name="Semantic Software Lab">
 
    <description url="http://www.semanticsoftware.info/semantic-assistants">
@@ -14,7 +14,7 @@
    Copyright (C) 2009 - 2011 Semantic Software Lab, http://www.semanticsoftware.info
    </copyright>
 
-<license>
+   <license>
       Semantic Assistants
 
 The Semantic Assistants architecture is free software: you can redistribute and/or modify it under the terms of the GNU Affero General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version. 
@@ -33,7 +33,7 @@ License along with this program.  If not, see &lt;http://www.gnu.org/licenses/&g
          id="info.semanticsoftware.semassist.client.eclipse"
          download-size="0"
          install-size="0"
-         version="1.0.0"
+         version="1.1.0"
          unpack="false"/>
 
 </feature>

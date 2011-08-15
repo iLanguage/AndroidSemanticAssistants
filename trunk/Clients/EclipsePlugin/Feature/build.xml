@@ -2,7 +2,7 @@
 <project name="info.semanticsoftware.semassist.client.eclipse" default="build.update.jar" basedir=".">
 
 	<target name="init">
-		<property name="feature.id" value="info.semanticsoftware.semassist.client.eclipse_1.0.0"/>
+		<property name="feature.id" value="info.semanticsoftware.semassist.client.eclipse_1.1.0"/>
 		<property name="feature.temp.folder" value="${basedir}/feature.temp.folder"/>
 		<property name="feature.destination" value="${basedir}"/>
 	</target>
@@ -27,7 +27,7 @@
       	<copy file="${feature.destination}/${feature.id}.jar" todir="../Update/features" overwrite="true"/>
         <!-- Copying plugin jar to update site -->
       	
-      	<copy file="../plugins/info.semanticsoftware.semassist.client.eclipse.1.0.0.jar" tofile="../Update/plugins/${feature.id}.jar" overwrite="true"/>
+      	<copy file="../plugins/info.semanticsoftware.semassist.client.eclipse.1.1.0.jar" tofile="../Update/plugins/${feature.id}.jar" overwrite="true"/>
 	</target>
 
 	<target name="gather.bin.parts" depends="init" if="feature.base">
