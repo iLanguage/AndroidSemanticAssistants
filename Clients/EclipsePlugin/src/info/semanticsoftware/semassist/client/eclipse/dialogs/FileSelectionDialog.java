@@ -36,6 +36,7 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.dialogs.ISelectionStatusValidator;
@@ -93,16 +94,14 @@ public class FileSelectionDialog extends SelectionStatusDialog {
     /** Combobox containing available service names */
     public Combo cmbServices;
     
-    /** Combobox containing file format filters */
-    public Combo cmbExtensions;
-    
     public static boolean CONNECTION_IS_FINE;
     
     private ServiceInformationThread servicesThread;
     
     private ViewerFilter filter;
-    
-    private String[] extensionList = {".java", ".cpp", ".txt"};
+        
+    /** Text box to filter the file tree by extension */
+	private Text txtFileFormat;
 
     /**
      * Constructs an instance of CheckedTreeSelectionDialog.
@@ -321,26 +320,18 @@ public class FileSelectionDialog extends SelectionStatusDialog {
         
         Label lblExtensions = new Label(buttonComposite, SWT.NONE);
         lblExtensions.setText("File Format:");
-        cmbExtensions = new Combo(buttonComposite, SWT.DROP_DOWN | SWT.READ_ONLY);
-        cmbExtensions.add("");
         
-        for(int i=0; i < extensionList.length; i++){
-        	cmbExtensions.add(extensionList[i]);
-        }
-        
-        cmbExtensions.select(0);
-        
-        cmbExtensions.addModifyListener(new ModifyListener() {
-			@Override
-			public void modifyText(ModifyEvent e) {
-				ViewerFilter[] filters = fViewer.getFilters();
+        txtFileFormat = new Text(buttonComposite, SWT.SINGLE | SWT.BORDER);
+
+        txtFileFormat.addModifyListener(new ModifyListener() {
+            public void modifyText(ModifyEvent e) {
+            	ViewerFilter[] filters = fViewer.getFilters();
 				for (int i=0; i < filters.length; i++){
 					fViewer.removeFilter(filters[i]);
 				}
 				
-				String extTemp = cmbExtensions.getItem(cmbExtensions.getSelectionIndex());
+                String extTemp = txtFileFormat.getText();
 	        	if(!extTemp.equals("")){
-		        	extTemp = extTemp.substring(1);
 		        	final String extension = extTemp;
 		        	filter = new ViewerFilter() {
 						@Override
@@ -355,11 +346,12 @@ public class FileSelectionDialog extends SelectionStatusDialog {
 						}
 			        };
 					fViewer.addFilter(filter);
+			        fViewer.expandAll();
 	        	}
 	        	setInput(FileSelectionHandler.workspace.getRoot());
-			}
-		});
-   
+            }
+        });
+        
         Button selectButton = createButton(buttonComposite,
                 IDialogConstants.SELECT_ALL_ID, "Select All",
                 false);
