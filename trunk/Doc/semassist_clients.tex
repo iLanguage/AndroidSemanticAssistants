@@ -496,31 +496,7 @@ When a file output type is received by the plug-in, it will try to open it up in
 
 \subsubsection{Global Settings}
 The second option found under the Semantic Assistants menu is the "Global
-Settings" item. By clicking on this menu item, a dialog will be shown to the
-user that lets him customize the hostname and port number values used to connect
-to the Semantic Assistants server. The values provided by the user in the
-textfields will be saved to a properties file in the Eclipse workspace
-".metadata" folder and will be used to store useful information between
-different Eclipse launch profiles. The ".metadata" folder can be found on the
-root of user's Eclipse workspace folder. Note that this folder is a hidden
-folder and is not meant to be viewed or modified by the users. The Semantic
-Assistants plug-in folder can be found on
-\begin{verbatim}
-${workspace_loc}
-/.metadata/.plugins/info.semanticsoftware.semassist.client.eclipse
-\end{verbatim} 
-
-where the \begin{verbatim}${workspace_loc}\end{verbatim} refers to the path of
-the workspace of the Eclipse installed on the user's machine.
-
-If this folder gets accidentally deleted by the user, the Semantic Assistants
-plug-in will create a new one on the next startup of the plug-in.
-
-In the Semantic Assistants settings dialog, a "Use Defaults" option is also
-available. If this widget is checked, the default values will be overwritten on
-the values previously provided by the user and the Semantic Assistants plug-in
-will use the default hostname and port number values to connect to the server
-and invoke services.
+Settings" item. By clicking on this menu item, a dialog as depicted in Figure \ref{fig:eclipse_settings} is shown to the user that lets him choose a preferred server from a list of pre-defined values or add a custom server to the settings file. The values are provided in the Semantic Assistants global preference file described in \ref{sec:pref_management}. If the preference file gets accidentally deleted, a default preference file will be created by the plug-in but the eclipse-specific settings will be lost.
 \begin{figure}[htb]
 \begin{center}
   \includegraphics[width=0.6\textwidth]{pictures/eclipse_settings.jpg}
