@@ -663,3 +663,34 @@ Finally, make it visible to the user.
 % that all low-level details of handling language services, such as
 % metadata lookup, parametrization, and result handling, are hidden from
 % the client plug-in through our client-side abstraction layer.
+
+\label{client_pref}
+\paragraph{Client Preference Management}
+As described in \ref{sec:pref_management}, the preference settings of Semantic Assistants clients are stored in a single shared XML file. Figure \ref{list:semassist-settings} presents the default structure of preference file. Initially, the settings file has a \texttt{<global>} tag. As the name suggests, all preferences stored as the children of this node will affect all the clients. The global tag has two \texttt{<server>} and one \texttt{<lastCalledServer>} child nodes that hold pre-defined server information for clients to connect to.
+ 
+\begin{figure}[!tb]
+\begin{lstlisting}[language=XML,xleftmargin=4mm,columns=flexible]
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<saProperties>
+  <global>
+    <lastCalledServer host="minion.cs.concordia.ca" port="8879"/>
+    <server host="minion.cs.concordia.ca" port="8879"/>
+    <server host="assistant.cs.concordia.ca" port="8879"/>
+  </global>
+</saProperties>
+\end{lstlisting}
+\caption{The \emph{semassist-settings.xml} file default structure}
+\label{list:semassist-settings}
+\end{figure}
+
+Each client can store its proprietary preferences inside an XML tag that bears the client's name. For example, Figure \ref{list:eclipse-pref} shows the Eclipse plug-in preferred server information. The \texttt{ClientUtils.java} class inside CSAL.jar library provides methods to create and modify the preferences file. For more information on how to use the methods, please refer to the Javadoc documentation.
+
+\begin{figure}[!tb]
+\begin{lstlisting}[language=XML,xleftmargin=4mm,columns=flexible]
+<eclipse>
+  <server host="example.com" port="1234"/>
+</eclipse>
+\end{lstlisting}
+\caption{The Eclipse plug-in preferences}
+\label{list:eclipse-pref}
+\end{figure}
