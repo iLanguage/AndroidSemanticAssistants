@@ -142,7 +142,7 @@ public class UNOUtils
         PropertyValue[] loadProps = new PropertyValue[1];
         loadProps[0] = new PropertyValue();
         loadProps[0].Name = "Hidden";
-        loadProps[0].Value = new Boolean(true);
+        loadProps[0].Value = Boolean.valueOf(true);
          */
 
         // Load
@@ -542,8 +542,8 @@ public class UNOUtils
     private static XTextRange findAnnotation(final Annotation annot) {
       // Configure search settings.
       try {
-         mxSearchDescr.setPropertyValue("SearchWords", new Boolean(true));
-         mxSearchDescr.setPropertyValue("SearchCaseSensitive", new Boolean(true));
+         mxSearchDescr.setPropertyValue("SearchWords", Boolean.valueOf(true));
+         mxSearchDescr.setPropertyValue("SearchCaseSensitive", Boolean.valueOf(true));
          mxSearchDescr.setSearchString(annot.mContent);
       } catch (final Exception ex) {
          // Interested in: UnknownProperty, WrappedTarget & IllegalArgument exceptions.
@@ -625,7 +625,7 @@ public class UNOUtils
         {
             // For plain text
             mxSearchDescr.setSearchString( annotation.mContent );
-            mxSearchDescr.setPropertyValue( "SearchWords", new Boolean( true ) );
+            mxSearchDescr.setPropertyValue( "SearchWords", Boolean.valueOf( true ) );
 
             System.out.println( "---------------- Text to be searched: " + annotation.mContent );
 

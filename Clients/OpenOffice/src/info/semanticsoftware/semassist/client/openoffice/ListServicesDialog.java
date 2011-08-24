@@ -119,10 +119,10 @@ public class ListServicesDialog
                 "com.sun.star.awt.UnoControlDialogModel", _xComponentContext );
         final XPropertySet xPSetDialog = UnoRuntime.queryInterface(
                 XPropertySet.class, dialogModel );
-        xPSetDialog.setPropertyValue( "Width", new Integer( DIALOG_WIDTH ) );
-        xPSetDialog.setPropertyValue( "Height", new Integer( DIALOG_HEIGHT ) );
-        xPSetDialog.setPropertyValue( "PositionX", new Integer( 100 ) );
-        xPSetDialog.setPropertyValue( "PositionY", new Integer( 100 ) );
+        xPSetDialog.setPropertyValue( "Width", Integer.valueOf( DIALOG_WIDTH ) );
+        xPSetDialog.setPropertyValue( "Height", Integer.valueOf( DIALOG_HEIGHT ) );
+        xPSetDialog.setPropertyValue( "PositionX", Integer.valueOf( 100 ) );
+        xPSetDialog.setPropertyValue( "PositionY", Integer.valueOf( 100 ) );
         xPSetDialog.setPropertyValue( "Title", new String( "Available Assistants" ) );
         xPSetDialog.setPropertyValue( "Closeable", false );
 
@@ -141,10 +141,10 @@ public class ListServicesDialog
         final XPropertySet xPSetLabelName = UnoRuntime.queryInterface(
                 XPropertySet.class, labelNameModel );
 
-        xPSetLabelName.setPropertyValue( "PositionX", new Integer( 5 ) );
-        xPSetLabelName.setPropertyValue( "PositionY", new Integer( LBOX_TOP - 13 ) );
-        xPSetLabelName.setPropertyValue( "Width", new Integer( LBOX_WIDTH ) );
-        xPSetLabelName.setPropertyValue( "Height", new Integer( 13 ) );
+        xPSetLabelName.setPropertyValue( "PositionX", Integer.valueOf( 5 ) );
+        xPSetLabelName.setPropertyValue( "PositionY", Integer.valueOf( LBOX_TOP - 13 ) );
+        xPSetLabelName.setPropertyValue( "Width", Integer.valueOf( LBOX_WIDTH ) );
+        xPSetLabelName.setPropertyValue( "Height", Integer.valueOf( 13 ) );
         xPSetLabelName.setPropertyValue( "Align", new Short( (short) 0 ) );
         xPSetLabelName.setPropertyValue( "Name", _labelName );
         xPSetLabelName.setPropertyValue( "TabIndex", new Short( (short) 99 ) );

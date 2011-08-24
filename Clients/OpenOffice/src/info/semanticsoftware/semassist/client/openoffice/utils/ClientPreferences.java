@@ -42,8 +42,8 @@ public abstract class ClientPreferences {
    /**
     * @param size value of the side-note font.
     */
-   public static void setSideNoteFontSize(float size) {
-      setPreference(PRESENTATION_SIDENOTE, "fontsize", new Float(size));
+   public static void setSideNoteFontSize(final float size) {
+      setPreference(PRESENTATION_SIDENOTE, "fontsize", Float.valueOf(size));
    }
 
 
@@ -54,17 +54,18 @@ public abstract class ClientPreferences {
       float result;
       final ArrayList<XMLElementModel> preferences =
          ClientUtils.getClientPreference(CLIENT_NAME, PRESENTATION_SIDENOTE);
+      final float dfl = 8; // Default.
 
       if (preferences.size() == 0) {
          // Use defaults since no client tag exists or no key tag exists within the client tag.
-         result = 8;
+         result = dfl;
       } else {
          // Use the first side-note tag if multiple are defined.
          final String val = preferences.get(0).getAttribute().get("fontsize");
          if (val != null) {
             result = Float.valueOf(val);
          } else {
-            result = 8;
+            result = dfl;
          }
       }
       return result;
@@ -75,7 +76,7 @@ public abstract class ClientPreferences {
     * @param status true to highlight document text associated with a side-note,
     *               or false otherwise.
     */
-   public static void setTextHighlightMode(boolean status) {
+   public static void setTextHighlightMode(final boolean status) {
       setPreference(PRESENTATION_SIDENOTE, "showHighlight", Boolean.valueOf(status));
    }
 
@@ -93,7 +94,7 @@ public abstract class ClientPreferences {
     * @param status true to show annotation content within side-notes,
     *               or false otherwise.
     */
-   public static void setShowAnnotationContent(boolean status) {
+   public static void setShowAnnotationContent(final boolean status) {
       setPreference(PRESENTATION_SIDENOTE, "showContent", Boolean.valueOf(status));
    }
 
@@ -111,7 +112,7 @@ public abstract class ClientPreferences {
     * @param status true to allow filtering of empty-valued
     *               features or false otherwise.
     */
-   public static void setEmptyFeatureFilter(boolean status) {
+   public static void setEmptyFeatureFilter(final boolean status) {
       setPreference(PRESENTATION_SIDENOTE, "showEmptyFeatures", Boolean.valueOf(status));
    }
 
@@ -129,8 +130,8 @@ public abstract class ClientPreferences {
     * @param status true to allow alteration of resulting annotation responses
     *        or false otherwise.
     */
-   public static void setInteractiveResultHandling(boolean status) {
-      setPreference(RESULT_HANDLING, "interactive", new Boolean(status));
+   public static void setInteractiveResultHandling(final boolean status) {
+      setPreference(RESULT_HANDLING, "interactive", Boolean.valueOf(status));
    }
 
 
@@ -147,7 +148,7 @@ public abstract class ClientPreferences {
     * @param status true to allow an external browser to handle the document
     *        results or false otherwise.
     */
-   public static void setBrowserResultHandling(boolean status) {
+   public static void setBrowserResultHandling(final boolean status) {
       setPreference(RESULT_HANDLING, "browserDelegate", Boolean.valueOf(status));
    }
 
@@ -163,6 +164,9 @@ public abstract class ClientPreferences {
 
    /**
     * Helper method to set a generic preference.
+    * @param pref XML tag name of the preference.
+    * @param key XML attribute name of the preference.
+    * @param val XML attribute value of the preference.
     */
    private static <T> void setPreference(final String pref, final String key, final T val) {
       // Prepare the attribute/value map.
@@ -175,6 +179,11 @@ public abstract class ClientPreferences {
 
    /**
     * Helper method to get a boolean preference.
+    * @param pref XML tag name of the preference.
+    * @param key XML attribute name of the preference to retrieve.
+    * @param dfl Default value if the key is not found.
+    *
+    * @return The value of the extracted boolean preference.
     */
    private static boolean getBooleanPreference(final String pref, final String key, boolean dfl) {
       boolean result;
