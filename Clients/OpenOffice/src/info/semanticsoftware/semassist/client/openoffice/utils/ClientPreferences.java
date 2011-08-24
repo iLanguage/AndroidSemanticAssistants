@@ -62,7 +62,7 @@ public abstract class ClientPreferences {
          // Use the first side-note tag if multiple are defined.
          final String val = preferences.get(0).getAttribute().get("fontsize");
          if (val != null) {
-            result = new Float(val).floatValue();
+            result = Float.valueOf(val);
          } else {
             result = 8;
          }
@@ -76,7 +76,7 @@ public abstract class ClientPreferences {
     *               or false otherwise.
     */
    public static void setTextHighlightMode(boolean status) {
-      setPreference(PRESENTATION_SIDENOTE, "showHighlight", new Boolean(status));
+      setPreference(PRESENTATION_SIDENOTE, "showHighlight", Boolean.valueOf(status));
    }
 
 
@@ -94,7 +94,7 @@ public abstract class ClientPreferences {
     *               or false otherwise.
     */
    public static void setShowAnnotationContent(boolean status) {
-      setPreference(PRESENTATION_SIDENOTE, "showContent", new Boolean(status));
+      setPreference(PRESENTATION_SIDENOTE, "showContent", Boolean.valueOf(status));
    }
 
 
@@ -112,7 +112,7 @@ public abstract class ClientPreferences {
     *               features or false otherwise.
     */
    public static void setEmptyFeatureFilter(boolean status) {
-      setPreference(PRESENTATION_SIDENOTE, "showEmptyFeatures", new Boolean(status));
+      setPreference(PRESENTATION_SIDENOTE, "showEmptyFeatures", Boolean.valueOf(status));
    }
 
 
@@ -148,7 +148,7 @@ public abstract class ClientPreferences {
     *        results or false otherwise.
     */
    public static void setBrowserResultHandling(boolean status) {
-      setPreference(RESULT_HANDLING, "browserDelegate", new Boolean(status));
+      setPreference(RESULT_HANDLING, "browserDelegate", Boolean.valueOf(status));
    }
 
 
@@ -188,7 +188,7 @@ public abstract class ClientPreferences {
          // Use the first side-note tag if multiple are defined.
          final String val = preferences.get(0).getAttribute().get(key);
          if (val != null) {
-            result = new Boolean(val).booleanValue();
+            result = Boolean.valueOf(val);
          } else {
             // Use defaults if key was not found.
             result = dfl;
