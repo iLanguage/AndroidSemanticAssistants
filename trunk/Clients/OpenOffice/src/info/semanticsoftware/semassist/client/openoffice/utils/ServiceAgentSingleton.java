@@ -35,20 +35,27 @@ public class ServiceAgentSingleton
     private static SemanticServiceBrokerService service = null;
     private static SemanticServiceBroker agent = null;
 
+    /** Host name value */
+	private static String serverHost ="";
+	
+    /** Port number value */
+	private static String serverPort = "";
+
     public static synchronized SemanticServiceBroker getInstance()
     {
+        // Cache the configured server & port members of this singleton.
+        UNOUtils.propertiesReader();
+
         try
         {
-            if( agent == null || UNOUtils.getServerInfoChanged() )
+            if( agent == null )
             {
-                if( service == null || UNOUtils.getServerInfoChanged() )
+                if( service == null )
                 {
-
+                    System.out.println("Creating broker using hostname " + serverHost + " and port "+ serverPort );
                     service = new SemanticServiceBrokerService( new URL( createURL() ),
                             new QName( "http://server.semassist.semanticsoftware.info/",
                             "SemanticServiceBrokerService" ) );
-
-                    UNOUtils.setServerInfoChanged( false );
                 }
                 agent = service.getSemanticServiceBrokerPort();
             }
@@ -74,9 +81,28 @@ public class ServiceAgentSingleton
 
     private static String createURL()
     {
-        return "http://" + UNOUtils.getServerHost() + ":" + UNOUtils.getServerPort() + "/SemAssist?wsdl";
+        return "http://" + serverHost + ":" + serverPort + "/SemAssist?wsdl";
     }
 
+	/**
+	 * Sets the host name with the value provided
+	 *
+	 * @param value The value provided as host name
+	 * */
+	public static void setServerHost(final String value)
+	{
+	   serverHost = value;
+	}
+	
+	/**
+	 * Sets the port number with the value provided
+	 *
+	 * @param value The value provided as port number
+	 * */
+	public static void setServerPort(final String value )
+	{
+	    serverPort = value;
+	}
 }
 
 

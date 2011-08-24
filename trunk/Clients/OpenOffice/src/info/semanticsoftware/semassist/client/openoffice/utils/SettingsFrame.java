@@ -11,8 +11,14 @@
 package info.semanticsoftware.semassist.client.openoffice.utils;
 
 import info.semanticsoftware.semassist.csal.ClientUtils;
+
+import info.semanticsoftware.semassist.csal.XMLElementModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.swing.*;
 
 /**
@@ -22,9 +28,6 @@ import javax.swing.*;
 public class SettingsFrame extends JFrame
 {
     private static boolean mDefaultServerSelect = true;
-    private static String mCustomServerPort;
-    private static String mCustomServerHost;
-
 
     /** Creates new form SettingsFrame */
     public SettingsFrame()
@@ -41,48 +44,32 @@ public class SettingsFrame extends JFrame
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jSideNoteFontSizeField = new JTextField(Float.toString(UNOUtils.getSideNoteFontSize()));
-        jRadioButtonDefault = new javax.swing.JRadioButton( null, null, mDefaultServerSelect);
-        jRadioButtonCustom = new javax.swing.JRadioButton(null, null, !mDefaultServerSelect);
-        okButton = new javax.swing.JButton();
-        cancelButton = new javax.swing.JButton();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jDefaultHostField = new javax.swing.JTextField(ClientUtils.defaultServerHost());
-        jDefaultPortField = new javax.swing.JTextField(ClientUtils.defaultServerPort());
-        jCustomHostField = new javax.swing.JTextField(mCustomServerHost);
-        jCustomPortField = new javax.swing.JTextField(mCustomServerPort);
-        jLabel6 = new javax.swing.JLabel();
-
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Global Settings");
         setAlwaysOnTop(true);
 
-        jRadioButtonDefault.setText("Default");
-        jRadioButtonDefault.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonDefaultActionPerformed(evt);
+        toggleServerMode(mDefaultServerSelect);
+
+        jRadioButtonDefault.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent evt) {
+                toggleServerMode(true);
             }
         });
 
-        jRadioButtonCustom.setText("Custom");
-        jRadioButtonCustom.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jRadioButtonCustomActionPerformed(evt);
+        jRadioButtonCustom.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent evt) {
+                toggleServerMode(false);
             }
         });
 
-        okButton.setText("Ok");
         okButton.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
             }
         });
 
-        cancelButton.setText("Cancel");
         cancelButton.addActionListener( new ActionListener()
             {
 
@@ -94,33 +81,25 @@ public class SettingsFrame extends JFrame
 
             } );
 
-            jLabel1.setText("Server Settings");
 
-            jLabel2.setText("Host:");
+            // Populate the available server combo-box from the configuration file.
+            final ArrayList<XMLElementModel> result = ClientUtils.getClientPreference("global", "server");
+            for (final XMLElementModel node : result) {
+ 	    		   final String key = node.getAttribute().get(ClientUtils.XML_HOST_KEY);
+ 	    		   final String value = node.getAttribute().get(ClientUtils.XML_PORT_KEY);
+ 	    		   serversCombo.addItem(key + ":" + value);
+            }
 
-            jLabel3.setText("Port:");
-
-            jLabel4.setText("Host:");
-
-            jLabel5.setText("Port:");
-
-            jDefaultHostField.setEditable(false);
-
-            jDefaultPortField.setEditable(false);
-
+            // Attach key listeners.
             jCustomHostField.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyReleased(java.awt.event.KeyEvent evt) {
-                    jCustomHostFieldKeyReleased(evt);
                 }
             });
 
             jCustomPortField.addKeyListener(new java.awt.event.KeyAdapter() {
                 public void keyReleased(java.awt.event.KeyEvent evt) {
-                    jCustomPortFieldKeyReleased(evt);
                 }
             });
-
-            jLabel6.setText("Annotation Settings");
 
             javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
             getContentPane().setLayout(layout);
@@ -134,32 +113,30 @@ public class SettingsFrame extends JFrame
                         .addGroup(layout.createSequentialGroup()
                             .addContainerGap()
                             .addComponent(jSeparator2, GroupLayout.DEFAULT_SIZE, 514, Short.MAX_VALUE))
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(25, 25, 25)
-                            
-                            // Position the default & custom hostname & port elements.
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jRadioButtonDefault)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel3)
-                                        .addComponent(jLabel2))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jDefaultHostField)
-                                        .addComponent(jDefaultPortField))))
-                            .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jRadioButtonCustom)
-                                .addGroup(layout.createSequentialGroup()
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                        .addComponent(jLabel5)
-                                        .addComponent(jLabel4))
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(jCustomHostField)
-                                        .addComponent(jCustomPortField))))
-                            )
+
+                        // Position the default available servers elements.
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(jRadioButtonDefault)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel2))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addComponent(serversCombo))))
+
+                        // Position the custom hostname & port number elements.
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                            .addComponent(jRadioButtonCustom)
+                            .addGroup(layout.createSequentialGroup()
+                                .addContainerGap()
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                                    .addComponent(jLabel5)
+                                    .addComponent(jLabel4))
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addComponent(jCustomHostField)
+                                    .addComponent(jCustomPortField))))
                         .addGroup(layout.createSequentialGroup()
                             .addContainerGap()
                             .addComponent(jCheckBox0))
@@ -231,21 +208,30 @@ public class SettingsFrame extends JFrame
                     .addGap(19, 19, 19)
                     .addComponent(jLabel1)
                     .addGap(12, 12, 12)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jRadioButtonDefault)
-                        .addComponent(jRadioButtonCustom))
-                    .addGap(19, 19, 19)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jRadioButtonDefault)
+                    .addGap(12, 12, 12)
+
+                    // Position the available servers & combo box elements.
+                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel2)
-                        .addComponent(jCustomHostField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(serversCombo, GroupLayout.PREFERRED_SIZE,
+                           GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addGap(19, 19, 19)
+                    .addComponent(jRadioButtonCustom)
+                    .addGap(12, 12, 12)
+
+                    // Position the hostname label & text field elements.
+                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel4)
-                        .addComponent(jDefaultHostField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGap(26, 26, 26)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jDefaultPortField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jCustomPortField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jCustomHostField, GroupLayout.PREFERRED_SIZE,
+                           GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
+                    .addGap(12, 12, 12)
+
+                    // Position the port number label & text field elements.
+                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                         .addComponent(jLabel5)
-                        .addComponent(jLabel3))
+                        .addComponent(jCustomPortField, GroupLayout.PREFERRED_SIZE,
+                           GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                     .addGap(59, 59, 59)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(okButton)
@@ -268,56 +254,34 @@ public class SettingsFrame extends JFrame
         setVisible( false );
     }//GEN-LAST:event_okButtonActionPerformed
 
-    private void jRadioButtonDefaultActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jRadioButtonDefaultActionPerformed
-    {//GEN-HEADEREND:event_jRadioButtonDefaultActionPerformed
-        //De-select the custom radio button
-        jRadioButtonCustom.setSelected( false );
-    }//GEN-LAST:event_jRadioButtonDefaultActionPerformed
-
-    private void jRadioButtonCustomActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_jRadioButtonCustomActionPerformed
-    {//GEN-HEADEREND:event_jRadioButtonCustomActionPerformed
-        //De-select the default radio button
-        jRadioButtonDefault.setSelected( false );
-    }//GEN-LAST:event_jRadioButtonCustomActionPerformed
-
-    private void jCustomHostFieldKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jCustomHostFieldKeyReleased
-    {//GEN-HEADEREND:event_jCustomHostFieldKeyReleased
-        mCustomServerHost = jCustomHostField.getText();
-    }//GEN-LAST:event_jCustomHostFieldKeyReleased
-
-    private void jCustomPortFieldKeyReleased(java.awt.event.KeyEvent evt)//GEN-FIRST:event_jCustomPortFieldKeyReleased
-    {//GEN-HEADEREND:event_jCustomPortFieldKeyReleased
-        mCustomServerPort = jCustomPortField.getText();
-    }//GEN-LAST:event_jCustomPortFieldKeyReleased
-
     private void updateCheckBoxStatus()
     {
         boolean status;
-        
+
         // Interactive annotation result handling option.
         status = jCheckBox0.isSelected();
         System.out.println( "------ Interactive Annotation Handling: " + (status ? "Enabled" : "Disabled") );
-        UNOUtils.setInteractiveResultHandling( status );
+        ClientPreferences.setInteractiveResultHandling( status );
 
         // Annotation highlighting in text option.
         status = jCheckBox1.isSelected();
         System.out.println( "------ Text Highlight: " + (status ? "Enabled" : "Disabled") );
-        UNOUtils.setTextHighlighting( status );
+        ClientPreferences.setTextHighlightMode( status );
 
         // Empty feature filtering option.
         status = jCheckBox2.isSelected();
         System.out.println( "------ Filter Empty Features: " + (status ? "Enabled" : "Disabled") );
-        UNOUtils.setEmptyFeatureFilter( status );
+        ClientPreferences.setEmptyFeatureFilter( status );
 
         // Show annotation content option.
         status = jCheckBox3.isSelected();
         System.out.println( "------ Show Annotation Content: " + (status ? "Enabled" : "Disabled") );
-        UNOUtils.setShowAnnotationContent( status );
+        ClientPreferences.setShowAnnotationContent( status );
 
         // Handle HTML results with external borwser option.
         status = jCheckBox4.isSelected();
         System.out.println( "------ Enable Browser Result Handling: " + (status ? "Enabled" : "Disabled") );
-        UNOUtils.setBrowserResultHandling( status );
+        ClientPreferences.setBrowserResultHandling( status );
     }
 
     private void updateRadioButtonsStatus()
@@ -334,15 +298,24 @@ public class SettingsFrame extends JFrame
 
     private void updateServerInfo()
     {
+        final Map<String, String> map = new HashMap<String, String>();
         if( jRadioButtonDefault.isSelected() )
         {
-            UNOUtils.setServerHost( jDefaultHostField.getText() );
-            UNOUtils.setServerPort( jDefaultPortField.getText() );
+            // Parse the server:port combo-box selection into parts.
+            final String address = serversCombo.getSelectedItem().toString();
+            final String[] token = address.split(":");
+            map.put(ClientUtils.XML_HOST_KEY, token[0]);
+            map.put(ClientUtils.XML_PORT_KEY, token[1]);
+            ClientUtils.setClientPreference(ClientPreferences.CLIENT_NAME, "server", map);
         }
         else
         {
-             UNOUtils.setServerHost( mCustomServerHost );
-             UNOUtils.setServerPort( mCustomServerPort );
+            // Use the server & host textfilds. Note that either
+            // field is assumed to not have the ":" delimiter else
+            // combo-box parsing above will fail.
+            map.put(ClientUtils.XML_HOST_KEY, jCustomHostField.getText());
+            map.put(ClientUtils.XML_PORT_KEY, jCustomPortField.getText());
+            ClientUtils.addNewServer(map);
         }
     }
 
@@ -356,7 +329,7 @@ public class SettingsFrame extends JFrame
          try {
             final float fontSizeNum = new Float(fontSizeStr).floatValue();
             if (fontSizeNum > 0) {
-               UNOUtils.setSideNoteFontSize(fontSizeNum);
+               ClientPreferences.setSideNoteFontSize(fontSizeNum);
             } else {
                System.out.println("Ignoring non-positive font-size");
             }
@@ -366,37 +339,53 @@ public class SettingsFrame extends JFrame
       }
     }
 
+   /**
+    * Convenience method to handle the default status of dialog elements.
+    * @param status True to use default server prererences.
+    */
+   private void toggleServerMode(boolean status) {
+      serversCombo.setEnabled(status);
+
+      jCustomHostField.setEnabled(!status);
+      jCustomPortField.setEnabled(!status);
+
+      jCustomHostField.setEditable(!status);
+      jCustomPortField.setEditable(!status);
+
+      jRadioButtonDefault.setSelected(status);
+      jRadioButtonCustom.setSelected(!status);
+   }
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton cancelButton;
-    private final JCheckBox jCheckBox0 =
-      new JCheckBox("Allow Interactive Handling", UNOUtils.isInteractiveResultHandling());
-    private final JCheckBox jCheckBox1 =
-      new JCheckBox("Annotation Highligting", UNOUtils.getCURRENT_HIGHLIGHT());
-    private final JCheckBox jCheckBox2 =
-      new JCheckBox("Filter Empty Features", UNOUtils.isEmptyFeatureFilter());
-    private final JCheckBox jCheckBox3 =
-      new JCheckBox("Show Annotation Content", UNOUtils.isShowAnnotationContent());
-    private final JCheckBox jCheckBox4 =
-      new JCheckBox("Open HTML results in external Browser", UNOUtils.isBrowserResultHandling());
-    private JTextField jSideNoteFontSizeField;
-    private javax.swing.JTextField jCustomHostField;
-    private javax.swing.JTextField jCustomPortField;
-    private javax.swing.JTextField jDefaultHostField;
-    private javax.swing.JTextField jDefaultPortField;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private final JLabel jLabel7 = new JLabel("Client Settings");
-    private final JLabel jSideNoteFontSizeLabel = new JLabel("Font size:");
-    private javax.swing.JRadioButton jRadioButtonCustom;
-    private javax.swing.JRadioButton jRadioButtonDefault;
-    private final JSeparator jSeparator1 = new JSeparator();
-    private final JSeparator jSeparator2 = new JSeparator();
-    private javax.swing.JButton okButton;
+    private static final JButton cancelButton = new JButton("Cancel");
+    private static final JCheckBox jCheckBox0 =
+      new JCheckBox("Allow Interactive Handling", ClientPreferences.isInteractiveResultHandling());
+    private static final JCheckBox jCheckBox1 =
+      new JCheckBox("Annotation Highligting", ClientPreferences.isTextHighlightMode());
+    private static final JCheckBox jCheckBox2 =
+      new JCheckBox("Filter Empty Features", ClientPreferences.isEmptyFeatureFilter());
+    private static final JCheckBox jCheckBox3 =
+      new JCheckBox("Show Annotation Content", ClientPreferences.isShowAnnotationContent());
+    private static final JCheckBox jCheckBox4 =
+      new JCheckBox("Open HTML results in external Browser", ClientPreferences.isBrowserResultHandling());
+    private static final JTextField jSideNoteFontSizeField =
+      new JTextField(Float.toString(ClientPreferences.getSideNoteFontSize()));
+    private final JComboBox serversCombo = new JComboBox();
+    private static final JTextField jCustomHostField = new JTextField();
+    private static final JTextField jCustomPortField = new JTextField();
+    private static final JLabel jLabel1 = new JLabel("Server Settings");
+    private static final JLabel jLabel2 = new JLabel("Available Servers:");
+    private static final JLabel jLabel4 = new JLabel("Host:");
+    private static final JLabel jLabel5 = new JLabel("Port:");
+    private static final JLabel jLabel6 = new JLabel("Annotation Settings");
+    private static final JLabel jLabel7 = new JLabel("Client Settings");
+    private static final JLabel jSideNoteFontSizeLabel = new JLabel("Font size:");
+    private static final JRadioButton jRadioButtonDefault = new JRadioButton("Pre-defined Servers");
+    private static final JRadioButton jRadioButtonCustom = new JRadioButton("Add A New Server");
+    private static final JSeparator jSeparator1 = new JSeparator();
+    private static final JSeparator jSeparator2 = new JSeparator();
+    private static final JButton okButton = new JButton("Ok");
     // End of variables declaration//GEN-END:variables
 
    /* For backwards compatibility, increment this serialization value ONLY when the
