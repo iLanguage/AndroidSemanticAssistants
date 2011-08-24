@@ -81,15 +81,17 @@ public class ServiceInvocationHandler implements Runnable
 
         System.out.println( "Argument text: " + argumentText );
 
-        SemanticServiceBroker broker = ServiceAgentSingleton.getInstance();
+
         UriList uriList = new UriList();
         uriList.getUriList().add( new String( "#literal" ) );
         StringArray stringArray = new StringArray();
         stringArray.getItem().add( new String( argumentText ) );
 
         String serviceResponse = null;
+        SemanticServiceBroker broker = null;
         try
         {
+            broker = ServiceAgentSingleton.getInstance();
             serviceResponse = broker.invokeService( serviceName, uriList, stringArray, 0L,
                     rtpArray, new UserContext() );
         }
@@ -140,7 +142,7 @@ public class ServiceInvocationHandler implements Runnable
                     System.out.println( "------------ fileExt: " + fileExt );
                     final File f = ClientUtils.writeStringToFile( fileString, fileExt );
 
-                    if ( UNOUtils.isBrowserResultHandling() )
+                    if ( ClientPreferences.isBrowserResultHandling() )
                     {
                        // Attempt to open HTML files through an external browser,
                        // else open the file through the default word-processor.
@@ -303,7 +305,8 @@ public class ServiceInvocationHandler implements Runnable
       final Collection<Annotation> dialogAnnots = new ArrayList<Annotation>();
       final String contextFeature = "problem";
       for (final Annotation annot : ClientUtils.mAnnotArray) {
-         if (UNOUtils.isInteractiveResultHandling() && annot.mFeatures.containsKey(contextFeature)) {
+         if (ClientPreferences.isInteractiveResultHandling() &&
+             annot.mFeatures.containsKey(contextFeature)) {
             dialogAnnots.add(annot);
          } else {
             sideNoteAnnots.add(annot);
@@ -311,7 +314,7 @@ public class ServiceInvocationHandler implements Runnable
       }
 
       // Handle interactive annotations (if any) through a modify dialog.
-      if (UNOUtils.isInteractiveResultHandling()) {
+      if (ClientPreferences.isInteractiveResultHandling()) {
         if (!dialogAnnots.isEmpty()) {
             new InteractiveAnnotationFrame(
                dialogAnnots.toArray(new Annotation[dialogAnnots.size()]),

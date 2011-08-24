@@ -26,8 +26,8 @@ import java.util.Map;
 
 public class XMLElementModel {
 	
-	private String name;
-	private Map<String, String> attributes = new HashMap<String, String>();
+	private String name; // XML tag name.
+	private Map<String, String> attributes = new HashMap<String, String>(); // XML tag attribute/value map.
 	
 	public void setName(String _name){
 		this.name = _name;

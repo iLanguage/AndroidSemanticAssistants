@@ -70,39 +70,6 @@ public class ClientUtils
         return paramHasValue( p, false );
     }
 
-    public static String defaultServerHost()
-    {
-        String strHost = "";
-        try
-        {
-            String host = new SemanticServiceBrokerService().getWSDLDocumentLocation().getHost();
-            strHost += host;
-        }
-        catch( Exception ex)
-        {
-            ex.printStackTrace();
-            
-        }
-        return strHost;
-    }
-
-    public static String defaultServerPort()
-    {
-        String strPort = "";
-        try
-        {
-            int port = new SemanticServiceBrokerService().getWSDLDocumentLocation().getPort();
-            strPort += port;
-
-        }
-        catch( Exception ex )
-        {
-            ex.printStackTrace();
-        }
-
-        return strPort;
-    }
-
     public static boolean paramHasValue( GateRuntimeParameter p, boolean allowEmptyStrings )
     {
         if( p == null )
@@ -839,7 +806,7 @@ public class ClientUtils
 				// Check if such client exists in the XML file or if there are more than one target
 				NodeList clientElement = doc.getElementsByTagName(client);
 				if(clientElement.getLength() == 0 || clientElement.getLength() > 1){
-					System.out.println("WARNING: No such client: \"" + client + "\"");
+					System.out.println("WARNING: Cannot resolve client: \"" + client + "\"");
 					return result;
 				}else{
 					Element clientTag = (Element) clientElement.item(0);
@@ -979,6 +946,7 @@ public class ClientUtils
 	    	Transformer transformer = transformerFactory.newTransformer();
 	    	DOMSource source = new DOMSource(document);
 	    	StreamResult result =  new StreamResult(new FileOutputStream(PROPERTIES_FILE_PATH));
+ 	    	//transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 	    	transformer.transform(source, result);
 		} catch (ParserConfigurationException e) {
 			e.printStackTrace();

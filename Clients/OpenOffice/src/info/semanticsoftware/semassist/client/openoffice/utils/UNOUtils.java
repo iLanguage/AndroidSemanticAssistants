@@ -55,24 +55,14 @@ import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.util.XReplaceable;
 import info.semanticsoftware.semassist.csal.ClientUtils;
 import info.semanticsoftware.semassist.csal.result.Annotation;
-import java.util.Iterator;
-import java.util.Set;
+import info.semanticsoftware.semassist.csal.XMLElementModel;
+import java.util.*;
 
 public class UNOUtils
 {
-
     private static final int HIGHLIGHT_YELLOW = 0x00FFFD00;
     private static final int HIGHLIGHT_OFF = 0xFFFFFF0A;
     private static int CURRENT_HIGHLIGHT = HIGHLIGHT_YELLOW;
-
-    // Configuration Defaults
-    private static float mSideNoteFontSize = 8; /* Default annotation font-size. */
-    private static Boolean mInteractiveResultHandling = true; /* Alterate results with a custom dialog. */
-    private static Boolean mBrowserResultHandling = true; /* Handle results with an external browser. */
-    private static Boolean mShowAnnotationContent = false; /* Put annotation content in side-notes. */
-    private static Boolean mEmptyFeatureFilter = true; /* Ignore empty-valued features by default. */
-    private static String mServerHost = ClientUtils.defaultServerHost();
-    private static String mServerPort = ClientUtils.defaultServerPort();
 
     private static Logger mLogger = Logger.getLogger( GUIUtils.class );
     private static XMultiServiceFactory mxDocFactory = null;
@@ -83,7 +73,6 @@ public class UNOUtils
    
     private static XText mxAnnotText = null;
     private static String mCurrentPipeline;
-    private static boolean mServerInfoChanged;
 
     /**
      * Retrieves either the marked text of the current document
@@ -194,16 +183,6 @@ public class UNOUtils
                 XMultiServiceFactory.class, doc );
 
         createInvisibleCursor(annotation);
-    }
-
-
-    /**
-     * @param status true to allow emphasising annotation span on the document
-     * text or false otherwise.
-     */
-    public static void setTextHighlighting( boolean status )
-    {
-       CURRENT_HIGHLIGHT = status ? HIGHLIGHT_YELLOW : HIGHLIGHT_OFF;
     }
 
     public static void initializeCursor( XComponentContext ctx )
@@ -356,10 +335,10 @@ public class UNOUtils
       String content = "";
 
       // Configure look-&-feel of side-note information.
-      setFontSize(text, getSideNoteFontSize());
+      setFontSize(text, ClientPreferences.getSideNoteFontSize());
 
       // If configured, duplicate annotation content as part of the side-note.
-      if (mShowAnnotationContent) {
+      if (ClientPreferences.isShowAnnotationContent()) {
          content += "content= "+ annotation.mContent +"\n";
       }
 
@@ -372,7 +351,7 @@ public class UNOUtils
          final String val = annotation.mFeatures.get(key);
 
          // If configured, suppress empty-valued features.
-         if (mEmptyFeatureFilter && "".equals(val)) {
+         if (ClientPreferences.isEmptyFeatureFilter() && "".equals(val)) {
             System.out.println("---------------- Ignoring empty valued feature: "+ key);
             continue;
          }
@@ -730,161 +709,23 @@ public class UNOUtils
 
     }
 
-    /**
-     * @return the CURRENT_HIGHLIGHT
-     */
-    public static boolean getCURRENT_HIGHLIGHT()
-    {
-      return (CURRENT_HIGHLIGHT == HIGHLIGHT_YELLOW);
+    // FIXME: Duplication from Eclipse Utils.java to be consolidated in CSAL
+    // once all duplicated client ServiceAgentSingletons implementations are
+    // refactored.
+    public static void propertiesReader()
+      throws NullPointerException {
+		// Should return only one item in the list
+	   ArrayList<XMLElementModel> server = ClientUtils.getClientPreference(ClientPreferences.CLIENT_NAME, "server");
+		
+   	// if there are no server defined for this client. then look for the last called one in the global scope
+		if (server.size() == 0) {
+	      server = ClientUtils.getClientPreference("global", "lastCalledServer");
+   	}
+   	// Note that if the former case, if by mistake there are more than
+      // one server defined, we pick the first one. If the specific host/port
+      // attributes are not found, the preference file is corrupt &
+      // implicitly throw an exception.
+		ServiceAgentSingleton.setServerHost(server.get(0).getAttribute().get(ClientUtils.XML_HOST_KEY));
+	   ServiceAgentSingleton.setServerPort(server.get(0).getAttribute().get(ClientUtils.XML_PORT_KEY));
     }
-
-   /**
-    * @param size value of the side-note font.
-    */
-   public static void setSideNoteFontSize( float size )
-   {
-      mSideNoteFontSize = size;
-   }
-
-   /**
-    * @return the font-size for side-note content.
-    */
-   public static float getSideNoteFontSize()
-   {
-      return mSideNoteFontSize;
-   }
-
-   /**
-    * @param status true to allow an external browser to handle the document
-    *        results or false otherwise.
-    */
-   public static void setBrowserResultHandling( boolean status )
-   {
-      mBrowserResultHandling = status;
-   }
-
-   /**
-    * @return the mBrowserResultHandling status.
-    */
-   public static boolean isBrowserResultHandling()
-   {
-      return mBrowserResultHandling;
-   }
-
-   /**
-    * @param status true to allow alteration of resulting annotation responses
-    *        or false otherwise.
-    */
-   public static void setInteractiveResultHandling( boolean status )
-   {
-      mInteractiveResultHandling = status;
-   }
-
-   /**
-    * @return the mInteractiveResultHandling status.
-    */
-   public static boolean isInteractiveResultHandling()
-   {
-      return mInteractiveResultHandling;
-   }
-
-   /**
-    * @param status true to allow filtering of empty-valued
-    *               features or false otherwise.
-    */
-   public static void setEmptyFeatureFilter( boolean status )
-   {
-      mEmptyFeatureFilter = status;
-   }
-
-   /**
-    * @return the mEmptyFeatureFilter status.
-    */
-   public static boolean isEmptyFeatureFilter()
-   {
-      return mEmptyFeatureFilter;
-   }
-
-   /**
-    * @param status true to show annotation content within side-notes,
-    *               or false otherwise.
-    */
-   public static void setShowAnnotationContent( boolean status )
-   {
-      mShowAnnotationContent = status;
-   }
-
-   /**
-    * @return the mShowAnnotationContent status.
-    */
-   public static boolean isShowAnnotationContent()
-   {
-      return mShowAnnotationContent;
-   }
-
-
-    /**
-     * @return the mServerHost
-     */
-    public static String getServerHost()
-    {
-        if(mServerHost.isEmpty() )
-        {
-            mServerHost = ClientUtils.defaultServerHost();
-        }
-
-        return mServerHost;
-    }
-
-    /**
-     * @param amServerHost the mServerHost to set
-     */
-    public static void setServerHost( String amServerHost )
-    {
-        if( mServerHost.equals( amServerHost ) )
-        {
-            return;
-        }
-
-        mServerHost = amServerHost;
-        mServerInfoChanged = true;
-    }
-
-    /**
-     * @return the mServerPort
-     */
-    public static String getServerPort()
-    {
-        if( mServerPort.isEmpty() )
-        {
-            mServerPort = ClientUtils.defaultServerPort();
-        }
-
-        return mServerPort;
-    }
-
-    /**
-     * @param amServerPort the mServerPort to set
-     */
-    public static void setServerPort( String amServerPort )
-    {
-        mServerPort = amServerPort;
-    }
-
-    /**
-     * @return the mServerInfoChanged
-     */
-    public static boolean getServerInfoChanged()
-    {
-        return mServerInfoChanged;
-    }
-
-    /**
-     * @param amServerInfoChanged the mServerInfoChanged to set
-     */
-    public static void setServerInfoChanged( boolean amServerInfoChanged )
-    {
-        mServerInfoChanged = amServerInfoChanged;
-    }
-
 }
