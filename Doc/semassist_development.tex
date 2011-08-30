@@ -664,8 +664,8 @@ Finally, make it visible to the user.
 % metadata lookup, parametrization, and result handling, are hidden from
 % the client plug-in through our client-side abstraction layer.
 
-\label{client_pref}
 \paragraph{Client Preference Management}
+\label{client_pref}
 As described in \ref{sec:pref_management}, the preference settings of Semantic Assistants clients are stored in a single shared XML file. Figure \ref{list:semassist-settings} presents the default structure of preference file. Initially, the settings file has a \texttt{<global>} tag. As the name suggests, all preferences stored as the children of this node will affect all the clients. The global tag has two \texttt{<server>} and one \texttt{<lastCalledServer>} child nodes that hold pre-defined server information for clients to connect to.
  
 \begin{figure}[!tb]

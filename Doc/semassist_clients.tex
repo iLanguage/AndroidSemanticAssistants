@@ -593,8 +593,8 @@ the source directory and add your development codes. To run your code, right
 click on \texttt{plugin.xml} file and select Run As $\rightarrow$ Eclipse
 Application.
 
-\label{sec:pref_management}
 \section{Global Preference Management}
+\label{sec:pref_management}
 Semantic Assistants clients preferences are stored in a single file in the user machine's home directory under the name \texttt{semassist-settings.xml}. This file is shared between all the clients and contains information, such as different servers that clients can connect to as well as other client-specific preferences. The preference XML document has two main parts: a global part and a client-specific part. The scope of the global preference, as the name suggests, is all of the clients and any changes to this part will affect them all. The client-specific scope, on the other hand, is limited to that specific client and does not affect others. Each Semantic Assistants client installed on the user machine has a dedicated tag inside the client-specific part, where it can store its proprietary preferences.
 
 This file does not ship with the Semantic Assistants project but a default preference file is created by the very first client installed and used on the user's machine and will be reused by the subsequent clients. It is not advised to manually modify this file unless its structure can be kept consistent. In case of deletion, a default file will be again created by the next used client. The structure of the preference file is detailed in \ref{client_pref}.
