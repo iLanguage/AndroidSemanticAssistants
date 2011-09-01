@@ -16,7 +16,7 @@ public class Utils {
 		
 		// if there are no server defined for this client. then look for the last called one in the global scope
 		if(server.size() == 0){
-			server = ClientUtils.getClientPreference("global", "lastCalledServer");
+			server = ClientUtils.getClientPreference(ClientUtils.XML_CLIENT_GLOBAL, "lastCalledServer");
 		}
 		
 		// Note that if the former case, if by mistake there are more than one server defined, we pick the first one

@@ -23,6 +23,7 @@ package info.semanticsoftware.semassist.csal;
 
 import java.util.HashMap;
 import java.util.Map;
+import org.w3c.dom.NamedNodeMap;
 
 public class XMLElementModel {
 	
@@ -37,11 +38,16 @@ public class XMLElementModel {
 		return this.name;
 	}
 	
-	
 	public void setAttribute(String _key, String _value){
 		this.attributes.put(_key, _value);
 	}
-	
+
+   public void setAttributes(final NamedNodeMap attrs) {
+	   for (int i = 0; i < attrs.getLength(); ++i){
+		   this.setAttribute(attrs.item(i).getNodeName(), attrs.item(i).getNodeValue());
+      }
+   }
+
 	public Map<String, String> getAttribute(){
 		return this.attributes;
 	}

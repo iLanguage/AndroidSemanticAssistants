@@ -35,14 +35,14 @@ import java.net.*;
 
 import net.java.dev.jaxb.array.*;
 import info.semanticsoftware.semassist.server.*;
+import info.semanticsoftware.semassist.csal.*;
 
 public class SACLClient
 {
+    // Client-unique key to differentiate its preferences from
+    // other clients.
+    private static final String CLIENT_NAME = "cmdline";
 
-    private static final String PROMPT = "==> ";
-    private static final String WELCOME_MESSAGE = "\n\nWelcome to the command line client for the semantic text " +
-                                                  "assistants architecture!\nType help or h for list of commands.\n\n";
-    private static final String GOODBYE_MESSAGE = "Leaving the command line client...\n";
     private static String lastCommand = "";
     private static String lastParams = "";
 
@@ -108,6 +108,20 @@ public class SACLClient
                 pl( info.getServiceName() );
             }
 
+        }
+        else if( "listpref".equals(cmd) )
+        {
+            ArrayList<XMLElementModel> preferences;
+
+            // Retrieve & display all global preferences.
+            preferences = ClientUtils.getClientPreference(ClientUtils.XML_CLIENT_GLOBAL, null);
+            pl("\n"+ ClientUtils.XML_CLIENT_GLOBAL +" preferences:");
+            printPreferences(preferences);
+
+            // Retireve & display all command-line preferences.
+            preferences = ClientUtils.getClientPreference(CLIENT_NAME, null);
+            pl("\n"+ CLIENT_NAME +" preferences:");
+            printPreferences(preferences);
         }
         else if( cmd.equals( "recommend" ) )
         {
@@ -399,6 +413,7 @@ public class SACLClient
         pl( "List of commands:" );
         pl( "  h, help, usage                   Prints this list" );
         pl( "  listall                          List all available NLP services" );
+        pl( "  listpref                         List all preferences available to this client" );
         pl( "  recommend langs=l1,l2,...        Lists recommended services for the" );
         pl( "            doclang=dl               given user and document languages" );
         pl( "  invoke serviceName               Invokes a language service. Input will" );
@@ -411,9 +426,15 @@ public class SACLClient
 
     }
 
-    private static void prompt()
+    private static void printPreferences(final ArrayList<XMLElementModel> preferences)
     {
-        System.out.print( PROMPT );
+      for (final XMLElementModel pref : preferences) {
+         final Map<String, String> attr = pref.getAttribute();
+         final Set<String> keys = attr.keySet();
+         for (final String key : keys) {
+            pl(pref.getName() +"."+ key +"="+ attr.get(key));
+         }
+      }
     }
 
     private static boolean isExitCommand( String cmd )
