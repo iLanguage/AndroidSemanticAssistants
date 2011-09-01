@@ -39,7 +39,7 @@ import info.semanticsoftware.semassist.server.*;
 
 public class ClientUtils
 {
-
+	public static final String XML_CLIENT_GLOBAL = "global";
 	public static final String XML_HOST_KEY = "host";
 	public static final String XML_PORT_KEY = "port";
  	public static final String PROPERTIES_FILE_PATH = System.getProperty("user.home")+ System.getProperty("file.separator") +"semassist-settings.xml";
@@ -789,11 +789,12 @@ public class ClientUtils
      * If the client or element does not exist, it returns an empty list.
      * @see XMLElementModel
      * @param client the target client scope
-     * @param element the target element
+     * @param element the specific target element to retireve or null to retireve all
+     *                elements at the @a client scope.
      * @return a list of elements or an empty list if no such client or element exists
      */
-    public static ArrayList<XMLElementModel> getClientPreference(String client, String element){
-    	ArrayList<XMLElementModel> result = new ArrayList<XMLElementModel>();
+    public static ArrayList<XMLElementModel> getClientPreference(final String client, final String element){
+    	final ArrayList<XMLElementModel> result = new ArrayList<XMLElementModel>();
     	File propertiesFile = new File(PROPERTIES_FILE_PATH);
 		if(propertiesFile.exists()){
 			try {
@@ -807,33 +808,26 @@ public class ClientUtils
 				NodeList clientElement = doc.getElementsByTagName(client);
 				if(clientElement.getLength() == 0 || clientElement.getLength() > 1){
 					System.out.println("WARNING: Cannot resolve client: \"" + client + "\"");
-					return result;
 				}else{
 					Element clientTag = (Element) clientElement.item(0);
     				NodeList children = clientTag.getChildNodes();
-					Element elementNode = null;
 
 					for(int i=0; i < children.getLength(); i++){
-						// check if the client has the element
-						if(children.item(i).getNodeName().equals(element)){							
-							XMLElementModel candid = new XMLElementModel();
-							candid.setName(element);
-							elementNode = (Element) children.item(i);
-
-							// Get all the attributes and put each pair in the hash map
-							NamedNodeMap attrs = elementNode.getAttributes();
-							for (int j = 0; j < attrs.getLength(); j++){
-								candid.setAttribute(attrs.item(j).getNodeName(), attrs.item(j).getNodeValue());
-							}
+					   final Element elementNode = (Element) children.item(i);
+					   // If not specified, include all preference elements defined
+					   // for the client, else keep just the wanted ones.
+						if(element == null || elementNode.getNodeName().equals(element)){							
+							final XMLElementModel candid = new XMLElementModel();
+							candid.setName(elementNode.getNodeName());
+                     candid.setAttributes(elementNode.getAttributes());
 
 							result.add(candid);
 						}
 					}
 
-					// if there is no such element in the XML file, this object is null
-					if (elementNode == null) {
+					// if there is no such element in the XML file, results are empty
+					if (result.isEmpty()) {
 						System.out.println("WARNING: No \"" + element + "\" element found for client \"" + client + "\"");
-						return result;
 					}
 				}
 			} catch (ParserConfigurationException e) {
@@ -845,6 +839,7 @@ public class ClientUtils
 			}
 
 		} else {
+	    	// Generate property file & recursively retry.
 	    	createPropertiesFile();
 	    	getClientPreference(client, element);
 		}
@@ -866,12 +861,12 @@ public class ClientUtils
 
 				Element root = doc.getDocumentElement();
 				Element clientTag;
-				NodeList clientElement = doc.getElementsByTagName("global");
+				NodeList clientElement = doc.getElementsByTagName(XML_CLIENT_GLOBAL);
 
 				if(clientElement.getLength() != 0){
     				clientTag = (Element) clientElement.item(0);
   				}else{
-  					clientTag = doc.createElement("global");
+  					clientTag = doc.createElement(XML_CLIENT_GLOBAL);
   				}
 
 				//FIXME should prevent adding duplication
@@ -922,7 +917,7 @@ public class ClientUtils
 			Document document = documentBuilder.newDocument();
 			
 			Element root = document.createElement("saProperties");
-			Element globalNode = document.createElement("global");
+			Element globalNode = document.createElement(XML_CLIENT_GLOBAL);
 			
 			Element lastServer = document.createElement("lastCalledServer");
 			lastServer.setAttribute("host", "minion.cs.concordia.ca");

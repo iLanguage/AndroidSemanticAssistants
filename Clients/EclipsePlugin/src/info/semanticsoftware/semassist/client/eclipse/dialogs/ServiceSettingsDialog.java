@@ -116,7 +116,7 @@ public class ServiceSettingsDialog extends Dialog {
             		Map<String, String> map = new HashMap<String, String>();
             		map.put(ClientUtils.XML_HOST_KEY, txtServerHost.getText());
             		map.put(ClientUtils.XML_PORT_KEY, txtServerPort.getText());
-            		//ClientUtils.setClientPreference("global", "server", map);
+            		//ClientUtils.setClientPreference(ClientUtils.XML_CLIENT_GLOBAL, "server", map);
             		ClientUtils.addNewServer(map);
             		super.buttonPressed(buttonId);
             	}
@@ -320,7 +320,7 @@ public class ServiceSettingsDialog extends Dialog {
 			}
 		});
          cmbServers.add("");
-         ArrayList<XMLElementModel> result = ClientUtils.getClientPreference("global", "server");
+         ArrayList<XMLElementModel> result = ClientUtils.getClientPreference(ClientUtils.XML_CLIENT_GLOBAL, "server");
      	 for (int i = 0; i < result.size(); i++){
  	    		String key = result.get(i).getAttribute().get(ClientUtils.XML_HOST_KEY);
  	    		String value = result.get(i).getAttribute().get(ClientUtils.XML_PORT_KEY);

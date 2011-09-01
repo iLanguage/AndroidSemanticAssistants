@@ -83,7 +83,7 @@ public class SettingsFrame extends JFrame
 
 
             // Populate the available server combo-box from the configuration file.
-            final ArrayList<XMLElementModel> result = ClientUtils.getClientPreference("global", "server");
+            final ArrayList<XMLElementModel> result = ClientUtils.getClientPreference(ClientUtils.XML_CLIENT_GLOBAL, "server");
             for (final XMLElementModel node : result) {
  	    		   final String key = node.getAttribute().get(ClientUtils.XML_HOST_KEY);
  	    		   final String value = node.getAttribute().get(ClientUtils.XML_PORT_KEY);
