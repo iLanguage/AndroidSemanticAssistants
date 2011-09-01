@@ -436,13 +436,5 @@ public class SACLClient
          }
       }
     }
-
-    private static boolean isExitCommand( String cmd )
-    {
-        cmd = cmd.toLowerCase();
-        return cmd.equals( "exit" ) || cmd.equals( "quit" ) || cmd.equals( "bye" ) ||
-               cmd.equals( "schluss" ) || cmd.equals( "raus" );
-    }
-
 }
 
