@@ -841,7 +841,7 @@ public class ClientUtils
 		} else {
 	    	// Generate property file & recursively retry.
 	    	createPropertiesFile();
-	    	getClientPreference(client, element);
+	    	return getClientPreference(client, element);
 		}
 		return result;
     }

@@ -44,7 +44,7 @@ public class SACLClient
     private static final String CLIENT_NAME = "cmdline";
 
     private static String lastCommand = "";
-    private static String lastParams = "";
+    private static String[] lastParams = null;
 
     public static void main( String args[] )
     {
@@ -55,22 +55,15 @@ public class SACLClient
             System.exit( 0 );
         }
 
-        String cmd = args[0];
-
-        String params = "";
-        if( args.length > 1 )
-        {
-            for( int i = 1; i < args.length; i++ )
-            {
-                params += args[i] + " ";
-            }
-        }
+        final String cmd = args[0];
+        final String[] params = (args.length > 1) ?
+            Arrays.copyOfRange(args, 1, args.length) : new String[0];
 
         executeCommand( cmd, params );
         System.exit( 0 );
     }
 
-    private static void executeCommand( String cmd, String params )
+    private static void executeCommand(final String cmd, final String[] params )
     {
         if( cmd.equals( "h" ) || cmd.equals( "help" ) || cmd.equals( "usage" ) )
         {
@@ -83,13 +76,13 @@ public class SACLClient
         }
         else if( cmd.equals( "printlast" ) )
         {
-            pl( lastCommand + " " + lastParams );
+            pl( lastCommand + " " + arrayToString(lastParams, " ") );
             return;
         }
         else if( cmd.equals( "listall" ) )
         {
 
-            if( params != null || params.length() > 0 )
+            if(params.length > 0)
             {
                 paramsOtherServer( params );
             }
@@ -111,17 +104,51 @@ public class SACLClient
         }
         else if( "listpref".equals(cmd) )
         {
-            ArrayList<XMLElementModel> preferences;
-
             // Retrieve & display all global preferences.
-            preferences = ClientUtils.getClientPreference(ClientUtils.XML_CLIENT_GLOBAL, null);
             pl("\n"+ ClientUtils.XML_CLIENT_GLOBAL +" preferences:");
-            printPreferences(preferences);
+            printPreferences(ClientUtils.getClientPreference(
+               ClientUtils.XML_CLIENT_GLOBAL, null));
 
             // Retireve & display all command-line preferences.
-            preferences = ClientUtils.getClientPreference(CLIENT_NAME, null);
             pl("\n"+ CLIENT_NAME +" preferences:");
-            printPreferences(preferences);
+            printPreferences(ClientUtils.getClientPreference(
+               CLIENT_NAME, null));
+        }
+        else if( "setpref".equals(cmd) )
+        {
+            if (params.length == 0) {
+               pl("Missing parameters.\n");
+               printHelp();
+               return;
+            }
+
+            // Check for accepted preference scopes.
+            final String scope = params[0];
+            if (!ClientUtils.XML_CLIENT_GLOBAL.equals(scope) &&
+                !CLIENT_NAME.equals(scope)) {
+               pl("Unrecognized <"+ scope +"> scope.\n");
+               printHelp();
+               return;
+            }
+
+            try {
+               // Parse list of preferences, attributes & values to set.
+               final String[] vars = params[1].split(",");
+
+               for (int i = 0; i < vars.length; ++i) {
+                  final String pair = vars[i].split("=")[0];
+                  final String pref = pair.split("\\.")[0];
+                  final String var = pair.split("\\.")[1];
+                  final String val = vars[i].split("=")[1];
+                  final Map<String, String> map = new HashMap<String, String>();
+                  map.put(var, val);
+                  ClientUtils.setClientPreference(scope, pref, map);
+               }
+            } catch (final Exception ex) {
+               // Syntax error parsing pref.attr=val,...
+               pl("Parameter parsing error.\n");
+               printHelp();
+            }
         }
         else if( cmd.equals( "recommend" ) )
         {
@@ -155,7 +182,7 @@ public class SACLClient
         {
             try
             {
-                if( params == null || params.length() == 0 )
+                if( params.length == 0 )
                 {
                     printHelp();
                     return;
@@ -164,7 +191,7 @@ public class SACLClient
                 // Extract user context from the parameters
                 UserContext ctx = buildUserContext( params );
 
-                String serviceName = getServiceName( params );
+                final String serviceName = getServiceName( params[0] );
                 pl( "Invoking " + serviceName + "..." );
                 invokeWithParams( params , serviceName, ctx);
 
@@ -220,15 +247,13 @@ public class SACLClient
         // Save for repeated usage
         lastCommand = cmd;
         lastParams = params;
-
     }
 
-    private static UserContext buildUserContext( String params )
+    private static UserContext buildUserContext( final String[] pa )
     {
         UserContext ctx = new UserContext();
 
         // Parse parameters
-        String[] pa = params.split( " " );
         for( int i = 0; i < pa.length; i++ )
         {
             String[] pvPair = pa[i].split( "=" );
@@ -249,6 +274,20 @@ public class SACLClient
         return ctx;
     }
 
+   public static <T> String arrayToString(final T[] arr, final String separator) {
+      String result = "";
+      if (arr != null && arr.length > 0) {
+         result = arr[0].toString();
+         for (int i = 1; i < arr.length; ++i) {
+            result = result + separator + arr[i].toString();
+         }
+      }
+      return result;
+   }
+
+    /**
+     * Get the content of a possibly quoted string.
+     */
     private static String getServiceName( String params )
     {
         String serviceName = null;
@@ -265,14 +304,6 @@ public class SACLClient
             }
 
             serviceName = params.substring( 1, pos );
-            if( params.length() > pos + 1 )
-            {
-                params = params.substring( pos + 1 );
-            }
-            else
-            {
-                params = "";
-            }
         }
         else
         {
@@ -285,29 +316,21 @@ public class SACLClient
             {
                 serviceName = params.substring( 0, pos );
             }
-
-            if( params.length() > pos + 1 )
-            {
-                params = params.substring( pos + 1 );
-            }
-            else
-            {
-                params = "";
-            }
         }
 
         return serviceName;
     }
 
-    private static void invokeWithParams( String params, String serviceName, UserContext ctx )
+    private static void invokeWithParams( final String[] params,
+         final String serviceName, final UserContext ctx )
     {
         UriList uriArray = new UriList();
         GateRuntimeParameterArray rtpArray = new GateRuntimeParameterArray();
         StringArray stringArray = new StringArray();
-        String[] split = params.split( " " );
+        final String[] split = new String[params.length];
         for( int i = 0; i < split.length; i++ )
         {
-            split[i] = split[i].trim();
+            split[i] = params[i].trim();
             int pos = split[i].indexOf( '=' );
             if( pos < 0 )
             {
@@ -360,10 +383,11 @@ public class SACLClient
         pl( result );
     }
 
-    private static void paramsOtherServer( String params )
+
+    private static void paramsOtherServer(final String[] params )
     {
-        String[] split = params.split( " " );
-        for( int i = 0; i < split.length; i++ )
+        final String[] split = new String[params.length];
+        for( int i = 0; i < params.length; i++ )
         {
             split[i] = split[i].trim();
             int pos = split[i].indexOf( '=' );
@@ -414,6 +438,8 @@ public class SACLClient
         pl( "  h, help, usage                   Prints this list" );
         pl( "  listall                          List all available NLP services" );
         pl( "  listpref                         List all preferences available to this client" );
+        pl( "  setpref ["+ ClientUtils.XML_CLIENT_GLOBAL +"|"+ CLIENT_NAME +"]         Set the value of a client preference/attribute" );
+        pl( "     pref1.attr1=val,...             at the given scope." );
         pl( "  recommend langs=l1,l2,...        Lists recommended services for the" );
         pl( "            doclang=dl               given user and document languages" );
         pl( "  invoke serviceName               Invokes a language service. Input will" );
