@@ -53,7 +53,7 @@
     <!-- This target compiles all the classes -->
     <target name="compile" depends="init" description="Compile the source" >
         <!-- Compile the java code from ${srcDir} into ${buildDir} -->
-        <javac srcdir="${src.home}" destdir="${build.home}"  includeantruntime="${antruntime}">
+        <javac srcdir="${src.home}" destdir="${build.home}"  includeantruntime="${antruntime}" debug="true">
 	    <compilerarg value="${compile.args}" />
             <classpath refid="compile.classpath" />
         </javac>
