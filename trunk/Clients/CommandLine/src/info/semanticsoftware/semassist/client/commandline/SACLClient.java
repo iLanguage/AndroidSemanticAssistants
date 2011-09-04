@@ -275,14 +275,14 @@ public class SACLClient
     }
 
    public static <T> String arrayToString(final T[] arr, final String separator) {
-      String result = "";
+      final StringBuffer result = new StringBuffer();
       if (arr != null && arr.length > 0) {
-         result = arr[0].toString();
+         result.append(arr[0].toString());
          for (int i = 1; i < arr.length; ++i) {
-            result = result + separator + arr[i].toString();
+            result.append(separator + arr[i].toString());
          }
       }
-      return result;
+      return result.toString();
    }
 
     /**
