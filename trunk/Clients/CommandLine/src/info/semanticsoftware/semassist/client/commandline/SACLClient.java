@@ -43,9 +43,6 @@ public class SACLClient
     // other clients.
     private static final String CLIENT_NAME = "cmdline";
 
-    private static String lastCommand = "";
-    private static String[] lastParams = null;
-
     public static void main( String args[] )
     {
 
@@ -68,16 +65,6 @@ public class SACLClient
         if( cmd.equals( "h" ) || cmd.equals( "help" ) || cmd.equals( "usage" ) )
         {
             printHelp();
-        }
-        else if( cmd.equals( "again" ) || cmd.equals( "last" ) )
-        {
-            executeCommand( lastCommand, lastParams );
-            return;
-        }
-        else if( cmd.equals( "printlast" ) )
-        {
-            pl( lastCommand + " " + arrayToString(lastParams, " ") );
-            return;
         }
         else if( cmd.equals( "listall" ) )
         {
@@ -242,11 +229,6 @@ public class SACLClient
         {
             printHelp();
         }
-
-
-        // Save for repeated usage
-        lastCommand = cmd;
-        lastParams = params;
     }
 
     private static UserContext buildUserContext( final String[] pa )
@@ -362,19 +344,7 @@ public class SACLClient
             }
             else if( paramName.equals( "params" ) )
             {
-                String[] runParams = paramValue.split( "," );
-                if( runParams.length >= 2 )
-                {
-                    // runParams[0] -> for Host
-                    // runParams[1] -> for Port
-                    if( runParams[0].toLowerCase().contains( "host" ) && runParams[1].toLowerCase().contains( "port" ) )
-                    {
-                        String[] hostValue = runParams[0].split( "=" );
-                        ServiceAgentSingleton.setServerHost( hostValue[1] );
-                        String[] portValue = runParams[1].split( "=" );
-                        ServiceAgentSingleton.setServerPort( portValue[1].substring( 0, portValue[1].length() - 1 ) );
-                    }
-                }
+               parseHostPortValue(paramValue);
             }
         }
         SemanticServiceBroker agent = ServiceAgentSingleton.getInstance();
@@ -383,6 +353,23 @@ public class SACLClient
         pl( result );
     }
 
+   /**
+    * @param paramValue Comma delimited string with host/port key value pairs.
+    */
+   private static void parseHostPortValue(final String paramValue) {
+      final String[] runParams = paramValue.split( "," );
+      if( runParams.length >= 2 ) {
+         // runParams[0] -> for Host
+         // runParams[1] -> for Port
+         if( runParams[0].toLowerCase().contains( "host" ) &&
+             runParams[1].toLowerCase().contains( "port" ) ) {
+            final String host = runParams[0].split("=")[1];
+            final String port = runParams[1].split("=")[1];
+            ServiceAgentSingleton.setServerHost( host );
+            ServiceAgentSingleton.setServerPort( port.substring( 0, port.length() - 1 ) );
+         }
+      }
+   }
 
     private static void paramsOtherServer(final String[] params )
     {
@@ -405,19 +392,7 @@ public class SACLClient
             // Handle runtime parameters
             if( paramName.equals( "params" ) )
             {
-                String[] runParams = paramValue.split( "," );
-                if( runParams.length >= 2 )
-                {
-                    // runParams[0] -> for Host
-                    // runParams[1] -> for Port
-                    if( runParams[0].toLowerCase().contains( "host" ) && runParams[1].toLowerCase().contains( "port" ) )
-                    {
-                        String[] hostValue = runParams[0].split( "=" );
-                        ServiceAgentSingleton.setServerHost( hostValue[1] );
-                        String[] portValue = runParams[1].split( "=" );
-                        ServiceAgentSingleton.setServerPort( portValue[1].substring( 0, portValue[1].length() - 1 ) );
-                    }
-                }
+               parseHostPortValue(paramValue);
             }
         }
     }
@@ -445,8 +420,6 @@ public class SACLClient
         pl( "  invoke serviceName               Invokes a language service. Input will" );
         pl( "         docs=url1;url2,...          be the documents whose URLs are given, " );
         pl( "         params=(p1=v1,p2=v2,...)    params specifies runtime parameters." );
-        pl( "  printlast                        Print last command" );
-        pl( "  again, last                      Execute last command" );
         pl( "  status                           Display a list of loaded Pipelines" );
         pl( "                                   Display a list of Queued(waiting) Pipelines" );
 
