@@ -409,7 +409,7 @@ from the "Available Assistants" item and modify the connection settings to the
 Semantic Assistants server by selecting the second item.
 \begin{figure}[htb]
 \begin{center}
-  \includegraphics[width=0.8\textwidth]{pictures/eclipse_menu.jpg}
+  \includegraphics[width=1.0\textwidth]{pictures/eclipse_menu.jpg}
   \caption{Semantic Assistant Menu in Eclipse}
   \label{fig:eclipse_menu}
 \end{center}
@@ -418,7 +418,7 @@ Semantic Assistants server by selecting the second item.
 Selecting the "Available Assistants" item from Semantic Assistants menu will
 open a file selection dialog. The file selection dialog allows the user to
 select the desired files, folders and even complete projects to send to the
-server as inputs to an NLP service.
+server as inputs to an NLP service. For more convenience, you can type an arbitrary extension like ``java'' or ``xml'', in the ``File Format'' field to filter to file tree view. 
 
 \begin{figure}[htb]
 \begin{center}
@@ -431,13 +431,14 @@ server as inputs to an NLP service.
 This dialog also lets the user to select an NLP service from a dynamically
 generated list of services. This list is generated dynamically by selecting the
 available services based on the client and the language capabilities of the
-deployed NLP services. Note that the integration of a new service does not
+deployed NLP services. The server location where the service information are read from is presented just above the list as depicted in Fig \ref{fig:eclipse_services}. Note that the integration of a new service does not
 require any changes on the client side - any new NLP service created and
 deployed by a language engineer is dynamically discovered through its OWL
 metadata maintained by the architecture and so becomes immediately available to
 any connected client.
 
 \begin{figure}[htb]
+\label{fig:eclipse_services}
 \begin{center}
   \includegraphics[width=0.5\textwidth]{pictures/eclipse_services.jpg}
   \caption{A List of Available NLP Services}
@@ -507,30 +508,50 @@ Settings" item. By clicking on this menu item, a dialog as depicted in Figure \r
 
 \subsection{Installation}
 \label{subsec:eclipse_install}
-In order to use the Eclipse plug-in, do the following:
+You can install the Semantic Assistants plug-in via the Eclipse software installer. To do so, first you have to add the Semantic Assistants software repository to your Eclipse list of software sites. In addition to installing the plug-in, adding the repository lets the Eclipse update manager to check for plug-in updates once available. Please carefully follow the steps listed below to install the Eclipse plug-in and refer to section \ref{trouble:eclipse_install} for installation troubleshooting.
 
 \begin{enumerate}
-
-  \item Make sure that the client-side abstraction layer is already been built
-and packaged.
-
-  \item cd to the \url{Clients/EclipsePlugin} directory.
-
-  \item Type \texttt{ant}. The ant file will compile all the classes and package
-the plug-in JAR file in \url{EclipsePlugin/plugins} folder.
-
-  \item Browse to your Eclipse installation folder and paste the generated JAR
-file from previous step into the \url{plugins} folder.
-  
-  \item Start the Eclipse application. The Eclipse plug-in loader will
-automatically install the plug-in for you. If the plug-in is installed
+  \item Select Help $\rightarrow$ Install New Software to open the Eclipse software installer.
+  \item Press the ``Add'' button in the dialog, to add the Semantic Assistants repository.
+  \item In the new dialog depicted in Fig \ref{fig:eclipse_install}, type ``\texttt{Semantic Assistants}'' and\\ ``\texttt{http://sa-eclipse.semanticsoftware.info}'' in ``Name'' and ``Location'' fields, respectively, and press ``OK''.
+  \item The Semantic Assistants repository should now be added to your Eclipse list of software sites as seen in Fig \ref{fig:eclipse_install2}. From the loaded softwares, check the Eclipse plug-in and press ``Next''.
+  \item Simply, follow the installation steps and let the installer restart the Eclipse application.
+  \item The Eclipse plug-in loader will automatically load the plug-in for you. If the plug-in is installed
 successfully, you should be able to see the Semantic Assistants menu added to
 you toolbar.
-
-  \textbf{Note:} Remember the server must be running to be able to query or
-execute language services.
-
 \end{enumerate}
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=0.6\textwidth]{pictures/eclipse_install.jpg}
+  \caption{Adding Semantic Assistants Repository to Eclipse List of Software Sites}
+  \label{fig:eclipse_install}
+\end{center}
+\end{figure}
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=0.6\textwidth]{pictures/eclipse_install2.jpg}
+  \caption{Eclipse Software Installer Dialog}
+  \label{fig:eclipse_install2}
+\end{center}
+\end{figure}
+
+\subsection{Updating The Plug-in}
+\begin{enumerate}
+  \item Select Help $\rightarrow$ Check for Updates to open the Eclipse update manager.
+  \item If there are any updates available for the Semantic Assistants plug-in, it will appear the in the update manager dialog as shown in Fig \ref{fig:eclipse_update}.
+  \item Check the Semantic Assistants Eclipse plug-in from the list and press ``Next''.
+  \item Follow the wizard steps and let the update manager restart your Eclipse for the updates to take place.
+\end{enumerate}
+
+\begin{figure}[htb]
+\begin{center}
+  \includegraphics[width=1.0\textwidth]{pictures/eclipse_update.jpg}
+  \caption{Updatin the Plug-in via Eclipse Update Manager}
+  \label{fig:eclipse_update}
+\end{center}
+\end{figure}
 
 \subsection{Development Notes}
 \label{subsec:eclipse.development}
