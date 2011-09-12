@@ -64,16 +64,16 @@ The following directories and files are found under the \emph{Server} directory.
 \item \url{src}: Contains the java source code.
 \item \url{gate-home}: Contains two gate user configuration files \emph{gate.xml} and \url{user-gate.xml}.
 \item \url{logs}: It is used for server log files.
-\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Server} is loaded through Netbeans.
-\item \url{.classpath}: ClassPath file for NetBeans.
-\item \url{.project}: Project Description file for NetBeans.
+%\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Server} is loaded through Netbeans.
+%\item \url{.classpath}: ClassPath file for NetBeans.
+%\item \url{.project}: Project Description file for NetBeans.
 \item \url{Makefile}: Makefile that can be used to invoke Ant targets.
 \item \url{build.xml}: Ant build file use to compile the project. Contains dependency information.
-\item \url{nb-build.xml}: Build file used by Netbeans.
+%\item \url{nb-build.xml}: Build file used by Netbeans.
 \item \url{protege.properties}: Generated properties file, used by Protege.
 \item \url{build}: Contains the binary java .class files.
 \item \url{dist}: Contains a .jar file of the compiled server side.
-\item \url{nbdist}: Contains a .jar file of the compiled server. Generated when the server is compiled through Netbeans.
+%\item \url{nbdist}: Contains a .jar file of the compiled server. Generated when the server is compiled through Netbeans.
 \end{enumerate}
 
 
@@ -83,13 +83,13 @@ The following directories and files are found under the \emph{CSAL} directory.
 \begin{enumerate}
 \item \url{src}: Contains the java source code of the client side abstraction layer.
 \item \url{dist}: Contains the output .jar file result of compilation of the CSAL.
-\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{CSAL} is loaded through Netbeans.
-\item \url{.classpath}: ClassPath file for NetBeans.
-\item \url{.project}: Project Description file for NetBeans.
+%\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{CSAL} is loaded through Netbeans.
+%\item \url{.classpath}: ClassPath file for NetBeans.
+%\item \url{.project}: Project Description file for NetBeans.
 \item \url{Makefile}: Makefile that can be used to invoke ant targets.
 \item \url{build.xml}: Ant build file use to compile the project. Contains dependency information.
 \item \url{bin}: Contains the binary java .class files.
-\item \url{nb-build.xml}: Buildfile used by Netbeans.
+%\item \url{nb-build.xml}: Buildfile used by Netbeans.
 \end{enumerate}
 
 
@@ -99,9 +99,9 @@ The two sample clients we provide, \emph{CommandLine} and \emph{OpenOffice}, hav
 \subsubsection{Command Line Client Directory Structure}
 \begin{enumerate}
 \item \url{src}: Contains the java source code of the Command Line Client.
-\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Command Line Client} is loaded through Netbeans.
-\item \url{.classpath}: ClassPath file for NetBeans.
-\item \url{.project}: Project Description file for NetBeans.
+%\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Command Line Client} is loaded through Netbeans.
+%\item \url{.classpath}: ClassPath file for NetBeans.
+%\item \url{.project}: Project Description file for NetBeans.
 \item \url{build.xml}: Ant build file use to compile the project.Contains dependency information.
 \item \url{bin}: Contains the binary java .class files.
 \item \url{runclient.sh}: Script helps with the class path setting and running the client.
@@ -115,8 +115,8 @@ The two sample clients we provide, \emph{CommandLine} and \emph{OpenOffice}, hav
 \item \url{build.xml}: Ant build file use to complile the project.Contains dependency information.
 \item \url{bin}: Contains the binary java .class files.
 \item \url{SemassistOpenOfficePlugIn.oxt}: Contains the output file result of complilation and packaged in oxt plug-in format used by OpenOffice.
-\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Command Line Client} is loaded through Netbeans.
-\item \url{nb-build.xml}: Buildfile used by Netbeans.
+%\item \url{nbproject}: Contains configuration and properties files used by the NeatBeans IDE if the \emph{Command Line Client} is loaded through Netbeans.
+%\item \url{nb-build.xml}: Buildfile used by Netbeans.
 \end{enumerate}
 
 \subsubsection{Eclipse Client Directory Structure}
@@ -176,74 +176,53 @@ We recommend you test if the server is running correctly by accessing
 it through the command-line client described in Section~\ref{sec:sacl:clc}.
 
 
-\section{NetBeans Development}
-Parts of the project have been developed using the NetBeans
-IDE.\footnote{NetBeans IDE, \url{http://netbeans.org/}.} Debugging is
-  made possible for all elements of the project, the steps will be
-  described in this section. \textbf{Note:} The following steps have
-  been validated with NetBeans IDE 6.7.
+%\section{NetBeans Development}
+%Parts of the project have been developed using the NetBeans
+%IDE.\footnote{NetBeans IDE, \url{http://netbeans.org/}.} Debugging is
+%  made possible for all elements of the project, the steps will be
+%  described in this section. \textbf{Note:} The following steps have
+%  been validated with NetBeans IDE 6.7.
 
-\subsection{Open the Project Workspace}
+%\subsection{Open the Project Workspace}
 
-\begin{enumerate}
-  \item Open the NetBeans IDE.
-  \item Select \emph{File} from the Menu Bar then \emph{Open Project}.
-  \item From the Dialog that pops-up navigate to the \emph{SemanticAssistants} Directory and open \emph{Server} and \emph{CSAL}. 
-  \item Repeat the previous step and navigate to the \emph{SemanticAssistants/Clients} Directory and open \emph{OpenOffice} and \emph{CommandLine} 
-\end{enumerate}
+%\begin{enumerate}
+%  \item Open the NetBeans IDE.
+%  \item Select \emph{File} from the Menu Bar then \emph{Open Project}.
+%  \item From the Dialog that pops-up navigate to the \emph{SemanticAssistants} Directory and open \emph{Server} and \emph{CSAL}. 
+%  \item Repeat the previous step and navigate to the \emph{SemanticAssistants/Clients} Directory and open \emph{OpenOffice} and \emph{CommandLine} 
+%\end{enumerate}
 
-\subsection{Run a Project through NetBeans}
+%\subsection{Run a Project through NetBeans}
 
-\begin{enumerate}
-  \item Open the \emph{Files} Window (\emph{Ctrl-2}) and the list of the open project will appear.
-  \item Collapse the files for a given project
-  \item To \emph{compile/dist/run/clean} or any other action, \emph{R-Click} to the \emph{build.xml}, select \emph{Run target} and select one of the list.
-\end{enumerate}
+%\begin{enumerate}
+%  \item Open the \emph{Files} Window (\emph{Ctrl-2}) and the list of the open project will appear.
+%  \item Collapse the files for a given project
+%  \item To \emph{compile/dist/run/clean} or any other action, \emph{R-Click} to the \emph{build.xml}, select \emph{Run target} and select one of the list.
+%\end{enumerate}
 
-\subsection{Debug a Project with the NetBeans debugger}
-\label{sec:debug}
-Currently the projects: \emph{Server}, \emph{CSAL} and \emph{OpenOffice} are
-being built with debug info and the developer has to follow the following
-steps to attach the debugger in order to set breakpoints and pause the
-execution of any given projects.  \textbf{Note:} To configure OpenOffice Writer
-  to listen for incoming debugger connections please refer to the subsection 
-  \emph{Configure the OpenOffice Writer to Run in Debug Mode} below.
+%\subsection{Debug a Project with the NetBeans debugger}
+%\label{sec:debug}
+%Currently the projects: \emph{Server}, \emph{CSAL} and \emph{OpenOffice} are
+%being built with debug info and the developer has to follow the following
+%steps to attach the debugger in order to set breakpoints and pause the
+%execution of any given projects.  \textbf{Note:} To configure OpenOffice Writer
+%  to listen for incoming debugger connections please refer to the subsection 
+%  \emph{Configure the OpenOffice Writer to Run in Debug Mode} below.
 
-\begin{enumerate}
-  \item To debug a running process in the system, the developer should go to \emph{Debug} from the Menu bar and select \emph{Attach Debugger}. A window will pop up.
-  \item Set the following arguments to the pop-up window: 
-  \begin{itemize}
-    \item \textbf{Debugger}: Java Debugger (JPDA)
-    \item \textbf{Connector}: Socket Attach (Attaches by socket to other VMs)
-    \item \textbf{Trasport}: dt\_socket 
-    \item \textbf{Host:} The local machine's IP, e.g. \emph{Host: localhost}
-    \item \textbf{Port:} The port that the process is listening. The value is found and changed at the build.xml. The \emph{Server} is listening at \emph{8888}.
-  \end{itemize}
-  \item Click \emph{OK}. The process that the debugger was attached, now runs in \emph{Debug Mode}.
-	Repeat the above steps every time you run the project.
-\end{enumerate}
+%\begin{enumerate}
+%  \item To debug a running process in the system, the developer should go to \emph{Debug} from the Menu bar and select \emph{Attach Debugger}. A window will pop up.
+%  \item Set the following arguments to the pop-up window: 
+%  \begin{itemize}
+%    \item \textbf{Debugger}: Java Debugger (JPDA)
+%    \item \textbf{Connector}: Socket Attach (Attaches by socket to other VMs)
+%    \item \textbf{Trasport}: dt\_socket 
+%    \item \textbf{Host:} The local machine's IP, e.g. \emph{Host: localhost}
+%    \item \textbf{Port:} The port that the process is listening. The value is found and changed at the build.xml. The \emph{Server} is listening at \emph{8888}.
+%  \end{itemize}
+%  \item Click \emph{OK}. The process that the debugger was attached, now runs in \emph{Debug Mode}.
+%	Repeat the above steps every time you run the project.
+%\end{enumerate}
   
-
-\subsubsection{Configure the OpenOffice Writer to Run in Debug Mode}
-This Section describes how to configure the JAVA VM in OpenOffice Writer to accept incoming connection for a debugger.
-
-\begin{enumerate}
-  \item Open OpenOffice Writer
-  \item Go to Tools, Options. Under \emph{OpenOffice.org}, there is a \emph{Java} item. Select it and then Click on the 
-        \emph{Parameter} button. There the parameters when running the JAVA VM are set.
-  \item To run in debug mode \emph{Assign} the following 2 parameters:
-  \begin{itemize}
-    \item \textbf{-X debug}
-    \item \textbf{-Xrunjdwp:transport=dt\_socket,server=y,suspend=n,address=7081}
-  \end{itemize}
-  \item \textbf{Note: The} \emph{address=7081} \textbf{should be the consistent with the port set in \emph{Attach Debugger} within NetBeans}
-  \item  Now OO Writer is ready to accept connections from the debugger
-
-\end{enumerate} 
-
-
-
-
 \section{Service Invocation and Result Passing}
 In this section, we provide details on the communication between the
 clients and the server in the \sa architecture.

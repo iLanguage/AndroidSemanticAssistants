@@ -409,10 +409,25 @@ private static void HighlightField()
 \label{list:ssb}
 \end{figure}
 
-
-More details on how to compile and debug an OpenOffice plug-in can be found in
-Section~\ref{sec:debug}.
+%More details on how to compile and debug an OpenOffice plug-in can be found in Section~\ref{sec:debug}.
  
+\subsubsection{Configure the OpenOffice Writer to Run in Debug Mode}
+This Section describes how to configure the JAVA VM in OpenOffice Writer to accept incoming connection for a debugger.
+
+\begin{enumerate}
+  \item Open OpenOffice Writer
+  \item Go to Tools, Options. Under \emph{OpenOffice.org}, there is a \emph{Java} item. Select it and then Click on the 
+        \emph{Parameter} button. There the parameters when running the JAVA VM are set.
+  \item To run in debug mode \emph{Assign} the following 2 parameters:
+  \begin{itemize}
+    \item \textbf{-X debug}
+    \item \textbf{-Xrunjdwp:transport=dt\_socket,server=y,suspend=n,address=7081}
+  \end{itemize}
+  \item \textbf{Note: The} \emph{address=7081} \textbf{should be the consistent with the port set within the debugger}
+  \item  Now OO Writer is ready to accept connections from the debugger
+\end{enumerate} 
+
+
 \section{Eclipse Plug-in}
 Eclipse is not a single monolithic program, but rather a small kernel containing
 a plug-in loader surrounded by hundreds of plug-ins. The behavior of each
