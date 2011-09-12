@@ -21,7 +21,8 @@
 \section{Command-Line Client}
 \label{sec:sacl:clc}
 This is a simple example client to access the server from the command line.
-It is located under \url{SemanticAssistants/Clients/CommandLine}. 
+It is located under \url{SemanticAssistants/Clients/CommandLine} and is meant to demonstrate and test to plug-in developers various Semantic Assistant functionalities.
+
 \begin{enumerate}
 \item To compile: \emph{ant compile}
 \item To run: \emph{./runclient.sh}
@@ -67,7 +68,33 @@ For example:
     "params=(Host=localhost,Port=8080)"
 \end{verbatim}
 
-This parameter list has to be added at every invocation.
+This parameter list may be added at every invocation.
+
+\subsection*{Configuring Client Preferences}
+The Semantic Assistant CSAL architecture makes it is possible to configure persistent server connection and runtime preferences for the command-line client via the \texttt{semassist-settings.xml} file described in section \ref{sec:pref_management}.
+Run the following to see all configurations relevant to the command-line client. The output should be similar to this:
+\begin{verbatim}
+    ./runclient.sh listpref
+
+    global preferences:
+    lastCalledServer.port=8879
+    lastCalledServer.host=minion.cs.concordia.ca
+    server.port=8879
+    server.host=minion.cs.concordia.ca
+    server.port=8879
+    server.host=assistant.cs.concordia.ca
+
+    cmdline preferences:
+\end{verbatim}
+
+To then create new or override existing preferences in either the global or the client scopes, you can run something like the following:
+\begin{verbatim}
+    ./runclient.sh setpref cmdline credential.login="John Doe"
+    ./runclient.sh setpref cmdline credential.password="letmein"
+\end{verbatim}
+Note that while any preference can be configured, unlike the fictitious ones above, only supported ones will take effect for the command-line client.
+Only the following preferences are currently supported: \texttt{server.host}, \texttt{server.port}, \texttt{lastCalledServer.host} and \texttt{lastCalledServer.port}.
+
 
 \section{OpenOffice.org Writer Plug-In}
 %TODO: update screenshots
