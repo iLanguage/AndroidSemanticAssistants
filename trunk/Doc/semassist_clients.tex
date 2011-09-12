@@ -89,10 +89,10 @@ Run the following to see all configurations relevant to the command-line client.
 
 To then create new or override existing preferences in either the global or the client scopes, you can run something like the following:
 \begin{verbatim}
-    ./runclient.sh setpref cmdline credential.login="John Doe"
-    ./runclient.sh setpref cmdline credential.password="letmein"
+    ./runclient.sh setpref cmdline server.host=localhost
+    ./runclient.sh setpref cmdline server.port=8080
 \end{verbatim}
-Note that while any preference can be configured, unlike the fictitious ones above, only supported ones will take effect for the command-line client.
+Note that while any preference can be configured, only supported ones will take effect for the command-line client.
 Only the following preferences are currently supported: \texttt{server.host}, \texttt{server.port}, \texttt{lastCalledServer.host} and \texttt{lastCalledServer.port}.
 
 
