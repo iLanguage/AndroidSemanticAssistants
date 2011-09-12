@@ -364,9 +364,13 @@ public class SACLClient
          if( runParams[0].toLowerCase().contains( "host" ) &&
              runParams[1].toLowerCase().contains( "port" ) ) {
             final String host = runParams[0].split("=")[1];
-            final String port = runParams[1].split("=")[1];
+            final String tmp = runParams[1].split("=")[1];
+            final String port = tmp.substring(0, tmp.length() - 1);
+
+            // Force server connection ignoring any configured connection preferences.
             ServiceAgentSingleton.setServerHost( host );
-            ServiceAgentSingleton.setServerPort( port.substring( 0, port.length() - 1 ) );
+            ServiceAgentSingleton.setServerPort( port );
+            pl("Force connection to server <"+ host +":"+ port +">");
          }
       }
    }
@@ -376,7 +380,7 @@ public class SACLClient
         final String[] split = new String[params.length];
         for( int i = 0; i < params.length; i++ )
         {
-            split[i] = split[i].trim();
+            split[i] = params[i].trim();
             int pos = split[i].indexOf( '=' );
             if( pos < 0 )
             {
@@ -434,6 +438,26 @@ public class SACLClient
             pl(pref.getName() +"."+ key +"="+ attr.get(key));
          }
       }
+    }
+
+    // FIXME: Duplication from Eclipse Utils.java to be consolidated in CSAL
+    // once all duplicated client ServiceAgentSingletons implementations are
+    // refactored.
+    public static void propertiesReader()
+      throws NullPointerException {
+		// Should return only one item in the list
+	   ArrayList<XMLElementModel> server = ClientUtils.getClientPreference(CLIENT_NAME, "server");
+		
+   	// if there are no server defined for this client. then look for the last called one in the global scope
+		if (server.size() == 0) {
+	      server = ClientUtils.getClientPreference(ClientUtils.XML_CLIENT_GLOBAL, "lastCalledServer");
+   	}
+   	// Note that if the former case, if by mistake there are more than
+      // one server defined, we pick the first one. If the specific host/port
+      // attributes are not found, the preference file is corrupt &
+      // implicitly throw an exception.
+		ServiceAgentSingleton.setServerHost(server.get(0).getAttribute().get(ClientUtils.XML_HOST_KEY));
+	   ServiceAgentSingleton.setServerPort(server.get(0).getAttribute().get(ClientUtils.XML_PORT_KEY));
     }
 }
 

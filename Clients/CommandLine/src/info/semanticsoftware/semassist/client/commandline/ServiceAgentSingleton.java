@@ -43,6 +43,16 @@ public class ServiceAgentSingleton
             {
                 if( service == null )
                 {
+                    // NOTE: This redundant check is to maintain behaviour of the
+                    // command-line params=(Host=<hostname>,Port=<portnum>) override
+                    // option & relies on the short lived lifespan of the command line
+                    // process to work. May want to remove this functionality once each
+                    // client's ServiceAgentSingletons are consolidated in CSAL.
+                    if( serverHost.isEmpty() || serverPort.isEmpty() ) {
+                        // Cache the configured server & port members of this singleton.
+                        SACLClient.propertiesReader();
+                    }
+
                     if( !serverHost.isEmpty() && !serverPort.isEmpty() )
                     {
                         //System.out.println( "using params");
