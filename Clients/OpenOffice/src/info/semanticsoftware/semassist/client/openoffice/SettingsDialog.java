@@ -72,11 +72,11 @@ public class SettingsDialog
     protected static final int LBOX_WIDTH = DIALOG_WIDTH - 10;
     protected static final int LBOX_HEIGHT = DIALOG_HEIGHT - 55;
     protected static final int LBOX_TOP = 32;
-    protected XComponentContext mxComponentContext;
-    protected XDialog mxDialog = null;
+    private XComponentContext mxComponentContext;
+    private XDialog mxDialog = null;
     protected static Logger mLog = Logger.getLogger( SettingsDialog.class );
-    protected GlobalSettingsFrame mGloablSettingsFrame = null;
-    protected SettingsFrame mSettingsFrame = null;
+    private GlobalSettingsFrame mGloablSettingsFrame = null;
+    private SettingsFrame mSettingsFrame = null;
 
 
     public SettingsDialog( final XComponentContext xComponentContext ) throws IOException
