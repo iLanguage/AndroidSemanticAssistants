@@ -42,21 +42,21 @@ public class GATERuntimeParameter
 {
 
 
-     protected boolean mOptional = true;
+     private boolean mOptional = true;
 
      // Can be ambiguous, therefore DEPRECATED
-     // protected String prClassname = "";
+     // private String prClassname = "";
 
      /**
       * Name of the GATE pipeline the parameter is used for. Only
       * really needed if multiple pipelines are concatenated.
       */
-     protected String mPipelineName = "";
-     protected String mPrName = "";
-     protected String mParamName = "";
-     protected String mType = "";
-     protected String mDefaultValueString = null;
-     protected String mLabel = null;
+     private String mPipelineName = "";
+     private String mPrName = "";
+     private String mParamName = "";
+     private String mType = "";
+     private String mDefaultValueString = null;
+     private String mLabel = null;
 
      public static final String DOUBLE   = "double";
      public static final String INT      = "int";
@@ -67,12 +67,12 @@ public class GATERuntimeParameter
      
 
      // The actual parameter values
-     protected Double  mDoubleValue  = null;
-     protected String  mStringValue  = null;
-     protected Integer mIntValue     = null;
-     protected Boolean mBooleanValue = null;
-     protected URL     mUrlValue     = null;
-     protected Corpus  mCorpusValue  = null;
+     private Double  mDoubleValue  = null;
+     private String  mStringValue  = null;
+     private Integer mIntValue     = null;
+     private Boolean mBooleanValue = null;
+     private URL     mUrlValue     = null;
+     private Corpus  mCorpusValue  = null;
      
 
      public GATERuntimeParameter() 
