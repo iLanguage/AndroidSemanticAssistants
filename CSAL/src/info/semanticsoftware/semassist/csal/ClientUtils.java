@@ -65,12 +65,12 @@ public class ClientUtils
       mMimeToExtMap = Collections.unmodifiableMap(map);
     };
 
-    public static boolean paramHasValue( GateRuntimeParameter p )
+    public static boolean paramHasValue( final GateRuntimeParameter p )
     {
         return paramHasValue( p, false );
     }
 
-    public static boolean paramHasValue( GateRuntimeParameter p, boolean allowEmptyStrings )
+    public static boolean paramHasValue( final GateRuntimeParameter p, final boolean allowEmptyStrings )
     {
         if( p == null )
         {
@@ -112,7 +112,7 @@ public class ClientUtils
     /**
      * Produce annotation human-readable string
      */
-    public static String getHRResult( String xmlResult )
+    public static String getHRResult( final String xmlResult )
     {
         Document xmlDoc = getXmlDoc( xmlResult );
         if( xmlDoc == null )
@@ -129,7 +129,7 @@ public class ClientUtils
         return xmlDoc.toString();
     }
 
-    public static Vector<SemanticServiceResult> getServiceResults( String xmlResult )
+    public static Vector<SemanticServiceResult> getServiceResults( final String xmlResult )
     {
         Document xmlDoc = getXmlDoc( xmlResult );
         if( xmlDoc == null )
@@ -143,12 +143,12 @@ public class ClientUtils
         return results;
     }
 
-    public static File writeStringToFile( String s )
+    public static File writeStringToFile( final String s )
     {
         return writeStringToFile( s, ".xml" );
     }
 
-    public static String getFileNameExt( String mimetype )
+    public static String getFileNameExt( final String mimetype )
     {
         if (mimetype == null) {
             return null;
@@ -164,7 +164,7 @@ public class ClientUtils
         return null;
     }
 
-    public static File writeStringToFile( String s, String ext )
+    public static File writeStringToFile( final String s, final String ext )
     {
         try
         {
@@ -191,7 +191,7 @@ public class ClientUtils
         return createTempFile( "serviceResult-", ".xml" );
     }
 
-    public static File createTempFile( String prefix, String ext )
+    public static File createTempFile( final String prefix, final String ext )
     {
         String fileName = getRandomFileName( prefix );
         File outFile = null;
@@ -208,14 +208,14 @@ public class ClientUtils
         return outFile;
     }
 
-    public static String getRandomFileName( String prefix )
+    public static String getRandomFileName( final String prefix )
     {
         DateFormat df = DateFormat.getTimeInstance( DateFormat.LONG );
         String ds = df.toString().replace( " ", "" );
         return prefix + ds + ".";
     }
 
-    private static Vector<SemanticServiceResult> getServiceResults( Node root )
+    private static Vector<SemanticServiceResult> getServiceResults( final Node root )
     {
         Vector<SemanticServiceResult> result = new Vector<SemanticServiceResult>();
         Node child;
@@ -240,7 +240,7 @@ public class ClientUtils
         return result;
     }
 
-    protected static SemanticServiceResult getOneResult( Node node )
+    protected static SemanticServiceResult getOneResult( final Node node )
     {
         String nodeName = node.getNodeName();
         SemanticServiceResult result = new SemanticServiceResult();
@@ -325,7 +325,7 @@ public class ClientUtils
         return result;
     }
 
-    protected static Vector<RetrievedDocument> getCorpusDocuments( Node node )
+    protected static Vector<RetrievedDocument> getCorpusDocuments( final Node node )
     {
         if( node == null )
         {
@@ -355,7 +355,7 @@ public class ClientUtils
      * key, and AnnotationVector objects as value. These stand for multiple
      * annotation instances.
      */
-    protected static HashMap<String, AnnotationVector> getAnnotationObjects( Node node )
+    protected static HashMap<String, AnnotationVector> getAnnotationObjects( final Node node )
     {
         if( node == null )
         {
@@ -416,7 +416,7 @@ public class ClientUtils
         return result;
     }
 
-    protected static HashMap<String, AnnotationVector> getAnnotationObjectByStart( Node node )
+    protected static HashMap<String, AnnotationVector> getAnnotationObjectByStart( final Node node )
     {
         if( node == null )
         {
@@ -479,7 +479,7 @@ public class ClientUtils
     // in the result probably works only if there are no documents
     // that lacks any type of annotation entirely. Content-based ID
     // would be better.
-    protected static String getDocID( int num )
+    protected static String getDocID( final int num )
     {
         return (new Integer( num )).toString();
     }
@@ -489,7 +489,7 @@ public class ClientUtils
      * from the DOM tree. All these instances are children of the
      * passed node object, which is typically annotation document node.
      */
-    protected static Vector<Annotation> getAnnotationsForOneDocument( Node node )
+    protected static Vector<Annotation> getAnnotationsForOneDocument( final Node node )
     {
 
         if( node == null )
@@ -538,7 +538,7 @@ public class ClientUtils
         return result;
     }
 
-    protected static HashMap<String, String> getAnnotationFeatures( Node node )
+    protected static HashMap<String, String> getAnnotationFeatures( final Node node )
     {
         if( node == null )
         {
@@ -576,7 +576,7 @@ public class ClientUtils
         return result;
     }
 
-    public final static String getElementValue( Node elem )
+    public final static String getElementValue( final Node elem )
     {
         Node kid;
         if( elem != null )
@@ -599,7 +599,7 @@ public class ClientUtils
      * @param obj Object string to parse
      * @return XML document or <B>null</B> if error occured
      */
-    public static Document getXmlDoc( Object obj )
+    public static Document getXmlDoc( final Object obj )
     {
 
         DocumentBuilder docBuilder;
@@ -670,7 +670,7 @@ public class ClientUtils
      *  is good for escaping to produce valid XML, but not for producing safe
      *  HTML.</span>
      */
-    public static void SortAnnotations(AnnotationVectorArray annotVectorArr)
+    public static void SortAnnotations(final AnnotationVectorArray annotVectorArr)
     {
         mAnnotArray = new ArrayList<Annotation>();
 
@@ -692,7 +692,7 @@ public class ClientUtils
 
     }
 
-    protected static void CreateAnnotationsArray(AnnotationVector annotVector)
+    protected static void CreateAnnotationsArray(final AnnotationVector annotVector)
     {
 
         for(Iterator<Annotation> it = annotVector.mAnnotationVector.iterator(); it.hasNext();)
@@ -717,7 +717,7 @@ public class ClientUtils
      * @param element the target element
      * @param map a hash map of element attributes in form of <key,value> pairs
      */
-    public static void setClientPreference(String client, String element, Map<String, String> map){
+    public static void setClientPreference(final String client, final String element, final Map<String, String> map){
 		try {		
 			File propertiesFile = new File(PROPERTIES_FILE_PATH);
 			if (propertiesFile.exists()) {
@@ -850,7 +850,7 @@ public class ClientUtils
      * Adds a new server element to the global scope
      * @param map a hash map of server attributes in form of <key,value> pairs
      * */
-    public static void addNewServer(Map<String, String> map){
+    public static void addNewServer(final Map<String, String> map){
     	try {		
 			File propertiesFile = new File(PROPERTIES_FILE_PATH);
 			if (propertiesFile.exists()) {
