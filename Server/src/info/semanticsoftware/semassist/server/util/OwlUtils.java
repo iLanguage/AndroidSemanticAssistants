@@ -48,40 +48,40 @@ public class OwlUtils
 
 
      // Ontology classes and properties
-     protected static JenaOWLModel model;
-     protected static OWLNamedClass pipelineClass;
-     protected static OWLProperty commentProperty;
-     protected static OWLProperty fileNameProperty;
-     protected static OWLProperty publishProperty;
-     protected static OWLProperty mergeInputProperty;
-     protected static OWLProperty concatenationOfProperty;
-     protected static OWLProperty giveInputProperty;
-     protected static OWLProperty consumesInputProperty;
+     private static JenaOWLModel model;
+     private static OWLNamedClass pipelineClass;
+     private static OWLProperty commentProperty;
+     private static OWLProperty fileNameProperty;
+     private static OWLProperty publishProperty;
+     private static OWLProperty mergeInputProperty;
+     private static OWLProperty concatenationOfProperty;
+     private static OWLProperty giveInputProperty;
+     private static OWLProperty consumesInputProperty;
 
      // Properties related to the produced output artifact(s)
-     protected static OWLObjectProperty producesOutputProperty;
-     protected static OWLObjectProperty hasFormatProperty;
-     protected static OWLObjectProperty urlGivenByParameterProperty;
-     protected static OWLObjectProperty necessaryParamSettingProperty;
-     protected static OWLObjectProperty parameterProperty;
-     protected static OWLProperty mimeTypeProperty;
-     protected static OWLProperty hrFormatProperty;
-     protected static OWLProperty valueProperty;     
-     protected static OWLProperty isPerDocumentProperty; 
-     protected static OWLProperty isBoundlessProperty;
+     private static OWLObjectProperty producesOutputProperty;
+     private static OWLObjectProperty hasFormatProperty;
+     private static OWLObjectProperty urlGivenByParameterProperty;
+     private static OWLObjectProperty necessaryParamSettingProperty;
+     private static OWLObjectProperty parameterProperty;
+     private static OWLProperty mimeTypeProperty;
+     private static OWLProperty hrFormatProperty;
+     private static OWLProperty valueProperty;     
+     private static OWLProperty isPerDocumentProperty; 
+     private static OWLProperty isBoundlessProperty;
 
      // Properties regarding potentional parameters for the pipeline
-     protected static OWLObjectProperty hasParameterProperty;
-     protected static OWLObjectProperty isActualArtifactProperty;
+     private static OWLObjectProperty hasParameterProperty;
+     private static OWLObjectProperty isActualArtifactProperty;
 
-     protected static OWLProperty hasGATENameProperty;
-     protected static OWLProperty typeProperty;
-     protected static OWLProperty optionalProperty;
-     protected static OWLProperty prNameProperty;
-     protected static OWLProperty isInAnnotationSetProperty;
-     protected static OWLProperty hasFeatureProperty;
-     protected static OWLProperty defaultValueProperty;
-     protected static OWLProperty labelProperty;
+     private static OWLProperty hasGATENameProperty;
+     private static OWLProperty typeProperty;
+     private static OWLProperty optionalProperty;
+     private static OWLProperty prNameProperty;
+     private static OWLProperty isInAnnotationSetProperty;
+     private static OWLProperty hasFeatureProperty;
+     private static OWLProperty defaultValueProperty;
+     private static OWLProperty labelProperty;
      
 
 

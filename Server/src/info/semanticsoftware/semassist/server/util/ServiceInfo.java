@@ -28,26 +28,26 @@ import java.util.*;
 public class ServiceInfo
 {
 
-    protected String mServiceName = "";
-    protected String mServiceDescription = "";
-    protected String mServiceDir = "";
-    protected String mAppFileName = "";
-    protected boolean mPublishAsNLPService = false;
-    protected boolean mMergeInputDocs = false;
+    private String mServiceName = "";
+    private String mServiceDescription = "";
+    private String mServiceDir = "";
+    private String mAppFileName = "";
+    private boolean mPublishAsNLPService = false;
+    private boolean mMergeInputDocs = false;
     /**
      * Parameter list to be shown to the user
      */
     public Vector<GATERuntimeParameter> mParams = new Vector<GATERuntimeParameter>();
-    public Vector<String> mInputArtifactTypes = new Vector<String>();
+    public final Vector<String> mInputArtifactTypes = new Vector<String>();
     /**
      * List of those parameters that receive the input document as
      * value. Important for search query parameters etc., when there
      * is no actual input corpus.
      */
-    public Vector<GATERuntimeParameter> mParamsTakingInput = new Vector<GATERuntimeParameter>();
-    public Vector<GATEPipelineOutput> mOutputArtifacts = new Vector<GATEPipelineOutput>();
-    protected HashMap<String, List<String>> mProducedAnnotations = new HashMap<String, List<String>>();
-    protected String mConcatenationOf = "";
+    public final Vector<GATERuntimeParameter> mParamsTakingInput = new Vector<GATERuntimeParameter>();
+    public final Vector<GATEPipelineOutput> mOutputArtifacts = new Vector<GATEPipelineOutput>();
+    private final HashMap<String, List<String>> mProducedAnnotations = new HashMap<String, List<String>>();
+    private String mConcatenationOf = "";
 
     public ServiceInfo()
     {
