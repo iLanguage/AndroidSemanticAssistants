@@ -406,7 +406,7 @@ public class ServiceInvocationHandler implements Runnable
    /**
     * Open an file through a browser.
     *
-    * @param file HTML document.
+    * @param f HTML document.
     * @return true if successful, false otherwise.
     */
    private boolean spawnBrowser(final File f)

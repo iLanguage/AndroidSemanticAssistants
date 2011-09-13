@@ -90,13 +90,7 @@ public class ListServicesDialog
 
     /**
      * ListServicesDialog constructor
-     * @param XComponentContext xComponentContext
-     * @param String davServer
-     * @param int davPort
-     * @param String davPath
-     * @param String davUser
-     * @param String davPass
-     * @return OpenDialog
+     * @param xComponentContext
      * @throws IOException
      */
     public ListServicesDialog( final XComponentContext xComponentContext ) throws IOException
@@ -106,6 +100,7 @@ public class ListServicesDialog
 
     /**
      * Method for creating a the dialog box
+     * @throws com.sun.star.uno.Exception
      */
     public void createDialog() throws com.sun.star.uno.Exception
     {
