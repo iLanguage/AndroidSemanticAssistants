@@ -405,7 +405,7 @@ public class ListServicesDialog
     public class OnCancelClick implements XActionListener
     {
 
-        XControlContainer _xControlCont;
+        private XControlContainer _xControlCont;
 
         public OnCancelClick( final XControlContainer xControlCont )
         {
@@ -437,7 +437,7 @@ public class ListServicesDialog
     public class OnOkClick implements XActionListener
     {
 
-        XControlContainer _xControlCont;
+        private XControlContainer _xControlCont;
 
         public OnOkClick( final XControlContainer xControlCont )
         {
