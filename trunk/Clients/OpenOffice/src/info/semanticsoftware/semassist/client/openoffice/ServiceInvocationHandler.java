@@ -48,7 +48,7 @@ public class ServiceInvocationHandler implements Runnable
     private Thread thread;
     private GateRuntimeParameterArray rtpArray = new GateRuntimeParameterArray();
 
-    public ServiceInvocationHandler( XComponentContext xComponentContext )
+    public ServiceInvocationHandler( final XComponentContext xComponentContext )
     {
         compCtx = xComponentContext;
         thread = new Thread( this );
@@ -238,7 +238,7 @@ public class ServiceInvocationHandler implements Runnable
 
     protected
 
-     String getAnnotationsString( HashMap<String, AnnotationVectorArray> map )
+     String getAnnotationsString( final HashMap<String, AnnotationVectorArray> map )
     {
         if( map == null )
         {
@@ -265,7 +265,7 @@ public class ServiceInvocationHandler implements Runnable
         return sb.toString();
     }
 
-    protected String getAnnotationsString( AnnotationVectorArray annotVectorArr )
+    protected String getAnnotationsString( final AnnotationVectorArray annotVectorArr )
     {
 
         StringBuffer strBuffer = new StringBuffer();
@@ -331,7 +331,7 @@ public class ServiceInvocationHandler implements Runnable
    }
 
 
-    protected String listAnnotations( AnnotationVector as )
+    protected String listAnnotations( final AnnotationVector as )
     {
         if( as == null )
         {
@@ -409,7 +409,7 @@ public class ServiceInvocationHandler implements Runnable
     * @param file HTML document.
     * @return true if successful, false otherwise.
     */
-   private boolean spawnBrowser(File f)
+   private boolean spawnBrowser(final File f)
    {
       boolean status = true;
       try {

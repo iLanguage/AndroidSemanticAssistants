@@ -99,7 +99,7 @@ public class ListServicesDialog
      * @return OpenDialog
      * @throws IOException
      */
-    public ListServicesDialog( XComponentContext xComponentContext ) throws IOException
+    public ListServicesDialog( final XComponentContext xComponentContext ) throws IOException
     {
         _xComponentContext = xComponentContext;
     }
@@ -316,7 +316,7 @@ public class ListServicesDialog
         xComponent.dispose();
     }
 
-    private void updateServiceList( XControlContainer c )
+    private void updateServiceList( final XControlContainer c )
     {
         // Grant 30 seconds as timeout value
         TimeOut to = new TimeOut( c, 30000 );
@@ -326,7 +326,7 @@ public class ListServicesDialog
         gsThread.start();
     }
 
-    private void setStatusText( XControlContainer m_c, String s )
+    private void setStatusText( final XControlContainer m_c, final String s )
     {
         // Get the model of the status label
         final XControl xControl = UnoRuntime.queryInterface(
@@ -371,7 +371,7 @@ public class ListServicesDialog
         return m_xDesktop.getCurrentFrame();
     }
 
-    private String formatServiceInfo( ServiceInfoForClient info )
+    private String formatServiceInfo( final ServiceInfoForClient info )
     {
         return info.getServiceName() + " - " + info.getServiceDescription();
     }
@@ -384,19 +384,19 @@ public class ListServicesDialog
 
         private XControlContainer _xControlCont;
 
-        public OnListDblClick( XControlContainer xControlCont )
+        public OnListDblClick( final XControlContainer xControlCont )
         {
             _xControlCont = xControlCont;
         }
 
         // XEventListener
-        public void disposing( EventObject eventObject )
+        public void disposing( final EventObject eventObject )
         {
             _xControlCont = null;
         }
 
         // XActionListener
-        public void actionPerformed( ActionEvent actionEvent )
+        public void actionPerformed( final ActionEvent actionEvent )
         {
             // goIntoDav(_xControlCont);
         }
@@ -412,21 +412,21 @@ public class ListServicesDialog
 
         XControlContainer _xControlCont;
 
-        public OnCancelClick( XControlContainer xControlCont )
+        public OnCancelClick( final XControlContainer xControlCont )
         {
             _xControlCont = xControlCont;
         }
 
         // XEventListener
         @Override
-        public void disposing( EventObject eventObject )
+        public void disposing( final EventObject eventObject )
         {
             _xControlCont = null;
         }
 
         // XActionListener
         @Override
-        public void actionPerformed( ActionEvent actionEvent )
+        public void actionPerformed( final ActionEvent actionEvent )
         {
             log.debug( "End execution with cancel btn" );
             Settings.setSelectedServiceName( "CancelBtn" );
@@ -444,21 +444,21 @@ public class ListServicesDialog
 
         XControlContainer _xControlCont;
 
-        public OnOkClick( XControlContainer xControlCont )
+        public OnOkClick( final XControlContainer xControlCont )
         {
             _xControlCont = xControlCont;
         }
 
         // XEventListener
         @Override
-        public void disposing( EventObject eventObject )
+        public void disposing( final EventObject eventObject )
         {
             _xControlCont = null;
         }
 
         // XActionListener
         @Override
-        public void actionPerformed( ActionEvent actionEvent )
+        public void actionPerformed( final ActionEvent actionEvent )
         {
 
             // Find out which service is selected and save this
@@ -492,7 +492,7 @@ public class ListServicesDialog
         private XControlContainer m_c;
         private TimeOut m_to;
 
-        public GetServices( XControlContainer c, TimeOut to )
+        public GetServices( final XControlContainer c, final TimeOut to )
         {
             m_c = c;
             m_to = to;
@@ -653,7 +653,7 @@ public class ListServicesDialog
         private Logger timeoutLog = Logger.getLogger( TimeOut.class );
         private boolean kill = false;
 
-        public TimeOut( XControlContainer c, int milliSec )
+        public TimeOut( final XControlContainer c, final int milliSec )
         {
             m_c = c;
             thread = new Thread( this );

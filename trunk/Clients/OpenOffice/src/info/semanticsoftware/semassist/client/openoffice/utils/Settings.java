@@ -41,13 +41,13 @@ public class Settings
         return selectedServiceName;
     }
 
-    public static void setSelectedServiceName( String s )
+    public static void setSelectedServiceName( final String s )
     {
         selectedServiceName = s;
         UNOUtils.setCurrentPipeline( selectedServiceName );
     }
 
-    public static void setAvailableServices( HashMap<String, ServiceInfoForClient> m )
+    public static void setAvailableServices( final HashMap<String, ServiceInfoForClient> m )
     {
         availableServices = m;
     }

@@ -65,7 +65,7 @@ public class SettingsFrame extends JFrame
         });
 
         okButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+            public void actionPerformed(final java.awt.event.ActionEvent evt) {
                 okButtonActionPerformed(evt);
             }
         });
@@ -73,7 +73,7 @@ public class SettingsFrame extends JFrame
         cancelButton.addActionListener( new ActionListener()
             {
 
-                public void actionPerformed( ActionEvent e )
+                public void actionPerformed( final ActionEvent e )
                 {
                     dispose();
                     setVisible(false);
@@ -92,12 +92,12 @@ public class SettingsFrame extends JFrame
 
             // Attach key listeners.
             jCustomHostField.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyReleased(java.awt.event.KeyEvent evt) {
+                public void keyReleased(final java.awt.event.KeyEvent evt) {
                 }
             });
 
             jCustomPortField.addKeyListener(new java.awt.event.KeyAdapter() {
-                public void keyReleased(java.awt.event.KeyEvent evt) {
+                public void keyReleased(final java.awt.event.KeyEvent evt) {
                 }
             });
 
@@ -242,7 +242,7 @@ public class SettingsFrame extends JFrame
             pack();
         }// </editor-fold>//GEN-END:initComponents
 
-    private void okButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_okButtonActionPerformed
+    private void okButtonActionPerformed(final java.awt.event.ActionEvent evt)//GEN-FIRST:event_okButtonActionPerformed
     {//GEN-HEADEREND:event_okButtonActionPerformed
         // for checkbox
         updateCheckBoxStatus();
@@ -343,7 +343,7 @@ public class SettingsFrame extends JFrame
     * Convenience method to handle the default status of dialog elements.
     * @param status True to use default server prererences.
     */
-   private void toggleServerMode(boolean status) {
+   private void toggleServerMode(final boolean status) {
       serversCombo.setEnabled(status);
 
       jCustomHostField.setEnabled(!status);

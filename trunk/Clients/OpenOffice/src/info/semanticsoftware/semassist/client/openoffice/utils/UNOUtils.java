@@ -78,7 +78,7 @@ public class UNOUtils
      * Retrieves either the marked text of the current document
      * or, if nothing is marked, the whole text of the document.
      */
-    public static String getArgumentText( XComponentContext ctx )
+    public static String getArgumentText( final XComponentContext ctx )
     {
         // Get the XModel interface from the active document,
         // and its controller
@@ -108,12 +108,12 @@ public class UNOUtils
 
     }
 
-    public static void createNewDoc( XComponentContext ctx )
+    public static void createNewDoc( final XComponentContext ctx )
     {
         createNewDoc( ctx, "" );
     }
 
-    public static void createNewDoc( XComponentContext ctx, String text )
+    public static void createNewDoc( final XComponentContext ctx, final String text )
     {
 
         // Get an empty text document
@@ -131,7 +131,7 @@ public class UNOUtils
 
     }
 
-    public static XComponent createNewDoc( XComponentContext ctx, File f )
+    public static XComponent createNewDoc( final XComponentContext ctx, final File f )
     {
         // Query the XComponentLoader interface from the Desktop service
         final XComponentLoader xComponentLoader = UnoRuntime.queryInterface(
@@ -174,7 +174,7 @@ public class UNOUtils
         return null;
     }
 
-    public static void createDocAnnotations( XComponentContext ctx, Annotation annotation )
+    public static void createDocAnnotations( final XComponentContext ctx, final Annotation annotation )
     {
         // get the active document
         XTextDocument doc = getActiveTextDocument( ctx );
@@ -185,7 +185,7 @@ public class UNOUtils
         createInvisibleCursor(annotation);
     }
 
-    public static void initializeCursor( XComponentContext ctx )
+    public static void initializeCursor( final XComponentContext ctx )
     {
         // get the active document
         XTextDocument doc = getActiveTextDocument( ctx );
@@ -209,12 +209,12 @@ public class UNOUtils
     /**
      * @param aMCurrentPipeline the mCurrentPipeline to set
      */
-    public static void setCurrentPipeline( String aMCurrentPipeline )
+    public static void setCurrentPipeline( final String aMCurrentPipeline )
     {
         mCurrentPipeline = aMCurrentPipeline;
     }
 
-    private static XTextDocument createTextDocument( XDesktop xDesktop )
+    private static XTextDocument createTextDocument( final XDesktop xDesktop )
     {
         XTextDocument aTextDocument = null;
 
@@ -235,20 +235,20 @@ public class UNOUtils
     /**
      * Get the currently active text document
      */
-    private static XTextDocument getActiveTextDocument( XComponentContext ctx )
+    private static XTextDocument getActiveTextDocument( final XComponentContext ctx )
     {
         XModel xDocModel = getActiveDocumentModel( ctx );
         return UnoRuntime.queryInterface( XTextDocument.class, xDocModel );
     }
 
-    private static XModel getActiveDocumentModel( XComponentContext ctx )
+    private static XModel getActiveDocumentModel( final XComponentContext ctx )
     {
         XComponent document = getCurrentComponent( ctx );
 
         return UnoRuntime.queryInterface( XModel.class, document );
     }
 
-    private static XComponent getCurrentComponent( XComponentContext ctx )
+    private static XComponent getCurrentComponent( final XComponentContext ctx )
     {
         XDesktop xDesktop = getDesktop( ctx );
         XComponent document = xDesktop.getCurrentComponent();
@@ -259,7 +259,7 @@ public class UNOUtils
     /**
      * Get the desktop service
      */
-    private static XDesktop getDesktop( XComponentContext ctx )
+    private static XDesktop getDesktop( final XComponentContext ctx )
     {
         XMultiComponentFactory xmcf = ctx.getServiceManager();
         Object desktop = null;
@@ -273,7 +273,7 @@ public class UNOUtils
         return UnoRuntime.queryInterface( com.sun.star.frame.XDesktop.class, desktop );
     }
 
-    private static XComponent createNewDocument( XDesktop xDesktop, String sDocumentType )
+    private static XComponent createNewDocument( final XDesktop xDesktop, final String sDocumentType )
     {
         String sURL = "private:factory/" + sDocumentType;
         XComponent xComponent = null;
@@ -297,7 +297,7 @@ public class UNOUtils
         return xComponent;
     }
 
-    private static void annotateField( Annotation annotation )
+    private static void annotateField( final Annotation annotation )
     {
         try {
             mxAnnotText.insertTextContent(mxDocCursor, makeAnnotation(annotation), false);
@@ -413,7 +413,7 @@ public class UNOUtils
      * @param range of text to change the font.
      * @param size value of the new font.
      */
-    private static void setFontSize(XTextRange range, float size)
+    private static void setFontSize(final XTextRange range, final float size)
     {
         // Extract the cursor properties & change its font-size.
         final XTextCursor cursor = range.getText().createTextCursorByRange(range);

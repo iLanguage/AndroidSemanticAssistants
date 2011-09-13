@@ -57,7 +57,7 @@ public class GlobalSettingsFrame extends JFrame
     }
 
     @Override
-    public void actionPerformed( ActionEvent e )
+    public void actionPerformed( final ActionEvent e )
     {
     }
 
