@@ -79,7 +79,7 @@ public class SettingsDialog
     protected SettingsFrame mSettingsFrame = null;
 
 
-    public SettingsDialog( XComponentContext xComponentContext ) throws IOException
+    public SettingsDialog( final XComponentContext xComponentContext ) throws IOException
     {
         mxComponentContext = xComponentContext;
 

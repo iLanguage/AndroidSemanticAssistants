@@ -43,7 +43,7 @@ public class GUIUtils
 
      private static Logger logger = Logger.getLogger(GUIUtils.class);
 
-     public static void showMessageBox(XComponentContext ctx, XFrame frame, String title, String msg) 
+     public static void showMessageBox(final XComponentContext ctx, final XFrame frame, final String title, final String msg) 
 	  {
 	       XToolkit m_xToolkit = null;
 

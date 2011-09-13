@@ -97,7 +97,7 @@ public class ProtocolHandlerAddon
          * @param xmultiservicefactoryInitialization A special service factory
          * could be introduced while initializing.
          */
-        public ProtocolHandlerAddonImpl( XComponentContext xComponentContext )
+        public ProtocolHandlerAddonImpl( final XComponentContext xComponentContext )
         {
             mxCmpCtx = xComponentContext;
         }
@@ -110,7 +110,7 @@ public class ProtocolHandlerAddon
          * passed to the caller.
          */
         @Override
-        public void initialize( Object[] object )
+        public void initialize( final Object[] object )
                 throws com.sun.star.uno.Exception
         {
 
@@ -150,7 +150,7 @@ public class ProtocolHandlerAddon
          * @return True, if the given service name will be supported.
          */
         @Override
-        public boolean supportsService( String sService )
+        public boolean supportsService( final String sService )
         {
             int len = mServiceNames.length;
 
@@ -176,9 +176,9 @@ public class ProtocolHandlerAddon
 
         // XDispatchProvider
         @Override
-        public XDispatch queryDispatch( com.sun.star.util.URL aURL,
-                                        String sTargetFrameName,
-                                        int iSearchFlags )
+        public XDispatch queryDispatch( final com.sun.star.util.URL aURL,
+                                        final String sTargetFrameName,
+                                        final int iSearchFlags )
         {
 
             XDispatch xRet = null;
@@ -197,7 +197,7 @@ public class ProtocolHandlerAddon
         }
 
         @Override
-        public XDispatch[] queryDispatches( DispatchDescriptor[] seqDescripts )
+        public XDispatch[] queryDispatches( final DispatchDescriptor[] seqDescripts )
         {
             int nCount = seqDescripts.length;
             XDispatch[] lDispatcher = new XDispatch[nCount];
@@ -214,8 +214,8 @@ public class ProtocolHandlerAddon
 
         // XDispatch
         @Override
-        public void dispatch( com.sun.star.util.URL aURL,
-                              com.sun.star.beans.PropertyValue[] aArguments )
+        public void dispatch( final com.sun.star.util.URL aURL,
+                              final com.sun.star.beans.PropertyValue[] aArguments )
         {
             
             if( aURL.Protocol.compareTo( SEMASSIST_PROTOCOL ) == 0 )
@@ -291,18 +291,18 @@ public class ProtocolHandlerAddon
         }
 
         @Override
-        public void addStatusListener( XStatusListener xControl,
-                                       com.sun.star.util.URL aURL )
+        public void addStatusListener( final XStatusListener xControl,
+                                       final com.sun.star.util.URL aURL )
         {
         }
 
         @Override
-        public void removeStatusListener( XStatusListener xControl,
-                                          com.sun.star.util.URL aURL )
+        public void removeStatusListener( final XStatusListener xControl,
+                                          final com.sun.star.util.URL aURL )
         {
         }
 
-        public void showMessageBox( String sTitle, String sMessage )
+        public void showMessageBox( final String sTitle, final String sMessage )
         {
             GUIUtils.showMessageBox( mxCmpCtx, mxFrame, sTitle, sMessage );
         }
@@ -362,7 +362,7 @@ public class ProtocolHandlerAddon
          * Should not be called directly. Call <code>runSelectedService</code>
          * instead, or runtime parameters will not be taken into account.
          */
-        private void doRunSelectedService( GateRuntimeParameterArray rtpArray )
+        private void doRunSelectedService( final GateRuntimeParameterArray rtpArray )
         {
             String arg = UNOUtils.getArgumentText( mxCmpCtx );
 
@@ -387,7 +387,7 @@ public class ProtocolHandlerAddon
             handler.start();
         }
 
-        private JFrame buildRTParamFrame( ServiceInfoForClient info, List<GateRuntimeParameter> params )
+        private JFrame buildRTParamFrame( final ServiceInfoForClient info, final List<GateRuntimeParameter> params )
         {
 
             Vector<GateRuntimeParameter> mandatory = new Vector<GateRuntimeParameter>();
@@ -421,13 +421,13 @@ public class ProtocolHandlerAddon
 
             private RTParamFrame frame = null;
 
-            public ParamActionListener( RTParamFrame f )
+            public ParamActionListener( final RTParamFrame f )
             {
                 frame = f;
             }
 
             @Override
-            public void actionPerformed( ActionEvent e )
+            public void actionPerformed( final ActionEvent e )
             {
                 GateRuntimeParameterArray params = frame.getParams();
                 System.out.println( "------ Retrieved params array from the frame: " );
@@ -462,7 +462,7 @@ public class ProtocolHandlerAddon
      * structures) of a single
      * registry key accessible.
      */
-    public static XSingleComponentFactory __getComponentFactory( String sImplementationName )
+    public static XSingleComponentFactory __getComponentFactory( final String sImplementationName )
     {
         XSingleComponentFactory xFactory = null;
 
@@ -483,7 +483,7 @@ public class ProtocolHandlerAddon
      * structures) of a single
      * registry key accessible.
      */
-    public static boolean __writeRegistryServiceInfo( XRegistryKey xRegistryKey )
+    public static boolean __writeRegistryServiceInfo( final XRegistryKey xRegistryKey )
     {
         return Factory.writeRegistryServiceInfo(
                 ProtocolHandlerAddonImpl.class.getName(),
