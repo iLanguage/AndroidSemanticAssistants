@@ -94,7 +94,7 @@ public class ProtocolHandlerAddon
         private static final String SEMASSIST_PROTOCOL = "info.semanticsoftware.semassist.client.openoffice:";
 
         /** The constructor of the inner class has a XMultiServiceFactory parameter.
-         * @param xmultiservicefactoryInitialization A special service factory
+         * @param xComponentContext A special service factory
          * could be introduced while initializing.
          */
         public ProtocolHandlerAddonImpl( final XComponentContext xComponentContext )
@@ -106,7 +106,7 @@ public class ProtocolHandlerAddon
          * directly after its creation.
          * @param object This array of arbitrary objects will be passed to the
          * component after its creation.
-         * @throws Exception Every exception will not be handled, but will be
+         * @throws com.sun.star.uno.Exception Every exception will not be handled, but will be
          * passed to the caller.
          */
         @Override
@@ -146,7 +146,7 @@ public class ProtocolHandlerAddon
 
         /** This method returns true, if the given service will be
          * supported by the component.
-         * @param stringService Service name.
+         * @param sService Service name.
          * @return True, if the given service name will be supported.
          */
         @Override
@@ -361,6 +361,7 @@ public class ProtocolHandlerAddon
         /**
          * Should not be called directly. Call <code>runSelectedService</code>
          * instead, or runtime parameters will not be taken into account.
+         * @param rtpArray
          */
         private void doRunSelectedService( final GateRuntimeParameterArray rtpArray )
         {
@@ -455,12 +456,7 @@ public class ProtocolHandlerAddon
      * @return Returns a <code>XSingleServiceFactory</code> for creating the
      * component.
      * @see com.sun.star.comp.loader.JavaLoader#
-     * @param stringImplementationName The implementation name of the component.
-     * @param xmultiservicefactory The service manager, who gives access to every
-     * known service.
-     * @param xregistrykey Makes structural information (except regarding tree
-     * structures) of a single
-     * registry key accessible.
+     * @param sImplementationName The implementation name of the component.
      */
     public static XSingleComponentFactory __getComponentFactory( final String sImplementationName )
     {
@@ -479,7 +475,7 @@ public class ProtocolHandlerAddon
      * @return returns true if the operation succeeded
      * @see com.sun.star.comp.loader.JavaLoader#
      * @see com.sun.star.lib.uno.helper.Factory#
-     * @param xregistrykey Makes structural information (except regarding tree
+     * @param xRegistryKey Makes structural information (except regarding tree
      * structures) of a single
      * registry key accessible.
      */
