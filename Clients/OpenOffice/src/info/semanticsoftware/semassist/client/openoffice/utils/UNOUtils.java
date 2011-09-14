@@ -279,7 +279,6 @@ public class UNOUtils
         XComponent xComponent = null;
 
         XComponentLoader xComponentLoader = null;
-        PropertyValue xValues[] = new PropertyValue[1];
         PropertyValue xEmptyArgs[] = new PropertyValue[0];
 
         try

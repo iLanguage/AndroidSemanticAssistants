@@ -299,7 +299,7 @@ public class RTParamFrame extends JFrame
             try
             {
                 URL u = new URL( valueString );
-                p.setUrlValue( valueString );
+                p.setUrlValue( u.toString() );
             }
             catch( MalformedURLException e )
             {

@@ -101,7 +101,7 @@ public class SettingsDialog
         xPSetDialog.setPropertyValue( "Height", new Integer( DIALOG_HEIGHT ) );
         xPSetDialog.setPropertyValue( "PositionX", new Integer( 100 ) );
         xPSetDialog.setPropertyValue( "PositionY", new Integer( 100 ) );
-        xPSetDialog.setPropertyValue( "Title", new String( "Global Settings" ) );
+        xPSetDialog.setPropertyValue( "Title", "Global Settings" );
 
 
         // Get the service manager from the dialog model

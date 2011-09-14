@@ -52,7 +52,7 @@ public class EvaluationSession {
 		invocationJob.setUser(true);
 		for(int i=0; i < resources.size(); i++){
 			try {
-				InputStream inputStream = (InputStream) (resources.get(i).getFile()).getContents();
+				InputStream inputStream = (resources.get(i).getFile()).getContents();
 				InputStreamReader isr = new InputStreamReader(inputStream);
 				BufferedReader br = new BufferedReader(isr);
 				String theLine;
