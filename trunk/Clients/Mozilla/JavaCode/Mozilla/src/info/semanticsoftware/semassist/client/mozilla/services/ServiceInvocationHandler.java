@@ -94,7 +94,7 @@ public class ServiceInvocationHandler implements Runnable {
 
 		SemanticServiceBroker broker = ServiceAgentSingleton.getInstance();
 		UriList uriList = new UriList();
-		uriList.getUriList().add( new String( "#literal" ) );
+		uriList.getUriList().add( "#literal" );
 		StringArray stringArray = new StringArray();
 		stringArray.getItem().add( new String( argumentText ) );
 
@@ -121,7 +121,7 @@ public class ServiceInvocationHandler implements Runnable {
 		// used for document case
 		ArrayList<String> docString = new ArrayList<String>();
 		//boolean docCase = false;
-		String resultTypeCase = new String("");
+		String resultTypeCase = "";
 
 		if ( results == null ) {
 			System.out.println( "---------- No results retrieved in response message" );

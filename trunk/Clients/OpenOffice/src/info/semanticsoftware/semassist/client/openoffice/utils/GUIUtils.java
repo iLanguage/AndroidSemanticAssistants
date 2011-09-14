@@ -64,7 +64,7 @@ public class GUIUtils
 			 // Create a new window description for the message box
 			 WindowDescriptor aDescriptor = new WindowDescriptor();
 			 aDescriptor.Type              = WindowClass.MODALTOP;
-			 aDescriptor.WindowServiceName = new String("infobox");
+			 aDescriptor.WindowServiceName = "infobox";
 			 aDescriptor.ParentIndex       = -1;
 			 aDescriptor.Parent            = UnoRuntime.queryInterface(
 			    XWindowPeer.class, frame.getContainerWindow());

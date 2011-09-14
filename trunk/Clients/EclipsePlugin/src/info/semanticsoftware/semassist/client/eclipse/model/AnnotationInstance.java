@@ -84,7 +84,7 @@ public class AnnotationInstance {
 		features ="";
 		 Iterator<Map.Entry<String, String>> it = featuresMap.getFeaturesMap().entrySet().iterator();
 		    while (it.hasNext()) {
-		        Map.Entry<String,String> pairs = (Map.Entry<String,String>)it.next();
+		        Map.Entry<String,String> pairs = it.next();
 		        features = features + (pairs.getKey() + "=" + pairs.getValue() + " | ");
 		    }
 		return features;

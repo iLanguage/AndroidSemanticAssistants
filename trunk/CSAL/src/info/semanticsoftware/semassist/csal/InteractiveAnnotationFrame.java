@@ -202,9 +202,6 @@ public class InteractiveAnnotationFrame extends JFrame {
 
       // Layout GUI option panel components.
       final JPanel optionPnl = new JPanel();
-      final JScrollPane scrollLst = new JScrollPane(optionLst,
-         JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
-         JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
       optionLst.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
       optionLst.setPreferredSize(new Dimension(500, 50));
       optionPnl.setBorder(BorderFactory.createTitledBorder("Available Options"));

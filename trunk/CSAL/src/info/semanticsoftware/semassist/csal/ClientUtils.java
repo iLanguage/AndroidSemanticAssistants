@@ -122,7 +122,7 @@ public class ClientUtils
 
         Node root = xmlDoc.getDocumentElement();
         //FIXME check for unused variable here
-        Vector<SemanticServiceResult> results = getServiceResults( root );
+        //Vector<SemanticServiceResult> results = getServiceResults( root );
 
         // Work with node.getLocalName()
 

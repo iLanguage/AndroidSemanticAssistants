@@ -334,7 +334,7 @@ public class SACLClient
                     try
                     {
                         URL u = new URL( urls[j] );
-                        uriArray.getUriList().add( urls[j] );
+                        uriArray.getUriList().add( u.toString() );
                     }
                     catch( MalformedURLException e )
                     {

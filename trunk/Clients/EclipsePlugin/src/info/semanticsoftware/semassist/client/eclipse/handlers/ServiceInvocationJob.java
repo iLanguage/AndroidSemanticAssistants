@@ -186,7 +186,7 @@ public class ServiceInvocationJob extends Job{
 		        }
 		        
 		        for(int i=0; i < stringArray.getItem().size(); i++){
-		   	        	uriList.getUriList().add( new String( "#literal" ) );  
+		   	        	uriList.getUriList().add( "#literal" );  
 		   	        	uriList.getUriList().add(stringArray.getItem().get(i));
 		   	    }
 		        

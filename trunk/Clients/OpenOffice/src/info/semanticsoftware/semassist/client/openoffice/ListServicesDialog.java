@@ -118,7 +118,7 @@ public class ListServicesDialog
         xPSetDialog.setPropertyValue( "Height", Integer.valueOf( DIALOG_HEIGHT ) );
         xPSetDialog.setPropertyValue( "PositionX", Integer.valueOf( 100 ) );
         xPSetDialog.setPropertyValue( "PositionY", Integer.valueOf( 100 ) );
-        xPSetDialog.setPropertyValue( "Title", new String( "Available Assistants" ) );
+        xPSetDialog.setPropertyValue( "Title", "Available Assistants" );
         xPSetDialog.setPropertyValue( "Closeable", false );
 
         // Get the service manager from the dialog model
@@ -333,7 +333,7 @@ public class ListServicesDialog
 
         try
         {
-            ps.setPropertyValue( "Label", new String( s ) );
+            ps.setPropertyValue( "Label", s );
         }
         catch( Exception e )
         {
@@ -374,7 +374,7 @@ public class ListServicesDialog
     /**
      * OnListDblClick - Called when the user double click on a document in the Open Document dialog
      */
-    public class OnListDblClick implements XActionListener
+    public static class OnListDblClick implements XActionListener
     {
 
         private XControlContainer _xControlCont;

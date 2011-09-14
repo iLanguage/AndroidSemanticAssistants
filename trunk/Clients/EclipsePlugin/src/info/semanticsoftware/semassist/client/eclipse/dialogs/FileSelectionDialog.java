@@ -285,7 +285,7 @@ public class FileSelectionDialog extends SelectionStatusDialog {
         fViewer.setComparator(fComparator);
         if (fFilters != null) {
             for (int i = 0; i != fFilters.size(); i++) {
-				fViewer.addFilter((ViewerFilter) fFilters.get(i));
+				fViewer.addFilter(fFilters.get(i));
 			}
         }
         fViewer.setInput(fInput);
@@ -391,7 +391,7 @@ public class FileSelectionDialog extends SelectionStatusDialog {
         if (elements.length > 0) {
             if (fFilters != null) {
                 for (int i = 0; i < fFilters.size(); i++) {
-                    ViewerFilter curr = (ViewerFilter) fFilters.get(i);
+                    ViewerFilter curr = fFilters.get(i);
                     elements = curr.filter(fViewer, input, elements);
                 }
             }
