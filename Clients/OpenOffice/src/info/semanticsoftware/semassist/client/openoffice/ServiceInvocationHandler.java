@@ -318,7 +318,7 @@ public class ServiceInvocationHandler implements Runnable
         if (!dialogAnnots.isEmpty()) {
             new InteractiveAnnotationFrame(
                dialogAnnots.toArray(new Annotation[dialogAnnots.size()]),
-               contextFeature, "suggestion", new ReplaceAnnotCallback<AnnotModifyCallbackParam>());
+               contextFeature, "suggestion", new ReplaceAnnotCallback<AnnotCallbackParam>());
          } else {
             System.out.println("Found no interactive annotations with <"+ contextFeature +"> features");
          }
@@ -429,9 +429,15 @@ public class ServiceInvocationHandler implements Runnable
 }
 
 // Helper Class
-class ReplaceAnnotCallback<T extends AnnotModifyCallbackParam> implements Callback<T> {
+class ReplaceAnnotCallback<T extends AnnotCallbackParam> implements Callback<T> {
    @Override
    public boolean execute(final T param) {
-      return UNOUtils.replaceAnnotation(param.getAffectedAnnotation(), param.getContext());
+      final Annotation annot = param.getAffectedAnnotation();
+      final String text = param.getContext();
+
+      // Update document if annotation was changed in the dialog,
+      // else no operation.
+      return (text.compareTo(annot.mContent) != 0) ?
+         UNOUtils.replaceAnnotation(annot, text) : true;
    }
 }
