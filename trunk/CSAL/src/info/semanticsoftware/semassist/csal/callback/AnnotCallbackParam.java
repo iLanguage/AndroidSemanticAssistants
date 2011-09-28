@@ -29,12 +29,16 @@ import info.semanticsoftware.semassist.csal.result.Annotation;
  * Data model class for the callback parameter to modify
  * annotations.
  */
-public final class AnnotModifyCallbackParam {
+public final class AnnotCallbackParam {
 
    private final Annotation affected; // Original annotation.
    private final String context; // New annotation context.
 
-   public AnnotModifyCallbackParam(final Annotation affected, final String context)
+   /**
+    * @param affected Non-null original annotation.
+    * @param contex Non-null new annotation text.
+    */
+   public AnnotCallbackParam(final Annotation affected, final String context)
       throws NullPointerException {
 
       if (affected == null || context == null) {
