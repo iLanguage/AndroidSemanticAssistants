@@ -381,5 +381,5 @@ public class InteractiveAnnotationFrame extends JFrame {
    /* For backwards compatibility, increment this serialization value ONLY when the
     * public interface of this class is changed, otherwise keep it fixed!
     */
-   private static final long serialVersionUID = 1L;
+   private static final long serialVersionUID = 2L;
 }
