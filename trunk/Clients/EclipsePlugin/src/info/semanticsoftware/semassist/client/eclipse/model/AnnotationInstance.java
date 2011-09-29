@@ -1,7 +1,11 @@
 package info.semanticsoftware.semassist.client.eclipse.model;
 
+import info.semanticsoftware.semassist.csal.result.Annotation;
+
 import java.util.Iterator;
+import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * This class defines the structure of Semantic Annotations produced from parsing the serves's XML response.
@@ -10,7 +14,10 @@ import java.util.Map;
  * @author Bahar Sateli
  * */
 public class AnnotationInstance {
-	
+
+   /** Monotonically increasing count used for Annotation IDs. */
+   private static int instanceCounter = 0;
+ 
 	/** Annotation ID */
 	private String id;
 	
@@ -32,15 +39,43 @@ public class AnnotationInstance {
 	/** This variable stores all the features associated with each annotation in form of (key,value) pairs in a Java map. */
 	private FeatureMap featuresMap = new FeatureMap();
 
+   /** Flag indicating if this annotation presents the user with choices. */
+   private boolean interactive;
+
+
 	/** Constructor. Initializing private variables. */
-	public AnnotationInstance(String identifier, String content, String type, String start, String end) {
+	private AnnotationInstance(final String content, final String type, final String start, final String end) {
 		super();
-		this.id = identifier;
+		this.id = Integer.toString(instanceCounter++); // set unique key for next instance.
 		this.content = content;
 		this.type = type;
 		this.start = start;
 		this.end = end;
 	}
+
+   /** Constructor. Transformation from Annotation types. */
+   public AnnotationInstance(final Annotation annot, final boolean interactive) {
+      this(annot.mContent, annot.mType, String.valueOf(annot.mStart), String.valueOf(annot.mEnd));
+		final Set<String> featureNames = annot.mFeatures.keySet();
+		            	            	
+      for (final String name : featureNames) {
+		   final String value = annot.mFeatures.get(name);
+		   this.addFeatureMap(name, value);
+		}
+      this.interactive = interactive;
+   }
+
+   //TODO: The existence of this method indicates that this class
+   // should be merged with that of CSAL's Annotation!!
+   public final Annotation toAnnotation() {
+      final Annotation annot = new Annotation();
+      annot.mType = this.getType();
+      annot.mContent = this.getContent();
+      annot.mFeatures = new HashMap<String,String>(this.getFeatureMap().getFeaturesMap());
+      annot.mStart = Long.valueOf(this.getStart());
+      annot.mEnd = Long.valueOf(this.getEnd());  
+      return annot;
+   }
 
 	/** Getter method for annotation's identifier 
 	 * @return id Identifier of the annotation 
@@ -97,13 +132,6 @@ public class AnnotationInstance {
 		return featuresMap;
 	}
 	
-	
-	/** Setter method for annotation identifier 
-	 * @param input annotation identifier */
-	public void setID(String input){
-		this.id = input;
-	}
-	
 	/** Setter method for annotation content */
 	public void setContent(String content){
 		this.content = content;
@@ -132,4 +160,10 @@ public class AnnotationInstance {
 		featuresMap.put(key, value);
 	}
 
+   /** 
+    * @return The interactive status of the annotation.
+    */
+   public boolean isInteractive() {
+      return interactive;
+   }
 }	

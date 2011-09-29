@@ -1,5 +1,6 @@
 package info.semanticsoftware.semassist.client.eclipse.handlers;
 
+import info.semanticsoftware.semassist.client.eclipse.utils.Utils;
 import info.semanticsoftware.semassist.client.eclipse.model.AnnotationInstance;
 import info.semanticsoftware.semassist.client.eclipse.model.SemanticAssistantsStatusViewModel;
 import info.semanticsoftware.semassist.csal.ClientUtils;
@@ -27,34 +28,32 @@ import org.eclipse.ui.PlatformUI;
  *
  */
 public class ServerResponseHandler {
-		static int annID = 0;
-		public static void createAnnotation(SemanticServiceResult current){
-			
+
+      /**
+       * Handles interactive annotations with a modification dialog and displays
+       * remaining or unmodified annotation within the Semantic Assistant view.
+       *
+       * @param current
+       */
+      public static void createAnnotation(final SemanticServiceResult current) {
 			int counter = 0;
 			/** List of annotations that maps document IDs to annotation instances */
-			HashMap<String, AnnotationVector> annotationsVector = current.mAnnotations;
-			Set<String> keys = annotationsVector.keySet();
+			final HashMap<String, AnnotationVector> annotationsVector = current.mAnnotations;
 
-			for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); ){
-		            String docID = it2.next();
-		            AnnotationVector annotsVector = annotationsVector.get(docID);
-		            Vector<Annotation> annots = annotsVector.mAnnotationVector;
-		            for(int i=0; i < annots.size(); i++){
-		            	AnnotationInstance annotation = new AnnotationInstance(Integer.toString(annID), annots.get(i).mContent, annotsVector.mType, String.valueOf(annots.get(i).mStart), String.valueOf(annots.get(i).mEnd));
-		            	Set<String> featureNames = annots.get(i).mFeatures.keySet();
-		            	            	
-		            	for(Iterator<String> it3 = featureNames.iterator(); it3.hasNext();){
-		            		String name = it3.next();
-		            		String value = annots.get(i).mFeatures.get(name);
-		            		annotation.addFeatureMap(name, value);
-		            	}
-		
-		            	EvaluationSession.getResources().get(counter).getAnnotations().add(annotation);
-		            	annID++;
-		            }
-		            counter++;
-		     }
-		}
+         for (final String docID : annotationsVector.keySet()) {
+		      final AnnotationVector annotsVector = annotationsVector.get(docID);
+		      final Vector<Annotation> annots = annotsVector.mAnnotationVector;
+
+            // Classify annotations as interactive or not & attach them 
+            // to the corresponding resource.
+		      for (int i = 0; i < annots.size(); ++i) {
+               final Annotation annot = annots.get(i);
+               EvaluationSession.getResources().get(counter).getAnnotations().add(
+                  new AnnotationInstance(annot, annot.mFeatures.containsKey(Utils.INTERACTIVE_CONTEXT_FEATURE)));
+            }
+            ++counter;
+		   }
+      }
 		
 		public static void createFile(String fileContent, String fileExt){
 			String outputFilePath = "";
