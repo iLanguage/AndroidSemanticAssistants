@@ -24,7 +24,7 @@ package info.semanticsoftware.semassist.csal;
 
 import info.semanticsoftware.semassist.csal.result.Annotation;
 import info.semanticsoftware.semassist.csal.callback.Callback;
-import info.semanticsoftware.semassist.csal.callback.AnnotCallbackParam;
+import info.semanticsoftware.semassist.csal.callback.AnnotModifyCallbackParam;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -49,16 +49,16 @@ public class InteractiveAnnotationFrame extends JFrame {
     * @param targetFeature Feature name indicating which elements are accepted
     *        to be displayed in the option list. If null, no feature filtering
     *        is pefromed.
-    * @param callback Invokes the callback when the ignore/modify button are pressed.
-    *        The passed argument to the callback.execute() contains the string in the
-    *        input text field.
+    * @param callback Invokes the callback when the modify button is pressed with
+    *        a selected list element. The passed argument to the callback.execute()
+    *        is the String of the selected list elemement.
     *
     * @throws IllegalArgumentException if @a annots are empty, in which case
     * caller should do proper dialog handling (show msg box).
     */
    public InteractiveAnnotationFrame(final Annotation[] annots,
       final String contextFeature, final String targetFeature,
-      final Callback<AnnotCallbackParam> callback)
+      final Callback<AnnotModifyCallbackParam> callback)
       throws IllegalArgumentException {
 
       // Validate arguments
@@ -112,7 +112,7 @@ public class InteractiveAnnotationFrame extends JFrame {
          @Override
          public void actionPerformed(final ActionEvent evnt) {
             System.out.println("Ignore Button Pressed");
-            handleItem();
+            nextItem();
          }
       });
 
@@ -316,8 +316,8 @@ public class InteractiveAnnotationFrame extends JFrame {
    private void handleItem() {
       // Prepare callback argument with (possibly tweeked) input text.
       final String text = inputTxt.getText();
-      final AnnotCallbackParam param =
-         new AnnotCallbackParam(annots.current(), text);
+      final AnnotModifyCallbackParam param =
+         new AnnotModifyCallbackParam(annots.current(), text);
 
       if (!callback.execute(param)) {
          System.err.println("Problems modifying text <"+ text +">");
@@ -376,10 +376,10 @@ public class InteractiveAnnotationFrame extends JFrame {
    private final ImmutableCollection<Annotation> annots;
    private final String contextFeature;
    private final String targetFeature;
-   private final Callback<AnnotCallbackParam> callback;
+   private final Callback<AnnotModifyCallbackParam> callback;
 
    /* For backwards compatibility, increment this serialization value ONLY when the
     * public interface of this class is changed, otherwise keep it fixed!
     */
-   private static final long serialVersionUID = 2L;
+   private static final long serialVersionUID = 1L;
 }
