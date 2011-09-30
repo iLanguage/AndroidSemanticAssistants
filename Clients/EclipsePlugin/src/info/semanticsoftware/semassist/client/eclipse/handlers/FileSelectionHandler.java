@@ -1,17 +1,10 @@
 package info.semanticsoftware.semassist.client.eclipse.handlers;
 
 import java.io.File;
-import java.util.ArrayList;
 
-import info.semanticsoftware.semassist.client.eclipse.utils.Utils;
 import info.semanticsoftware.semassist.client.eclipse.dialogs.FileSelectionDialog;
 import info.semanticsoftware.semassist.client.eclipse.model.Resource;
-import info.semanticsoftware.semassist.client.eclipse.model.AnnotationInstance;
 import info.semanticsoftware.semassist.client.eclipse.model.SemanticAssistantsStatusViewModel;
-import info.semanticsoftware.semassist.csal.InteractiveAnnotationFrame;
-import info.semanticsoftware.semassist.csal.callback.AnnotCallbackParam;
-import info.semanticsoftware.semassist.csal.callback.Callback;
-import info.semanticsoftware.semassist.csal.result.Annotation;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -99,53 +92,6 @@ public class FileSelectionHandler extends AbstractHandler{
         return null;
 	}
 	
-
-   private static void processInteractiveAnnotations() {
-
-      // Identify all interactive annotations available.
-      final ArrayList<Annotation> interactiveAnnots = new ArrayList<Annotation>();
-      for (final Resource res : EvaluationSession.getResources()) {
-         for (final AnnotationInstance annot : res.getAnnotations()) {
-            if (annot.isInteractive()) {
-               interactiveAnnots.add(annot.toAnnotation());
-            }
-         }
-      }
-
-      if (interactiveAnnots.isEmpty()) {
-         System.out.println("Found no interactive annotations");
-         return;
-      }
-
-      // Callback to either make interactive modifications on
-      // annotations or display them in the Semantic Assistant
-      // view.
-      final Callback<AnnotCallbackParam> callback = new Callback<AnnotCallbackParam>() {
-         @Override
-         public boolean execute(final AnnotCallbackParam param) {
-            final Annotation annot = param.getAffectedAnnotation();
-            final String text = param.getContext();
-   
-            if (text.compareTo(annot.mContent) != 0) {
-               // Update document.
-				   SemanticAssistantsStatusViewModel.addLog(
-                  "Interactive annotation <"+ annot.mType +"> was modified with <"+ annot.mContent +"> content.");
-               //TODO: Find annotation in corresponding resource & replace
-               //content.
-               //TODO: Remove this annotation from the Semantic Assistant view
-               //list.
-            }
-            return true;
-         }
-      };
-
-      // Invoke the dialog.
-      new InteractiveAnnotationFrame(
-         interactiveAnnots.toArray(new Annotation[interactiveAnnots.size()]),
-         Utils.INTERACTIVE_CONTEXT_FEATURE, "suggestion", callback);
-   }
-
-
 	public static void openViews(){
          //Open the views
 			try {
@@ -156,8 +102,6 @@ public class FileSelectionHandler extends AbstractHandler{
 				// Open a new one with fresh data
 				window.getActivePage().showView("info.semanticsoftware.semassist.client.eclipse.views.SemanticAssistantsStatusView");
 		
-            processInteractiveAnnotations();
-
 			} catch (PartInitException e) {
 				System.err.println("Could not open the view.");
 				e.printStackTrace();

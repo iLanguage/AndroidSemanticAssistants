@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 public class Utils {
 	
-   public static final String INTERACTIVE_CONTEXT_FEATURE = "problem";
-
 	public static boolean defaultSettings = true;
 
 	public static void propertiesReader(){
