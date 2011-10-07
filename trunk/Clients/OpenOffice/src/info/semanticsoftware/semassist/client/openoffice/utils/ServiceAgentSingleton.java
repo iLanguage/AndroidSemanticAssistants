@@ -46,23 +46,18 @@ public class ServiceAgentSingleton
         // Cache the configured server & port members of this singleton.
         UNOUtils.propertiesReader();
 
-        try
-        {
-            if( agent == null )
-            {
-                if( service == null )
-                {
-                    System.out.println("Creating broker using hostname " + serverHost + " and port "+ serverPort );
-                    service = new SemanticServiceBrokerService( new URL( createURL() ),
-                            new QName( "http://server.semassist.semanticsoftware.info/",
-                            "SemanticServiceBrokerService" ) );
-                }
-                agent = service.getSemanticServiceBrokerPort();
+        try {
+            if (!serverHost.isEmpty() && !serverPort.isEmpty()) {
+               System.out.println("Creating broker using hostname " + serverHost + " and port "+ serverPort );
+               service = new SemanticServiceBrokerService( new URL( createURL() ),
+                           new QName( "http://server.semassist.semanticsoftware.info/",
+                           "SemanticServiceBrokerService" ) );
+            } else {
+	            System.out.println( "Creating broker using default values");
+	            service = new SemanticServiceBrokerService();
             }
-
-        }
-        catch( MalformedURLException e )
-        {
+            agent = service.getSemanticServiceBrokerPort();
+        } catch( MalformedURLException e ) {
             //e.printStackTrace();
             JOptionPane.showMessageDialog( null,"Server not found. \nPlease check the Server Host and Port",
                     "MalformedURL", JOptionPane.ERROR_MESSAGE );
