@@ -48,7 +48,7 @@ public class SettingsFrame extends JFrame
         setTitle("Global Settings");
         setAlwaysOnTop(true);
 
-        toggleServerMode(mDefaultServerSelect);
+        toggleServerMode(true);
 
         jRadioButtonDefault.addActionListener(new ActionListener() {
             @Override
@@ -64,9 +64,10 @@ public class SettingsFrame extends JFrame
             }
         });
 
-        okButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(final java.awt.event.ActionEvent evt) {
-                okButtonActionPerformed(evt);
+        okButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(final ActionEvent evt) {
+                okButtonActionPerformed();
             }
         });
 
@@ -83,11 +84,16 @@ public class SettingsFrame extends JFrame
 
 
             // Populate the available server combo-box from the configuration file.
-            final ArrayList<XMLElementModel> result = ClientUtils.getClientPreference(ClientUtils.XML_CLIENT_GLOBAL, "server");
+            final ArrayList<XMLElementModel> result =
+               ClientUtils.getClientPreference(ClientUtils.XML_CLIENT_GLOBAL, "server");
             for (final XMLElementModel node : result) {
- 	    		   final String key = node.getAttribute().get(ClientUtils.XML_HOST_KEY);
- 	    		   final String value = node.getAttribute().get(ClientUtils.XML_PORT_KEY);
- 	    		   serversCombo.addItem(key + ":" + value);
+               final String availableConnection = 
+ 	    		      node.getAttribute().get(ClientUtils.XML_HOST_KEY) + ":" +
+ 	    		      node.getAttribute().get(ClientUtils.XML_PORT_KEY);
+ 	    		   serversCombo.addItem(availableConnection);
+            }
+            if (serversCombo.getItemCount() > 0) {
+               serversCombo.setSelectedItem(0);
             }
 
             // Attach key listeners.
@@ -242,8 +248,7 @@ public class SettingsFrame extends JFrame
             pack();
         }// </editor-fold>//GEN-END:initComponents
 
-    private void okButtonActionPerformed(final java.awt.event.ActionEvent evt)//GEN-FIRST:event_okButtonActionPerformed
-    {//GEN-HEADEREND:event_okButtonActionPerformed
+    private void okButtonActionPerformed() {
         // for checkbox
         updateCheckBoxStatus();
         updateRadioButtonsStatus();
@@ -252,7 +257,7 @@ public class SettingsFrame extends JFrame
 
         dispose();
         setVisible( false );
-    }//GEN-LAST:event_okButtonActionPerformed
+    }
 
     private void updateCheckBoxStatus()
     {
@@ -306,7 +311,6 @@ public class SettingsFrame extends JFrame
             final String[] token = address.split(":");
             map.put(ClientUtils.XML_HOST_KEY, token[0]);
             map.put(ClientUtils.XML_PORT_KEY, token[1]);
-            ClientUtils.setClientPreference(ClientPreferences.CLIENT_NAME, "server", map);
         }
         else
         {
@@ -317,6 +321,7 @@ public class SettingsFrame extends JFrame
             map.put(ClientUtils.XML_PORT_KEY, jCustomPortField.getText());
             ClientUtils.addNewServer(map);
         }
+        ClientUtils.setClientPreference(ClientPreferences.CLIENT_NAME, "server", map);
     }
 
     private void updateAnnotationInfo()
@@ -358,7 +363,7 @@ public class SettingsFrame extends JFrame
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private static final JButton cancelButton = new JButton("Cancel");
+    private final JButton cancelButton = new JButton("Cancel");
     private static final JCheckBox jCheckBox0 =
       new JCheckBox("Allow Interactive Handling", ClientPreferences.isInteractiveResultHandling());
     private static final JCheckBox jCheckBox1 =
@@ -381,11 +386,11 @@ public class SettingsFrame extends JFrame
     private static final JLabel jLabel6 = new JLabel("Annotation Settings");
     private static final JLabel jLabel7 = new JLabel("Client Settings");
     private static final JLabel jSideNoteFontSizeLabel = new JLabel("Font size:");
-    private static final JRadioButton jRadioButtonDefault = new JRadioButton("Pre-defined Servers");
-    private static final JRadioButton jRadioButtonCustom = new JRadioButton("Add A New Server");
+    private final JRadioButton jRadioButtonDefault = new JRadioButton("Pre-defined Servers");
+    private final JRadioButton jRadioButtonCustom = new JRadioButton("Add A New Server");
     private static final JSeparator jSeparator1 = new JSeparator();
     private static final JSeparator jSeparator2 = new JSeparator();
-    private static final JButton okButton = new JButton("Ok");
+    private final JButton okButton = new JButton("Ok");
     // End of variables declaration//GEN-END:variables
 
    /* For backwards compatibility, increment this serialization value ONLY when the
