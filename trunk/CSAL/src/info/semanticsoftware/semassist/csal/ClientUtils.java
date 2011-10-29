@@ -920,16 +920,16 @@ public class ClientUtils
 			Element globalNode = document.createElement(XML_CLIENT_GLOBAL);
 			
 			Element lastServer = document.createElement("lastCalledServer");
-			lastServer.setAttribute("host", "minion.cs.concordia.ca");
-			lastServer.setAttribute("port", "8879");
+			lastServer.setAttribute(XML_HOST_KEY, "minion.cs.concordia.ca");
+			lastServer.setAttribute(XML_PORT_KEY, "8879");
 			
 			Element serverOne = document.createElement("server");
-			serverOne.setAttribute("host", "minion.cs.concordia.ca");
-			serverOne.setAttribute("port", "8879");
+			serverOne.setAttribute(XML_HOST_KEY, "minion.cs.concordia.ca");
+			serverOne.setAttribute(XML_PORT_KEY, "8879");
 			
 			Element serverTwo = document.createElement("server");
-			serverTwo.setAttribute("host", "assistant.cs.concordia.ca");
-			serverTwo.setAttribute("port", "8879");
+			serverTwo.setAttribute(XML_HOST_KEY, "assistant.cs.concordia.ca");
+			serverTwo.setAttribute(XML_PORT_KEY, "8879");
 
 			globalNode.appendChild(lastServer);
 			globalNode.appendChild(serverOne);

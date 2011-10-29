@@ -85,16 +85,26 @@ public class SettingsFrame extends JFrame
 
             // Populate the available server combo-box from the configuration file.
             final ArrayList<XMLElementModel> result =
-               ClientUtils.getClientPreference(ClientUtils.XML_CLIENT_GLOBAL, "server");
+               ClientUtils.getClientPreference(ClientUtils.XML_CLIENT_GLOBAL, "server"); // all known
+            final ArrayList<XMLElementModel> cache =
+               ClientUtils.getClientPreference(ClientPreferences.CLIENT_NAME, "server"); // last used by this client
+
+            final String selectedConnection = cache.isEmpty() ? "" :
+               cache.get(0).getAttribute().get(ClientUtils.XML_HOST_KEY) + ":" +
+               cache.get(0).getAttribute().get(ClientUtils.XML_PORT_KEY);
+
+            int index = -1, selectIndex = -1;
             for (final XMLElementModel node : result) {
                final String availableConnection = 
  	    		      node.getAttribute().get(ClientUtils.XML_HOST_KEY) + ":" +
  	    		      node.getAttribute().get(ClientUtils.XML_PORT_KEY);
  	    		   serversCombo.addItem(availableConnection);
+               ++index;
+               if (selectedConnection.compareTo(availableConnection) == 0) {
+                  selectIndex = index;
+               }
             }
-            if (serversCombo.getItemCount() > 0) {
-               serversCombo.setSelectedItem(0);
-            }
+            serversCombo.setSelectedIndex(selectIndex > -1 ? selectIndex : 0);
 
             // Attach key listeners.
             jCustomHostField.addKeyListener(new java.awt.event.KeyAdapter() {
