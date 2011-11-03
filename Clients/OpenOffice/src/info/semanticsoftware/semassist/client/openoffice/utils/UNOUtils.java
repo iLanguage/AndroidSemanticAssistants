@@ -324,21 +324,17 @@ public class UNOUtils
          "com.sun.star.text.TextField.Annotation"));
       final XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class, annot);
 
-      // Keep track of side-note text & content with the same information but for
-      // different purposes. Text is for embedding complex objects into side-notes,
-      // while content is for side-note mandatory properties. Should investigate
-      // how to leverage of OpenOffice's (unknown) internal defaults to not have
-      // multiple representation of the same information.
+      // Text is for embedding complex objects into side-notes.
       final XText text = UnoRuntime.queryInterface(
          XText.class, props.getPropertyValue("TextRange"));
-      String content = "";
+      text.insertString(text, "type= "+ annotation.mType +"\n", false);
 
       // Configure look-&-feel of side-note information.
       setFontSize(text, ClientPreferences.getSideNoteFontSize());
 
       // If configured, duplicate annotation content as part of the side-note.
       if (ClientPreferences.isShowAnnotationContent()) {
-         content += "content= "+ annotation.mContent +"\n";
+         text.insertString(text, "content= "+ annotation.mContent +"\n", false);
       }
 
       // Iterate through annotation features.
@@ -367,7 +363,10 @@ public class UNOUtils
 
       // Define side-note properties.
       try {
-         props.setPropertyValue("Content", content);
+         // NOTE: It is not clear from OpenOffice's API if the "Content" property
+         // is strictly required, which are the default values, nor what are the
+         // consequences of (not) having it.
+         //props.setPropertyValue("Content", annot.getPresentation(false));
          props.setPropertyValue("Author", mCurrentPipeline);
       } catch (UnknownPropertyException e) {
          /* Thrown ONLY on programming/typo error of the try body! */
