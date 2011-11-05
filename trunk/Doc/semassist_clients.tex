@@ -235,12 +235,12 @@ size can ease readability of features.
 
 \subsubsection{Browser Handling of HTML Results}
 Instead of returning annotations, some pipelines produce HTML documents. The
-"Open HTML results in external Browser" option shown in Figure~\ref{fig:oosettings},
+``Open HTML results in external Browser'' option shown in Figure~\ref{fig:oosettings},
 allows OpenOffice to invoke a local browser to display these results.
 
 \subsubsection{Server Settings}
 Another option found under the Semantic Assistants menu in ``Global
-Settings.''is \emph{Server Settings}.  There the user is able to specify the
+Settings.'' is \emph{Server Settings}.  There the user is able to specify the
 Server information (Host and Port) of a local or distant server.
 
 \subsection{Installation}
@@ -447,7 +447,7 @@ Eclipse plug-in loader.
 \subsection{Features}
 Once the Semantic Assistants plug-in is installed, it creates a new menu entry
 in the Eclipse menu toolbar. A user can inquire about the available services
-from the "Available Assistants" item and modify the connection settings to the
+from the ``Available Assistants'' item and modify the connection settings to the
 Semantic Assistants server by selecting the second item.
 \begin{figure}[htb]
 \begin{center}
@@ -457,7 +457,7 @@ Semantic Assistants server by selecting the second item.
 \end{center}
 \end{figure}
 \subsubsection{Available Assistants}
-Selecting the "Available Assistants" item from Semantic Assistants menu will
+Selecting the ``Available Assistants'' item from Semantic Assistants menu will
 open a file selection dialog. The file selection dialog allows the user to
 select the desired files, folders and even complete projects to send to the
 server as inputs to an NLP service. For more convenience, you can type an arbitrary extension like ``java'' or ``xml'', in the ``File Format'' field to filter to file tree view. 
@@ -495,10 +495,10 @@ Now, let's look at how different types of outputs are handled in the plug-in:
 
 \paragraph{Annotations.}
 Annotations retrieved from a successful service invocation are being shown to the user in an
-Eclipse view part called "Semantic Assistants" view. In the mentioned view, a
+Eclipse view part called ``Semantic Assistants'' view. In the mentioned view, a
 table will be dynamically generated that contains
 all the parsed annotation instances. In Figure~\ref{fig:eclipse_saView} the
-result of an execution of the "Person and Location Extractor" service on two
+result of an execution of the ``Person and Location Extractor'' service on two
 sample classes is shown.
 \begin{figure}[htb]
 \begin{center}
@@ -538,8 +538,8 @@ Documents received from the server response carry a URL property where defines w
 When a file output type is received by the plug-in, it will try to open it up in a web browser. In Eclipse, users can configure whether they want to open URLs in the Eclipse built-in web browser or any other ones in the file system. Whichever defined as the default behavior in Eclipse by the user, will be used by the plug-in to present the result file to the user. In this case, a log message will be shown to the user in the ``Semantic Assistants Status'' view to inform the user that the file is opened in his browser.
 
 \subsubsection{Global Settings}
-The second option found under the Semantic Assistants menu is the "Global
-Settings" item. By clicking on this menu item, a dialog as depicted in Figure \ref{fig:eclipse_settings} is shown to the user that lets him choose a preferred server from a list of pre-defined values or add a custom server to the settings file. The values are provided in the Semantic Assistants global preference file described in \ref{sec:pref_management}. If the preference file gets accidentally deleted, a default preference file will be created by the plug-in but the eclipse-specific settings will be lost.
+The second option found under the Semantic Assistants menu is the ``Global
+Settings'' item. By clicking on this menu item, a dialog as depicted in Figure \ref{fig:eclipse_settings} is shown to the user that lets him choose a preferred server from a list of pre-defined values or add a custom server to the settings file. The values are provided in the Semantic Assistants global preference file described in \ref{sec:pref_management}. If the preference file gets accidentally deleted, a default preference file will be created by the plug-in but the eclipse-specific settings will be lost.
 \begin{figure}[htb]
 \begin{center}
   \includegraphics[width=0.6\textwidth]{pictures/eclipse_settings.jpg}
@@ -631,10 +631,10 @@ If you want to modify the plug-in behavior or enhance it, follow these steps:
 \begin{enumerate}
 \item Open the Eclipse application.
 \item Select File $\rightarrow$ New  $\rightarrow$ Project and under the
-"Plug-in Development" category select the "Plug-in Project".
+``Plug-in Development'' category select the ``Plug-in Project''.
 \item A new plug-in project wizard will open up. Keep the EclipsePlugin name for
-the project. Just below the project name there is a checkbox reading "Use
-Default Location". Uncheck it and browse to the EclipsePlugin folder inside
+the project. Just below the project name there is a checkbox reading ``Use
+Default Location''. Uncheck it and browse to the EclipsePlugin folder inside
 where you've stored the Semantic Assistants folder.
 \item Leave the other options untouched and press Finish.
 \end{enumerate}
