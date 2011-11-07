@@ -338,8 +338,8 @@ public class FileSelectionDialog extends SelectionStatusDialog {
 						public boolean select(Viewer viewer, Object parent, Object element) {
 			               IResource src = (IResource) element;
 			                
-			               if(src.getType() == IResource.PROJECT || src.getType() == IResource.FOLDER || ((src.getType() == IResource.FILE) && src.getFileExtension().equals(extension))){
-			            		   return true;   
+			               if(src.getType() == IResource.PROJECT || src.getType() == IResource.FOLDER || ((src.getType() == IResource.FILE) && src.getFileExtension().equals(extension) && !(src.getName().startsWith(".")))){
+			            	   return true;   
 			               }else{
 			                	 return false;
 			               }
