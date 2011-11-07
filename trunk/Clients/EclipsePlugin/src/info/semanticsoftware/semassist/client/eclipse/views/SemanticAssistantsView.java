@@ -164,7 +164,7 @@ public class SemanticAssistantsView extends ViewPart {
 	
 	private void fillContextMenu(IMenuManager manager) {
 		manager.add(refreshAction);
-		manager.add(sampleAction);
+		//manager.add(sampleAction);
 		manager.add(closeAction);
 
 		// Other plug-ins can contribute there actions here
@@ -181,14 +181,14 @@ public class SemanticAssistantsView extends ViewPart {
 	private void fillLocalPullDown(IMenuManager manager) {
 		manager.add(refreshAction);
 		manager.add(new Separator());
-		manager.add(sampleAction);
+		//manager.add(Action);
 		manager.add(new Separator());
 		manager.add(closeAction);
 	}
 
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(refreshAction);
-		manager.add(sampleAction);
+		//manager.add(sampleAction);
 		manager.add(closeAction);
 
 	}
@@ -212,9 +212,9 @@ public class SemanticAssistantsView extends ViewPart {
 				showMessage("Sample Action executed");
 			}
 		};
-		sampleAction.setText("Sample Action");
-		sampleAction.setToolTipText("Sample Action");
-		sampleAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
+		//sampleAction.setText("Sample Action");
+		//sampleAction.setToolTipText("Sample Action");
+		//sampleAction.setImageDescriptor(PlatformUI.getWorkbench().getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJS_INFO_TSK));
 		
 		doubleClickAction = new Action() {
 			public void run() {
