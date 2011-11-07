@@ -69,8 +69,16 @@ public class FileSelectionHandler extends AbstractHandler{
                 IResource src = (IResource) selection[i];
                 
                 //if its not a file, we are not interested
-                if(src.getType() != IResource.FILE ) continue;
-   
+                if(src.getType() != IResource.FILE ){
+                	continue;
+                }
+                
+                //FIXME allow hidden files
+                // filtering out hidden, .class and .pref files
+                if(src.getType() == IResource.FILE && src.getName().startsWith(".") || src.getType() == IResource.FILE && src.getName().endsWith(".class") || src.getType() == IResource.FILE && src.getName().endsWith(".prefs")){
+                	continue;
+                }
+
                 //add the file to the session resources list
                 EvaluationSession.getResources().add(new Resource((IFile) src));
             }

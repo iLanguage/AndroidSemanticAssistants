@@ -46,7 +46,11 @@ public class ServerResponseHandler {
 		            	for(Iterator<String> it3 = featureNames.iterator(); it3.hasNext();){
 		            		String name = it3.next();
 		            		String value = annots.get(i).mFeatures.get(name);
-		            		annotation.addFeatureMap(name, value);
+		            		if(value.equals("")){
+		            			continue;
+		            		}else{
+		            			annotation.addFeatureMap(name, value);
+		            		}
 		            	}
 		
 		            	EvaluationSession.getResources().get(counter).getAnnotations().add(annotation);
