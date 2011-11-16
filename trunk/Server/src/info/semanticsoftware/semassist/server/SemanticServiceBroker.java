@@ -430,6 +430,7 @@ public class SemanticServiceBroker
             while( (line = reader.readLine()) != null )
             {
                 result.append( line );
+				result.append(System.getProperty("line.separator"));
             }
 
             return result.toString();
@@ -1035,9 +1036,7 @@ public class SemanticServiceBroker
 
             // If the current document is given as a string: Get
             // it from the literalDocs array
-            if( current == null ||
-                current.toString().equals( MasterData.LITERAL_DOC_URI ) ||
-                current.toString().startsWith( "#" ) )
+            if( current == null || current.toString().equals( MasterData.LITERAL_DOC_URI ))
             {
                 if( literalDocs != null && literalIndex <= literalDocs.length - 1 )
                 {
@@ -1049,7 +1048,7 @@ public class SemanticServiceBroker
                         d = Factory.newDocument( literalDocs[literalIndex] );
                         // Some GATE components need documents to have
                         // a URL, so we make sure every document has one
-                        d.setSourceUrl( MasterData.getDummyDocumentURL() );
+						d.setSourceUrl( MasterData.getDummyDocumentURL() );
                         literalIndex++;
                         corpus.add( d );
                     }
@@ -1057,10 +1056,36 @@ public class SemanticServiceBroker
                     {
                         Logging.exception( e );
                     }
-
-
                 }
                 else
+                {
+                    // Issue warning
+                    Logging.log( MasterData.WARNING_ANNOUNCEMENT + "Document URI says literal, " +
+                                 "but no more literally passed documents found. Skipping..." );
+                }
+            }else if(current.toString().startsWith( "#" )){
+            	if( literalDocs != null && literalIndex <= literalDocs.length - 1 )
+                {
+            	// Indices are fine. Create new document and add it to the corpus
+                Document d;
+                
+                try
+                {
+                    d = Factory.newDocument( literalDocs[literalIndex] );
+                    // Some GATE components need documents to have
+                    // a URL, so we make sure every document has one
+                	URL docURL = new URL(current.toString().substring(1));  
+                	d.setSourceUrl(docURL);
+                    literalIndex++;
+                    corpus.add( d );
+                }
+                catch( ResourceInstantiationException e )
+                {
+                    Logging.exception( e );
+                }catch (MalformedURLException e2){
+                	Logging.exception(e2);
+                }
+                }else
                 {
                     // Issue warning
                     Logging.log( MasterData.WARNING_ANNOUNCEMENT + "Document URI says literal, " +
