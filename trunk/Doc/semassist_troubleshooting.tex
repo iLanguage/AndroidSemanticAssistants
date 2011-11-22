@@ -48,7 +48,7 @@ your system. This compilation error arises when your open files
 size is less than what is required by the JVM to compile all the
 classes, which is at least 6000. Thus, to bypass this problem, simply
 increase the open files size to a size more than 6000 (note that this
-typically requires administrator priviliges):
+typically requires administrator privileges):
 \begin{verbatim}
     sudo ulimit -n 8000
 \end{verbatim}
@@ -65,3 +65,12 @@ editing the file \verb=/etc/security/limits=:
 \label{trouble:eclipse_install}
 \paragraph{The Plug-in does not show up in Eclipse.} This problem happens when the plug-in could not successfully install itself on your Eclipse. The most common cause of this is when you have not enough permissions on your Eclipse installation folder. For Eclipse plug-in to install itself, it needs write permission to the \texttt{configurations} folder. Login as root or obtain the adequate permissions to write into the Eclipse installation folder and restart application.
 It is recommended to start Eclipse with \texttt{``-clean''} command line argument to clear any per-configuration cached data.
+
+\section{Development}
+\subsection{Eclipse Plug-In}
+\paragraph{``Cannot load 32-bit SWT libraries on 64-bit JVM'' Error.} This error happens when you are trying to run the plug-in inside an Eclipse that is configured to use a 64-bit JVM. To fix this problem you have to force your Eclipse program to use a 32-bit JVM (provided that it is available on your machine) like the following:
+\begin{itemize}
+\item Right-click on plug-in.xml and select Run As $\rightarrow$ Run Configurations.
+\item Select the ``Argument'' tab and add ``-d32'' to VM Arguments window content.
+\item Press ``Run''.
+\end{itemize}
