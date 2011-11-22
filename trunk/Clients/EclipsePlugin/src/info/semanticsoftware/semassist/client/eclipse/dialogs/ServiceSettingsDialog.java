@@ -117,6 +117,7 @@ public class ServiceSettingsDialog extends Dialog {
             		map.put(ClientUtils.XML_HOST_KEY, txtServerHost.getText());
             		map.put(ClientUtils.XML_PORT_KEY, txtServerPort.getText());
             		//ClientUtils.setClientPreference(ClientUtils.XML_CLIENT_GLOBAL, "server", map);
+            		ClientUtils.setClientPreference("eclipse", "server", map);
             		ClientUtils.addNewServer(map);
             		super.buttonPressed(buttonId);
             	}

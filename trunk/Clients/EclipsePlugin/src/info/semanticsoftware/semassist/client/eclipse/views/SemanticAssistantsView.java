@@ -165,7 +165,7 @@ public class SemanticAssistantsView extends ViewPart {
 	private void fillContextMenu(IMenuManager manager) {
 		manager.add(refreshAction);
 		//manager.add(sampleAction);
-		manager.add(closeAction);
+		//manager.add(closeAction);
 
 		// Other plug-ins can contribute there actions here
 		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
@@ -182,14 +182,14 @@ public class SemanticAssistantsView extends ViewPart {
 		manager.add(refreshAction);
 		manager.add(new Separator());
 		//manager.add(Action);
-		manager.add(new Separator());
-		manager.add(closeAction);
+		//manager.add(new Separator());
+		//manager.add(closeAction);
 	}
 
 	private void fillLocalToolBar(IToolBarManager manager) {
 		manager.add(refreshAction);
 		//manager.add(sampleAction);
-		manager.add(closeAction);
+		//manager.add(closeAction);
 
 	}
 
