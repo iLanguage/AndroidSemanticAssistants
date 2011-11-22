@@ -42,7 +42,7 @@ public class ClientUtils
 	public static final String XML_CLIENT_GLOBAL = "global";
 	public static final String XML_HOST_KEY = "host";
 	public static final String XML_PORT_KEY = "port";
- 	public static final String PROPERTIES_FILE_PATH = System.getProperty("user.home")+ System.getProperty("file.separator") +"semassist-settings.xml";
+ 	public static final String PROPERTIES_FILE_PATH = System.getProperty("user.home")+ System.getProperty("file.separator");
 	
     public static ArrayList<Annotation> mAnnotArray;
     protected static Comparator<Annotation> mByStartCharacter = new CompareByStart();
@@ -719,7 +719,7 @@ public class ClientUtils
      */
     public static void setClientPreference(final String client, final String element, final Map<String, String> map){
 		try {		
-			File propertiesFile = new File(PROPERTIES_FILE_PATH);
+			File propertiesFile = new File(getPropertiesFileName());
 			if (propertiesFile.exists()) {
 				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
 				DocumentBuilder docBuilder = builder.newDocumentBuilder();
@@ -760,7 +760,7 @@ public class ClientUtils
 				root.appendChild(clientTag);
 
 				DOMSource source = new DOMSource(doc);
-				StreamResult result = new StreamResult(new FileOutputStream(PROPERTIES_FILE_PATH));
+				StreamResult result = new StreamResult(new FileOutputStream(propertiesFile));
 
 				TransformerFactory transFactory = TransformerFactory.newInstance();
 				Transformer transformer = transFactory.newTransformer();
@@ -789,13 +789,13 @@ public class ClientUtils
      * If the client or element does not exist, it returns an empty list.
      * @see XMLElementModel
      * @param client the target client scope
-     * @param element the specific target element to retireve or null to retireve all
+     * @param element the specific target element to retrieve or null to retrieve all
      *                elements at the @a client scope.
      * @return a list of elements or an empty list if no such client or element exists
      */
     public static ArrayList<XMLElementModel> getClientPreference(final String client, final String element){
     	final ArrayList<XMLElementModel> result = new ArrayList<XMLElementModel>();
-    	File propertiesFile = new File(PROPERTIES_FILE_PATH);
+    	File propertiesFile = new File(getPropertiesFileName());
 		if(propertiesFile.exists()){
 			try {
 				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
@@ -852,7 +852,7 @@ public class ClientUtils
      * */
     public static void addNewServer(final Map<String, String> map){
     	try {		
-			File propertiesFile = new File(PROPERTIES_FILE_PATH);
+			File propertiesFile = new File(getPropertiesFileName());
 			if (propertiesFile.exists()) {
 				DocumentBuilderFactory builder = DocumentBuilderFactory.newInstance();
 				DocumentBuilder docBuilder = builder.newDocumentBuilder();
@@ -882,7 +882,7 @@ public class ClientUtils
 				root.appendChild(clientTag);
 
 				DOMSource source = new DOMSource(doc);
-				StreamResult result = new StreamResult(new FileOutputStream(PROPERTIES_FILE_PATH));
+				StreamResult result = new StreamResult(new FileOutputStream(propertiesFile));
 
 				TransformerFactory transFactory = TransformerFactory.newInstance();
 				Transformer transformer = transFactory.newTransformer();
@@ -911,6 +911,17 @@ public class ClientUtils
      * */
     public static void createPropertiesFile(){
 		try {
+			File propertiesFile;
+			if(System.getProperty("os.name").toLowerCase().equals("windows")){
+				propertiesFile = new File(getPropertiesFileName());
+				Runtime rt = Runtime.getRuntime();
+				Process pr = rt.exec("attrib -s -h -r " + PROPERTIES_FILE_PATH + "semassist-settings.xml");
+				//FIXME what's this for?
+				int exitVal = pr.exitValue();
+			}else{
+				propertiesFile = new File(PROPERTIES_FILE_PATH + ".semassist-settings.xml");
+			}
+			
 	    	DocumentBuilderFactory documentBuilderFactory = DocumentBuilderFactory.newInstance();
 	    	DocumentBuilder documentBuilder;
 			documentBuilder = documentBuilderFactory.newDocumentBuilder();
@@ -927,20 +938,15 @@ public class ClientUtils
 			serverOne.setAttribute(XML_HOST_KEY, "minion.cs.concordia.ca");
 			serverOne.setAttribute(XML_PORT_KEY, "8879");
 			
-			Element serverTwo = document.createElement("server");
-			serverTwo.setAttribute(XML_HOST_KEY, "assistant.cs.concordia.ca");
-			serverTwo.setAttribute(XML_PORT_KEY, "8879");
-
 			globalNode.appendChild(lastServer);
 			globalNode.appendChild(serverOne);
-			globalNode.appendChild(serverTwo);
 			root.appendChild(globalNode);
 			document.appendChild(root);
 	    	
 			TransformerFactory transformerFactory = TransformerFactory.newInstance();
 	    	Transformer transformer = transformerFactory.newTransformer();
 	    	DOMSource source = new DOMSource(document);
-	    	StreamResult result =  new StreamResult(new FileOutputStream(PROPERTIES_FILE_PATH));
+	    	StreamResult result =  new StreamResult(new FileOutputStream(propertiesFile));
  	    	//transformer.setOutputProperty(OutputKeys.INDENT, "yes");
 	    	transformer.transform(source, result);
 		} catch (ParserConfigurationException e) {
@@ -952,5 +958,15 @@ public class ClientUtils
 		} catch (TransformerException e) {
 			e.printStackTrace();
 		}
+    }
+    
+    private static String getPropertiesFileName(){
+    	String fileName = "";
+    	if(System.getProperty("os.name").toLowerCase().equals("windows")){
+			fileName = PROPERTIES_FILE_PATH + "semassist-settings.xml";
+		}else{
+			fileName = PROPERTIES_FILE_PATH + ".semassist-settings.xml";
+		}
+    	return fileName;
     }
 }
