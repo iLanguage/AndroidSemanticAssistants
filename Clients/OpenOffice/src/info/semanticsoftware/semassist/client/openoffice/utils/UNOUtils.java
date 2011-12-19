@@ -229,7 +229,7 @@ public class UNOUtils
          // Retrieve any existing frames with the same URL, 
          // else create new ones.
          comp = xComponentLoader.loadComponentFromURL(
-            url, "_default", 0, new PropertyValue[0]);     //<<dbg _blank
+            url, "_default", 0, new PropertyValue[0]);
       } catch( final com.sun.star.io.IOException ex ) {
          System.err.println("Invalid URL <"+ url +">"); 
          ex.printStackTrace();
