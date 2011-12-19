@@ -266,24 +266,9 @@ public class ClientUtils
 	    String annotationType = nm.getNamedItem( "annotationSet" ).getNodeValue();
             System.out.println( "------------- annotationSet = " + annotationType );
 
-	    if(isBoundless.equals("true"))
-            {
-                result.mResultType = SemanticServiceResult.BOUNDLESS_ANNOTATION;
-            }
-            else
-            {
-                // for side-notes
-                result.mResultType = SemanticServiceResult.ANNOTATION;
-            }
-
-            // annotation vector, annotation sorted by type
-
-            // annotvector by start
-            HashMap<String, AnnotationVector> map = getAnnotationObjectByStart( node );
-
-
-            result.mAnnotations = map;
-
+            result.mResultType = isBoundless.equals("true") ?
+               SemanticServiceResult.BOUNDLESS_ANNOTATION : SemanticServiceResult.ANNOTATION;
+            result.mAnnotations = getAnnotationObjects( node );
         }
         // File case
         else if( nodeName.equals( SemanticServiceResult.FILE ) )
@@ -362,15 +347,13 @@ public class ClientUtils
             return null;
         }
 
-        NamedNodeMap nm = node.getAttributes();
-        String annotationType = nm.getNamedItem( "type" ).getNodeValue();
-
-
+        final NamedNodeMap nm = node.getAttributes();
+        final String annotationType = nm.getNamedItem( "type" ).getNodeValue();
 
         Node kid;
         // Use document ID as key, AnnotationVector (not yet annotation
         // instances!) as content
-        HashMap<String, AnnotationVector> result = new HashMap<String, AnnotationVector>();
+        final HashMap<String, AnnotationVector> result = new HashMap<String, AnnotationVector>();
 
         // Traverse the child nodes of the annotation node, which
         // should be <document> nodes
@@ -384,7 +367,6 @@ public class ClientUtils
                 // kid should be annotation document node now
                 if( kid.getNodeName().equals( "document" ) )
                 {
-
                     // Get some document ID
                     NamedNodeMap nmKid = kid.getAttributes();
                     String url = nmKid.getNamedItem( "url" ).getNodeValue();
@@ -399,65 +381,6 @@ public class ClientUtils
                     anns.mAnnotationVector = va;
                     anns.mType = annotationType;
 
-                    // Put the AnnotationVector in the document's space
-                    result.put( url, anns );
-
-                }
-                else
-                {
-                    System.out.println( "---------- Strange thing in annotation case: node " +
-                                        "name is not \"document\", but " + kid.getNodeName() + "." );
-                }
-
-                documentCount++;
-            }
-        }
-
-        return result;
-    }
-
-    protected static HashMap<String, AnnotationVector> getAnnotationObjectByStart( final Node node )
-    {
-        if( node == null )
-        {
-            return null;
-        }
-
-        NamedNodeMap nm = node.getAttributes();
-        String annotationType = nm.getNamedItem( "type" ).getNodeValue();
-
-        Node kid;
-        // Use document ID as key, AnnotationVector (not yet annotation
-        // instances!) as content
-        HashMap<String, AnnotationVector> result = new HashMap<String, AnnotationVector>();
-
-        // Traverse the child nodes of the annotation node, which
-        // should be <document> nodes
-        if( node.hasChildNodes() )
-        {
-            int documentCount = 0;
-
-            for( kid = node.getFirstChild(); kid != null; kid = kid.getNextSibling() )
-            {
-
-                // kid should be annotation document node now
-                if( kid.getNodeName().equals( "document" ) )
-                {
-
-                    // Get some document ID
-                    NamedNodeMap nmKid = kid.getAttributes();
-                    String url = nmKid.getNamedItem( "url" ).getNodeValue();
-
-                    if( url == null || url.equals( "" ) )
-                    {
-                        url = getDocID( documentCount );
-                    }
-
-                    // Get current annotation vector for this document
-                    Vector<Annotation> va = getAnnotationsForOneDocument( kid );
-                    AnnotationVector anns = new AnnotationVector();
-                    anns.mAnnotationVector = va;
-                    anns.mType = annotationType;
                     // Put the AnnotationVector in the document's space
                     result.put( url, anns );
 

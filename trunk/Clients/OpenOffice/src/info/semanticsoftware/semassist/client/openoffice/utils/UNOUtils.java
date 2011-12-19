@@ -24,11 +24,11 @@ package info.semanticsoftware.semassist.client.openoffice.utils;
 
 import java.io.*;
 
-import org.apache.log4j.Logger;
-
-
 import com.sun.star.uno.UnoRuntime;
 import com.sun.star.uno.XComponentContext;
+
+import com.sun.star.container.XEnumeration;
+import com.sun.star.container.NoSuchElementException;
 
 import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
@@ -43,6 +43,7 @@ import com.sun.star.text.XTextViewCursorSupplier;
 
 import com.sun.star.lang.XMultiComponentFactory;
 import com.sun.star.lang.XComponent;
+import com.sun.star.lang.WrappedTargetException;
 
 import com.sun.star.beans.PropertyVetoException;
 import com.sun.star.beans.PropertyValue;
@@ -57,6 +58,8 @@ import info.semanticsoftware.semassist.csal.ClientUtils;
 import info.semanticsoftware.semassist.csal.result.Annotation;
 import info.semanticsoftware.semassist.csal.XMLElementModel;
 import java.util.*;
+import java.net.URI;
+import java.net.URISyntaxException;
 
 public class UNOUtils
 {
@@ -64,7 +67,6 @@ public class UNOUtils
     private static final int HIGHLIGHT_OFF = 0xFFFFFF0A;
     private static int CURRENT_HIGHLIGHT = HIGHLIGHT_YELLOW;
 
-    private static Logger mLogger = Logger.getLogger( GUIUtils.class );
     private static XMultiServiceFactory mxDocFactory = null;
     private static XTextCursor mxDocCursor = null;
     private static XSearchDescriptor mxSearchDescr = null;
@@ -73,6 +75,61 @@ public class UNOUtils
    
     private static XText mxAnnotText = null;
     private static String mCurrentPipeline;
+
+    /**
+     * Retrieves the URI of the current document.
+     *
+     * @param ctx CopenOffice context.
+     * @return uri for the document if available, empty if document
+     *             not saved or null on error.
+     */
+    public static URI getDocumentURI( final XComponentContext ctx )
+    {
+      URI result;
+      try {
+         final XModel model = getActiveDocumentModel(ctx);
+         result = new URI(model.getURL());
+      } catch (final URISyntaxException ex) {
+         System.out.println("Error retrieving URI from document context.");
+         result = null;
+      }
+      return result;
+    }
+
+    /**
+     * Determines if a document is currently loaded.
+     *
+     * @param ctx OpenOffice context.
+     * @param url String of the URL. Use empty string for documents that have
+     *            not been saved.
+     *
+     * @return True if @a url is among the loaded documents, false otherwise.
+     */
+    public static boolean isDocumentLoaded(final XComponentContext ctx, final String url)
+    {
+      final XEnumeration docs = getDesktop(ctx).getComponents().createEnumeration();
+      while (docs.hasMoreElements()) {
+         try {
+            final XModel elem =
+               UnoRuntime.queryInterface(XModel.class, docs.nextElement());
+
+            // Normalize excess slashes.
+            final String normURL = elem.getURL().equals("") ? "" :
+               new URI(elem.getURL()).toURL().toString();
+
+            if (url.equals(normURL)) {
+               return true;
+            }               
+         } catch (final com.sun.star.container.NoSuchElementException ex) {
+            ex.printStackTrace(System.err);
+         } catch (final com.sun.star.lang.WrappedTargetException ex) {
+            ex.printStackTrace(System.err);
+         } catch (final Exception ex) {
+            System.err.println(ex.getMessage());
+         }
+      }
+      return false;
+   }
 
     /**
      * Retrieves either the marked text of the current document
@@ -108,70 +165,79 @@ public class UNOUtils
 
     }
 
-    public static void createNewDoc( final XComponentContext ctx )
-    {
-        createNewDoc( ctx, "" );
-    }
 
+    /**
+     * Spawns an OpenOffice window with a new document from a given text.
+     *
+     * @param ctx Context.
+     * @param text Text content for the new document.
+     */
     public static void createNewDoc( final XComponentContext ctx, final String text )
     {
+        try {
+            // Get an new empty document.
+            final XTextDocument doc = UnoRuntime.queryInterface(
+               com.sun.star.text.XTextDocument.class,
+               loadDoc(ctx, "private:factory/swriter"));
 
-        // Get an empty text document
-        XTextDocument doc = createTextDocument( getDesktop( ctx ) );
-        XText docText = doc.getText();
-        int endIndex = text.length();
-
-        if( text.length() > 10000 )
-        {
-            endIndex = 10000;
+            // Add text content to document.
+            doc.getText().setString(text);
+        } catch( final Exception ex ) {
+            System.err.println("Failed to create textual document");
+            ex.printStackTrace( System.err );
         }
-
-
-        docText.setString( text.substring( 0, endIndex ) );
-
     }
 
-    public static XComponent createNewDoc( final XComponentContext ctx, final File f )
+
+    /**
+     * Spawns an OpenOffice window with a document from a given file.
+     *
+     * @param ctx Context.
+     * @param file Local file from which to get content for new document.
+     */
+    public static void createNewDoc( final XComponentContext ctx, final File f )
     {
-        // Query the XComponentLoader interface from the Desktop service
-        final XComponentLoader xComponentLoader = UnoRuntime.queryInterface(
-                XComponentLoader.class, getDesktop( ctx ) );
-
-        PropertyValue[] loadProps = new PropertyValue[0];
-        /*
-        PropertyValue[] loadProps = new PropertyValue[1];
-        loadProps[0] = new PropertyValue();
-        loadProps[0].Name = "Hidden";
-        loadProps[0].Value = Boolean.valueOf(true);
-         */
-
-        // Load
-        String url = "";
-        try
-        {
+        // Create URL string from file object.
+        String url;
+        try {
             url = "file://" + f.getCanonicalPath();
-        }
-        catch( Exception e )
-        {
-            //e.printStackTrace();
-        }
-
-        try
-        {
-            System.out.println( "--------------- File URL: " + url );
-            return xComponentLoader.loadComponentFromURL( url, "_blank", 0, loadProps );
-        }
-        catch( com.sun.star.io.IOException e )
-        {
-            e.printStackTrace();
-        }
-        catch( com.sun.star.lang.IllegalArgumentException e )
-        {
-            e.printStackTrace();
+        } catch( final Exception ex ) {
+            System.out.println("WARNING: Corrupted URL, using empty instead.");
+            url = "";
         }
 
+        loadDoc(ctx, url);
+    }
 
-        return null;
+    /**
+     * Helper method to spawn an OpenOffice window with a new or existing document.
+     *
+     * @param ctx Contex.
+     * @param url URL of the existing document or protocol for the new.
+     *
+     * @return Component of the spawned frame if successful or null otherwise.
+     */
+    private static XComponent loadDoc(final XComponentContext ctx, final String url)
+    {
+      XComponent comp = null;
+
+      // Query the XComponentLoader interface from the Desktop service
+      final XComponentLoader xComponentLoader = UnoRuntime.queryInterface(
+         XComponentLoader.class, getDesktop(ctx) );
+
+      try {
+         // Retrieve any existing frames with the same URL, 
+         // else create new ones.
+         comp = xComponentLoader.loadComponentFromURL(
+            url, "_default", 0, new PropertyValue[0]);     //<<dbg _blank
+      } catch( final com.sun.star.io.IOException ex ) {
+         System.err.println("Invalid URL <"+ url +">"); 
+         ex.printStackTrace();
+      } catch( final com.sun.star.lang.IllegalArgumentException ex ) {
+         System.err.println("Invalid properties");
+         ex.printStackTrace();
+      }
+      return comp;
     }
 
     public static void createDocAnnotations( final XComponentContext ctx, final Annotation annotation )
@@ -214,24 +280,6 @@ public class UNOUtils
         mCurrentPipeline = aMCurrentPipeline;
     }
 
-    private static XTextDocument createTextDocument( final XDesktop xDesktop )
-    {
-        XTextDocument aTextDocument = null;
-
-        try
-        {
-            XComponent xComponent = createNewDocument( xDesktop, "swriter" );
-            aTextDocument = UnoRuntime.queryInterface(
-                    com.sun.star.text.XTextDocument.class, xComponent );
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace( System.err );
-        }
-
-        return aTextDocument;
-    }
-
     /**
      * Get the currently active text document
      */
@@ -271,29 +319,6 @@ public class UNOUtils
         {
         }
         return UnoRuntime.queryInterface( com.sun.star.frame.XDesktop.class, desktop );
-    }
-
-    private static XComponent createNewDocument( final XDesktop xDesktop, final String sDocumentType )
-    {
-        String sURL = "private:factory/" + sDocumentType;
-        XComponent xComponent = null;
-
-        XComponentLoader xComponentLoader = null;
-        PropertyValue xEmptyArgs[] = new PropertyValue[0];
-
-        try
-        {
-            xComponentLoader = UnoRuntime.queryInterface(
-                    XComponentLoader.class, xDesktop );
-
-            xComponent = xComponentLoader.loadComponentFromURL( sURL, "_blank", 0, xEmptyArgs );
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace( System.err );
-        }
-
-        return xComponent;
     }
 
     private static void annotateField( final Annotation annotation )

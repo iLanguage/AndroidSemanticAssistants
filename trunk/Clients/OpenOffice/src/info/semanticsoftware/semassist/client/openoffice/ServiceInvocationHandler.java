@@ -43,7 +43,11 @@ public class ServiceInvocationHandler implements Runnable
 {
 
     private XComponentContext compCtx;
+
+    /** Textual content of the active document or selected document region when
+        the service was invoked. */
     private String argumentText = null;
+
     private String serviceName = null;
     private Thread thread;
     private GateRuntimeParameterArray rtpArray = new GateRuntimeParameterArray();
@@ -76,16 +80,28 @@ public class ServiceInvocationHandler implements Runnable
     {
         if( argumentText == null || serviceName == null )
         {
+            System.out.println( "No text is available to process." );
             return;
         }
 
-        System.out.println( "Argument text: " + argumentText );
+        // Populate the document & content arrays to transmit as the server
+        // request. 
+        final UriList uriList = new UriList();
 
+        final URI docURI = UNOUtils.getDocumentURI( compCtx );
+        if (docURI != null && !docURI.toString().equals("")) {
+            uriList.getUriList().add("#"+ docURI.toString());
+        } else {
+            // Unsaved documents do not have a URI.
+            uriList.getUriList().add("#literal");
+        }
 
-        UriList uriList = new UriList();
-        uriList.getUriList().add( new String( "#literal" ) );
-        StringArray stringArray = new StringArray();
-        stringArray.getItem().add( new String( argumentText ) );
+        final StringArray stringArray = new StringArray();
+        stringArray.getItem().add( argumentText );
+        
+        System.out.println( "Text Start -------------------------------------" );
+        System.out.println( argumentText );
+        System.out.println( "Text End ---------------------------------------" );
 
         String serviceResponse = null;
         SemanticServiceBroker broker = null;
@@ -104,6 +120,7 @@ public class ServiceInvocationHandler implements Runnable
 
             // returns result in sorted by type
             Vector<SemanticServiceResult> results = ClientUtils.getServiceResults( serviceResponse );
+            System.out.println("serviceResponse:\n"+ serviceResponse);
 
             // used for document case
             String DocString = "";
@@ -164,14 +181,18 @@ public class ServiceInvocationHandler implements Runnable
                     // Annotation case => append to data structure
                     System.out.println( "---------------- Annotation case..." );
                     annotationsPerDocument = appendResults(current.mAnnotations, annotationsPerDocument);
+                   
+                    // Process annotations corresponding to each of the
+                    // documents.
+                    for( final String docID : annotationsPerDocument.keySet() ) {
+                        System.out.println("Annotating document <"+ docID +">");
 
-                    // Assemble annotations string
-                    if( annotationsPerDocument.size() > 0 )
-                    {
-                        System.out.println( "---------------- Creating document with annotation information..." );
-                        UNOUtils.createNewDoc( compCtx, getAnnotationsString( annotationsPerDocument ) );
-                    }
+                        final AnnotationVectorArray annots =
+                           annotationsPerDocument.get(docID);
 
+                        UNOUtils.createNewDoc(compCtx, getAnnotationsString(annots));
+                        handleAnnotations(compCtx, annots);
+                    }    
                 }
                 else if( current.mResultType.equals( SemanticServiceResult.ANNOTATION ) )
                 {
@@ -179,11 +200,21 @@ public class ServiceInvocationHandler implements Runnable
                     System.out.println( "---------------- Sidenote case..." );
                     annotationsPerDocument = appendResults(current.mAnnotations, annotationsPerDocument);
 
-                    // Assemble annotations string
-                    if( annotationsPerDocument.size() > 0 )
-                    {
-                        System.out.println( "---------------- Creating side-notes with annotation information..." );
-                        getAnnotationsString( annotationsPerDocument );
+
+                    // Process annotations corresponding to each of the
+                    // documents.
+                    for( final String docID : annotationsPerDocument.keySet() ) {
+                        System.out.println("Annotating document <"+ docID +">");
+
+                        // NOTE: Unsaved documents requested for server processing
+                        // are numerically indexed rather than represented by URLs
+                        // in the server's response. Need to revert this non-URL 
+                        // mapping here.
+                        final String url = isURL(docID) ? docID : "";
+
+                        if (UNOUtils.isDocumentLoaded(compCtx, url)) {
+                           handleAnnotations(compCtx, annotationsPerDocument.get( docID ));
+                        }
                     }
                 }
                 else if( current.mResultType.equals( SemanticServiceResult.DOCUMENT ) )
@@ -201,6 +232,11 @@ public class ServiceInvocationHandler implements Runnable
 
             } // end while (for each result)
 
+            // FIXME: This branch is only relevant for the SemanticServiceResult.DOCUMENT
+            // case & should be moved there to reduce variable scopes. More seriously, if
+            // multiple documents are returned in a corpus, at best only 1 new document is
+            // created. Also the DocString argument should be the content of documents not
+            // their URLs! From the looks of our pipelines, this seams like dead code.
             if( DocCase )
             {
                 UNOUtils.createNewDoc( compCtx, DocString );
@@ -235,51 +271,19 @@ public class ServiceInvocationHandler implements Runnable
       return dstMap;
     }
 
-
-    protected
-
-     String getAnnotationsString( final HashMap<String, AnnotationVectorArray> map )
+    private static String getAnnotationsString( final AnnotationVectorArray annotVectorArr )
     {
-        if( map == null )
-        {
-            return "";
-        }
-
-        StringBuffer sb = new StringBuffer();
-
-        // The key is annotation document ID (URL or number), the values are
-        // annotation instances, basically
-        Set<String> keys = map.keySet();
-
-
-        for( Iterator<String> it = keys.iterator(); it.hasNext(); )
-        {
-            String docID = it.next();
-            sb.append( "Annotations for document " + docID + ":\n\n" );
-            AnnotationVectorArray va = map.get( docID );
-            sb.append( getAnnotationsString( va ) );
-            handleAnnotations(va);
-        }
-
-
-        return sb.toString();
-    }
-
-    protected String getAnnotationsString( final AnnotationVectorArray annotVectorArr )
-    {
-
-        StringBuffer strBuffer = new StringBuffer();
-
-
         if( annotVectorArr == null )
         {
             return "";
         }
 
+        final StringBuffer strBuffer = new StringBuffer();
+
 
         for( Iterator<AnnotationVector> it = annotVectorArr.mAnnotVectorArray.iterator(); it.hasNext(); )
         {
-            AnnotationVector annotVector = it.next();
+            final AnnotationVector annotVector = it.next();
 
             strBuffer.append( "Type: " + annotVector.mType + "\n" );
 
@@ -293,12 +297,17 @@ public class ServiceInvocationHandler implements Runnable
 
     }
 
-   private void handleAnnotations(final AnnotationVectorArray annotVectorArr) {
-      // sort annotations by start
-      ClientUtils.SortAnnotations(annotVectorArr);
-
-      // create enumeration of existing sidenotes in the text
-      UNOUtils.initializeCursor( compCtx );
+   /**
+    * Performs side-note annotation on a given document context.
+    *
+    * @param ctx Document context to annotate.
+    * @param annots Annotation vector corresponding to a document.
+    */
+   private static void handleAnnotations(
+      final XComponentContext ctx, final AnnotationVectorArray annots)
+   {
+      // Sort annotations by start
+      ClientUtils.SortAnnotations(annots);
 
       // Divide annotations into interactive & non-interactive ones.
       final Collection<Annotation> sideNoteAnnots = new ArrayList<Annotation>();
@@ -323,15 +332,22 @@ public class ServiceInvocationHandler implements Runnable
             System.out.println("Found no interactive annotations with <"+ contextFeature +"> features");
          }
       }
+ 
+      //dbg>> Need proper document focus before randomly annotating text.
+
+      // create enumeration of existing sidenotes in the text
+      UNOUtils.initializeCursor( ctx );
 
       // Default annotation handling.
       for (final Annotation annot : sideNoteAnnots) {
-         CreateSideNotes(annot);
+         if (annot != null) {
+            UNOUtils.createDocAnnotations(ctx, annot);
+         }
       }
    }
 
 
-    protected String listAnnotations( final AnnotationVector as )
+    private static String listAnnotations( final AnnotationVector as )
     {
         if( as == null )
         {
@@ -391,18 +407,6 @@ public class ServiceInvocationHandler implements Runnable
         rtpArray = a;
     }
 
-    protected void CreateSideNotes( Annotation annotation )
-    {
-
-        if( annotation == null )
-        {
-            return;
-        }
-
-        UNOUtils.createDocAnnotations( compCtx, annotation );
-
-    }
-
    /**
     * Open an file through a browser.
     *
@@ -425,6 +429,18 @@ public class ServiceInvocationHandler implements Runnable
          status = false;
       }
       return status;
+   }
+
+
+   private static final boolean isURL(final String str) {
+      boolean result = true;
+      try {
+         new URI(str).toURL();
+      } catch (final Exception ex) {
+         // Test by side-effect.
+         result = false;
+      }
+      return result;
    }
 }
 
