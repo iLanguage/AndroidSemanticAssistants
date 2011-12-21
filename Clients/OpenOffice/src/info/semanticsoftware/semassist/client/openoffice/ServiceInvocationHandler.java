@@ -191,7 +191,7 @@ public class ServiceInvocationHandler implements Runnable
                            annotationsPerDocument.get(docID);
 
                         UNOUtils.createNewDoc(compCtx, getAnnotationsString(annots));
-                        handleAnnotations(compCtx, annots);
+                        handleAnnotations(compCtx, annots, null);
                     }    
                 }
                 else if( current.mResultType.equals( SemanticServiceResult.ANNOTATION ) )
@@ -213,7 +213,7 @@ public class ServiceInvocationHandler implements Runnable
                         final String url = isURL(docID) ? docID : "";
 
                         if (UNOUtils.isDocumentLoaded(compCtx, url)) {
-                           handleAnnotations(compCtx, annotationsPerDocument.get( docID ));
+                           handleAnnotations(compCtx, annotationsPerDocument.get( docID ), url);
                         }
                     }
                 }
@@ -302,9 +302,10 @@ public class ServiceInvocationHandler implements Runnable
     *
     * @param ctx Document context to annotate.
     * @param annots Annotation vector corresponding to a document.
+    * @param url URL of the save document to which annotate or null.
     */
    private static void handleAnnotations(
-      final XComponentContext ctx, final AnnotationVectorArray annots)
+      final XComponentContext ctx, final AnnotationVectorArray annots, final String url)
    {
       // Sort annotations by start
       ClientUtils.SortAnnotations(annots);
@@ -333,10 +334,16 @@ public class ServiceInvocationHandler implements Runnable
          }
       }
  
-      //dbg>> Need proper document focus before randomly annotating text.
-
-      // create enumeration of existing sidenotes in the text
-      UNOUtils.initializeCursor( ctx );
+      // Assign cursor focus to either saved or unsaved document.
+      // NOTE: Should encapsulate cursor initialization in UNOUtils to
+      // avoid race condition where user manually changes window focus
+      // between between the time a loaded document is first given focus
+      // until UNOUtils.createDocAnnotations() is invoked.
+      if (url != null) {
+         UNOUtils.initializeCursor(ctx, url);
+      } else {
+         UNOUtils.initializeCursor(ctx);
+      }
 
       // Default annotation handling.
       for (final Annotation annot : sideNoteAnnots) {
