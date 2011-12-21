@@ -54,12 +54,14 @@ import com.sun.star.text.XTextCursor;
 import com.sun.star.text.XTextField;
 import com.sun.star.util.XSearchDescriptor;
 import com.sun.star.util.XReplaceable;
+import com.sun.star.uri.ExternalUriReferenceTranslator;
+import com.sun.star.uri.XExternalUriReferenceTranslator;
+
 import info.semanticsoftware.semassist.csal.ClientUtils;
 import info.semanticsoftware.semassist.csal.result.Annotation;
 import info.semanticsoftware.semassist.csal.XMLElementModel;
 import java.util.*;
-import java.net.URI;
-import java.net.URISyntaxException;
+import java.net.*;
 
 public class UNOUtils
 {
@@ -107,17 +109,22 @@ public class UNOUtils
      */
     public static boolean isDocumentLoaded(final XComponentContext ctx, final String url)
     {
+      // Normalize URL argument to be an OpenOffice internal URL
+      // representation. This differs in some cases from Java's URL
+      // representation.
+      final String normURL = translateURL(ctx, url, false);
+      if (normURL == null) {
+         System.err.println("Cannot normalize url <"+ url +">");
+         return false;
+      }
+
       final XEnumeration docs = getDesktop(ctx).getComponents().createEnumeration();
       while (docs.hasMoreElements()) {
          try {
             final XModel elem =
                UnoRuntime.queryInterface(XModel.class, docs.nextElement());
 
-            // Normalize excess slashes.
-            final String normURL = elem.getURL().equals("") ? "" :
-               new URI(elem.getURL()).toURL().toString();
-
-            if (url.equals(normURL)) {
+            if (normURL.equals(elem.getURL())) {
                return true;
             }               
          } catch (final com.sun.star.container.NoSuchElementException ex) {
@@ -221,21 +228,27 @@ public class UNOUtils
     {
       XComponent comp = null;
 
-      // Query the XComponentLoader interface from the Desktop service
-      final XComponentLoader xComponentLoader = UnoRuntime.queryInterface(
-         XComponentLoader.class, getDesktop(ctx) );
+      // Normalize URL argument to be an OpenOffice internal URL
+      // representation. This differs in some cases from Java's URL
+      // representation.
+      final String normURL = translateURL(ctx, url, false);
+      if (normURL != null) {
+         // Query the XComponentLoader interface from the Desktop service
+         final XComponentLoader xComponentLoader = UnoRuntime.queryInterface(
+            XComponentLoader.class, getDesktop(ctx) );
 
-      try {
-         // Retrieve any existing frames with the same URL, 
-         // else create new ones.
-         comp = xComponentLoader.loadComponentFromURL(
-            url, "_default", 0, new PropertyValue[0]);
-      } catch( final com.sun.star.io.IOException ex ) {
-         System.err.println("Invalid URL <"+ url +">"); 
-         ex.printStackTrace();
-      } catch( final com.sun.star.lang.IllegalArgumentException ex ) {
-         System.err.println("Invalid properties");
-         ex.printStackTrace();
+         try {
+            // Retrieve any existing frames with the same URL, 
+            // else create new ones.
+            comp = xComponentLoader.loadComponentFromURL(
+               normURL, "_default", 0, new PropertyValue[0]);
+         } catch( final com.sun.star.io.IOException ex ) {
+            System.err.println("Invalid URL <"+ url +">"); 
+            ex.printStackTrace();
+         } catch( final com.sun.star.lang.IllegalArgumentException ex ) {
+            System.err.println("Invalid properties");
+            ex.printStackTrace();
+         }
       }
       return comp;
     }
@@ -251,17 +264,47 @@ public class UNOUtils
         createInvisibleCursor(annotation);
     }
 
+    /**
+     * Helper method to represent paths as internal or external URLs.
+     *
+     * @param ctx Context
+     * @param url URL to translate.
+     * @param mode TRUE to translate @a url to an external URL.
+     *             FALSE to translate @a url to an internal URL.
+     *
+     * @return The translated URL if successful or null otherwise.
+     */
+    private static final String translateURL( final XComponentContext ctx, final String url , final boolean mode ) {
+      final XExternalUriReferenceTranslator translator = ExternalUriReferenceTranslator.create(ctx);
+
+      final String normURL = mode ?
+         translator.translateToExternal(url) : translator.translateToInternal(url);
+      return (normURL.length() == 0 && url.length() != 0) ? null : normURL;
+    }
+
+    private static final void initializeCursor_internal( final XComponentContext ctx, final XComponent comp)
+    {
+      try {
+         final XTextDocument doc = UnoRuntime.queryInterface( XTextDocument.class, comp);
+
+         mxDocFactory = UnoRuntime.queryInterface(
+            XMultiServiceFactory.class, doc);
+         mxSearchable = UnoRuntime.queryInterface( XReplaceable.class, doc );
+
+         mxSearchDescr = mxSearchable.createSearchDescriptor();
+      } catch (final Exception ex) {
+         ex.printStackTrace(System.err);
+      }
+    }
+
+    public static void initializeCursor( final XComponentContext ctx, final String url )
+    {
+      initializeCursor_internal(ctx, loadDoc(ctx, url));
+    }
+
     public static void initializeCursor( final XComponentContext ctx )
     {
-        // get the active document
-        XTextDocument doc = getActiveTextDocument( ctx );
-
-        mxDocFactory = UnoRuntime.queryInterface(
-                XMultiServiceFactory.class, doc );
-
-        mxSearchable = UnoRuntime.queryInterface( XReplaceable.class, doc );
-
-        mxSearchDescr = mxSearchable.createSearchDescriptor();
+      initializeCursor_internal(ctx, getActiveTextDocument( ctx ));
     }
 
     /**
@@ -646,6 +689,10 @@ public class UNOUtils
 
         try
         {
+            // FIXME: This blob of code should make use of the
+            // findAnnotation() function to privatize mxSearchable &
+            // mxSearchDesc member variables.
+
             // For plain text
             mxSearchDescr.setSearchString( annotation.mContent );
             mxSearchDescr.setPropertyValue( "SearchWords", Boolean.valueOf( true ) );
