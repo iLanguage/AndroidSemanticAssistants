@@ -175,15 +175,6 @@ public class ServerResponseHandler {
 
 	        }
 
-	        // sort annotations by start
-	        ClientUtils.SortAnnotations( annotVectorArr );
-	        //
-
-	        for ( Iterator<Annotation> it2 = ClientUtils.mAnnotArray.iterator(); it2.hasNext(); )
-	        {
-	            // Create Side Notes
-	        }
-
 	        return strBuffer.toString();
 
 	    }
