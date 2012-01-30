@@ -44,8 +44,6 @@ public class ClientUtils
 	public static final String XML_PORT_KEY = "port";
  	public static final String PROPERTIES_FILE_PATH = System.getProperty("user.home")+ System.getProperty("file.separator");
 	
-    public static ArrayList<Annotation> mAnnotArray;
-    protected static Comparator<Annotation> mByStartCharacter = new CompareByStart();
     protected static byte[] ILLEGAL_XML_1_0_CHARS;
 
     // Symbolic names for supported MIME-types.
@@ -217,24 +215,20 @@ public class ClientUtils
 
     private static Vector<SemanticServiceResult> getServiceResults( final Node root )
     {
-        Vector<SemanticServiceResult> result = new Vector<SemanticServiceResult>();
-        Node child;
+        final Vector<SemanticServiceResult> result = new Vector<SemanticServiceResult>();
 
-        if( root != null )
+        if( root != null && root.hasChildNodes() )
         {
-            if( root.hasChildNodes() )
+            for( Node child = root.getFirstChild(); child != null; child = child.getNextSibling() )
             {
-                for( child = root.getFirstChild(); child != null; child = child.getNextSibling() )
-                {
-                    SemanticServiceResult r = getOneResult( child );
+               final SemanticServiceResult r = getOneResult( child );
 
-                    if( r != null )
-                    {
-                        result.add( r );
-                    }
+               if( r != null )
+               {
+                  result.add( r );
+               }
 
-                    System.out.println( "------------- Node name: " + child.getNodeName() );
-                }
+               System.out.println( "------------- Node name: " + child.getNodeName() );
             }
         }
         return result;
@@ -350,7 +344,6 @@ public class ClientUtils
         final NamedNodeMap nm = node.getAttributes();
         final String annotationType = nm.getNamedItem( "type" ).getNodeValue();
 
-        Node kid;
         // Use document ID as key, AnnotationVector (not yet annotation
         // instances!) as content
         final HashMap<String, AnnotationVector> result = new HashMap<String, AnnotationVector>();
@@ -361,14 +354,14 @@ public class ClientUtils
         {
             int documentCount = 0;
 
-            for( kid = node.getFirstChild(); kid != null; kid = kid.getNextSibling() )
+            for( Node kid = node.getFirstChild(); kid != null; kid = kid.getNextSibling() )
             {
 
                 // kid should be annotation document node now
                 if( kid.getNodeName().equals( "document" ) )
                 {
                     // Get some document ID
-                    NamedNodeMap nmKid = kid.getAttributes();
+                    final NamedNodeMap nmKid = kid.getAttributes();
                     String url = nmKid.getNamedItem( "url" ).getNodeValue();
                     if( url == null || url.equals( "" ) )
                     {
@@ -376,9 +369,8 @@ public class ClientUtils
                     }
 
                     // Get current annotation vector for this document
-                    Vector<Annotation> va = getAnnotationsForOneDocument( kid );
-                    AnnotationVector anns = new AnnotationVector();
-                    anns.mAnnotationVector = va;
+                    final AnnotationVector anns = new AnnotationVector();
+                    anns.mAnnotationVector = getAnnotationsForOneDocument( kid );
                     anns.mType = annotationType;
 
                     // Put the AnnotationVector in the document's space
@@ -420,20 +412,19 @@ public class ClientUtils
             return null;
         }
 
-        Vector<Annotation> result = new Vector<Annotation>();
+        final Vector<Annotation> result = new Vector<Annotation>();
 
-        Node kid;
-        for( kid = node.getFirstChild(); kid != null; kid = kid.getNextSibling() )
+        for( Node kid = node.getFirstChild(); kid != null; kid = kid.getNextSibling() )
         {
 
             // kid should be an annotationInstance node now
             if( kid.getNodeName().equals( "annotationInstance" ) )
             {
-                Annotation annotation = new Annotation();
+                final Annotation annotation = new Annotation();
 
                 // Get content, start, and end
-                NamedNodeMap nm = kid.getAttributes();
-                String content = nm.getNamedItem( "content" ).getNodeValue();
+                final NamedNodeMap nm = kid.getAttributes();
+                final String content = nm.getNamedItem( "content" ).getNodeValue();
                 annotation.mContent = content;
                 annotation.mStart = Long.parseLong( nm.getNamedItem( "start" ).getNodeValue() );
                 annotation.mEnd = Long.parseLong( nm.getNamedItem( "end" ).getNodeValue() );
@@ -457,6 +448,10 @@ public class ClientUtils
                                     "name is not \"annotationInstance\", but " + kid.getNodeName() + "." );
             }
         }
+
+        // Sort annotations by start offset.
+        System.out.println("------ Sorting "+ result.size() +" annotationInstance(s) for document.");
+        Collections.sort( result, new OffsetComparator() );
 
         return result;
     }
@@ -575,62 +570,19 @@ public class ClientUtils
         return doc;
     }
 
-    /**
-     * Escape characters for text appearing as XML data, between tags.
-     *
-     * <P>The following characters are replaced with corresponding character entities :
-     * <table border='1' cellpadding='3' cellspacing='0'>
-     * <tr><th> Character </th><th> Encoding </th></tr>
-     * <tr><td> < </td><td> &lt; </td></tr>
-     * <tr><td> > </td><td> &gt; </td></tr>
-     * <tr><td> & </td><td> &amp; </td></tr>
-     * <tr><td> " </td><td> &quot;</td></tr>
-     * <tr><td> ' </td><td> &#039;</td></tr>
-     * </table>
-     *
-     * <P>Note that JSTL's {@code <c:out>} escapes the exact same set of
-     * characters as this method. <span class='highlight'>That is, {@code <c:out>}
-     *  is good for escaping to produce valid XML, but not for producing safe
-     *  HTML.</span>
-     */
-    public static void SortAnnotations(final AnnotationVectorArray annotVectorArr)
+    /*
+    public static List<Annotation> sortAnnotations(final AnnotationVectorArray annotVectorArr)
     {
-        mAnnotArray = new ArrayList<Annotation>();
-
-        if(annotVectorArr == null)
-        {
-            return;
+        if (annotVectorArr == null) {
+            return null;
         }
 
-        for(Iterator<AnnotationVector> it = annotVectorArr.mAnnotVectorArray.iterator(); it.hasNext();)
-        {
-            AnnotationVector annotVector = it.next();
+        final List<Annotation> result = AnnotationVectorArray.convert();
+        Collections.sort(result, new OffsetComparator());
 
-            //Add Annotations to AnnotationArray in order to sort
-            CreateAnnotationsArray(annotVector);
-        }
-
-        // sort all mAnnotations by start offset
-        Collections.sort( mAnnotArray, mByStartCharacter );
-
+        return result;
     }
-
-    protected static void CreateAnnotationsArray(final AnnotationVector annotVector)
-    {
-
-        for(Iterator<Annotation> it = annotVector.mAnnotationVector.iterator(); it.hasNext();)
-        {
-            Annotation annotation = it.next();
-
-            if (annotation.mContent != null && !annotation.mContent.equals( "" ))
-            {
-                annotation.mType = annotVector.mType;
-                System.out.println("annotation.mType: " + annotation.mType);
-
-                mAnnotArray.add(annotation);
-            }
-        }
-    }
+    */
     
     /**
      * Finds and sets the attribute values of the specified element in the client scope.

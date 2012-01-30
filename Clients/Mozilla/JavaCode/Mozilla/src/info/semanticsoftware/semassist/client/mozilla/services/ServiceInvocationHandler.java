@@ -40,6 +40,7 @@ package info.semanticsoftware.semassist.client.mozilla.services;
 
 import info.semanticsoftware.semassist.client.mozilla.domain.Results;
 import info.semanticsoftware.semassist.csal.ClientUtils;
+import info.semanticsoftware.semassist.csal.OffsetComparator;
 import info.semanticsoftware.semassist.csal.result.Annotation;
 import info.semanticsoftware.semassist.csal.result.AnnotationVector;
 import info.semanticsoftware.semassist.csal.result.AnnotationVectorArray;
@@ -52,8 +53,10 @@ import info.semanticsoftware.semassist.server.UserContext;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -197,22 +200,9 @@ public class ServiceInvocationHandler implements Runnable {
 				// Annotation case => append to data structure
 				System.out.println( "---------------- Annotation case..." );
 
-				// Keys are document IDs or URLs
-				HashMap<String, AnnotationVector> map = current.mAnnotations;
-				Set<String> keys = map.keySet();
+            annotationsPerDocument = appendResults(current.mAnnotations, annotationsPerDocument);
 
-				for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); ) {
-					String docID = it2.next();
-
-					if( annotationsPerDocument.get( docID ) == null ) {
-						annotationsPerDocument.put( docID, new AnnotationVectorArray() );
-					}
-
-					AnnotationVectorArray v = annotationsPerDocument.get( docID );
-					v.mAnnotVectorArray.add( map.get( docID ) );
-				}
-
-				// Assemble annotations string
+            // Assemble annotations string
 				if( annotationsPerDocument.size() > 0 ) {
 					System.out.println( "---------------- Creating document with annotation information..." );
 
@@ -224,20 +214,7 @@ public class ServiceInvocationHandler implements Runnable {
 				// Sidenote case => append to data structure
 				System.out.println( "---------------- Annotation case..." );
 
-				// Keys are document IDs or URLs
-				HashMap<String, AnnotationVector> map = current.mAnnotations;
-				Set<String> keys = map.keySet();
-
-				for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); ) {
-					String docID = it2.next();
-
-					if( annotationsPerDocument.get( docID ) == null ) {
-						annotationsPerDocument.put( docID, new AnnotationVectorArray() );
-					}
-
-					AnnotationVectorArray v = annotationsPerDocument.get( docID );
-					v.mAnnotVectorArray.add( map.get( docID ) );
-				}
+            annotationsPerDocument = appendResults(current.mAnnotations, annotationsPerDocument);
 
 				// Assemble annotations string
 				if( annotationsPerDocument.size() > 0 ) {
@@ -263,15 +240,24 @@ public class ServiceInvocationHandler implements Runnable {
 		System.out.println();
 		
 		//save the results
-		
-		if (ClientUtils.mAnnotArray != null ) { 
-			for ( Iterator<Annotation> it2 = ClientUtils.mAnnotArray.iterator() ; it2.hasNext() ; ) {
-				Annotation annotation = it2.next();
-				Results result = new Results("ANNOTATION", serviceCalled);
-				result.setAnnotation(annotation);
-				resultsList.add(result);
-			}
-		}
+      if (!annotationsPerDocument.isEmpty()) {
+         // FIXME: Hack to convert the nasty AnnotationVectorArray data-structure
+         // into a more sane one by flattening out its content in order to sort the
+         // annotations. See how OpenOffice's ServiceInvocationHandler.java handles
+         // this.
+         final List<Annotation> lst = new ArrayList<Annotation>();
+         for (final String key : annotationsPerDocument.keySet()) {
+            final AnnotationVectorArray arr = annotationsPerDocument.get(key);
+            lst.addAll(AnnotationVectorArray.convert(arr));
+         }
+         Collections.sort(lst, new OffsetComparator());
+
+         for (final Annotation annotation : lst) {
+	         final Results result = new Results("ANNOTATION", serviceCalled);
+		      result.setAnnotation(annotation);
+   			resultsList.add(result);
+	   	}
+      }
 
 		//if (docCase && docString.size() > 0) {
 		if (resultTypeCase == "DOCUMENT" && docString.size() > 0) {
@@ -312,8 +298,6 @@ public class ServiceInvocationHandler implements Runnable {
 			String docID = it.next();
 			stringBuffer.append( "Annotations for document " + docID + ":\n\n" );
 			AnnotationVectorArray va = map.get( docID );
-
-			ClientUtils.SortAnnotations( va );
 		}
 		
 		return stringBuffer.toString();
@@ -330,7 +314,33 @@ public class ServiceInvocationHandler implements Runnable {
 	public void setRuntimeParameters( GateRuntimeParameterArray rtpArray ) {
 		this.rtpArray = rtpArray;
 	}
-	
+
+   /**
+    * Appends new source map elements to the destination map accounting for
+    * type differences between the map values.
+    *
+    * @param srcMap Source map to be searched.
+    * @param dstMap Destination map to be modified.
+    *
+    * @return Reference to the appended @dstMap if any.
+    */
+   public static HashMap<String, AnnotationVectorArray> appendResults(
+     final HashMap<String, AnnotationVector> srcMap,
+     final HashMap<String, AnnotationVectorArray> dstMap)
+   {
+     // Keys are document IDs or URLs
+     final Set<String> keys = srcMap.keySet();
+
+     for (final String key : keys) {
+         if ( dstMap.get( key ) == null ) {
+             dstMap.put( key, new AnnotationVectorArray() );
+         }
+          final AnnotationVectorArray v = dstMap.get( key );
+         v.mAnnotVectorArray.add( srcMap.get( key ) );
+     }
+     return dstMap;
+   }
+
 	/*
 	public void start() {
 		run();

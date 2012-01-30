@@ -21,6 +21,8 @@
 
 package info.semanticsoftware.semassist.csal.result;
 
+import java.util.List;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -32,4 +34,26 @@ public class AnnotationVectorArray {
 
     public Vector<AnnotationVector> mAnnotVectorArray = new Vector<AnnotationVector>();
 
+    /**
+     * Temporary helper method to facilitate transition away from
+     * call-sites depending on this nasty data-structure that
+     * discourages information-hiding and encapsulation.
+     *
+     * @param arr Instance to convert from.
+     * @return Resulting list of annotations.
+     */
+    public static final List<Annotation> convert(final AnnotationVectorArray arr) {
+      final List<Annotation> lst = new ArrayList<Annotation>();
+
+      for (final AnnotationVector vtr : arr.mAnnotVectorArray) {
+         for (final Annotation ann : vtr.mAnnotationVector) {
+            // Flatten out AnnotationVectorArray into an
+            // list removing any noise annotations.
+            if (ann.mContent != null && !"".equals(ann)) {
+               lst.add(ann);
+            }
+         }
+      }
+      return lst;
+    }
 }
