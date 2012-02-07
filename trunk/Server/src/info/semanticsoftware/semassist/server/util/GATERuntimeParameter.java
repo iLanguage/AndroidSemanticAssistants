@@ -26,6 +26,7 @@ package info.semanticsoftware.semassist.server.util;
 
 import java.net.URL;
 import java.net.MalformedURLException;
+import javax.xml.bind.annotation.XmlTransient;
 
 import javax.jws.*;
 import gate.*;
@@ -440,6 +441,7 @@ public class GATERuntimeParameter
         return mUrlValue;
     }
 
+    @XmlTransient
     public Corpus getCorpusValue()
     {
         return mCorpusValue;
