@@ -54,7 +54,6 @@
         <pathelement location="${commons-lang.jar}" /> <!-- used for xml encoding -->
     	<pathelement location="${gate-home}/lib/junit.jar" />
 	<pathelement location="${lib.home}/icu4j-3.8.jar" />
-	<pathelement location="${lib.home}/jaxb-api-2.0.jar" />
     </path>    
   
     <!-- This target compiles all the classes -->  
