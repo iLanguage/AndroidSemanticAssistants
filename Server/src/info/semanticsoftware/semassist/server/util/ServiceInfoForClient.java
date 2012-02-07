@@ -84,7 +84,7 @@ public class ServiceInfoForClient
 	       return serviceDescription;
 	  }
      
-     
-     
-     
+    public void setParams(Vector<GATERuntimeParameter> input){ 
+		params = input;
+	}
 }

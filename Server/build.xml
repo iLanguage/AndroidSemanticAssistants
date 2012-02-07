@@ -53,6 +53,7 @@
         <pathelement location="${ant.jar}" />
         <pathelement location="${commons-lang.jar}" /> <!-- used for xml encoding -->
     	<pathelement location="${gate-home}/lib/junit.jar" />
+	<pathelement location="${lib.home}/icu4j-3.8.jar" />
     </path>    
   
     <!-- This target compiles all the classes -->  
@@ -149,6 +150,7 @@
                 <pathelement location="${protege-owl.home}/jena.jar" />
                 <pathelement location="${protege-owl.home}/orphanNodesAlg.jar" />
                 <pathelement location="${protege-owl.home}/arq.jar" />
+		<pathelement location="${lib.home}/icu4j-3.8.jar" />
                 <fileset dir="${gate-home}/lib" >
                     <include name="*.jar" />
                 </fileset>

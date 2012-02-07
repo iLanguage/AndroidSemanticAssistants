@@ -110,7 +110,7 @@ public class SemanticServiceBroker
 
 
         // Initialize GATE
-        initGate();
+       	initGate();
         
         Logging.log("Server Started Loading Resources");
         //MainFrame.getInstance().setVisible(true); // for debugging only
@@ -788,7 +788,7 @@ public class SemanticServiceBroker
                 String gateHomePath = MasterData.Instance().getGateHome();
                 String gatePluginDir = MasterData.Instance().getGatePluginDir();
                 String gateUserFile = MasterData.Instance().getGateUserFile();
-                
+
                 File gateHome = new File( gateHomePath );
 
                 Gate.setGateHome( gateHome );
