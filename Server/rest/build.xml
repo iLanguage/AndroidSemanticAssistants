@@ -1,0 +1,129 @@
+<?xml version="1.0"?>
+
+<!--
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+   This file is part of the Semantic Assistants architecture.
+
+   Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
+
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+   
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<project name="RESTlet" default="deploy" basedir=".">
+
+    <!-- Tomcat task definitions -->
+    <taskdef name="start" classname="org.apache.catalina.ant.StartTask" />
+    <taskdef name="stop" classname="org.apache.catalina.ant.StopTask" />
+    <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" />
+    <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask" />
+
+    <target name="init" description="Initialize build properties">
+	    
+      <!-- build properties - do not edit -->
+      <property name="project.name"      value="SemAssistRestlet"/>
+      <property name="war.name"      value="SemAssistRestlet.war"/>
+      <property name="out.dir"       value="output"/>
+      <property name="web.dir"       value="WEB-INF"/>
+      <property name="bin.dir"       value="build"/>
+      <property name="src.dir"       value="src"/>
+      <property name="lib.dir"       value="WebContent/WEB-INF/lib"/>
+      
+      <path id="compile.classpath">
+	<fileset dir="${lib.dir}" >
+	  <include name="*.jar" />
+	</fileset>
+      </path>
+      
+      <!-- tomcat properties - replace with correct values -->
+      <property name="tomcat.manager.url"       value="http://localhost:8080/manager"/>
+      <property name="tomcat.manager.username"       value="test"/>
+      <property name="tomcat.manager.password"       value="test"/>
+
+    </target>
+	
+    <target name="compile" depends="init" description="Compile the source" >
+      <javac srcdir="${src.dir}" debug="true" debuglevel="lines,vars,source" destdir="${bin.dir}/classes">
+	  <!--compilerarg value="${compile.args}"/-->
+          <classpath refid="compile.classpath" />
+      </javac>
+    </target>
+    
+    <target name="pack" depends="compile" description="Packages all files in a WAR">
+    	<mkdir dir="${out.dir}"/>
+    	<copy todir="${out.dir}/${web.dir}">
+	  <fileset dir="WebContent/${web.dir}"/>
+  	</copy>
+  	
+  	<copy todir="${out.dir}/${web.dir}">
+	  <fileset dir="${bin.dir}"/>
+  	</copy>
+  	
+  	<copy file="index.htm" todir="${out.dir}"/>
+  		
+  	<war destfile="${war.name}" webxml="${out.dir}/${web.dir}/web.xml">
+	  <fileset dir="." >
+	    <include name="*.htm" />
+	  </fileset>
+	  <lib dir="${out.dir}/${web.dir}/lib"/>
+	  <classes dir="${out.dir}/${web.dir}/classes"/>
+	</war>
+    </target>
+    
+    <target name="clean" depends="init" description="Delete intermediary generated files">
+	<delete includeEmptyDirs="true">
+	  <fileset dir="${out.dir}"/>
+	</delete>
+	<delete includeEmptyDirs="true">
+	  <fileset dir="${bin.dir}/classes"/>
+	</delete>
+    </target>
+    
+    <target name="clean-all" depends="init" description="Delete all generated files including the WAR file and undeploys the application">
+    	<antcall target="clean"/>
+    	<delete file="${war.name}"/>
+    	<!-- if you want to use the build file locally, replace the above line with the line below -->
+	<!--war="${war.name}"/-->
+	<antcall target="undeploy"/>
+    </target>
+    
+    <!-- TOMCAT ACTIONS -->
+    <target name="start" depends="init" description="start application in tomcat">
+	<start url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${project.name}" />
+    </target>
+    
+    <target name="stop" depends="init" description="stop application in tomcat">
+	<stop url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${project.name}" />
+    </target>
+	
+    <target name="deploy" depends="pack" description="deploy to tomcat">
+	<echo>deploying from client</echo>
+	<deploy url="${tomcat.manager.url}"
+		username="${tomcat.manager.username}"
+		password="${tomcat.manager.password}"
+		path="/${project.name}"
+		war="rest/${war.name}"/>
+		<!-- if you want to use the build file locally, replace the above line with the line below -->
+		<!--war="${war.name}"/-->
+    </target>
+    
+    <target name="undeploy" depends="init, stop" description="undeploy from tomcat">
+	<undeploy failonerror="no"
+		url="${tomcat.manager.url}"
+		username="${tomcat.manager.username}"
+		password="${tomcat.manager.password}"
+		path="/${project.name}"/>
+    </target>
+
+</project>
