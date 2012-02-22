@@ -287,7 +287,7 @@ public class ServiceInvocationHandler implements Runnable
       // avoid race condition where user manually changes window focus
       // between between the time a loaded document is first given focus
       // until UNOUtils.createDocAnnotations() is invoked.
-      if (url != null) {
+      if (url != null && !"".equals(url)) {
          UNOUtils.initializeCursor(ctx, url);
       } else {
          UNOUtils.initializeCursor(ctx);
