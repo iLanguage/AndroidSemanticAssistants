@@ -39,6 +39,7 @@
 	        android:id="@+id/av_assist"
 	        android:layout_width="wrap_content"
 	        android:layout_height="50dip"
+	        android:onClick="onAssistantsClick"
 	        android:layout_gravity="center_horizontal"
 	        android:contentDescription="@string/strAssistBtn"
 	        android:src="@drawable/av_assist" />
@@ -47,6 +48,7 @@
 	        android:id="@+id/gl_sett"
 	        android:layout_width="wrap_content"
 	        android:layout_height="50dip"
+	        android:onClick="onSettingsClick"
 	        android:layout_gravity="center_horizontal"
 	        android:contentDescription="@string/strSettBtn"
 	        android:src="@drawable/gl_sett" />
