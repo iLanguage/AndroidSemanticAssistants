@@ -23,6 +23,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -295,4 +296,17 @@ public class SemanticAssistantsActivity extends ListActivity{
 	    	
 	        return output;
 	    }
+	    
+	    public boolean onKeyDown(int keyCode, KeyEvent event) {
+			switch (keyCode) {
+				case KeyEvent.KEYCODE_BACK:	{
+					
+					//TODO call the same method as the All services button, if the user has gone deeper into this page.
+					return false;
+				}
+				default:{
+					return super.onKeyDown(keyCode, event);
+				}
+			}
+		}
 }
