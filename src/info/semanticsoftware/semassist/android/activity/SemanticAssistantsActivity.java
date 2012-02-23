@@ -43,6 +43,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 	TextView lblAvAssist;
 	EditText txtInput;
 	Button btnInvoke;
+	Button btnClear;
 	
 		private static ServiceInfoForClientArray servicesList;
 		ArrayAdapter<String> adapter;
@@ -90,7 +91,15 @@ public class SemanticAssistantsActivity extends ListActivity{
 					}   
 	            }
 	        });
-	    }
+	    
+	        btnClear = (Button) findViewById(R.id.btnClear);
+	        btnClear.setOnClickListener(new View.OnClickListener() {
+	            public void onClick(View v) {
+	            	txtInput.setText("");
+	            }
+	        });
+		}
+		
 		
 		@Override
 	    public void onStart(){

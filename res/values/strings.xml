@@ -2,6 +2,7 @@
 <resources>
     <string name="app_name">Semantic Assistants</string>
     <string name="btnInvokeLabel">Invoke</string>
+    <string name="btnClearLabel">Clear</string>
     <string name="lblServiceList">Available assistants:</string>
     <string name="lblServiceName">Service Name: </string>
     <string name="lblServiceDesc">Service Description: </string>
@@ -9,6 +10,13 @@
     <string name="lblInput">Text input:</string>
     <string name="txtInputSample">Type your content here&#8230;</string>
     <string name="strSlogan">Semantics for the Masses</string>
+    
+    <string name="lblContent">Content</string>
+    <string name="lblType">Type</string>
+    <string name="lblStart">Start</string>
+    <string name="lblEnd">End</string>
+    <string name="lblFeats">Features</string>
+    
     <!-- Accessibility -->
     <string name="strLogo">Semantic Assistants Logo</string>
     <string name="strAssistBtn">Available Assistants Button</string>
