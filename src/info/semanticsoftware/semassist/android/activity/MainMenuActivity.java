@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.widget.LinearLayout;
 
 public class MainMenuActivity extends Activity {
 	private View mServicesButton;
@@ -16,6 +17,13 @@ public class MainMenuActivity extends Activity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.home);
+        int width = getWindow().getWindowManager().getDefaultDisplay().getWidth();
+        if (width < 500 ){
+			//phones
+			LinearLayout buttonArea = (LinearLayout)findViewById(R.id.button_area);
+	        buttonArea.setOrientation(LinearLayout.VERTICAL);
+		}
+        
         mServicesButton = findViewById(R.id.av_assist);
         mServicesButton.setOnClickListener(sServicesListener);
         
