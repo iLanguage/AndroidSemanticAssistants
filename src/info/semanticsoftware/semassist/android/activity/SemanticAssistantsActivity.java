@@ -29,6 +29,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TableRow;
 import android.widget.LinearLayout.LayoutParams;
@@ -44,6 +45,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 	TextView lblAvAssist;
 	EditText txtInput;
 	Button btnInvoke;
+	Button btnClear;
 	
 		private static ServiceInfoForClientArray servicesList;
 		ArrayAdapter<String> adapter;
@@ -71,27 +73,14 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        	txtInput.setText(bundle.getString(Intent.EXTRA_TEXT));
 	        }
 	        
-	        btnInvoke = (Button) findViewById(R.id.btnInvoke);
-	        btnInvoke.setOnClickListener(new View.OnClickListener() {
+	        btnClear = (Button) findViewById(R.id.btnClear);
+	        btnClear.setOnClickListener(new View.OnClickListener() {
 	            public void onClick(View v) {
-	            	RequestRepresentation request = new RequestRepresentation(selectedService, null, txtInput.getText().toString());
-	            	Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
-	                Representation response = new ClientResource("http://semassist.ilanguage.ca:8182/SemAssistRestlet/services/" + selectedService).post(representation);
-	                try {
-	                	StringWriter writer = new StringWriter();
-	                	response.write(writer);
-	                	String responseString = writer.toString();
-	                	System.out.println(responseString);
-
-	                	Intent intent = new Intent(getBaseContext(), SemanticResultsActivity.class);
-	                	intent.putExtra("xml", responseString);
-	                    startActivity(intent);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}   
+	            	txtInput.setText("");
 	            }
 	        });
-	    }
+		}
+		
 		
 		@Override
 	    public void onStart(){
@@ -154,7 +143,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 			//intent.putExtra("serviceName",list.getItemAtPosition(position).toString());
 			//startActivity(intent);
 	    	list.setVisibility(View.GONE);
-	    	lblAvAssist.setVisibility(View.INVISIBLE);
+	    	lblAvAssist.setVisibility(View.GONE);
 	    	LinearLayout linearLayout =  (LinearLayout) findViewById(R.id.servicesLayout);
 	    	String temp = (String) list.getItemAtPosition(position);
 	    	selectedService = temp;
@@ -176,10 +165,12 @@ public class SemanticAssistantsActivity extends ListActivity{
 	    private LinearLayout getServiceDescLayout(){
 	    	
 	    	final LinearLayout output = new LinearLayout(this);
+	    	final RelativeLayout topButtonsLayout = new RelativeLayout(this);
+	        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
+
 	    	final Button btnBack = new Button(this);
 	    	btnBack.setText("< All services");
 	        btnBack.setId(5);
-	        btnBack.setLayoutParams(new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT));
 	        btnBack.setOnClickListener(new View.OnClickListener(){
 	        	public void onClick(View v) {
 	               //btnBack.setVisibility(View.GONE);
@@ -188,7 +179,38 @@ public class SemanticAssistantsActivity extends ListActivity{
 	               lblAvAssist.setVisibility(View.VISIBLE);
 	        	}
 	        });
-	        output.addView(btnBack);
+	        
+	        topButtonsLayout.addView(btnBack);
+	        
+	        final Button btnInvoke = new Button(this);
+	        btnInvoke.setText("Invoke");
+	        btnInvoke.setId(6);
+	        
+	        btnInvoke.setOnClickListener(new View.OnClickListener(){
+	        	public void onClick(View v) {
+	            	RequestRepresentation request = new RequestRepresentation(selectedService, null, txtInput.getText().toString());
+	            	Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
+	                Representation response = new ClientResource("http://semassist.ilanguage.ca:8182/SemAssistRestlet/services/" + selectedService).post(representation);
+	                try {
+	                	StringWriter writer = new StringWriter();
+	                	response.write(writer);
+	                	String responseString = writer.toString();
+	                	System.out.println(responseString);
+
+	                	Intent intent = new Intent(getBaseContext(), SemanticResultsActivity.class);
+	                	intent.putExtra("xml", responseString);
+	                    startActivity(intent);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}   
+	            }
+	        });
+	        
+	        layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, btnInvoke.getId());
+	        btnInvoke.setLayoutParams(layoutParams);
+	        topButtonsLayout.addView(btnInvoke);
+	        
+	        output.addView(topButtonsLayout);
 	        
 	    	TableLayout serviceInfoTbl = new TableLayout(this);
 	        output.addView(serviceInfoTbl);
@@ -274,7 +296,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 	    	
 	        return output;
 	    }
-
+	    
 	    public boolean onKeyDown(int keyCode, KeyEvent event) {
 			switch (keyCode) {
 				case KeyEvent.KEYCODE_BACK:	{
@@ -287,5 +309,4 @@ public class SemanticAssistantsActivity extends ListActivity{
 				}
 			}
 		}
-	    
 }
