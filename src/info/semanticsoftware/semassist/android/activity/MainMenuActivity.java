@@ -3,6 +3,7 @@ package info.semanticsoftware.semassist.android.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
@@ -10,7 +11,8 @@ import android.widget.LinearLayout;
 
 public class MainMenuActivity extends Activity {
 	private WebView mWebView;
-
+	private static final String TAG = "SemanticAssistants";
+	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,13 +32,13 @@ public class MainMenuActivity extends Activity {
 	}
 	
 	public void onAssistantsClick(View v) {
-		System.out.println("Clicked");
+		Log.d(TAG,"Clicked");
 		Intent getServices = new Intent(getBaseContext(), SemanticAssistantsActivity.class);
         startActivity(getServices);
 	}
 
 	public void onSettingsClick(View v) {
-		System.out.println("settings Clicked");
+		Log.d(TAG,"settings Clicked");
 	}
 	 
 
