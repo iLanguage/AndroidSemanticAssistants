@@ -60,12 +60,6 @@
 	        android:layout_width="wrap_content"
 	        android:layout_height="wrap_content">
 	        <Button
-		        android:id="@+id/btnInvoke"
-		        android:layout_width="wrap_content"
-		        android:layout_height="wrap_content"
-		        android:text="@string/btnInvokeLabel">
-		    </Button>  
-		    <Button
 		        android:id="@+id/btnClear"
 		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
