@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Semantic Assistants</string>
+    <string name="btnInvokeLabel">Invoke</string>
+    <string name="lblServiceList">Available assistants:</string>
+    <string name="lblServiceName">Service Name: </string>
+    <string name="lblServiceDesc">Service Description: </string>
+    <string name="lblServiceParams">Service Parameters: </string>
+    <string name="lblInput">Text input:</string>
+    <string name="txtInputSample">Type your content here&#8230;</string>
+    <string name="strSlogan">Semantics for the Masses</string>
+    <!-- Accessibility -->
+    <string name="strLogo">Semantic Assistants Logo</string>
+    <string name="strAssistBtn">Available Assistants Button</string>
+    <string name="strSettBtn">Global Settings Button</string>
+</resources>
