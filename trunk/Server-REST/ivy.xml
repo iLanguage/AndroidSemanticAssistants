@@ -38,10 +38,20 @@
     </dependency>
 
     <dependency org="org.apache.httpcomponents" name="httpclient" rev="4.1.2">
-	<exclude org="commons-codec" />
+		<exclude org="commons-codec" />
         <exclude org="commons-logging" />
         <exclude name="httpcore" />
         <exclude org="junit" />
     </dependency>
+    
+    <dependency org="tomcat" name="catalina-ant" rev="5.5.23">
+		<exclude org="commons-digester" />
+		<exclude org="commons-logging" />
+		<exclude org="commons-modeler" />
+		<exclude name="catalina" />
+		<exclude org="mx4j-jmx" />
+		<exclude org="ant" />
+    </dependency>
+
    </dependencies>
 </ivy-module>
