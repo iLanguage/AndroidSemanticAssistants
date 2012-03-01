@@ -27,13 +27,7 @@
   <!-- Ivy task definition -->
   <taskdef resource="org/apache/ivy/ant/antlib.xml" 
      uri="antlib:org.apache.ivy.ant" classpath="${ivy.jar.dir}/ivy.jar"/>
-     
-  <!-- Tomcat task definitions -->
-  <taskdef name="start" classname="org.apache.catalina.ant.StartTask" />
-  <taskdef name="stop" classname="org.apache.catalina.ant.StopTask" />
-  <taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask" />
-  <taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask" />
-	 
+     	 
   <target name="init" description="Initialize build properties">
 	  
 	  <!-- Ivy properties - do not edit -->
@@ -78,7 +72,7 @@
   
   <target name="compile" depends="resolve" description="Compile the source" >
       <javac srcdir="${src.dir}" debug="true" debuglevel="lines,vars,source" destdir="${web.dir}/classes">
-	  <!--compilerarg value="${compile.args}"/-->
+      	<!--compilerarg value="${compile.args}"/-->
           <classpath refid="compile.classpath" />
       </javac>
   </target>
@@ -109,25 +103,40 @@
     	<delete dir="${dist.dir}"/>
     </target>
     
+    <target name="init-tomcat" depends="init" description="Defines tomcat tasks">
+  		<taskdef name="start" classname="org.apache.catalina.ant.StartTask"> 
+  			 <classpath refid="compile.classpath" />
+  		</taskdef>
+  		<taskdef name="stop" classname="org.apache.catalina.ant.StopTask">
+			<classpath refid="compile.classpath" />
+  		</taskdef>
+ 		<taskdef name="deploy" classname="org.apache.catalina.ant.DeployTask">
+			<classpath refid="compile.classpath" />
+		</taskdef>
+  		<taskdef name="undeploy" classname="org.apache.catalina.ant.UndeployTask">
+			<classpath refid="compile.classpath" />
+  		</taskdef>
+    </target>
+    
     <!-- TOMCAT ACTIONS -->
-    <target name="start" depends="init" description="start application in tomcat">
+    <target name="start" depends="init-tomcat" description="start application in tomcat">
 	<start url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${project.name}" />
     </target>
     
-    <target name="stop" depends="init" description="stop application in tomcat">
+    <target name="stop" depends="init-tomcat" description="stop application in tomcat">
 	<stop url="${tomcat.manager.url}" username="${tomcat.manager.username}" password="${tomcat.manager.password}" path="/${project.name}" />
     </target>
 	
-    <target name="deploy" depends="pack" description="deploy to tomcat">
+    <target name="deploy" depends="pack, init-tomcat" description="deploy to tomcat">
 	<echo>deploying from client</echo>
 	<deploy url="${tomcat.manager.url}"
 		username="${tomcat.manager.username}"
 		password="${tomcat.manager.password}"
 		path="/${project.name}"
-		war="${war.name}"/>
+		war="${dist.dir}/${war.name}"/>
     </target>
     
-    <target name="undeploy" depends="init, stop" description="undeploy from tomcat">
+    <target name="undeploy" depends="init-tomcat, stop" description="undeploy from tomcat">
 	<undeploy failonerror="no"
 		url="${tomcat.manager.url}"
 		username="${tomcat.manager.username}"
