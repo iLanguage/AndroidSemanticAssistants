@@ -1,7 +1,4 @@
-<?xml version="1.0"?>
-
-<!--
-   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+<!-- Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
 
    This file is part of the Semantic Assistants architecture.
 
@@ -135,11 +132,6 @@
 
     <!-- Run the web service -->
     <target name="run" depends="compile,dist"  description="run the application">
-        <!-- UNCOMMENT FOR REST 
-        <echo message="deploying RESTful interface"/>
-        <ant antfile="rest/build.xml" target="deploy" inheritall="false" />
-        -->
-        
         <java classname="info.semanticsoftware.semassist.server.Bootstrap" fork="true" maxmemory="${runtime.maxmem}" >
             <jvmarg value="-Xms${runtime.heap.initial}"/>
             <jvmarg value="-Xmx${runtime.heap.max}"/>
@@ -190,15 +182,10 @@
   
     <!-- Clear all build output -->
     <target name="clean">
-      <echo message="cleaning generated files"/>
       <delete includeemptydirs="true" quiet="true">
-	<fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
+<fileset dir="${build.home}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
       </delete>
       <delete dir="${docs.home}"/>
-      <!-- UNCOMMENT FOR REST
-	<echo message="undeploying RESTful interface"/>
-	<ant antfile="rest/build.xml" target="clean-all" inheritall="false" />
-      -->
     </target>
 
 </project>
