@@ -18,6 +18,7 @@ public class RequestRepresentation {
 	
 	public String getXML(){
 		StringBuffer buffer = new StringBuffer();
+		buffer.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
 		buffer.append("<invocation>");
 		buffer.append("<serviceName>").append(serviceName).append("</serviceName>");	
 		if(params !=null){
@@ -27,7 +28,7 @@ public class RequestRepresentation {
 					buffer.append("<name>").append(name).append("</name>");
 					buffer.append("<value>");
 						params.get(name);
-					buffer.append("</valuee>");
+					buffer.append("</value>");
 				buffer.append("</param>");
 			}
 		}

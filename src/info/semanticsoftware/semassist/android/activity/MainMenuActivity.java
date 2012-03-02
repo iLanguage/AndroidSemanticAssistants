@@ -39,6 +39,8 @@ public class MainMenuActivity extends Activity {
 
 	public void onSettingsClick(View v) {
 		Log.d(TAG,"settings Clicked");
+		Intent getSettings = new Intent(getBaseContext(), GlobalSettingsActivity.class);
+        startActivity(getSettings);
 	}
 	 
 

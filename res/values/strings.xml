@@ -21,4 +21,11 @@
     <string name="strLogo">Semantic Assistants Logo</string>
     <string name="strAssistBtn">Available Assistants Button</string>
     <string name="strSettBtn">Global Settings Button</string>
+    
+    <!-- Preferences -->
+    <string name="lblPrefConnectivity">Server Settings</string>
+    <string name="lblPrefServer">Select a server</string>
+    <string name="lblServerDialog">Semantic Assistants Server</string>
+    <string name="lblPrefServerSumm">Choose a server to read available assistants from</string>
+    <string name="selected_server_option">Selected Server</string>
 </resources>

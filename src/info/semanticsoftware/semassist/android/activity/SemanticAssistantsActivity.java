@@ -2,12 +2,16 @@ package info.semanticsoftware.semassist.android.activity;
 
 import info.semanticsoftware.semassist.android.parser.ServiceParser;
 import info.semanticsoftware.semassist.android.restlet.RequestRepresentation;
+import info.semanticsoftware.semassist.csal.ClientUtils;
+import info.semanticsoftware.semassist.csal.XMLElementModel;
 import info.semanticsoftware.semassist.server.GateRuntimeParameter;
 import info.semanticsoftware.semassist.server.ServiceInfoForClientArray;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.restlet.data.ClientInfo;
@@ -19,11 +23,13 @@ import org.restlet.resource.ResourceException;
 
 import android.app.ListActivity;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -36,6 +42,7 @@ import android.widget.LinearLayout.LayoutParams;
 import android.widget.ListView;
 import android.widget.TableLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class SemanticAssistantsActivity extends ListActivity{
 	 /** Called when the activity is first created. */
@@ -46,6 +53,8 @@ public class SemanticAssistantsActivity extends ListActivity{
 	EditText txtInput;
 	Button btnInvoke;
 	Button btnClear;
+	private Resources resources;
+	public static String serverURL;
 	
 		private static ServiceInfoForClientArray servicesList;
 		ArrayAdapter<String> adapter;
@@ -54,8 +63,13 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        super.onCreate(savedInstanceState);
 	        //tv = new TextView(this);
 	        
+	        resources = this.getResources();
+	        
+	        getServerSettings();
+	        
 	        getServicesTask task = new getServicesTask();
-	        task.execute(new String[] { "http://semassist.ilanguage.ca:8182/SemAssistRestlet/services" });	
+	        System.out.println("Retrieving " + serverURL + "/SemAssistRestlet/services");
+	        task.execute(new String[] { serverURL + "/SemAssistRestlet/services" });
 
 	        //requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 	        setContentView(R.layout.main);
@@ -81,6 +95,16 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        });
 		}
 		
+		private void getServerSettings(){
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+			serverURL = prefs.getString("selected_server_option", "-1");
+			if(serverURL.equals("-1")){
+				System.out.println("its the first time running");
+				GlobalSettingsActivity.SERVERS_XML_FILE_PATH = getFilesDir().getAbsolutePath()+ File.separator + "servers.xml";
+				ArrayList<XMLElementModel> defaultServer = GlobalSettingsActivity.getClientPreference("android", "server");
+				serverURL = "http://" + defaultServer.get(0).getAttribute().get(ClientUtils.XML_HOST_KEY) + ":" + defaultServer.get(0).getAttribute().get(ClientUtils.XML_PORT_KEY);
+			}
+		}
 		
 		@Override
 	    public void onStart(){
@@ -89,6 +113,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        	Bundle bundle = getIntent().getExtras();
 	        	System.out.println("got content");
 	        	txtInput.setText(bundle.getString(Intent.EXTRA_TEXT));
+	        	getIntent().setAction(null);
 	        }
 		}
 	    
@@ -96,7 +121,7 @@ public class SemanticAssistantsActivity extends ListActivity{
           
 			protected String doInBackground(String... urls) {
 				try {
-					Log.d("SemanticAssistantsActivity", "Sending GET via Restlet");
+					Log.d("SemanticAssistantsActivity", "Sending GET via Restlet to " + urls[0]);
 				    // Prepare the request
 					ClientResource resource = new ClientResource(urls[0]);
 					ClientInfo info = new ClientInfo(MediaType.TEXT_XML);
@@ -125,6 +150,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 		}
 	    
 	    private void populateServicesList(){
+	    	Toast.makeText(this, "Connecting to " + serverURL, Toast.LENGTH_LONG).show();
 	       String[] values = null;
 	       List<String> names = new ArrayList<String>();
 	       	for(int i=0; i < servicesList.getItem().size(); i++){
@@ -134,6 +160,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 	       	values = names.toArray(new String[names.size()]);
 			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.row, R.id.label, values);
 			setListAdapter(adapter);
+			
 	    }
 	    
 	    @Override
@@ -190,7 +217,8 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        	public void onClick(View v) {
 	            	RequestRepresentation request = new RequestRepresentation(selectedService, null, txtInput.getText().toString());
 	            	Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
-	                Representation response = new ClientResource("http://semassist.ilanguage.ca:8182/SemAssistRestlet/services/" + selectedService).post(representation);
+	            	System.out.println("sending post req to http://" + serverURL + "/SemAssistRestlet/services/" + selectedService);
+	                Representation response = new ClientResource(serverURL + "/SemAssistRestlet/services/" + selectedService).post(representation);
 	                try {
 	                	StringWriter writer = new StringWriter();
 	                	response.write(writer);
@@ -297,7 +325,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        return output;
 	    }
 	    
-	    public boolean onKeyDown(int keyCode, KeyEvent event) {
+	    /*public boolean onKeyDown(int keyCode, KeyEvent event) {
 			switch (keyCode) {
 				case KeyEvent.KEYCODE_BACK:	{
 					
@@ -308,5 +336,5 @@ public class SemanticAssistantsActivity extends ListActivity{
 					return super.onKeyDown(keyCode, event);
 				}
 			}
-		}
+		}*/
 }
