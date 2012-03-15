@@ -43,6 +43,18 @@
             android:name=".GlobalSettingsActivity"
             android:label="@string/app_name" >
         </activity>
+        
+        <service
+			android:name="info.semanticsoftware.semassist.android.service.SemanticAssistantsService"
+			android:process=":semassist_process" 
+			android:label="semassist">
+            <intent-filter android:label="Semantic Assistants">
+                <action android:name="PERSON_DETECTOR" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+		</service>
+		
+        <receiver android:name="info.semanticsoftware.semassist.android.service.SemanticAssistantsBroadcastReceiver"></receiver>
     </application>
 
 </manifest>

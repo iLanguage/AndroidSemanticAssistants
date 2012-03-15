@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import org.restlet.data.ClientInfo;
@@ -24,7 +23,6 @@ import org.restlet.resource.ResourceException;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -53,7 +51,6 @@ public class SemanticAssistantsActivity extends ListActivity{
 	EditText txtInput;
 	Button btnInvoke;
 	Button btnClear;
-	private Resources resources;
 	public static String serverURL;
 	
 		private static ServiceInfoForClientArray servicesList;
@@ -62,8 +59,6 @@ public class SemanticAssistantsActivity extends ListActivity{
 	    public void onCreate(Bundle savedInstanceState) {
 	        super.onCreate(savedInstanceState);
 	        //tv = new TextView(this);
-	        
-	        resources = this.getResources();
 	        
 	        getServerSettings();
 	        
@@ -99,7 +94,6 @@ public class SemanticAssistantsActivity extends ListActivity{
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			serverURL = prefs.getString("selected_server_option", "-1");
 			if(serverURL.equals("-1")){
-				System.out.println("its the first time running");
 				GlobalSettingsActivity.SERVERS_XML_FILE_PATH = getFilesDir().getAbsolutePath()+ File.separator + "servers.xml";
 				ArrayList<XMLElementModel> defaultServer = GlobalSettingsActivity.getClientPreference("android", "server");
 				serverURL = "http://" + defaultServer.get(0).getAttribute().get(ClientUtils.XML_HOST_KEY) + ":" + defaultServer.get(0).getAttribute().get(ClientUtils.XML_PORT_KEY);
@@ -111,7 +105,6 @@ public class SemanticAssistantsActivity extends ListActivity{
 			super.onStart();
 			if (Intent.ACTION_SEND.equals(getIntent().getAction())) {
 	        	Bundle bundle = getIntent().getExtras();
-	        	System.out.println("got content");
 	        	txtInput.setText(bundle.getString(Intent.EXTRA_TEXT));
 	        	getIntent().setAction(null);
 	        }
@@ -217,7 +210,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        	public void onClick(View v) {
 	            	RequestRepresentation request = new RequestRepresentation(selectedService, null, txtInput.getText().toString());
 	            	Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
-	            	System.out.println("sending post req to http://" + serverURL + "/SemAssistRestlet/services/" + selectedService);
+	            	System.out.println("sending post req to " + serverURL + "/SemAssistRestlet/services/" + selectedService);
 	                Representation response = new ClientResource(serverURL + "/SemAssistRestlet/services/" + selectedService).post(representation);
 	                try {
 	                	StringWriter writer = new StringWriter();
