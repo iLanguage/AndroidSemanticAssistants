@@ -370,8 +370,8 @@ public class ClientUtils
 
                     // Get current annotation vector for this document
                     final AnnotationVector anns = new AnnotationVector();
-                    anns.mAnnotationVector = getAnnotationsForOneDocument( kid );
                     anns.mType = annotationType;
+                    anns.mAnnotationVector = getAnnotationsForOneDocument( kid, anns.mType );
 
                     // Put the AnnotationVector in the document's space
                     result.put( url, anns );
@@ -404,7 +404,7 @@ public class ClientUtils
      * from the DOM tree. All these instances are children of the
      * passed node object, which is typically annotation document node.
      */
-    protected static Vector<Annotation> getAnnotationsForOneDocument( final Node node )
+    protected static Vector<Annotation> getAnnotationsForOneDocument( final Node node, final String annType )
     {
 
         if( node == null )
@@ -426,6 +426,7 @@ public class ClientUtils
                 final NamedNodeMap nm = kid.getAttributes();
                 final String content = nm.getNamedItem( "content" ).getNodeValue();
                 annotation.mContent = content;
+                annotation.mType = annType;
                 annotation.mStart = Long.parseLong( nm.getNamedItem( "start" ).getNodeValue() );
                 annotation.mEnd = Long.parseLong( nm.getNamedItem( "end" ).getNodeValue() );
 		
