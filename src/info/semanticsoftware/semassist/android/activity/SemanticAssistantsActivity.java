@@ -63,8 +63,9 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        getServerSettings();
 	        
 	        getServicesTask task = new getServicesTask();
-	        System.out.println("Retrieving " + serverURL + "/SemAssistRestlet/services");
-	        task.execute(new String[] { serverURL + "/SemAssistRestlet/services" });
+	        String temp = serverURL + "/SemAssistRestlet/services";
+	        System.out.println("Retrieving " + temp);
+	        task.execute(temp);
 
 	        //requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 	        setContentView(R.layout.main);
@@ -211,7 +212,8 @@ public class SemanticAssistantsActivity extends ListActivity{
 	            	RequestRepresentation request = new RequestRepresentation(selectedService, null, txtInput.getText().toString());
 	            	Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
 	            	System.out.println("sending post req to " + serverURL + "/SemAssistRestlet/services/" + selectedService);
-	                Representation response = new ClientResource(serverURL + "/SemAssistRestlet/services/" + selectedService).post(representation);
+	            	Representation response = new ClientResource("http://192.168.4.110:8080/SemAssistRestlet/services/" + selectedService).post(representation);
+	            	//Representation response = new ClientResource(serverURL + "/SemAssistRestlet/services/" + selectedService).post(representation);
 	                try {
 	                	StringWriter writer = new StringWriter();
 	                	response.write(writer);
@@ -220,6 +222,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 
 	                	Intent intent = new Intent(getBaseContext(), SemanticResultsActivity.class);
 	                	intent.putExtra("xml", responseString);
+	                	System.out.println("Server Response: *" + responseString + "*");
 	                    startActivity(intent);
 					} catch (Exception e) {
 						e.printStackTrace();

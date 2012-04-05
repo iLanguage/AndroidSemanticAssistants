@@ -56,7 +56,8 @@ public class SemanticAssistantsService extends IntentService{
 		try{
 			RequestRepresentation request = new RequestRepresentation("Person and Location Extractor", null, input);
 	    	Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
-			Representation response = new ClientResource(serverURL + "/SemAssistRestlet/services/Person and Location Extractor").post(representation);
+	    	Representation response = new ClientResource("http://semassist.ilanguage.ca:8182/SemAssistRestlet/services/Person and Location Extractor").post(representation);
+	    	//Representation response = new ClientResource(serverURL + "/SemAssistRestlet/services/Person and Location Extractor").post(representation);
 	    	StringWriter writer = new StringWriter();
 	    	response.write(writer);
 	    	System.out.println(writer.toString());

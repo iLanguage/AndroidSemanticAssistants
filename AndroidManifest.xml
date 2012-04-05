@@ -7,12 +7,32 @@
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="11" />
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
 	
+	    <!-- Permissions for web service calls -->
+    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />	
+    
+    <!-- Permissions for creating and modifying contacts -->
+    <uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
+	<uses-permission android:name="android.permission.WRITE_CONTACTS"></uses-permission>
+	
+	<!-- Permissions for creating and modifying accounts -->
+	<uses-permission android:name="android.permission.GET_ACCOUNTS"></uses-permission>
+	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"></uses-permission>
+	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
+	<uses-permission android:name="android.permission.USE_CREDENTIALS" />		
+	
+	<!-- Permissions for synchronizing Semantic Assistants contacts -->
+	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
+	<uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
+	
+	
 	<supports-screens android:largeScreens="true"
 			android:smallScreens="true" 
 			android:anyDensity="true"
 			android:normalScreens="true"/>
 	
     <application
+        android:name="info.semanticsoftware.semassist.android.application.SemAssistApp"
         android:icon="@drawable/sa_logo"
         android:label="@string/app_name" >
         <activity
@@ -55,6 +75,29 @@
 		</service>
 		
         <receiver android:name="info.semanticsoftware.semassist.android.service.SemanticAssistantsBroadcastReceiver"></receiver>
+    
+     <!-- Activity to ask users for account credentials -->
+        <activity
+            android:name="info.semanticsoftware.semassist.android.activity.AuthenticationActivity">
+        </activity>
+		
+        <!-- Semantic Assistants account authentication service -->
+        <service android:name="info.semanticsoftware.semassist.android.service.AuthenticationService" android:process=":auth">
+ 			<intent-filter>
+ 			    <action android:name="android.accounts.AccountAuthenticator" />
+ 			</intent-filter>
+			<meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator" />
+		</service>
+	    
+	    <!-- Semantic Assistants contact synchronizing service -->
+        <service android:name="info.semanticsoftware.semassist.android.service.ContactsSyncAdapterService" android:process=":contacts">
+            <intent-filter>
+                <action android:name="android.content.SyncAdapter" />
+            </intent-filter>
+            <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/sync_contacts" />
+            <meta-data android:name="android.provider.CONTACTS_STRUCTURE" android:resource="@xml/contacts" />
+		</service>
+		
     </application>
 
 </manifest>
