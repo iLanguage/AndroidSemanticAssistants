@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <account-authenticator android:accountType="info.semanticsoftware.semassist.account" 
+        android:icon="@drawable/icon" 
+        android:label="@string/account_name" 
+        android:smallIcon="@drawable/icon" 
+        xmlns:android="http://schemas.android.com/apk/res/android">
+</account-authenticator>

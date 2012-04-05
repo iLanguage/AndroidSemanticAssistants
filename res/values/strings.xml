@@ -28,4 +28,11 @@
     <string name="lblServerDialog">Semantic Assistants Server</string>
     <string name="lblPrefServerSumm">Choose a server to read available assistants from</string>
     <string name="selected_server_option">Selected Server</string>
+    
+    <string name="lblAccountUser">Username</string>
+    <string name="lblAccountPass">Password</string>
+    <string name="lblSignIn">Sign in</string>
+    <string name="lblCancel">Cancel</string>
+    
+    <string name="account_name">Semantic Assistants</string>
 </resources>
