@@ -3,7 +3,6 @@ package info.semanticsoftware.semassist.android.restlet;
 import info.semanticsoftware.semassist.android.encryption.EncryptionUtils;
 import info.semanticsoftware.semassist.android.prefs.PrefUtils;
 
-import java.security.PublicKey;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -46,26 +45,48 @@ public class RequestRepresentation {
 				buffer.append("</param>");
 			}
 		}
+		
+		EncryptionUtils utils = EncryptionUtils.getInstance();
 				
 		// get the session key to encrypt input data
-		byte[] sessionKey = EncryptionUtils.getInstance().getSessionKey();
+		byte[] sessionKey = utils.getSessionKey();
 		
-		System.out.println("Original Session key: " + sessionKey);
+		System.out.println("Original Session key: " + sessionKey + " " + sessionKey.length + " bytes");
 		// encrypted secret session key
-		String sessionKeyString = EncryptionUtils.getInstance().encryptSessionKey(sessionKey);
+		//String sessionKeyString = EncryptionUtils.getInstance().encryptSessionKey(sessionKey);
+		String unencryptedSessionKey = Base64.encodeToString(sessionKey, Base64.DEFAULT); 
 				
-		if(sessionKeyString != null){
+		/*if(sessionKeyString != null){
 			buffer.append("<sessionKey>").append(sessionKeyString).append("</sessionKey>");
-		}
+		}*/
+		
+		/******** DBG ***********/
+		
+		//String encryptedKeyString = utils.encryptSessionKey(sessionKey);
+		
+		
+		//buffer.append("<sessionKey>").append(unencryptedSessionKey).append("</sessionKey>");
+		//buffer.append("<test>").append(encryptedKeyString).append("</test>");
+		
+		//String encryptedKeyString = utils.encryptTest();
+		String encryptedKeyString = utils.encryptMe(sessionKey);
+		buffer.append("<sessionKey>").append(encryptedKeyString).append("</sessionKey>");
 		
 		buffer.append("<input><![CDATA[");
 		
-		byte[] encryptedBytes = EncryptionUtils.getInstance().encryptInputData(input, sessionKey);
-		String encryptedtString = Base64.encodeToString(encryptedBytes, android.util.Base64.DEFAULT);
+		//byte[] encryptedBytes = EncryptionUtils.getInstance().encryptInputData(input, sessionKey);
+		//String encryptedtString = Base64.encodeToString(encryptedBytes, android.util.Base64.DEFAULT);
 		
-		System.out.println("Encrypted text: " + encryptedtString);
-		buffer.append(encryptedtString);
+		String temp = utils.encryptInputData(input, sessionKey);
+		
+		System.out.println("Encrypted text: " + temp);
+		
+		buffer.append(temp);
 		buffer.append("]]></input>");
+		
+		buffer.append("<sessionIV>").append(utils.getIV()).append("</sessionIV>");
+		
+		
 		
         buffer.append("</invocation>");
         return buffer.toString();

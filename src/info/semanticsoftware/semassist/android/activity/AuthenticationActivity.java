@@ -1,6 +1,8 @@
 package info.semanticsoftware.semassist.android.activity;
 
+import java.io.File;
 import java.io.StringWriter;
+import java.util.ArrayList;
 
 import org.restlet.data.MediaType;
 import org.restlet.representation.Representation;
@@ -17,16 +19,23 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import info.semanticsoftware.semassist.android.activity.R;
+import info.semanticsoftware.semassist.csal.ClientUtils;
+import info.semanticsoftware.semassist.csal.XMLElementModel;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
 public class AuthenticationActivity extends AccountAuthenticatorActivity{
 	
+	private String serverURL = null;
+	private final String TAG = "AuthenticationActivity";
+	
 	@Override
     protected void onCreate(Bundle bundle) {
         super.onCreate(bundle);
         this.setContentView(R.layout.user_credentials);
+        getServerSettings();
     }
 	
 	public void onCancelClick(View v) {
@@ -36,27 +45,30 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity{
 	public void onSaveClick(View v) {
 		TextView tvUsername;
         TextView tvPassword;
-        String username;
+        
+        // Qualified username, i.e, user@semanticassistants.com
+        String qUsername;
+        
         String password;
 
         tvUsername = (TextView) this.findViewById(R.id.uc_txt_username);
         tvPassword = (TextView) this.findViewById(R.id.uc_txt_password);
 
-        username = tvUsername.getText().toString();
-        String usernameTemp = username.substring(0, username.indexOf("@"));
+        qUsername = tvUsername.getText().toString();
+        String username = qUsername.substring(0, qUsername.indexOf("@"));
         password = tvPassword.getText().toString();
 
         //TODO do client-side validation like password length etc.
-        //TODO perform some network activity here
         
-        String request = "<authenticate><username>" + usernameTemp + "</username><password>" + password + "</password></authenticate>";
+        String request = "<authenticate><username>" + username + "</username><password>" + password + "</password></authenticate>";
 		Representation representation = new StringRepresentation(request,MediaType.APPLICATION_XML);
-    	Representation response = new ClientResource("http://192.168.4.110:8080/SemAssistRestlet/user").post(representation);
+    	String uri = serverURL + "/SemAssistRestlet/user";
+		Representation response = new ClientResource(uri).post(representation);
         try {
         	StringWriter writer = new StringWriter();
         	response.write(writer);
         	String responseString = writer.toString();
-        	System.out.println(responseString);
+        	Log.d(TAG, "Authentication response: " + responseString);
         	
         	//Let's do some nasty string manipulation here TODO change this later
         	int temp = responseString.indexOf("<userKey>");
@@ -68,7 +80,7 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity{
         	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());        	
         	Editor editor = settings.edit();
         	editor.putString("modValue", pubKeyMod);
-        	editor.putString("username", username);
+        	editor.putString("username", qUsername);
         	boolean result = editor.commit();
         	if(result){
         		Toast.makeText(this, "Successfully authenticated", Toast.LENGTH_LONG).show();            	
@@ -88,18 +100,28 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity{
         AccountManager accMgr = AccountManager.get(this);
 
         // Add the account to the Android Account Manager
-        final Account account = new Account(username, accountType);
+        final Account account = new Account(qUsername, accountType);
         accMgr.addAccountExplicitly(account, password, null);
 
         // Now we tell our caller, could be the Android Account Manager or even our own application
         // that the process was successful
 
         final Intent intent = new Intent();
-        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, username);
+        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, qUsername);
         intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
         intent.putExtra(AccountManager.KEY_AUTHTOKEN, accountType);
         this.setAccountAuthenticatorResult(intent.getExtras());
         this.setResult(RESULT_OK, intent);
         this.finish();
+	}
+	
+	private void getServerSettings(){
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		serverURL = prefs.getString("selected_server_option", "-1");
+		if(serverURL.equals("-1")){
+			GlobalSettingsActivity.SERVERS_XML_FILE_PATH = getFilesDir().getAbsolutePath()+ File.separator + "servers.xml";
+			ArrayList<XMLElementModel> defaultServer = GlobalSettingsActivity.getClientPreference("android", "server");
+			serverURL = "http://" + defaultServer.get(0).getAttribute().get(ClientUtils.XML_HOST_KEY) + ":" + defaultServer.get(0).getAttribute().get(ClientUtils.XML_PORT_KEY);
+		}
 	}
 }

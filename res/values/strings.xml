@@ -34,5 +34,9 @@
     <string name="lblSignIn">Sign in</string>
     <string name="lblCancel">Cancel</string>
     
+    <!-- Dynamic views -->
+    <string name="btnAllServices">&lt; All Services</string>
+    <string name="lblRTParams">No runtime parameters.</string>
+    
     <string name="account_name">Semantic Assistants</string>
 </resources>

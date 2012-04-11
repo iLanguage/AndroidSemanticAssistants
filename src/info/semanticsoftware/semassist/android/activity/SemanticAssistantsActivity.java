@@ -52,6 +52,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 	Button btnInvoke;
 	Button btnClear;
 	public static String serverURL;
+	private final String TAG = "SemanticAssistantsActivity";
 	
 		private static ServiceInfoForClientArray servicesList;
 		ArrayAdapter<String> adapter;
@@ -64,14 +65,13 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        
 	        getServicesTask task = new getServicesTask();
 	        String temp = serverURL + "/SemAssistRestlet/services";
-	        System.out.println("Retrieving " + temp);
+	        Log.i(TAG, "Retrieving services..." + temp);
 	        task.execute(temp);
 
 	        //requestWindowFeature(Window.FEATURE_CUSTOM_TITLE);
 	        setContentView(R.layout.main);
 	        lblAvAssist = (TextView) findViewById(R.id.lblAvAssist);
 	        input = (EditText) findViewById(R.id.txtInput);
-	        input.setOnFocusChangeListener(inputFocusListener);
 	        //getWindow().setFeatureInt(Window.FEATURE_CUSTOM_TITLE, R.layout.main);
 	        //tv.setBackgroundColor(Color.rgb(100, 149, 237));
 	        //tv.setTextSize(25);
@@ -79,7 +79,6 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        txtInput = (EditText) findViewById(R.id.txtInput);
 	        if (Intent.ACTION_SEND.equals(getIntent().getAction())) {
 	        	Bundle bundle = getIntent().getExtras();
-	        	System.out.println("got content");
 	        	txtInput.setText(bundle.getString(Intent.EXTRA_TEXT));
 	        }
 	        
@@ -115,7 +114,7 @@ public class SemanticAssistantsActivity extends ListActivity{
           
 			protected String doInBackground(String... urls) {
 				try {
-					Log.d("SemanticAssistantsActivity", "Sending GET via Restlet to " + urls[0]);
+					Log.i(TAG, "Sending GET via Restlet to " + urls[0]);
 				    // Prepare the request
 					ClientResource resource = new ClientResource(urls[0]);
 					ClientInfo info = new ClientInfo(MediaType.TEXT_XML);
@@ -125,7 +124,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 					
 					ServiceParser parser = new ServiceParser(writer.toString());
 					
-					System.out.println("will parse " + writer.toString());
+					Log.i(TAG, "Parsing server response...");
 					servicesList = parser.parseToObject();
 					
 					return writer.toString();
@@ -144,7 +143,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 		}
 	    
 	    private void populateServicesList(){
-	    	Toast.makeText(this, "Connecting to " + serverURL, Toast.LENGTH_LONG).show();
+	    	Toast.makeText(this, "Connected to " + serverURL, Toast.LENGTH_LONG).show();
 	       String[] values = null;
 	       List<String> names = new ArrayList<String>();
 	       	for(int i=0; i < servicesList.getItem().size(); i++){
@@ -159,10 +158,6 @@ public class SemanticAssistantsActivity extends ListActivity{
 	    
 	    @Override
 	    protected void onListItemClick(ListView list, View view, int position, long id) {
-	    	//Toast.makeText(this, selection, Toast.LENGTH_LONG).show();
-			//Intent intent = new Intent(this, ServiceInfoActivity.class);
-			//intent.putExtra("serviceName",list.getItemAtPosition(position).toString());
-			//startActivity(intent);
 	    	list.setVisibility(View.GONE);
 	    	lblAvAssist.setVisibility(View.GONE);
 	    	LinearLayout linearLayout =  (LinearLayout) findViewById(R.id.servicesLayout);
@@ -170,14 +165,6 @@ public class SemanticAssistantsActivity extends ListActivity{
 	    	selectedService = temp;
 	    	linearLayout.addView(getServiceDescLayout());
 	    }
-	    
-	    private View.OnFocusChangeListener inputFocusListener = new View.OnFocusChangeListener(){
-            public void onFocusChange(View v, boolean hasFocus) { 
-            	if(hasFocus){
-            		//TODO complete this
-            	}
-            }
-	    };
 	    	    
 	    public static ServiceInfoForClientArray getServices(){
 	    	return servicesList;
@@ -190,7 +177,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 
 	    	final Button btnBack = new Button(this);
-	    	btnBack.setText("< All services");
+	    	btnBack.setText(R.string.btnAllServices);
 	        btnBack.setId(5);
 	        btnBack.setOnClickListener(new View.OnClickListener(){
 	        	public void onClick(View v) {
@@ -204,15 +191,16 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        topButtonsLayout.addView(btnBack);
 	        
 	        final Button btnInvoke = new Button(this);
-	        btnInvoke.setText("Invoke");
+	        btnInvoke.setText(R.string.btnInvokeLabel);
 	        btnInvoke.setId(6);
 	        
 	        btnInvoke.setOnClickListener(new View.OnClickListener(){
 	        	public void onClick(View v) {
 	            	RequestRepresentation request = new RequestRepresentation(selectedService, null, txtInput.getText().toString());
 	            	Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
-	            	System.out.println("sending post req to " + serverURL + "/SemAssistRestlet/services/" + selectedService);
-	            	Representation response = new ClientResource("http://192.168.4.110:8080/SemAssistRestlet/services/" + selectedService).post(representation);
+	            	String uri = serverURL + "/SemAssistRestlet/services/" + selectedService;
+	            	Log.i(TAG, "sending POST via Restlet to " + uri);
+	            	Representation response = new ClientResource(uri).post(representation);
 	            	//Representation response = new ClientResource(serverURL + "/SemAssistRestlet/services/" + selectedService).post(representation);
 	                try {
 	                	StringWriter writer = new StringWriter();
@@ -222,7 +210,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 
 	                	Intent intent = new Intent(getBaseContext(), SemanticResultsActivity.class);
 	                	intent.putExtra("xml", responseString);
-	                	System.out.println("Server Response: *" + responseString + "*");
+	                	Log.i(TAG, "Parsing server response: " + responseString);
 	                    startActivity(intent);
 					} catch (Exception e) {
 						e.printStackTrace();
@@ -304,7 +292,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        	output.addView(scroll);
 	        }else{
     			TextView lblParamName = new TextView(this);
-    			lblParamName.setText("No runtime parameters.");
+    			lblParamName.setText(R.string.lblRTParams);
     	        output.addView(lblParamName);
 	        }
     
