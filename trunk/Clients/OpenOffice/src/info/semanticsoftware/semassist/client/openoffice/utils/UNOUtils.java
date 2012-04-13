@@ -297,14 +297,23 @@ public class UNOUtils
       }
     }
 
-    public static void initializeCursor( final XComponentContext ctx, final String url )
-    {
-      initializeCursor_internal(ctx, loadDoc(ctx, url));
-    }
-
-    public static void initializeCursor( final XComponentContext ctx )
-    {
-      initializeCursor_internal(ctx, getActiveTextDocument( ctx ));
+    /**
+     * Assign cursor focus to either a saved or unsaved document.
+     *
+     * @param ctx Context
+     * @param url Url of document being assigned focus. Accepts
+     *            null or empty strings for yet unsaved documents.
+     */
+    public static void initializeCursor(final XComponentContext ctx, final String url) {
+      // NOTE: This public method should be privatized & encapsulated 
+      // to avoid race conditions where caller manually changes window
+      // focus between between the time a loaded document is first given
+      // focus up to UNOUtils.createDocAnnotations() is invoked.
+      if (url != null && !"".equals(url)) {
+         initializeCursor_internal(ctx, loadDoc(ctx, url));
+      } else {
+         initializeCursor_internal(ctx, getActiveTextDocument( ctx ));
+      }
     }
 
     /**

@@ -281,17 +281,8 @@ public class ServiceInvocationHandler implements Runnable
             System.out.println("Found no interactive annotations with <"+ contextFeature +"> features");
          }
       }
- 
-      // Assign cursor focus to either saved or unsaved document.
-      // NOTE: Should encapsulate cursor initialization in UNOUtils to
-      // avoid race condition where user manually changes window focus
-      // between between the time a loaded document is first given focus
-      // until UNOUtils.createDocAnnotations() is invoked.
-      if (url != null && !"".equals(url)) {
-         UNOUtils.initializeCursor(ctx, url);
-      } else {
-         UNOUtils.initializeCursor(ctx);
-      }
+
+      UNOUtils.initializeCursor(ctx, url);
 
       // Default annotation handling.
       for (final Annotation annot : sideNoteAnnots) {
