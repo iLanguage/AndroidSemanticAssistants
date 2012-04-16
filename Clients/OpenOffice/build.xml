@@ -33,6 +33,9 @@
     <property name="src.home"   value="${basedir}/src"/>
     <property name="dist.home"  value="${basedir}/dist"/>
 
+    <!-- Used for testing -->
+    <property name="test.src"	   value="${basedir}/test.src"/>
+    <property name="test.result" value="${basedir}/test.result"/>
 
     <!-- Tool Directories -->
     <property name="office.unopkg"    value="${office.program.dir}${file.separator}unopkg"/>
@@ -53,6 +56,7 @@
         <pathelement location="${ooo-classes-common}/ridl.jar" />
         <pathelement location="${ooo-classes-basis}/unoil.jar" />
         <pathelement location="${log4j.jar}"/>
+        <pathelement location="${junit.home}/junit.jar" />
         <pathelement location="${commons-lang.jar}"/>
     </path>
 
@@ -142,6 +146,29 @@
           </javadoc>
     </target>
 
+<!--
+   <target name="junit" depends="compile" description="Performs unit tests.">
+        <javac srcdir="${test.src}" destdir="${build.home}" debug="true" deprecation="true" includeantruntime="${antruntime}">
+        	<classpath refid="compile.classpath"/>
+        </javac>
+        <mkdir dir="${test.result}"/>
+        <junit failureproperty="junit.failed"  printsummary="yes">
+            <formatter type="xml"/>
+            <batchtest todir="${test.result}">
+                <fileset dir="${build.home}">
+                   <include name="**/*Test.class"/>
+                   <include name="**/Test*.class"/>
+                </fileset>
+            </batchtest>
+            <classpath>
+               <path refid="compile.classpath"/>
+               <pathelement location="${build.home}"/>
+            </classpath>
+        </junit>
+        <fail message="JUnit test failure." if="junit.failed"/>
+    </target>
+-->
+
     <!-- Findbugs analysis -->
     <target name="findbugs" depends="compile">
       <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
@@ -164,6 +191,7 @@
 	    <fileset file="${dist.home}/${csal.name}"/>
         </delete>
         <delete dir="${docs.home}"/>
+        <delete dir="${test.result}"/>
     </target>
 </project>
 
