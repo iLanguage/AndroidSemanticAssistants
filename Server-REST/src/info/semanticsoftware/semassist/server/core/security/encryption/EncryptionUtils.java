@@ -48,29 +48,35 @@ import javax.crypto.spec.SecretKeySpec;
 import org.apache.commons.codec.binary.Base64;
 
 public class EncryptionUtils {
-	
+
+	/** Class singleton object */
 	private static EncryptionUtils instance = null;
+	/** KeyPair encryption algorithm */
 	private final static String algorithm = "RSA";
-	private final static int keySize = 4096;
-	
+	/** KeyPair key size (bits) */
+	private final static int keySize = 1024;
+
+	/** Publickey specs */
 	private RSAPublicKeySpec pubKeySpec = null;
+	/** PrivateKey specs */
 	private RSAPrivateKeySpec priKeySpec = null;
-	
+
+	/** Protected class constructor to defeat instantiation. */
 	protected EncryptionUtils(){
 		// Defeat instantiation
 	}
-	
+
+	/** Returns the class singleton object.
+	 * @return the singleton object */
 	public static EncryptionUtils getInstance(){
 		if ( instance == null ){
 			instance = new EncryptionUtils();
 		}
-		
 		return instance;
 	}
-	
 
 	/**
-	 * Generates a key-pair based on the specified algorithm
+	 * Generates a key-pair based on the specified algorithm.
 	 * @return KeyPair or null if an exception is thrown
 	 */
 	public KeyPair generateKeyPair(){
@@ -79,7 +85,6 @@ public class EncryptionUtils {
 		try {
 			kpg = KeyPairGenerator.getInstance(algorithm);
 			kpg.initialize(keySize);
-			
 			pair = kpg.generateKeyPair();
 			return pair;
 		} catch (NoSuchAlgorithmException e) {
@@ -87,9 +92,9 @@ public class EncryptionUtils {
 		}
 		return pair;
 	}
-	
+
 	/**
-	 * Extracts a public key from the provided KeyPair
+	 * Extracts a public key from the provided KeyPair.
 	 * @param pair a key-pair
 	 * @return PublicKey or null
 	 */
@@ -108,9 +113,9 @@ public class EncryptionUtils {
 		}
 		return pubKey;
 	}
-	
+
 	/**
-	 * Extracts a private key from the provided KeyPair
+	 * Extracts a private key from the provided KeyPair.
 	 * @param pair a key-pair
 	 * @return PrivateKey or null
 	 */
@@ -129,20 +134,34 @@ public class EncryptionUtils {
 		}
 		return priKey;
 	}
-	
+
+	/** Gets the modulus part of the provided publickey.
+	 * @param key the PublicKey
+	 * @return Big integer representation of the modulus */
 	public BigInteger getModulus(PublicKey key){
 		return pubKeySpec.getModulus();
-		
 	}
-	
+
+	/** Gets the public exponent of the provided publickey.
+	 * @param key the PublicKey
+	 * @return Big integer representation of the public exponent */
 	public BigInteger getPubEx(PublicKey key){
 		return pubKeySpec.getPublicExponent();
 	}
-	
+
+	/** Gets the private exponent of the provided privatekey.
+	 * @param key the PrivateKey
+	 * @return Big integer representation of the private exponent */
 	public BigInteger getPriEx(PrivateKey key){
 		return priKeySpec.getPrivateExponent();
 	}
 
+	/** Decrypts the encrypted input with the provided session key.
+	 * @param input encrypted data
+	 * @param sessionKey session key to use
+	 * @param siv session key initialization vector
+	 * @return decrypted input string 
+	 */
 	public String decryptInputData(String input, byte[] sessionKey, byte[] siv){
 		String decryptedText = null;
 		try {
@@ -169,9 +188,11 @@ public class EncryptionUtils {
 		}
 		return decryptedText;
 	}
-	
-	////////////////
-	
+
+	/** Decrypts the client's session key using his PrivateKey.
+	 * @param cipherData encrypted session key string
+	 * @param key the private key to use
+	 * @return decrypted session key in a byte array */
 	public byte[] decryptSessionKey(String cipherData, PrivateKey key){
 		byte[] original = null;
 		try {
@@ -179,10 +200,8 @@ public class EncryptionUtils {
 			cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 			cipher.init(Cipher.DECRYPT_MODE, key);
 			original = cipher.doFinal(Base64.decodeBase64(cipherData));
-			
 			SecretKey secretKey =  new SecretKeySpec (original, "AES");
 			return secretKey.getEncoded();
-			//return original;
 		} catch (NoSuchPaddingException e) {
 			e.printStackTrace();
 		} catch (InvalidKeyException e) {
@@ -217,10 +236,9 @@ public class EncryptionUtils {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 }
