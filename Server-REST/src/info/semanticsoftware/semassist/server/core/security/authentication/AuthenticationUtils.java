@@ -40,27 +40,34 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class AuthenticationUtils {
-	
+
+	/** Singleton class object */
 	private static AuthenticationUtils instance = null;
+	/** Database connection object */
 	private Connection connection = null;
-	
+
+	/** Protected class constructor to defeat instantiation. */
 	protected AuthenticationUtils(){
 		// defeat instantiation
 	}
-	
+
+	/** Returns the singleton object.
+	 * @return singleton object
+	 */
 	public static AuthenticationUtils getInstance(){
 		if ( instance == null) {
 			instance = new AuthenticationUtils();
 		} 
-		
 		return instance;
 	}
-	
+
+	/** Loads the H2 database object into memory. */
 	public void loadDBIntoMemory(){
 		if(connection == null){
 			try {
 				Class.forName("org.h2.Driver");
 				// Setup the connection with the DB
+				//TODO move the credentials to the servlet's properties
 				connection = DriverManager.getConnection("jdbc:h2:~/H2DB/UsersDB", "dbadmin", "dbpass");
 				connection.setAutoCommit(false);
 			} catch (ClassNotFoundException e) {
@@ -70,17 +77,21 @@ public class AuthenticationUtils {
 			}
 		}
 	}
-	
-	public boolean authenticateUser(String userName, String password){
+
+	/** Authenticates the provided user credentials against the database.
+	 * @param userName username
+	 * @param password password
+	 * @return true if the credentials are valid, false otherwise */
+	public boolean authenticateUser(final String userName, final String password){
 		boolean isValidUser = false;
 		loadDBIntoMemory();
-		
+
 		PreparedStatement prepStatement;
 		try {
 			prepStatement = connection.prepareStatement("SELECT password FROM USERS WHERE USERNAME = ?");
 			prepStatement.setString(1, userName);
 			ResultSet resultSet = prepStatement.executeQuery();
-			
+
 			if (resultSet.next()) {
 				String retrievedPassword = resultSet.getString("password");
 				if(retrievedPassword.equals(password)){
@@ -90,17 +101,21 @@ public class AuthenticationUtils {
 				}
 				return isValidUser;
 			}else{
-			    System.out.println("Authentication failed. No such credentials.");
-			    return isValidUser = false;
+				System.out.println("Authentication failed. No such credentials.");
+				return isValidUser = false;
 			}
-			
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return isValidUser;
 	}
-	
-	public String getModulusString(String userName){
+
+	/** Returns the modulus part of the specified username's public/private keys.
+	 * @param userName username
+	 * @return string representation of the modulus
+	 */
+	public String getModulusString(final String userName){
 		loadDBIntoMemory();
 		String pubKeyString = "null";
 		try {
@@ -117,8 +132,12 @@ public class AuthenticationUtils {
 		}
 		return pubKeyString;
 	}
-	
-	public String getPrivateKeyString(String userName){
+
+	/** Returns the private exponent of the specified username's private key.
+	 * @param userName username
+	 * @return string representation of the private exponent
+	 */
+	public String getPrivateKeyString(final String userName){
 		loadDBIntoMemory();
 		String priKeyString = "null";
 		try {
@@ -127,16 +146,20 @@ public class AuthenticationUtils {
 			System.out.println("Querying DB: " + prepStatement.toString());
 			ResultSet result = prepStatement.executeQuery();
 			while (result.next()) {
-	            priKeyString = result.getString("priKey");
-	        }
+				priKeyString = result.getString("priKey");
+			}
 			return priKeyString;
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return priKeyString;
 	}
-	
-	public PrivateKey getPrivateKey(String userName){
+
+	/** Returns the specified username's private key object.
+	 * @param userName username
+	 * @return user's private key object
+	 */
+	public PrivateKey getPrivateKey(final String userName){
 		PrivateKey priKey = null;
 		String mod = getModulusString(userName);
 		String priStr = getPrivateKeyString(userName);
@@ -157,37 +180,38 @@ public class AuthenticationUtils {
 		}
 		return priKey;		
 	}
-	
-	public void addUser(String userName, String password, String devKey){
+
+	/** Adds a new user to the USERS database.
+	 * @param userName username
+	 * @param password password
+	 * @param devKey user's developer key (optional) */
+	public void addUser(final String userName, final String password, final String devKey){
 		loadDBIntoMemory();
 		PreparedStatement prepStatement;
 		try {
 			//Generate key-pair for the user
 			EncryptionUtils encUtil = EncryptionUtils.getInstance();
 			KeyPair pair = encUtil.generateKeyPair();
-			
+
 			PublicKey pubkey = encUtil.getPublicKey(pair);
 			BigInteger mod = encUtil.getModulus(pubkey);
 			BigInteger pubEx = encUtil.getPubEx(pubkey);
-			
+
 			PrivateKey priKey = encUtil.getPrivateKey(pair);
 			BigInteger priEx = encUtil.getPriEx(priKey);
-			
+
 			prepStatement = connection.prepareStatement("INSERT INTO USERS (USERNAME, PASSWORD, MOD, PRIKEY, PUBKEY) VALUES (?, ?, ?, ?, ?)");
 			prepStatement.setString(1, userName);
 			prepStatement.setString(2, password);
-			//prepStatement.setBigDecimal(3, new BigDecimal(mod));
 			prepStatement.setString(3, mod.toString());
-			//prepStatement.setBigDecimal(4, new BigDecimal(priEx));
 			prepStatement.setString(4, priEx.toString());
-			//prepStatement.setBigDecimal(5, new BigDecimal(pubEx));
 			prepStatement.setString(5, pubEx.toString());
-			
+
 			/*if(devKey != null){
 				prepStatement.setBigDecimal(6, new BigDecimal(new BigInteger(devKey)));
 			}*/
-			
-			try{ 
+
+			try{
 				prepStatement.executeUpdate();
 				connection.commit();
 				System.out.println("New user added!");
@@ -197,7 +221,7 @@ public class AuthenticationUtils {
 					System.out.println("Exception occured in database. Rolling back all the changes made in this transaction and releasing the lock.");
 					connection.rollback();
 				}
-			} 
+			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -206,7 +230,10 @@ public class AuthenticationUtils {
 			System.out.println("Database is locked by another process");
 		}
 	}
-	
+
+	/** Convenience method to add users to the database via commandline
+	 * @param args commandline arguments
+	 */
 	public static void main(String args[]){
 		AuthenticationUtils obj = AuthenticationUtils.getInstance();
 		obj.addUser(args[0], args[1], null);
