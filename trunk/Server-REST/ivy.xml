@@ -52,6 +52,14 @@
 		<exclude org="mx4j-jmx" />
 		<exclude org="ant" />
     </dependency>
+    
+    <dependency org="com.h2database" name="h2" rev="1.3.165">
+            <artifact name="h2" ext="jar"/>
+    </dependency>
+    
+    <dependency org="commons-codec" name="commons-codec" rev="1.6">
+        <exclude org="junit" />
+    </dependency>
 
    </dependencies>
 </ivy-module>
