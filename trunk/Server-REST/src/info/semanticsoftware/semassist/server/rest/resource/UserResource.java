@@ -23,14 +23,14 @@ import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
 public class UserResource extends ServerResource{
-	
+
 	@Get("xml")
 	public Representation getXML() {
 		String userName = (String) getRequest().getAttributes().get("userName");
 		StringRepresentation representation = null;
 		String xml = new UserModel().getXML(userName);
 		representation = new StringRepresentation(xml, MediaType.APPLICATION_XML);
-	
+
 		if (xml != null) {
 			return representation;
 		} else {
@@ -38,32 +38,32 @@ public class UserResource extends ServerResource{
 			return null;
 		}
 	}
-	
+
 	@Post
 	public StringRepresentation authenticate(Representation representation){
 		StringRepresentation result = null;
 		try {
 			String authRequest = representation.getText();
 			System.out.println(authRequest);
-			
+
 			SAXParserFactory spf = SAXParserFactory.newInstance(); 
-     	    SAXParser sp = spf.newSAXParser(); 
-     	    XMLReader xr = sp.getXMLReader(); 
-     	 
+			SAXParser sp = spf.newSAXParser(); 
+			XMLReader xr = sp.getXMLReader(); 
+
 			RequestHandler handler = new RequestHandler();
-            xr.setContentHandler(handler);
-             
+			xr.setContentHandler(handler);
+
             /* Parse the XML data from the request string */
             xr.parse(new InputSource(new StringReader(authRequest)));
-            
+
             String username = handler.getUsername();
             String password = handler.getPassword();
-            
+
 			AuthenticationUtils authUtil = AuthenticationUtils.getInstance();
 			if(authUtil.authenticateUser(username, password)){
 				String xml = new UserModel().getXML(username);
 				result = new StringRepresentation(xml, MediaType.APPLICATION_XML);
-			
+
 				if (xml != null) {
 					return result;
 				} else {
@@ -80,5 +80,5 @@ public class UserResource extends ServerResource{
 		}
 		return result;
 	}
-		
+
 }

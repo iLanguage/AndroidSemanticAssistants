@@ -5,12 +5,12 @@ import info.semanticsoftware.semassist.server.GateRuntimeParameter;
 import info.semanticsoftware.semassist.server.ServiceInfoForClient;
 
 public class RTParamModel {
-	
-	/** Returns the XML representation of all RTParams of a specific services 
+
+	/** Returns the XML representation of all RTParams of a specific services. 
 	 * @param service the NLP service instance
 	 * @return XML representation of all of the runtime parameters
 	 */
-	public String getAllXML(ServiceInfoForClient service){
+	public String getAllXML(final ServiceInfoForClient service){
 		List<GateRuntimeParameter> paramsList = service.getParams();
 		System.out.println(service.getServiceName() + " has " + paramsList.size() + " params.");
 		StringBuffer buffer = new StringBuffer();
@@ -23,13 +23,13 @@ public class RTParamModel {
 		buffer.append("</RTParams>");
         return buffer.toString();
 	}
-	
+
 	/**
-	 * Returns XML representation of the input service
+	 * Returns XML representation of the input service.
 	 * @param service NLP service object retrieved from SA server
 	 * @return XML representation of the specified service
 	 */
-	public String getXML(GateRuntimeParameter param) {
+	public String getXML(final GateRuntimeParameter param) {
 		StringBuilder xml = new StringBuilder();
 		xml.append("<RTParam>");
 		xml.append("<paramName>").append(param.getParamName()).append("</paramName>");

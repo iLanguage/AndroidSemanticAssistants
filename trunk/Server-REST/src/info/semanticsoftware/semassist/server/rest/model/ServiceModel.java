@@ -8,35 +8,35 @@ import info.semanticsoftware.semassist.server.ServiceInfoForClientArray;
 import info.semanticsoftware.semassist.server.rest.business.ServiceAgentSingleton;
 
 public class ServiceModel {
-	
+
 	Iterator<ServiceInfoForClient> iterator = null;
-    
+
 	public ServiceModel(){
-			try{
-				SemanticServiceBroker broker = ServiceAgentSingleton.getInstance();
-				ServiceInfoForClientArray services = broker.getAvailableServices();
-		        iterator = services.getItem().iterator();
-			}catch(Exception e){
-				System.err.println("Can not read list of available services.");
-				e.printStackTrace();
-			}
+		try{
+			SemanticServiceBroker broker = ServiceAgentSingleton.getInstance();
+			ServiceInfoForClientArray services = broker.getAvailableServices();
+			iterator = services.getItem().iterator();
+		}catch(Exception e){
+			System.err.println("Can not read list of available services.");
+			e.printStackTrace();
+		}
 	}
-	
-	/** Returns the XML representation of all the available services 
+
+	/** Returns the XML representation of all the available services. 
 	 * @return XML representation of services
 	 */
 	public String getAllXML(){
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("<services>");
-			while(iterator.hasNext()){
-	        	buffer.append(getXML(iterator.next()));
-	        }
-        buffer.append("</services>");
-        return buffer.toString();
+		while(iterator.hasNext()){
+			buffer.append(getXML(iterator.next()));
+		}
+		buffer.append("</services>");
+		return buffer.toString();
 	}
-	
+
 	/**
-	 * Returns XML representation of the input service
+	 * Returns XML representation of the input service.
 	 * @param service NLP service object retrieved from SA server
 	 * @return XML representation of the specified service
 	 */
@@ -50,10 +50,9 @@ public class ServiceModel {
 		xml.append("</service>");
 		return xml.toString();
 	}
-	
-	
+
 	/**
-	 * Returns XML representation of the input service
+	 * Returns XML representation of the input service.
 	 * @param serviceName name of the NLP service
 	 * @return XML representation of the specified service
 	 */
@@ -69,7 +68,7 @@ public class ServiceModel {
 				break;
 			}
 		}
-		
+
 		if(serviceObject != null){
 			xml.append("<service>");
 			xml.append("<serviceName>").append(serviceObject.getServiceName()).append("</serviceName>");
@@ -80,21 +79,21 @@ public class ServiceModel {
 		}else{
 			System.err.println("Service not found");
 		}
-		
+
 		return xml.toString();
 	}
-	
+
 	/**
-	 * Returns partial link URI of the specified service
+	 * Returns partial link URI of the specified service.
 	 * @param service NLP service object
 	 * @return partial URI for the service
 	 */
 	private String getLink(ServiceInfoForClient service){
 		return "/services/" + replace(service.getServiceName());
 	}
-	
+
 	/**
-	 * Replaces space characters with underscore
+	 * Replaces space characters with underscore.
 	 * @param service service name string
 	 * @return replaced service name
 	 */

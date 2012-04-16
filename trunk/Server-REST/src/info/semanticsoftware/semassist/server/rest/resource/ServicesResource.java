@@ -9,11 +9,11 @@ import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
 public class ServicesResource extends ServerResource{
-	
+
 	@Get("xml")
 	public Representation getXML() {
-	        String xml = new ServiceModel().getAllXML();
-			Representation representation = new StringRepresentation(xml, MediaType.APPLICATION_XML);
-			return representation;
+		String xml = new ServiceModel().getAllXML();
+		Representation representation = new StringRepresentation(xml, MediaType.APPLICATION_XML);
+		return representation;
 	}
 }
