@@ -13,14 +13,14 @@ import org.restlet.resource.Post;
 import org.restlet.resource.ServerResource;
 
 public class ServiceResource extends ServerResource{
-	
+
 	@Get("xml")
 	public Representation getXML() {
 		String serviceName = (String) getRequest().getAttributes().get("serviceName");
 		StringRepresentation representation = null;	
 		String xml = new ServiceModel().getXML(serviceName);
 		representation = new StringRepresentation(xml, MediaType.APPLICATION_XML);
-	
+
 		if (xml != null) {
 			return representation;
 		} else {
@@ -28,7 +28,7 @@ public class ServiceResource extends ServerResource{
 			return null;
 		}
 	}
-	
+
 	@Post
 	public StringRepresentation invoke(Representation representation){
 		try {
