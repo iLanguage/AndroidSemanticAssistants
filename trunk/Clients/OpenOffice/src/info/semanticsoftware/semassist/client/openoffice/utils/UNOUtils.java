@@ -178,9 +178,12 @@ public class UNOUtils
      *
      * @param ctx Context.
      * @param text Text content for the new document.
+     *
+     * @return True if operation was successful, false otherwise.
      */
-    public static void createNewDoc( final XComponentContext ctx, final String text )
+    public static boolean createNewDoc( final XComponentContext ctx, final String text )
     {
+        boolean status = true;
         try {
             // Get an new empty document.
             final XTextDocument doc = UnoRuntime.queryInterface(
@@ -192,7 +195,9 @@ public class UNOUtils
         } catch( final Exception ex ) {
             System.err.println("Failed to create textual document");
             ex.printStackTrace( System.err );
+            status = false;
         }
+        return status;
     }
 
 
@@ -201,10 +206,11 @@ public class UNOUtils
      *
      * @param ctx Context.
      * @param file Local file from which to get content for new document.
+     *
+     * @return True if operation was successful, false otherwise.
      */
-    public static void createNewDoc( final XComponentContext ctx, final File f )
+    public static boolean createNewDoc( final XComponentContext ctx, final File f )
     {
-        // Create URL string from file object.
         String url;
         try {
             url = "file://" + f.getCanonicalPath();
@@ -213,7 +219,8 @@ public class UNOUtils
             url = "";
         }
 
-        loadDoc(ctx, url);
+        return loadDoc(ctx, url) == null ? false : true;
+//        return loadDoc(ctx, f.toURI().toString()) == null ? false : true;
     }
 
     /**
