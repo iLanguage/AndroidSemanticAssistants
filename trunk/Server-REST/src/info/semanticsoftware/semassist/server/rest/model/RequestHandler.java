@@ -1,4 +1,4 @@
-/*	
+/*
 Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
@@ -27,42 +27,46 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-	public class RequestHandler extends DefaultHandler{
+/**
+ * This class parses a request representation XML message.
+ * @author Bahar Sateli
+ * */
+public class RequestHandler extends DefaultHandler{
 
-	/** The <serviceName> XML element representing an NLP service name. */
+	/** The <code><serviceName></code> XML element representing an NLP service name. */
 	private boolean serviceNameTag = false;
 
-	/** The <input> XML element representing representing the input text. */
+	/** The <code><input></code> XML element representing representing the input text. */
 	private boolean inputTag = false;
 
-	/** The <userName> XML element representing a user. */
+	/** The <code><userName></code> XML element representing a user. */
 	private boolean usernameTag = false;
 
-	/** The <password> XML element representing a user's password. */
+	/** The <code><password></code> XML element representing a user's password. */
 	private boolean passwordTag = false;
 
-	/** The <sessionKey> XML element representing a shared secret key. */
+	/** The <code><sessionKey></code> XML element representing a shared secret key. */
 	private boolean sessionKeyTag = false;
 
-	/** The <serviceIV> XML element representing the session key initialization vector. */
+	/** The <code><serviceIV></code> XML element representing the session key initialization vector. */
 	private boolean sessionIVTag = false;
 
-	/** Contains the <serviceName> node value. */
+	/** Contains the <code><serviceName></code> node value. */
 	private String serviceName;
 
-	/** Contains the <input> node value. */
+	/** Contains the <code><input></code> node value. */
 	private String input;
 
-	/** Contains the <userName> node value. */
+	/** Contains the <code><userName></code> node value. */
 	private String username;
 
-	/** Contains the <password> node value. */
+	/** Contains the <code><password></code> node value. */
 	private String password;
 
-	/** Contains the <sessionKey> node value. */
+	/** Contains the <code><sessionKey></code> node value. */
 	private String sessionKey;
 
-	/** Contains the <sessionIV> node value. */
+	/** Contains the <code><sessionIV></code> node value. */
 	private String sessionIV;
 
 	/** Returns the service name specified in the request. 
@@ -101,26 +105,29 @@ import org.xml.sax.helpers.DefaultHandler;
 		return this.sessionIV;
 	}
 
-	/** Gets invoked when parsing a request is initiated. */
+	/** Gets invoked when parsing a request is initiated. 
+	 * @throws SAXException if the request cannot be parsed */
 	@Override
 	public void startDocument() throws SAXException {
 		System.out.println("Started parsing service request");
 	}
 
-	/** Gets invoked when parsing a request is finished. */
+	/** Gets invoked when parsing a request is finished. 
+	 * @throws SAXException if the request cannot be parsed */
 	@Override
 	public void endDocument() throws SAXException {
 		System.out.println("Finished parsing service request");
 	}
 
-	/** Gets called on opening tags like <tag>.
+	/** Gets called on opening tags like <code><tag></code>.
 	 * It can also provide attribute(s), e.g., <tag attribute="attributeValue">
 	 * @param namespaceURI namespace used for the node
 	 * @param localName node's local name in the document
 	 * @param qName nodes' qualified name
-	 * @param atts node's attributes */
+	 * @param atts node's attributes 
+	 * @throws SAXException if the request cannot be parsed */
 	@Override
-	public void startElement(String namespaceURI, String localName,String qName, Attributes atts) throws SAXException {
+	public void startElement(final String namespaceURI, final String localName, final String qName, final Attributes atts) throws SAXException {
 		if (qName.equals("serviceName")) {
 			this.serviceNameTag = true;
 		}else if (qName.equals("input")) {
@@ -136,12 +143,13 @@ import org.xml.sax.helpers.DefaultHandler;
 		}
 	}
 
-	/** Gets called on closing tags like </tag>.
+	/** Gets called on closing tags like <code></tag></code>.
 	 * @param namespaceURI namespace used for the node
 	 * @param localName node's local name in the document
-	 * @param qName node's qualifed name */
+	 * @param qName node's qualifed name 
+	 * @throws SAXException if the request cannot be parsed */
 	@Override
-	public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
+	public void endElement(final String namespaceURI, final String localName, final String qName) throws SAXException {
 		if (qName.equals("serviceName")) {
 			this.serviceNameTag = false;
 		}else if (qName.equals("input")) {
@@ -157,12 +165,12 @@ import org.xml.sax.helpers.DefaultHandler;
 		}
 	}
 
-	/** Gets called on the following structure: <tag>characters</tag>.
+	/** Gets called on the following structure: <code><tag>characters</tag></code>.
 	 * @param ch char array representing the node content
 	 * @param start start offset in the array
 	 * @param length length of the content in the array */
 	@Override
-	public void characters(char[] ch, int start, int length) {
+	public void characters(final char[] ch, final int start, final int length) {
 		if(this.serviceNameTag){
 			serviceName = new String(ch, start, length);
 		}else if(this.inputTag){
