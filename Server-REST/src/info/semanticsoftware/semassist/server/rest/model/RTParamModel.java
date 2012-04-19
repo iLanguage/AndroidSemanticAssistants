@@ -1,4 +1,4 @@
-/*	
+/*
 Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
@@ -27,6 +27,10 @@ import java.util.List;
 import info.semanticsoftware.semassist.server.GateRuntimeParameter;
 import info.semanticsoftware.semassist.server.ServiceInfoForClient;
 
+/**
+ * Represents a GATE runtime parameter object.
+ * @author Bahar Sateli
+ * */
 public class RTParamModel {
 
 	/** Returns the XML representation of all RTParams of a specific services. 

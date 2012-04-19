@@ -1,4 +1,4 @@
-/*	
+/*
 Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
@@ -30,10 +30,14 @@ import info.semanticsoftware.semassist.server.ServiceInfoForClient;
 import info.semanticsoftware.semassist.server.ServiceInfoForClientArray;
 import info.semanticsoftware.semassist.server.rest.business.ServiceAgentSingleton;
 
+/** Represents an NLP pipeline.
+ * @author Bahar Sateli */
 public class ServiceModel {
 
-	Iterator<ServiceInfoForClient> iterator = null;
+	/** Services iterator object.*/
+	private Iterator<ServiceInfoForClient> iterator = null;
 
+	/** Class constructor that creates a broker agent to the Semantic Assistants server.*/
 	public ServiceModel(){
 		try{
 			SemanticServiceBroker broker = ServiceAgentSingleton.getInstance();
@@ -45,7 +49,7 @@ public class ServiceModel {
 		}
 	}
 
-	/** Returns the XML representation of all the available services. 
+	/** Returns the XML representation of all the available services.
 	 * @return XML representation of services
 	 */
 	public String getAllXML(){
@@ -63,7 +67,7 @@ public class ServiceModel {
 	 * @param service NLP service object retrieved from SA server
 	 * @return XML representation of the specified service
 	 */
-	public String getXML(ServiceInfoForClient service) {
+	public String getXML(final ServiceInfoForClient service) {
 		StringBuilder xml = new StringBuilder();
 		xml.append("<service>");
 		xml.append("<serviceName>").append(service.getServiceName()).append("</serviceName>");
@@ -79,7 +83,7 @@ public class ServiceModel {
 	 * @param serviceName name of the NLP service
 	 * @return XML representation of the specified service
 	 */
-	public String getXML(String serviceName) {
+	public String getXML(final String serviceName) {
 		ServiceInfoForClient serviceObject = null;
 		StringBuilder xml = new StringBuilder();
 
@@ -111,7 +115,7 @@ public class ServiceModel {
 	 * @param service NLP service object
 	 * @return partial URI for the service
 	 */
-	private String getLink(ServiceInfoForClient service){
+	private String getLink(final ServiceInfoForClient service){
 		return "/services/" + replace(service.getServiceName());
 	}
 
