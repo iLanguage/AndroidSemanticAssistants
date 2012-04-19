@@ -34,6 +34,7 @@ import com.sun.star.frame.XDesktop;
 import com.sun.star.frame.XModel;
 import com.sun.star.frame.XController;
 import com.sun.star.frame.XComponentLoader;
+import com.sun.star.frame.FrameSearchFlag;
 
 import com.sun.star.text.XTextDocument;
 import com.sun.star.text.XTextRange;
@@ -211,16 +212,7 @@ public class UNOUtils
      */
     public static boolean createNewDoc( final XComponentContext ctx, final File f )
     {
-        String url;
-        try {
-            url = "file://" + f.getCanonicalPath();
-        } catch( final Exception ex ) {
-            System.out.println("WARNING: Corrupted URL, using empty instead.");
-            url = "";
-        }
-
-        return loadDoc(ctx, url) == null ? false : true;
-//        return loadDoc(ctx, f.toURI().toString()) == null ? false : true;
+        return loadDoc(ctx, f.toURI().toString()) == null ? false : true;
     }
 
     /**
@@ -248,7 +240,8 @@ public class UNOUtils
             // Retrieve any existing frames with the same URL, 
             // else create new ones.
             comp = xComponentLoader.loadComponentFromURL(
-               normURL, "_default", 0, new PropertyValue[0]);
+               normURL, "_default", FrameSearchFlag.CREATE, new PropertyValue[0]);
+
          } catch( final com.sun.star.io.IOException ex ) {
             System.err.println("Invalid URL <"+ url +">"); 
             ex.printStackTrace();
