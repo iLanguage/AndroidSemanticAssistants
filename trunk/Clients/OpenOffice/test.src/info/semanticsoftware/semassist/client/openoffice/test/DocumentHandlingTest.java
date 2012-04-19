@@ -1,14 +1,15 @@
 package info.semanticsoftware.semassist.client.openoffice.test;
 
 // Tested Code
-import info.semanticsoftware.semassist.client.openoffice.utils.*;
+import info.semanticsoftware.semassist.client.openoffice.utils.UNOUtils;
 
 // JUnit
 import org.junit.*;
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 
 // Open Office Lib
-import com.sun.star.uno.XComponentContext;
 import com.sun.star.uno.XComponentContext;
 import com.sun.star.comp.helper.Bootstrap;
 import com.sun.star.lang.XMultiComponentFactory;
@@ -17,7 +18,9 @@ import com.sun.star.bridge.XUnoUrlResolver;
 import com.sun.star.beans.XPropertySet;
 import com.sun.star.uno.UnoRuntime;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 
 
 public class DocumentHandlingTest {
@@ -76,7 +79,7 @@ public class DocumentHandlingTest {
    public void testCreateDoc2() throws Exception {
       testCreateDoc("dir with spaces"+ File.separator +"test.txt");
    }
-   private final void testCreateDoc(final String testfile) {
+   private void testCreateDoc(final String testfile) {
       // Attempt to load a document in OpenOffice from a file that does
       // not exist. Any 'Invalid Properties' stack trace in std err are
       // informative details of handled exceptions & are irrelevant for
@@ -90,7 +93,7 @@ public class DocumentHandlingTest {
 
    // HELPER METHODS //
 
-   private final File makeTestFile(final String filename, final String txt) {
+   private File makeTestFile(final String filename, final String txt) {
       final File file = new File(filename);
       file.deleteOnExit();
       
