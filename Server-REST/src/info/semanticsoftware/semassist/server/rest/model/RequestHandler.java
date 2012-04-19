@@ -27,72 +27,98 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-public class RequestHandler extends DefaultHandler{
-	// ===========================================================
-	// Fields
-	// ===========================================================
+	public class RequestHandler extends DefaultHandler{
 
+	/** The <serviceName> XML element representing an NLP service name. */
 	private boolean serviceNameTag = false;
+
+	/** The <input> XML element representing representing the input text. */
 	private boolean inputTag = false;
+
+	/** The <userName> XML element representing a user. */
 	private boolean usernameTag = false;
+
+	/** The <password> XML element representing a user's password. */
 	private boolean passwordTag = false;
+
+	/** The <sessionKey> XML element representing a shared secret key. */
 	private boolean sessionKeyTag = false;
+
+	/** The <serviceIV> XML element representing the session key initialization vector. */
 	private boolean sessionIVTag = false;
+
+	/** Contains the <serviceName> node value. */
 	private String serviceName;
+
+	/** Contains the <input> node value. */
 	private String input;
+
+	/** Contains the <userName> node value. */
 	private String username;
+
+	/** Contains the <password> node value. */
 	private String password;
+
+	/** Contains the <sessionKey> node value. */
 	private String sessionKey;
+
+	/** Contains the <sessionIV> node value. */
 	private String sessionIV;
 
-	// ===========================================================
-	// Getter & Setter
-	// ===========================================================
-
+	/** Returns the service name specified in the request. 
+	 * @return service name*/
 	public String getServiceName(){
 		return this.serviceName;
 	}
 
+	/** Returns the input specified in the request. 
+	 * @return input string */
 	public String getInput(){
 		return this.input;
 	}
 
+	/** Returns the username specified in the request. 
+	 * @return username */
 	public String getUsername(){
 		return this.username;
 	}
 
-
+	/** Returns the password specified in the request. 
+	 * @return password */
 	public String getPassword(){
 		return this.password;
 	}
 
+	/** Returns the session key specified in the request. 
+	 * @return session key string representation */
 	public String getSessionKeyString(){
 		return this.sessionKey;
 	}
 
+	/** Returns the session IV specified in the request. 
+	 * @return session key IV string representation */
 	public String getSessionIVString(){
 		return this.sessionIV;
 	}
 
-	// ===========================================================
-	// Methods
-	// ===========================================================
+	/** Gets invoked when parsing a request is initiated. */
 	@Override
 	public void startDocument() throws SAXException {
 		System.out.println("Started parsing service request");
-
 	}
 
+	/** Gets invoked when parsing a request is finished. */
 	@Override
 	public void endDocument() throws SAXException {
-		// Nothing to do
 		System.out.println("Finished parsing service request");
 	}
 
-	/** Gets called on opening tags like:
-	 * <tag>
-	 * Can provide attribute(s), when xml was like:
-	 * <tag attribute="attributeValue">*/
+	/** Gets called on opening tags like <tag>.
+	 * It can also provide attribute(s), e.g., <tag attribute="attributeValue">
+	 * @param namespaceURI namespace used for the node
+	 * @param localName node's local name in the document
+	 * @param qName nodes' qualified name
+	 * @param atts node's attributes */
 	@Override
 	public void startElement(String namespaceURI, String localName,String qName, Attributes atts) throws SAXException {
 		if (qName.equals("serviceName")) {
@@ -109,8 +135,11 @@ public class RequestHandler extends DefaultHandler{
 			this.sessionIVTag = true;
 		}
 	}
-	/** Gets called on closing tags like:
-	 * </tag> */
+
+	/** Gets called on closing tags like </tag>.
+	 * @param namespaceURI namespace used for the node
+	 * @param localName node's local name in the document
+	 * @param qName node's qualifed name */
 	@Override
 	public void endElement(String namespaceURI, String localName, String qName) throws SAXException {
 		if (qName.equals("serviceName")) {
@@ -128,8 +157,10 @@ public class RequestHandler extends DefaultHandler{
 		}
 	}
 
-	/** Gets called on the following structure:
-	 * <tag>characters</tag> */
+	/** Gets called on the following structure: <tag>characters</tag>.
+	 * @param ch char array representing the node content
+	 * @param start start offset in the array
+	 * @param length length of the content in the array */
 	@Override
 	public void characters(char[] ch, int start, int length) {
 		if(this.serviceNameTag){
