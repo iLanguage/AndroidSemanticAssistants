@@ -30,6 +30,30 @@ public class ObjectFactory {
     }
 
     /**
+     * Create an instance of {@link ServiceInfoForClientArray }
+     * 
+     */
+    public ServiceInfoForClientArray createServiceInfoForClientArray() {
+        return new ServiceInfoForClientArray();
+    }
+
+    /**
+     * Create an instance of {@link ServiceInfoForClient }
+     * 
+     */
+    public ServiceInfoForClient createServiceInfoForClient() {
+        return new ServiceInfoForClient();
+    }
+
+    /**
+     * Create an instance of {@link UserContext }
+     * 
+     */
+    public UserContext createUserContext() {
+        return new UserContext();
+    }
+
+    /**
      * Create an instance of {@link GateRuntimeParameter }
      * 
      */
@@ -46,35 +70,11 @@ public class ObjectFactory {
     }
 
     /**
-     * Create an instance of {@link ServiceInfoForClient }
-     * 
-     */
-    public ServiceInfoForClient createServiceInfoForClient() {
-        return new ServiceInfoForClient();
-    }
-
-    /**
-     * Create an instance of {@link ServiceInfoForClientArray }
-     * 
-     */
-    public ServiceInfoForClientArray createServiceInfoForClientArray() {
-        return new ServiceInfoForClientArray();
-    }
-
-    /**
      * Create an instance of {@link GateRuntimeParameterArray }
      * 
      */
     public GateRuntimeParameterArray createGateRuntimeParameterArray() {
         return new GateRuntimeParameterArray();
-    }
-
-    /**
-     * Create an instance of {@link UserContext }
-     * 
-     */
-    public UserContext createUserContext() {
-        return new UserContext();
     }
 
 }

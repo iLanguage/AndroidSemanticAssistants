@@ -19,8 +19,8 @@ import net.java.dev.jaxb.array.StringArray;
 @WebService(name = "SemanticServiceBroker", targetNamespace = "http://server.semassist.semanticsoftware.info/")
 @SOAPBinding(style = SOAPBinding.Style.RPC)
 @XmlSeeAlso({
-    net.java.dev.jaxb.array.ObjectFactory.class,
-    info.semanticsoftware.semassist.server.ObjectFactory.class
+    info.semanticsoftware.semassist.server.ObjectFactory.class,
+    net.java.dev.jaxb.array.ObjectFactory.class
 })
 public interface SemanticServiceBroker {
 
