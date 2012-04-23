@@ -17,7 +17,7 @@ import javax.xml.ws.WebServiceFeature;
  * Generated source version: 2.1
  * 
  */
-@WebServiceClient(name = "SemanticServiceBrokerService", targetNamespace = "http://server.semassist.semanticsoftware.info/", wsdlLocation = "http://assistant.cs.concordia.ca:8879/SemAssist?wsdl")
+@WebServiceClient(name = "SemanticServiceBrokerService", targetNamespace = "http://server.semassist.semanticsoftware.info/", wsdlLocation = "http://minion.cs.concordia.ca:8879/SemAssist?wsdl")
 public class SemanticServiceBrokerService
     extends Service
 {
@@ -30,9 +30,9 @@ public class SemanticServiceBrokerService
         try {
             URL baseUrl;
             baseUrl = info.semanticsoftware.semassist.server.SemanticServiceBrokerService.class.getResource(".");
-            url = new URL(baseUrl, "http://assistant.cs.concordia.ca:8879/SemAssist?wsdl");
+            url = new URL(baseUrl, "http://minion.cs.concordia.ca:8879/SemAssist?wsdl");
         } catch (MalformedURLException e) {
-            logger.warning("Failed to create URL for the wsdl Location: 'http://assistant.cs.concordia.ca:8879/SemAssist?wsdl', retrying as a local file");
+            logger.warning("Failed to create URL for the wsdl Location: 'http://minion.cs.concordia.ca:8879/SemAssist?wsdl', retrying as a local file");
             logger.warning(e.getMessage());
         }
         SEMANTICSERVICEBROKERSERVICE_WSDL_LOCATION = url;
