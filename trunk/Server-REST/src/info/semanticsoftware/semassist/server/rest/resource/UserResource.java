@@ -75,7 +75,7 @@ public class UserResource extends ServerResource{
 	 * @return string representation of authentication result
 	 */
 	@Post
-	public StringRepresentation authenticate(Representation representation){
+	public StringRepresentation authenticate(final Representation representation){
 		StringRepresentation result = null;
 		try {
 			String authRequest = representation.getText();

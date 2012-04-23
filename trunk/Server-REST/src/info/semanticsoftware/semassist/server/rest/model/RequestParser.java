@@ -54,7 +54,7 @@ public class RequestParser {
 
 	/** Public constructor.
 	 * @param representation user request's XML representation*/
-	public RequestParser(String representation){
+	public RequestParser(final String representation){
 		requestRepresentation = representation;
 	}
 

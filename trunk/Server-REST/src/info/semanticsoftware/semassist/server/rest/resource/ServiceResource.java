@@ -69,7 +69,7 @@ public class ServiceResource extends ServerResource{
 	 * @return string representation of the server response
 	 * */
 	@Post
-	public StringRepresentation invoke(Representation representation){
+	public StringRepresentation invoke(final Representation representation){
 		try {
 			System.out.println("Request Content-Length size: " + representation.getSize() + " bytes.");
 			String request = representation.getText();
