@@ -1,4 +1,4 @@
-/*	
+/*
 Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
@@ -42,6 +42,9 @@ public class ServiceAgentSingleton
 	/** Port number value */
 	private static String serverPort = "2011";
 
+	/** Returns the class singleton object.
+	 * @return Semantic Assistants broker 
+	 */
 	public static synchronized SemanticServiceBroker getInstance()
 	{
 		try {
@@ -74,21 +77,19 @@ public class ServiceAgentSingleton
 	}
 
 	/**
-	 * Sets the host name with the value provided
-	 *
+	 * Sets the host name with the value provided.
 	 * @param value The value provided as host name
 	 * */
 	public static void setServerHost(final String value)
 	{
-	   serverHost = value;
+		serverHost = value;
 	}
 
 	/**
-	 * Sets the port number with the value provided
-	 *
+	 * Sets the port number with the value provided.
 	 * @param value The value provided as port number
 	 * */
-	public static void setServerPort(final String value )
+	public static void setServerPort(final String value)
 	{
 		serverPort = value;
 	}

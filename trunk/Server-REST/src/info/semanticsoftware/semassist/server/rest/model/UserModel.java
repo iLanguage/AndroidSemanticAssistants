@@ -1,4 +1,4 @@
-/*	
+/*
 Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
@@ -28,12 +28,15 @@ import java.util.Iterator;
 import info.semanticsoftware.semassist.server.ServiceInfoForClient;
 import info.semanticsoftware.semassist.server.core.security.authentication.AuthenticationUtils;
 
+/** Provides a representation of a user in the system.
+ * @author Bahar Sateli
+ */
 public class UserModel {
 
+	/** Services iterator object.*/
 	Iterator<ServiceInfoForClient> iterator = null;
 
 	public UserModel(){
-
 	}
 
 	/**

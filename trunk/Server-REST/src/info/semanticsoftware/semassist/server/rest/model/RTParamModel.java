@@ -42,13 +42,13 @@ public class RTParamModel {
 		System.out.println(service.getServiceName() + " has " + paramsList.size() + " params.");
 		StringBuffer buffer = new StringBuffer();
 		buffer.append("<RTParams>");
-			
+
 		for(GateRuntimeParameter param: paramsList){
-			buffer.append(getXML(param));	
+			buffer.append(getXML(param));
 		}
-		
+
 		buffer.append("</RTParams>");
-        return buffer.toString();
+		return buffer.toString();
 	}
 
 	/**

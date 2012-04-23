@@ -1,4 +1,4 @@
-/*	
+/*
 Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
@@ -44,18 +44,30 @@ import org.apache.commons.codec.binary.Base64;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
+/**
+ * Parses a request XML message and executes an invocation call
+ * to the Semantic Assistants server.
+ * @author Bahar Sateli 
+ * */
 public class RequestParser {
 	private String requestRepresentation = null;
 
+	/** Public constructor.
+	 * @param representation user request's XML representation*/
 	public RequestParser(String representation){
 		requestRepresentation = representation;
 	}
 
+	/**
+	 * Parses a request and executes an invocation call
+	 * to the Semantic Assistants server.
+	 * @return server's XML response
+	 * */
 	public String executeRequest(){
-		try { 
-			SAXParserFactory spf = SAXParserFactory.newInstance(); 
-			SAXParser sp = spf.newSAXParser(); 
-			XMLReader xr = sp.getXMLReader(); 
+		try {
+			SAXParserFactory spf = SAXParserFactory.newInstance();
+			SAXParser sp = spf.newSAXParser();
+			XMLReader xr = sp.getXMLReader();
 
 			/* Create a new ContentHandler and apply it to the XML-Reader*/
 			RequestHandler handler = new RequestHandler();
@@ -74,11 +86,6 @@ public class RequestParser {
 			System.out.println("Ecnrypted input is: " + encryptedText);
 
 			// STEP 1: Decrypt the session key using the user's private key
-			//String sessionKeyString = handler.getSessionKeyString();
-			//byte[] sessionKeyByte = Base64.decodeBase64(sessionKeyString);
-
-			/********** DBG *********/
-
 			String modulus = AuthenticationUtils.getInstance().getModulusString(handler.getUsername());
 			String priPart = AuthenticationUtils.getInstance().getPrivateKeyString(handler.getUsername());
 
@@ -86,10 +93,11 @@ public class RequestParser {
 			KeyFactory fact = KeyFactory.getInstance("RSA");
 			PrivateKey priKey = fact.generatePrivate(newSpec);
 
+			//FIXME
 			String test = requestRepresentation.substring(requestRepresentation.indexOf("<sessionKey>")+"<sessionKey>".length());
 			test = test.substring(0, test.indexOf("</sessionKey>")).trim();
 
-			System.out.println("Encrypted sessionKey: *"+test+"*");
+			System.out.println("Encrypted sessionKey: "+test);
 
 			byte[] decryptedSessionKey = EncryptionUtils.getInstance().decryptSessionKey(test,priKey);
 			System.out.println("Decrypted sessionKey: " + decryptedSessionKey);
@@ -97,14 +105,16 @@ public class RequestParser {
 			String sessionIV = handler.getSessionIVString();
 			byte[] ivByte = Base64.decodeBase64(sessionIV);
 
+			//STEP 2: Decrypt the input text using the session key
 			String plainText = new String(EncryptionUtils.getInstance().decryptInputData(encryptedText, decryptedSessionKey, ivByte));
-
 			System.out.println("Decrypted input is: " + plainText);
+
+			//STEP 3: Execute the request
 			urilist.getUriList().add("#literal");
 			content.getItem().add(plainText.trim());
 
 			String results = ServiceAgentSingleton.getInstance().invokeService(handler.getServiceName(), urilist, content, 0L, new GateRuntimeParameterArray(), new UserContext());
-			System.out.println("results" + results); 
+			System.out.println("results" + results);
 			return results;
 		} catch (Exception e) {
 			e.printStackTrace();

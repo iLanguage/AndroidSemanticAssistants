@@ -1,4 +1,4 @@
-/*	
+/*
 Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
@@ -32,6 +32,10 @@ import org.restlet.Restlet;
 import org.restlet.routing.Router;
 import org.restlet.Context;
 
+/**
+ * Restlet main class.
+ * @author Bahar Sateli
+ * */
 public class SemAssist extends Application {
 
 	public SemAssist(Context parentContext) {

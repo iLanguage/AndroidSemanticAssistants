@@ -1,4 +1,4 @@
-/*	
+/*
 Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
@@ -31,8 +31,14 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.Get;
 import org.restlet.resource.ServerResource;
 
+/** Router class to execute service inquiry requests.
+ * @author Bahar Sateli
+ */
 public class ServicesResource extends ServerResource{
 
+	/** Handles HTTP GET requests. Returns an XML
+	 * representation of the available services.
+	 * @return XML representation of available services */
 	@Get("xml")
 	public Representation getXML() {
 		String xml = new ServiceModel().getAllXML();
