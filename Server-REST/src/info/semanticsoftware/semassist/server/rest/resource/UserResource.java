@@ -1,4 +1,4 @@
-/*	
+/*
 Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
@@ -45,8 +45,15 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.XMLReader;
 
+/** Router class to execute user requests.
+ * @author Bahar Sateli
+ */
 public class UserResource extends ServerResource{
 
+	/** Handles HTTP GET requests. Returns an XML
+	 * representation of an authenticated user.
+	 * @return XML representation of a user
+	 */
 	@Get("xml")
 	public Representation getXML() {
 		String userName = (String) getRequest().getAttributes().get("userName");
@@ -62,6 +69,11 @@ public class UserResource extends ServerResource{
 		}
 	}
 
+	/** Handles HTTP POST requests. Returns the results
+	 * of a user authentication process.
+	 * @param representation user representation 
+	 * @return string representation of authentication result
+	 */
 	@Post
 	public StringRepresentation authenticate(Representation representation){
 		StringRepresentation result = null;
@@ -76,11 +88,11 @@ public class UserResource extends ServerResource{
 			RequestHandler handler = new RequestHandler();
 			xr.setContentHandler(handler);
 
-            /* Parse the XML data from the request string */
-            xr.parse(new InputSource(new StringReader(authRequest)));
+			/* Parse the XML data from the request string */
+			xr.parse(new InputSource(new StringReader(authRequest)));
 
-            String username = handler.getUsername();
-            String password = handler.getPassword();
+			String username = handler.getUsername();
+			String password = handler.getPassword();
 
 			AuthenticationUtils authUtil = AuthenticationUtils.getInstance();
 			if(authUtil.authenticateUser(username, password)){
