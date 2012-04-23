@@ -38,7 +38,10 @@ import org.restlet.Context;
  * */
 public class SemAssist extends Application {
 
-	public SemAssist(Context parentContext) {
+	/** Restlet constructor.
+	 * @param parentContext application context
+	 */
+	public SemAssist(final Context parentContext) {
 		super(parentContext);
 	}
 

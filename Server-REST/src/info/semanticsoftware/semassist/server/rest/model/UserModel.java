@@ -44,7 +44,7 @@ public class UserModel {
 	 * @param userName username
 	 * @return XML representation of the specified user with public key value or null
 	 */
-	public String getXML(String userName) {
+	public String getXML(final String userName) {
 		StringBuilder xml = new StringBuilder();
 		xml.append("<user>");
 		xml.append("<userName>").append(userName).append("</userName>");
@@ -59,7 +59,7 @@ public class UserModel {
 	 * @param userName username
 	 * @return partial URI for the user
 	 */
-	private String getLink(String userName){
+	private String getLink(final String userName){
 		return "/users/" + userName;
 	}
 

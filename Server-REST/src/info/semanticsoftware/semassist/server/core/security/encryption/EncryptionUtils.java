@@ -102,7 +102,7 @@ public class EncryptionUtils {
 	 * @param pair a key-pair
 	 * @return PublicKey or null
 	 */
-	public PublicKey getPublicKey(KeyPair pair){
+	public PublicKey getPublicKey(final KeyPair pair){
 		PublicKey pubKey = null;
 		try {
 			PublicKey publicKey = pair.getPublic();
@@ -123,7 +123,7 @@ public class EncryptionUtils {
 	 * @param pair a key-pair
 	 * @return PrivateKey or null
 	 */
-	public PrivateKey getPrivateKey(KeyPair pair){
+	public PrivateKey getPrivateKey(final KeyPair pair){
 		PrivateKey priKey = null;
 		try {
 			PrivateKey privateKey = pair.getPrivate();
@@ -142,21 +142,21 @@ public class EncryptionUtils {
 	/** Gets the modulus part of the provided publickey.
 	 * @param key the PublicKey
 	 * @return Big integer representation of the modulus */
-	public BigInteger getModulus(PublicKey key){
+	public BigInteger getModulus(final PublicKey key){
 		return pubKeySpec.getModulus();
 	}
 
 	/** Gets the public exponent of the provided publickey.
 	 * @param key the PublicKey
 	 * @return Big integer representation of the public exponent */
-	public BigInteger getPubEx(PublicKey key){
+	public BigInteger getPubEx(final PublicKey key){
 		return pubKeySpec.getPublicExponent();
 	}
 
 	/** Gets the private exponent of the provided privatekey.
 	 * @param key the PrivateKey
 	 * @return Big integer representation of the private exponent */
-	public BigInteger getPriEx(PrivateKey key){
+	public BigInteger getPriEx(final PrivateKey key){
 		return priKeySpec.getPrivateExponent();
 	}
 
@@ -166,7 +166,7 @@ public class EncryptionUtils {
 	 * @param siv session key initialization vector
 	 * @return decrypted input string 
 	 */
-	public String decryptInputData(String input, byte[] sessionKey, byte[] siv){
+	public String decryptInputData(String input, final byte[] sessionKey, final byte[] siv){
 		String decryptedText = null;
 		try {
 			Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
@@ -197,7 +197,7 @@ public class EncryptionUtils {
 	 * @param cipherData encrypted session key string
 	 * @param key the private key to use
 	 * @return decrypted session key in a byte array */
-	public byte[] decryptSessionKey(String cipherData, PrivateKey key){
+	public byte[] decryptSessionKey(String cipherData, final PrivateKey key){
 		byte[] original = null;
 		try {
 			Cipher cipher;
@@ -220,7 +220,7 @@ public class EncryptionUtils {
 		return original;
 	}
 
-	public String decryptTest(String test, PrivateKey key) {
+	public String decryptTest(String test, final PrivateKey key) {
 		try {
 			Cipher cipher;
 			cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
