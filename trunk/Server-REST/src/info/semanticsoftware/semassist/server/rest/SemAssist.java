@@ -44,6 +44,10 @@ public class SemAssist extends Application {
 	public SemAssist(final Context parentContext) {
 		super(parentContext);
 	}
+	
+	public SemAssist(){
+		super();
+	}
 
 	/** Defines the routers for incoming request URLs.
 	 * @return the defined router object */
