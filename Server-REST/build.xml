@@ -81,10 +81,30 @@
   </target>
   
   <target name="compile" depends="resolve" description="Compile the source" >
-      <javac srcdir="${src.dir}" debug="true" debuglevel="lines,vars,source" destdir="${web.dir}/classes">
+      <javac srcdir="${src.dir}" debug="true" debuglevel="lines,vars,source" destdir="${web.dir}/classes" includeantruntime="${antruntime}">
       	<!--compilerarg value="${compile.args}"/-->
           <classpath refid="compile.classpath" />
       </javac>
+  </target>
+  
+  <target name="jar" depends="compile" description="Creates an executable JAR">
+       <mkdir dir="${dist.dir}/temp"/>
+       <copy todir="${dist.dir}/temp/">
+       	<fileset dir="${web.dir}/classes"/>
+       </copy>
+       <path id="manifest.classpath">
+       	<fileset dir="${lib.dir}" includes="**/*.jar"/>
+       </path>
+       <manifestclasspath property="jar.classpath" jarfile="${dist.dir}/SA-REST.jar">
+    	<classpath refid="manifest.classpath"/>
+    	</manifestclasspath>  
+  	<jar destfile="${dist.dir}/SA-REST.jar" basedir="${dist.dir}/temp" update="true">
+       <manifest>
+      	<attribute name="Main-Class" value="info.semanticsoftware.semassist.server.rest.Bootstrap"/>
+      	<attribute name="Class-Path" value="${jar.classpath}"/>
+       </manifest>
+  	</jar>
+  	<delete dir="${dist.dir}/temp"/>
   </target>
   
    <target name="pack" depends="compile" description="Package all files in a WAR">
