@@ -11,6 +11,5 @@ public class SemanticAssistantsBroadcastReceiver extends BroadcastReceiver{
 	public void onReceive(Context arg0, Intent arg1) {
 		Log.i("Broadcast", "received");
 	}
-	
 
 }

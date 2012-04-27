@@ -15,17 +15,17 @@ import android.widget.TableRow;
 import android.widget.TextView;
 
 public class SemanticResultsActivity extends Activity {
-	
+
 	TableLayout tblResults;
-	
+
 	@Override
-    public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-        setContentView(R.layout.results);
-		
+		setContentView(R.layout.results);
+
 		tblResults = (TableLayout) findViewById(R.id.tblResultsLayout);
 		tblResults.setStretchAllColumns(true);
-		
+
 		TableRow resultRow;
 		TextView txtContent;
 		TextView txtType;
@@ -33,43 +33,42 @@ public class SemanticResultsActivity extends Activity {
 		TextView txtEnd;
 		TextView txtFeats;
 		String resultsXML = getIntent().getStringExtra("xml");
-    	
-    	Vector<SemanticServiceResult> results = ClientUtils.getServiceResults(resultsXML);
+
+		Vector<SemanticServiceResult> results = ClientUtils.getServiceResults(resultsXML);
 		for(SemanticServiceResult current: results){
 			if (current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
 				List<AnnotationInstance> annots = ServerResponseHandler.createAnnotation(current);
 				for(int i=0; i < annots.size(); i++){
 					resultRow = new TableRow(getApplicationContext());
-					
+
 					txtContent = new TextView(getApplicationContext());
 					txtContent.setText(annots.get(i).getContent());
 					txtContent.setTextAppearance(getApplicationContext(), R.style.normalText);
 					resultRow.addView(txtContent);
-					
+
 					txtType = new TextView(getApplicationContext());
 					txtType.setText(annots.get(i).getType());
 					txtType.setTextAppearance(getApplicationContext(), R.style.normalText);
 					resultRow.addView(txtType);
-					
+
 					txtStart = new TextView(getApplicationContext());
 					txtStart.setText(annots.get(i).getStart());
 					txtStart.setTextAppearance(getApplicationContext(), R.style.normalText);
 					resultRow.addView(txtStart);
-					
+
 					txtEnd = new TextView(getApplicationContext());
 					txtEnd.setText(annots.get(i).getEnd());
 					txtEnd.setTextAppearance(getApplicationContext(), R.style.normalText);
 					resultRow.addView(txtEnd);
-					
+
 					txtFeats = new TextView(getApplicationContext());
 					txtFeats.setText(annots.get(i).getFeatures());
 					txtFeats.setTextAppearance(getApplicationContext(), R.style.normalText);
-					resultRow.addView(txtFeats);					
-					
+					resultRow.addView(txtFeats);
+
 					tblResults.addView(resultRow);
 				}
 			}
 		}
-    	
 	}
 }

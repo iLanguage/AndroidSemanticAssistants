@@ -17,24 +17,22 @@ import javax.crypto.spec.SecretKeySpec;
 
 import android.util.Base64;
 
-
 public class EncryptionUtils {
-	
+
 	private static EncryptionUtils instance = null;
 	private byte[] siv = null;
-	
+
 	protected EncryptionUtils(){
 		// defeat instantiation
 	}
-	
+
 	public static EncryptionUtils getInstance(){
 		if (instance == null){
 			instance = new EncryptionUtils();
 		}
-		
 		return instance;
 	}
-	
+
 	/**
 	 * Returns a 128-bit symmetric key for server-side encryption
 	 * @return a random key byte array or null if exception is thrown
@@ -44,7 +42,7 @@ public class EncryptionUtils {
 		try{
 			KeyGenerator keyGen = KeyGenerator.getInstance("AES");
 			keyGen.init(128);
-			
+
 			SecretKey secretKey = keyGen.generateKey();
 			key = secretKey.getEncoded();
 			return key;
@@ -63,7 +61,7 @@ public class EncryptionUtils {
 			siv = cipher.getIV();
 			encryptedText = cipher.doFinal(input.getBytes("UTF-8"));
 			return Base64.encodeToString(encryptedText, Base64.DEFAULT);
-			
+
 		} catch (InvalidKeyException e) {
 			e.printStackTrace();
 		} catch (IllegalBlockSizeException e) {
@@ -76,22 +74,20 @@ public class EncryptionUtils {
 			e.printStackTrace();
 		} catch (NoSuchPaddingException e) {
 			e.printStackTrace();
-		}	
+		}
 		return "";
 	}
-	
+
 	public String getIV(){
 		return Base64.encodeToString(siv, Base64.DEFAULT);
 	}
-	
-	//////////////////
-	
+
 	public String encryptSessionKey(byte[] sessionKey){
 		String encryptedSessionKeyString = null;
 		//STEP 1: Get the public key component and create it from configuration
 		PrefUtils prefUtils = PrefUtils.getInstance();
 		PublicKey pubKey = prefUtils.getPublicKey();
-		
+
 		//STEP 2: Use the public key to encrypt the secret session key
 		try {
 			/*
@@ -107,7 +103,7 @@ public class EncryptionUtils {
 			encryptedSessionKeyString = Base64.encodeToString(cipherDataBytes, Base64.DEFAULT);
 			System.out.println("dbg: " + encryptedSessionKeyString);
 			return encryptedSessionKeyString;
-		} catch (NoSuchPaddingException e) {	
+		} catch (NoSuchPaddingException e) {
 			e.printStackTrace();
 		} catch (InvalidKeyException e) {
 			e.printStackTrace();
@@ -126,13 +122,13 @@ public class EncryptionUtils {
 		PublicKey pubKey = prefUtils.getPublicKey();
 		System.out.println("PublicKey remade: " + pubKey);
 		try {
-			
+
 			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");
 			cipher.init(Cipher.ENCRYPT_MODE,pubKey);
 			byte[] cipherDataBytes = cipher.doFinal("This is a test".getBytes("UTF-8"));
 			String encryptedSessionKeyString = Base64.encodeToString(cipherDataBytes, Base64.DEFAULT);
 			return encryptedSessionKeyString;
-		} catch (NoSuchPaddingException e) {	
+		} catch (NoSuchPaddingException e) {
 			e.printStackTrace();
 		} catch (InvalidKeyException e) {
 			e.printStackTrace();
@@ -143,10 +139,8 @@ public class EncryptionUtils {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
 		return null;
 	}
 
@@ -155,7 +149,7 @@ public class EncryptionUtils {
 		//STEP 1: Get the public key component and create it from configuration
 		PrefUtils prefUtils = PrefUtils.getInstance();
 		PublicKey pubKey = prefUtils.getPublicKey();
-		
+
 		//STEP 2: Use the public key to encrypt the secret session key
 		try {
 			/*
@@ -170,7 +164,7 @@ public class EncryptionUtils {
 			byte[] cipherDataBytes = cipher.doFinal(sessionKey);
 			encryptedSessionKeyString = Base64.encodeToString(cipherDataBytes, Base64.DEFAULT);
 			return encryptedSessionKeyString;
-		} catch (NoSuchPaddingException e) {	
+		} catch (NoSuchPaddingException e) {
 			e.printStackTrace();
 		} catch (InvalidKeyException e) {
 			e.printStackTrace();
@@ -183,5 +177,4 @@ public class EncryptionUtils {
 		}
 		return encryptedSessionKeyString;
 	}
-	
 }

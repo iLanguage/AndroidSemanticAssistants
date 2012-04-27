@@ -64,7 +64,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        getServerSettings();
 	        
 	        getServicesTask task = new getServicesTask();
-	        String temp = serverURL + "/SemAssistRestlet/services";
+	        String temp = serverURL + "/services";
 	        Log.i(TAG, "Retrieving services..." + temp);
 	        task.execute(temp);
 
@@ -196,25 +196,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 	        
 	        btnInvoke.setOnClickListener(new View.OnClickListener(){
 	        	public void onClick(View v) {
-	            	RequestRepresentation request = new RequestRepresentation(selectedService, null, txtInput.getText().toString());
-	            	Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
-	            	String uri = serverURL + "/SemAssistRestlet/services/" + selectedService;
-	            	Log.i(TAG, "sending POST via Restlet to " + uri);
-	            	Representation response = new ClientResource(uri).post(representation);
-	            	//Representation response = new ClientResource(serverURL + "/SemAssistRestlet/services/" + selectedService).post(representation);
-	                try {
-	                	StringWriter writer = new StringWriter();
-	                	response.write(writer);
-	                	String responseString = writer.toString();
-	                	System.out.println(responseString);
-
-	                	Intent intent = new Intent(getBaseContext(), SemanticResultsActivity.class);
-	                	intent.putExtra("xml", responseString);
-	                	Log.i(TAG, "Parsing server response: " + responseString);
-	                    startActivity(intent);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}   
+	            	new InvocationTask().execute();
 	            }
 	        });
 	        
@@ -321,4 +303,31 @@ public class SemanticAssistantsActivity extends ListActivity{
 				}
 			}
 		}*/
+	    class InvocationTask extends AsyncTask<Void, Void, Void>{
+	    	String responseString = null;
+			@Override
+			protected Void doInBackground(Void... params) {
+				RequestRepresentation request = new RequestRepresentation(selectedService, null, txtInput.getText().toString());
+            	Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
+            	String uri = serverURL + "/services/" + selectedService;
+            	Log.i(TAG, "sending POST via Restlet to " + uri);
+            	Representation response = new ClientResource(uri).post(representation);
+            	//Representation response = new ClientResource(serverURL + "/SemAssistRestlet/services/" + selectedService).post(representation);
+                try {
+                	StringWriter writer = new StringWriter();
+                	response.write(writer);
+                	responseString = writer.toString();
+                	System.out.println(responseString);
+
+                	Intent intent = new Intent(getBaseContext(), SemanticResultsActivity.class);
+                	intent.putExtra("xml", responseString);
+                	Log.i(TAG, "Parsing server response: " + responseString);
+                    startActivity(intent);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}   
+                return null;
+			}
+	    	
+	    }
 }

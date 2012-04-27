@@ -62,7 +62,9 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity{
         
         String request = "<authenticate><username>" + username + "</username><password>" + password + "</password></authenticate>";
 		Representation representation = new StringRepresentation(request,MediaType.APPLICATION_XML);
-    	String uri = serverURL + "/SemAssistRestlet/user";
+    	
+		String uri = serverURL + "/SemAssistRestlet/user";
+		System.out.println("sending auth req to " + uri);
 		Representation response = new ClientResource(uri).post(representation);
         try {
         	StringWriter writer = new StringWriter();

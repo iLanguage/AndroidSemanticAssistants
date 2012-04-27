@@ -3,19 +3,19 @@ import android.app.Application;
 import android.content.Context;
 
 public class SemAssistApp extends Application {
-    private static SemAssistApp instance;
+	private static SemAssistApp instance;
 
-    public static SemAssistApp getInstance() {
-        return instance;
-    }
+	public static SemAssistApp getInstance() {
+		return instance;
+	}
 
-    public Context getContext(){
-        return instance.getApplicationContext();
-    }
+	public Context getContext(){
+		return instance.getApplicationContext();
+	}
 
-    @Override
-    public void onCreate() {
-        instance = this;
-        super.onCreate();
-    }
+	@Override
+	public void onCreate() {
+		instance = this;
+		super.onCreate();
+	}
 }
