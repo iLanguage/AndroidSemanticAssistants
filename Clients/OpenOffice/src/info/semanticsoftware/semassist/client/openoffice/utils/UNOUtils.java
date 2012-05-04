@@ -807,4 +807,50 @@ public class UNOUtils
 		ServiceAgentSingleton.setServerHost(server.get(0).getAttribute().get(ClientUtils.XML_HOST_KEY));
 	   ServiceAgentSingleton.setServerPort(server.get(0).getAttribute().get(ClientUtils.XML_PORT_KEY));
     }
+
+   /**
+    * Helper method to troubleshoot OpenOffice object properties.
+    *
+    * @param props Property set being explored.
+    *
+    * @see http://wiki.services.openoffice.org/wiki/Documentation/DevGuide/ProUNO/Properties
+    */
+   private static final void printXPropertySet(final XPropertySet props) {
+      try {
+         // get the property info interface of this XPropertySet
+         final com.sun.star.beans.XPropertySetInfo info = props.getPropertySetInfo();
+ 
+         // get all properties (NOT the values) from XPropertySetInfo
+         final com.sun.star.beans.Property[] p = info.getProperties();
+         for (int i = 0; i < p.length; ++i) {
+            System.out.print("Property #" + i);
+            System.out.print(": Name<" + p[i].Name);
+            System.out.print("> Handle<" + p[i].Handle);
+            System.out.print("> " + p[i].Type.toString());
+ 
+            // attributes (flags)
+            System.out.print(" Attributes<");
+            final short nAttribs = p[i].Attributes;
+            if ((nAttribs & com.sun.star.beans.PropertyAttribute.MAYBEVOID) != 0)
+                 System.out.print("MAYBEVOID|");
+            if ((nAttribs & com.sun.star.beans.PropertyAttribute.BOUND) != 0)
+                 System.out.print("BOUND|");
+            if ((nAttribs & com.sun.star.beans.PropertyAttribute.CONSTRAINED) != 0)
+                 System.out.print("CONSTRAINED|");
+            if ((nAttribs & com.sun.star.beans.PropertyAttribute.READONLY) != 0)
+                 System.out.print("READONLY|");
+            if ((nAttribs & com.sun.star.beans.PropertyAttribute.TRANSIENT) != 0)
+                 System.out.print("TRANSIENT|");
+            if ((nAttribs & com.sun.star.beans.PropertyAttribute.MAYBEAMBIGUOUS ) != 0)
+                 System.out.print("MAYBEAMBIGUOUS|");
+            if ((nAttribs & com.sun.star.beans.PropertyAttribute.MAYBEDEFAULT) != 0)
+                 System.out.print("MAYBEDEFAULT|");
+            if ((nAttribs & com.sun.star.beans.PropertyAttribute.REMOVEABLE) != 0)
+                 System.out.print("REMOVEABLE|");
+            System.out.println("0>");
+         }
+     } catch (final Exception ex) {
+         ex.printStackTrace(System.err);
+     }
+  }
 }
