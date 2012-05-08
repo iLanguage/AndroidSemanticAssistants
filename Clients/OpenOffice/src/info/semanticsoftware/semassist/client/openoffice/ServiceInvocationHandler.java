@@ -137,6 +137,12 @@ public class ServiceInvocationHandler implements Runnable
                 return;
             }
 
+            // Clear previously generated annotations by a given pipeline.
+            if (ClientPreferences.isRefreshAnnotations()) {
+               System.out.println("Removing older annotations");
+               UNOUtils.clearDocAnnotations(compCtx, UNOUtils.getCurrentPipeline());
+            }
+
             for( Iterator<SemanticServiceResult> it = results.iterator(); it.hasNext(); )
             {
                 SemanticServiceResult current = it.next();

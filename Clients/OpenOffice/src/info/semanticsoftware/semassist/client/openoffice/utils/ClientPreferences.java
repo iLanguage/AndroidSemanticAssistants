@@ -107,6 +107,22 @@ public abstract class ClientPreferences {
       return getBooleanPreference(PRESENTATION_SIDENOTE, "showContent", false);
    }
 
+   /**
+    * @param status true to refresh existing annotations created by a 
+    *               semantic assistant pipeline on re-invocation, false
+    *               otherwise.
+    */
+   public static void setRefreshAnnotations(final boolean status) {
+      setPreference(RESULT_HANDLING, "refreshAnnotations", Boolean.valueOf(status));
+   }
+
+   /**
+    * @return Flag indicating if existing annotations from a pipeline should
+    *         be deleted prior to displaying new results.
+    */
+   public static boolean isRefreshAnnotations() {
+      return getBooleanPreference(RESULT_HANDLING, "refreshAnnotations", true);
+   }
 
    /**
     * @param status true to allow filtering of empty-valued
