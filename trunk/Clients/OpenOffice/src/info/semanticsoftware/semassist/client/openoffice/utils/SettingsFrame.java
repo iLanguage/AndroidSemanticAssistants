@@ -161,6 +161,9 @@ public class SettingsFrame extends JFrame
                             .addComponent(jCheckBox1))
                         .addGroup(layout.createSequentialGroup()
                             .addContainerGap()
+                            .addComponent(jCheckBox5))
+                        .addGroup(layout.createSequentialGroup()
+                            .addContainerGap()
                             .addComponent(jCheckBox2))
                         .addGroup(layout.createSequentialGroup()
                             .addContainerGap()
@@ -205,6 +208,8 @@ public class SettingsFrame extends JFrame
                     .addComponent(jCheckBox0)
                     .addGap(18, 18, 18)
                     .addComponent(jCheckBox1)
+                    .addGap(18, 18, 18)
+                    .addComponent(jCheckBox5)
                     .addGap(18, 18, 18)
                     .addComponent(jCheckBox2)
                     .addGap(18, 18, 18)
@@ -282,6 +287,11 @@ public class SettingsFrame extends JFrame
         status = jCheckBox1.isSelected();
         System.out.println( "------ Text Highlight: " + (status ? "Enabled" : "Disabled") );
         ClientPreferences.setTextHighlightMode( status );
+ 
+        // Annotation Refresh on pipeline re-invocation option.
+        status = jCheckBox5.isSelected();
+        System.out.println( "------ Annotation Refresh: " + (status ? "Enabled" : "Disabled") );
+        ClientPreferences.setRefreshAnnotations( status );
 
         // Empty feature filtering option.
         status = jCheckBox2.isSelected();
@@ -384,6 +394,8 @@ public class SettingsFrame extends JFrame
       new JCheckBox("Show Annotation Content", ClientPreferences.isShowAnnotationContent());
     private static final JCheckBox jCheckBox4 =
       new JCheckBox("Open HTML results in external Browser", ClientPreferences.isBrowserResultHandling());
+    private static final JCheckBox jCheckBox5 =
+      new JCheckBox("Refresn Annotations on Pipeline Re-Invocation", ClientPreferences.isRefreshAnnotations());
     private static final JTextField jSideNoteFontSizeField =
       new JTextField(Float.toString(ClientPreferences.getSideNoteFontSize()));
     private final JComboBox serversCombo = new JComboBox();

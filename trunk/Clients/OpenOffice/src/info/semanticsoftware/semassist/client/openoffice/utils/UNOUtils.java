@@ -268,7 +268,22 @@ public class UNOUtils
         mxDocFactory = UnoRuntime.queryInterface(
                 XMultiServiceFactory.class, doc );
 
-        createInvisibleCursor(annotation);
+      // Search for the annotation in the document.
+      final XTextRange range = findAnnotation(annotation);
+      if (range == null) {
+         System.err.println("Annotation not found in document.");
+         return;
+      }
+
+      // Position cursor at annotation text occurance.
+      mxAnnotText = range.getText();
+      mxDocCursor = mxAnnotText.createTextCursorByRange(range);
+      mxDocCursor.gotoRange(range, false);
+      mxDocCursor.gotoRange(range, true);
+
+      // TODO: Better encapsulate side-effect depenance on the above global
+      // variables.
+      annotateField(annotation);
     }
 
     /**
@@ -350,7 +365,7 @@ public class UNOUtils
             final XServiceInfo info =
                UnoRuntime.queryInterface(XServiceInfo.class, elem);
 
-            // Remove SemanticAssistant generated annotations.
+            // Only remove SemanticAssistant generated side-notes.
             if (info.supportsService("com.sun.star.text.TextField.Annotation")) {
                final XTextField field = UnoRuntime.queryInterface(XTextField.class, elem); 
                clearAnnotation(txt, field, pipeline);
@@ -360,12 +375,15 @@ public class UNOUtils
          ex.printStackTrace();
       }
    }
+   public static void clearDocAnnotations(final XComponentContext ctx) {
+      clearDocAnnotations(ctx, null);
+   }
 
    /**
     * Removes all semantic assistant pipeline generated annotation from the text.
     *
     * @param txt Text object containing the field.
-    * @param fld Field to be removed.
+    * @param fld Annotation text field (side-note) to be removed.
     * @param pipeline Name of the pipeline that generated the annotation. Null
     *                 to remove annotations from any pipeline.
     *
@@ -375,16 +393,17 @@ public class UNOUtils
       try {
          final XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class, fld);
          final String author = props.getPropertyValue("Author").toString();
-         if (pipeline != null) {
-            // Remove annotations from specific pipelines.
-            if (author.equals(APP +":"+ pipeline)) {
-               txt.removeTextContent(fld);
-            }
-         } else {
-            // Remove annotations from any pipeline.
-            if (author.startsWith(APP +":")) {
-               txt.removeTextContent(fld);
-            }
+         final boolean del = (pipeline != null) ?
+            author.equals(APP +":"+ pipeline) : author.startsWith(APP +":");
+
+         // Remove side-note & highlighting.
+         if (del) {
+            //TODO: Need to get document location of field to construct
+            // a cursor in order to remove highlighting. The following
+            // does not quite do the trick.
+            //final XTextRange range = fld.getAnchor();
+            //highlightField(range.getText().createTextCursorByRange(range), false);
+            txt.removeTextContent(fld);
          }
       } catch (final Exception ex) {
          ex.printStackTrace();
@@ -453,13 +472,34 @@ public class UNOUtils
     private static void annotateField( final Annotation annotation )
     {
         try {
-            mxAnnotText.insertTextContent(mxDocCursor, makeAnnotation(annotation), false);
+            final XTextField annot = makeAnnotation(annotation);
+            mxAnnotText.insertTextContent(mxDocCursor, annot, false);
         } catch(Exception e) {
             e.printStackTrace();
         }
 
         // Highlight annotated field
-        highlightField();
+        if (ClientPreferences.isTextHighlightMode()) {
+            highlightField(mxDocCursor, true);
+        }
+    }
+
+    /**
+     * Highlights the region of a given cursor.
+     *
+     * @param cursor Region to highlight.
+     * @param enable True to highlight, false to de-highlight.
+     */
+    private static boolean highlightField(final XTextCursor cursor, final boolean enable) {
+      boolean status = true;
+      try {
+         final XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class, cursor);
+         props.setPropertyValue("CharBackColor", enable ? CURRENT_HIGHLIGHT : HIGHLIGHT_OFF);
+      } catch (final Exception ex) {
+         ex.printStackTrace();
+         status = false;
+      }
+      return status;
     }
 
     /**
@@ -583,31 +623,6 @@ public class UNOUtils
         }
     }
 
-    private static void highlightField()
-    {
-        try
-        {
-            // Highlight text to yellow
-            // call setPropertyValue, passing in a Float object
-            // query the XPropertySet interface
-
-
-            final XPropertySet xCursorProps = UnoRuntime.queryInterface( XPropertySet.class, mxDocCursor );
-            xCursorProps.setPropertyValue( "CharBackColor", CURRENT_HIGHLIGHT );
-
-            mxDocCursor.gotoRange( mxDocCursor.getEnd(), false );
-            mxDocCursor.goRight( (short) 1, true );
-            xCursorProps.setPropertyValue( "CharBackColor", 0xFFFFFF1A );
-            //mxDocCursor.goLeft( (short) 1, false );
-
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
-        }
-
-    }
-
     private static boolean isTextAnnotated(final XTextCursor cursor) {
       boolean result = false;
       final XPropertySet props = UnoRuntime.queryInterface(XPropertySet.class, cursor);
@@ -618,65 +633,6 @@ public class UNOUtils
           ex.printStackTrace();
       }
       return result;
-    }
-
-    /**
-     * @deprecated This method checks if the text at the current position of
-     * the document cursor is highlighted. However, if it is not, this method
-     * has the side effect of highlighting it.
-     *
-     * @see isTextAnnotated
-     * @see highlightField 
-     */
-    @Deprecated
-    private static boolean IsTextAnnotated()
-    {
-        try
-        {
-            /*
-            Hashtable textFields;
-            final XTextFieldsSupplier supplier = UnoRuntime.queryInterface( XTextFieldsSupplier.class, xTextDoc );
-            XEnumerationAccess enumAccess = supplier.getTextFields();
-            XEnumeration xEnum = enumAccess.createEnumeration();
-            textFields = new Hashtable();
-
-            while( xEnum.hasMoreElements() )
-            {
-            Object o = xEnum.nextElement();
-            final XTextField text = UnoRuntime.queryInterface( XTextField.class, o );
-            // text.getAnchor()
-            //System.out.println( "---------------- XTextField text: " + text.getAnchor() );
-
-            }
-             */
-
-
-            final XPropertySet xCursorProps = UnoRuntime.queryInterface( XPropertySet.class, mxDocCursor );
-
-            Object property = xCursorProps.getPropertyValue( "CharBackColor" );
-
-
-            boolean result = (property.equals( HIGHLIGHT_OFF ) || property.equals( HIGHLIGHT_YELLOW ));
-
-            if( result )
-            {
-                if( !property.equals( CURRENT_HIGHLIGHT ) )
-                {
-                    highlightField();
-                }
-            }
-
-            System.out.println( "---------------- result: " + result );
-
-            return result;
-
-        }
-        catch( Exception e )
-        {
-            e.printStackTrace();
-        }
-
-        return false;
     }
 
     /**
@@ -767,102 +723,6 @@ public class UNOUtils
          return false;
       }
       return true;
-    }
-
-    private static void createInvisibleCursor(final Annotation annotation)
-    {
-        boolean isMoreElements = true;
-
-        try
-        {
-            // FIXME: This blob of code should make use of the
-            // findAnnotation() function to privatize mxSearchable &
-            // mxSearchDesc member variables.
-
-            // For plain text
-            mxSearchDescr.setSearchString( annotation.mContent );
-            mxSearchDescr.setPropertyValue( "SearchWords", Boolean.valueOf( true ) );
-
-            System.out.println( "---------------- Text to be searched: " + annotation.mContent );
-
-
-            Object xTextRange = mxSearchable.findFirst( mxSearchDescr );
-            XTextRange xTagTxtRange = UnoRuntime.queryInterface( XTextRange.class, xTextRange );
-
-            while( true )
-            {
-                // find initial range for the searched word 
-                try
-                {
-                    mxAnnotText = xTagTxtRange.getText();
-                    mxDocCursor = mxAnnotText.createTextCursor();
-                    mxDocCursor.gotoRange( xTagTxtRange, false );
-                    mxDocCursor.gotoRange( xTagTxtRange, true );
-
-                    break;
-                }
-                catch( RuntimeException re )
-                {
-                    System.out.println( "---------------- non plain text, go to next range1" );
-                    try
-                    {
-                        xTextRange = mxSearchable.findNext( xTextRange, mxSearchDescr );
-                        xTagTxtRange = UnoRuntime.queryInterface( XTextRange.class, xTextRange );
-                    }
-                    catch( RuntimeException runtimeException )
-                    {
-                        System.out.println( "---------------- No more elements" );
-                        isMoreElements = false;
-                        break;
-                    }
-                }
-            }
-
-            while( IsTextAnnotated() && isMoreElements )
-            {
-
-                if( (xTextRange = mxSearchable.findNext( xTextRange, mxSearchDescr )) == null )
-                {
-                    System.out.println( "---------------- No more elements" );
-                    isMoreElements = false;
-                    break;
-                }
-
-                xTagTxtRange = UnoRuntime.queryInterface( XTextRange.class, xTextRange );
-
-                if( xTagTxtRange == null )
-                {
-                    System.out.println( "---------------- Null tagTxtRange " );
-                }
-                // go to start, the to the stat of the range and then expand accordingly
-                try
-                {
-                    mxAnnotText = xTagTxtRange.getText();
-                    mxDocCursor = mxAnnotText.createTextCursor();
-                    mxDocCursor.gotoRange( xTagTxtRange, false );
-                    mxDocCursor.gotoRange( xTagTxtRange, true );
-                }
-                catch( RuntimeException runExc )
-                {
-                    System.out.println( "---------------- non plain text, go to next range2" );
-                }
-
-            }
-
-            if( isMoreElements )
-            {
-                // Annotate text field
-                annotateField( annotation );
-            }
-
-        }
-        catch( Exception e )
-        {
-            System.out.println( "---------------- Exception in plain text searching" );
-            e.printStackTrace();
-            return;
-        }
-
     }
 
     // FIXME: Duplication from Eclipse Utils.java to be consolidated in CSAL
