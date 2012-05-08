@@ -109,12 +109,26 @@
   
    <target name="pack" depends="compile" description="Package all files in a WAR">
     	<mkdir dir="${dist.dir}"/>
+
+	<path id="manifest.classpath">
+       	<fileset dir="${lib.dir}" includes="**/*.jar"/>
+       </path>
+       <manifestclasspath property="jar.classpath" jarfile="${dist.dir}/SemAssistRestlet.jar">
+    	<classpath refid="manifest.classpath"/>
+    	</manifestclasspath>  
+
 		<war destfile="${dist.dir}/${war.name}" webxml="${web.dir}/web.xml">
 		  <fileset dir="." >
 			<include name="*.htm" />
 		  </fileset>
+		  <fileset dir="${web.dir}/classes" includes="**/*"/>
+
 		  <lib dir="${lib.dir}"/>
 		  <classes dir="${web.dir}/classes"/>
+		  <manifest>
+      	<attribute name="Main-Class" value="info.semanticsoftware.semassist.server.rest.Bootstrap"/>
+      	<attribute name="Class-Path" value="${jar.classpath}"/>
+       </manifest>
 		</war>
    </target>
    
