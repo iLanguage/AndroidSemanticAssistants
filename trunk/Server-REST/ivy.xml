@@ -60,6 +60,10 @@
     <dependency org="commons-codec" name="commons-codec" rev="1.6">
         <exclude org="junit" />
     </dependency>
+    
+    <dependency org="javax.servlet" name="servlet-api" rev="2.5">
+            <artifact name="servlet-api" ext="jar"/>
+	</dependency>
 
    </dependencies>
 </ivy-module>
