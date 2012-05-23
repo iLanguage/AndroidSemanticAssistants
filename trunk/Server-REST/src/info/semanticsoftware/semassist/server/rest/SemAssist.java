@@ -23,6 +23,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.semanticsoftware.semassist.server.rest;
 
+import info.semanticsoftware.semassist.server.rest.resource.FileResource;
 import info.semanticsoftware.semassist.server.rest.resource.ServiceResource;
 import info.semanticsoftware.semassist.server.rest.resource.ServicesResource;
 import info.semanticsoftware.semassist.server.rest.resource.UserResource;
@@ -49,17 +50,20 @@ public class SemAssist extends Application {
 		super();
 	}
 
-	/** Defines the routers for incoming request URLs.
+	/** Defines the routers for incoming request URLs. This is 
+	 * how the restlet matches URLs to hnalder classes.
 	 * @return the defined router object */
 	@Override
 	public synchronized Restlet createInboundRoot() {
 		Router router = new Router(getContext());
 		// Define routers for NLP services
 		router.attach("/services", ServicesResource.class);
-		router.attach("/services/{serviceName}", ServiceResource.class);
+		router.attach("/service", ServiceResource.class);
 		// Define routers for user actions
 		router.attach("/user", UserResource.class);
 		router.attach("/users/{userName}", UserResource.class);
+		// Define routers for file
+		router.attach("/file/{fileName}", FileResource.class);
 		return router;
 	}
 }

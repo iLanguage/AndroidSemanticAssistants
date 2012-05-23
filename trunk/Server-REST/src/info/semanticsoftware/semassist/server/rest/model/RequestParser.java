@@ -26,21 +26,14 @@ package info.semanticsoftware.semassist.server.rest.model;
 import info.semanticsoftware.semassist.server.GateRuntimeParameterArray;
 import info.semanticsoftware.semassist.server.UriList;
 import info.semanticsoftware.semassist.server.UserContext;
-import info.semanticsoftware.semassist.server.core.security.authentication.AuthenticationUtils;
-import info.semanticsoftware.semassist.server.core.security.encryption.EncryptionUtils;
 import info.semanticsoftware.semassist.server.rest.business.ServiceAgentSingleton;
 
 import java.io.StringReader;
-import java.math.BigInteger;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
-import java.security.spec.RSAPrivateKeySpec;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import net.java.dev.jaxb.array.StringArray;
 
-import org.apache.commons.codec.binary.Base64;
 import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 
@@ -83,35 +76,10 @@ public class RequestParser {
 			System.out.println("Invocation asked for " + handler.getServiceName());
 
 			String encryptedText = handler.getInput();
-			System.out.println("Ecnrypted input is: " + encryptedText);
-
-			// STEP 1: Decrypt the session key using the user's private key
-			String modulus = AuthenticationUtils.getInstance().getModulusString(handler.getUsername());
-			String priPart = AuthenticationUtils.getInstance().getPrivateKeyString(handler.getUsername());
-
-			RSAPrivateKeySpec newSpec = new RSAPrivateKeySpec(new BigInteger(modulus), new BigInteger(priPart));
-			KeyFactory fact = KeyFactory.getInstance("RSA");
-			PrivateKey priKey = fact.generatePrivate(newSpec);
-
-			//FIXME
-			String test = requestRepresentation.substring(requestRepresentation.indexOf("<sessionKey>")+"<sessionKey>".length());
-			test = test.substring(0, test.indexOf("</sessionKey>")).trim();
-
-			System.out.println("Encrypted sessionKey: "+test);
-
-			byte[] decryptedSessionKey = EncryptionUtils.getInstance().decryptSessionKey(test,priKey);
-			System.out.println("Decrypted sessionKey: " + decryptedSessionKey);
-
-			String sessionIV = handler.getSessionIVString();
-			byte[] ivByte = Base64.decodeBase64(sessionIV);
-
-			//STEP 2: Decrypt the input text using the session key
-			String plainText = new String(EncryptionUtils.getInstance().decryptInputData(encryptedText, decryptedSessionKey, ivByte));
-			System.out.println("Decrypted input is: " + plainText);
-
+			
 			//STEP 3: Execute the request
 			urilist.getUriList().add("#literal");
-			content.getItem().add(plainText.trim());
+			content.getItem().add(encryptedText.trim());
 
 			String results = ServiceAgentSingleton.getInstance().invokeService(handler.getServiceName(), urilist, content, 0L, new GateRuntimeParameterArray(), new UserContext());
 			System.out.println("results" + results);
