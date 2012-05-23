@@ -21,12 +21,11 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <ivysettings>
-  <settings defaultResolver="chained"/>
-  <resolvers>
-    <chain name="chained" returnFirst="true">
-      <ibiblio name="maven-central" m2compatible="true" />
-      <ibiblio name="org.restlet" m2compatible="true"
-	root="http://maven.restlet.org/" /> 
-    </chain>
-  </resolvers>
+	<settings defaultResolver="chained"/>
+	<resolvers>
+		<chain name="chained" returnFirst="true">
+			<ibiblio name="maven-central" m2compatible="true" />
+			<ibiblio name="org.restlet" m2compatible="true" root="http://maven.restlet.org/" />
+		</chain>
+	</resolvers>
 </ivysettings>

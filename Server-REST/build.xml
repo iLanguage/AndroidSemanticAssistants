@@ -16,7 +16,7 @@
    but WITHOUT ANY WARRANTY; without even the implied warranty of
    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
    GNU Affero General Public License for more details.
-   
+
    You should have received a copy of the GNU Affero General Public License
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
@@ -44,7 +44,9 @@
       <!-- build properties - do not edit -->
       <property name="project.name"      value="SemAssistRestlet"/>
       <property name="war.name"      value="${project.name}.war"/>
+      <property name="secure-war.name"      value="${project.name}-Secure.war"/>
       <property name="dist.dir"       value="dist"/>
+      <property name="docs.dir"       value="docs"/>
       <property name="src.dir"       value="src"/>
       <property name="web.dir"       value="WebContent/WEB-INF"/>
       <property name="lib.dir"       value="${web.dir}/lib"/>
@@ -57,8 +59,8 @@
       
       <!-- tomcat properties - replace with correct values -->
       <property name="tomcat.manager.url"       value="http://localhost:8080/manager"/>
-      <property name="tomcat.manager.username"       value="test"/>
-      <property name="tomcat.manager.password"       value="test"/>
+      <property name="tomcat.manager.username"       value="both"/>
+      <property name="tomcat.manager.password"       value="tomcat"/>
             
   </target>
 
@@ -87,48 +89,87 @@
       </javac>
   </target>
   
-  <target name="jar" depends="compile" description="Creates an executable JAR">
-       <mkdir dir="${dist.dir}/temp"/>
-       <copy todir="${dist.dir}/temp/">
-       	<fileset dir="${web.dir}/classes"/>
-       </copy>
-       <path id="manifest.classpath">
-       	<fileset dir="${lib.dir}" includes="**/*.jar"/>
-       </path>
-       <manifestclasspath property="jar.classpath" jarfile="${dist.dir}/SA-REST.jar">
-    	<classpath refid="manifest.classpath"/>
-    	</manifestclasspath>  
-  	<jar destfile="${dist.dir}/SA-REST.jar" basedir="${dist.dir}/temp" update="true">
-       <manifest>
-      	<attribute name="Main-Class" value="info.semanticsoftware.semassist.server.rest.Bootstrap"/>
-      	<attribute name="Class-Path" value="${jar.classpath}"/>
-       </manifest>
-  	</jar>
-  	<delete dir="${dist.dir}/temp"/>
-  </target>
+	<target name="jar" depends="compile" description="Creates an executable JAR">
+		<mkdir dir="${dist.dir}/temp"/>
+		<copy todir="${dist.dir}/temp/">
+			<fileset dir="${web.dir}/classes"/>
+		</copy>
+		<path id="manifest.classpath">
+			<fileset dir="${lib.dir}" includes="**/*.jar"/>
+		</path>
+		<manifestclasspath property="jar.classpath" jarfile="${dist.dir}/SA-REST.jar">
+			<classpath refid="manifest.classpath"/>
+		</manifestclasspath>  
+		<jar destfile="${dist.dir}/SA-REST.jar" basedir="${dist.dir}/temp" update="true">
+		<manifest>
+			<attribute name="Main-Class" value="info.semanticsoftware.semassist.server.rest.Bootstrap"/>
+			<attribute name="Class-Path" value="${jar.classpath}"/>
+		</manifest>
+		</jar>
+		<delete dir="${dist.dir}/temp"/>
+	</target>
   
-   <target name="pack" depends="compile" description="Package all files in a WAR">
-    	<mkdir dir="${dist.dir}"/>
-
-	<path id="manifest.classpath">
-       	<fileset dir="${lib.dir}" includes="**/*.jar"/>
-       </path>
-       <manifestclasspath property="jar.classpath" jarfile="${dist.dir}/SemAssistRestlet.jar">
-    	<classpath refid="manifest.classpath"/>
+	<target name="pack" depends="compile" description="Package all files in a WAR">
+		<mkdir dir="${dist.dir}"/>
+		<path id="manifest.classpath">
+       		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+       	</path>
+		
+		<manifestclasspath property="jar.classpath" jarfile="${dist.dir}/${war.name}">
+    		<classpath refid="manifest.classpath"/>
     	</manifestclasspath>  
 
 		<war destfile="${dist.dir}/${war.name}" webxml="${web.dir}/web.xml">
-		  <fileset dir="." >
-			<include name="*.htm" />
-		  </fileset>
-		  <fileset dir="${web.dir}/classes" includes="**/*"/>
+			<fileset dir="." >
+				<include name="*.htm" />
+			</fileset>
+			
+			<!-- Jetty server in the executable WAR file needs the classes on root -->
+		  	<fileset dir="${web.dir}/classes" includes="**/*"/>
 
-		  <lib dir="${lib.dir}"/>
-		  <classes dir="${web.dir}/classes"/>
-		  <manifest>
-      	<attribute name="Main-Class" value="info.semanticsoftware.semassist.server.rest.Bootstrap"/>
-      	<attribute name="Class-Path" value="${jar.classpath}"/>
-       </manifest>
+			<!-- copy the dependencies -->
+			<lib dir="${lib.dir}"/>
+			
+			<!-- copy the classes -->
+			<classes dir="${web.dir}/classes"/>
+			
+			<!-- set the entry point and classpath in the manifest -->
+			<manifest>
+      			<attribute name="Main-Class" value="info.semanticsoftware.semassist.server.rest.Bootstrap"/>
+      			<attribute name="Class-Path" value="${jar.classpath}"/>
+       		</manifest>
+		</war>
+   </target>
+   
+   <target name="pack-secure" depends="compile" description="Package all files in a WAR">
+		<mkdir dir="${dist.dir}"/>
+		<path id="manifest.classpath">
+       		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+       	</path>
+		
+		<manifestclasspath property="jar.classpath" jarfile="${dist.dir}/${secure-war.name}">
+    		<classpath refid="manifest.classpath"/>
+    	</manifestclasspath>  
+
+		<war destfile="${dist.dir}/${secure-war.name}" webxml="${web.dir}/web.xml">
+			<fileset dir="." >
+				<include name="*.htm" />
+			</fileset>
+			
+			<!-- Jetty server in the executable WAR file needs the classes on root -->
+		  	<fileset dir="${web.dir}/classes" includes="**/*"/>
+
+			<!-- copy the dependencies -->
+			<lib dir="${lib.dir}"/>
+			
+			<!-- copy the classes -->
+			<classes dir="${web.dir}/classes"/>
+			
+			<!-- set the entry point and classpath in the manifest -->
+			<manifest>
+      			<attribute name="Main-Class" value="info.semanticsoftware.semassist.server.rest.SecureBootstrap"/>
+      			<attribute name="Class-Path" value="${jar.classpath}"/>
+       		</manifest>
 		</war>
    </target>
    
@@ -199,4 +240,12 @@
       </findbugs>
     </target>
     
+    <!-- Generates Javadoc output -->
+    <target name="javadoc" depends="init">
+    	<mkdir dir="${docs.home}"/>
+        <javadoc sourcepath="${src.dir}" destdir="${docs.dir}" defaultexcludes="yes" author="true" version="true" use="true" link="true" windowtitle="Semantic Assistants: RESTful Web Server">
+        <doctitle><![CDATA[<h1>Semantic Assistants: RESTful Web Server</h1>]]></doctitle>
+        <bottom><![CDATA[<i>Copyright © 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
+          </javadoc>
+    </target>
 </project>
