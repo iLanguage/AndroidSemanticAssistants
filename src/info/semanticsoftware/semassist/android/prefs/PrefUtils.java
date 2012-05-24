@@ -11,9 +11,11 @@ import java.security.spec.RSAPublicKeySpec;
 
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
+import android.util.Log;
 
 public class PrefUtils{
 
+	private static String TAG = "PrefUtils";
 	private static PrefUtils instance = null;
 	protected PrefUtils(){
 		// Defeat instantiation
@@ -35,7 +37,7 @@ public class PrefUtils{
 				RSAPublicKeySpec newSpec = new RSAPublicKeySpec(modulus, new BigInteger("65537"));
 				KeyFactory fact = KeyFactory.getInstance("RSA");
 				PublicKey pubkey = fact.generatePublic(newSpec);
-				System.out.println(pubkey.toString());
+				Log.i(TAG, pubkey.toString());
 				return pubkey;
 			} catch (NoSuchAlgorithmException e) {
 				e.printStackTrace();

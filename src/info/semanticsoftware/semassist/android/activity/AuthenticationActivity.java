@@ -26,104 +26,112 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+/**
+ * Provides an activity to authenticate users.
+ * @author Bahar Sateli
+ */
 public class AuthenticationActivity extends AccountAuthenticatorActivity{
-	
+
+	/** URL to send authentication request. */
 	private String serverURL = null;
+	/** Logging tag. */
 	private final String TAG = "AuthenticationActivity";
-	
+
+	/** Called when the activity is created.
+	 * @param bundle bundle */
 	@Override
-    protected void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        this.setContentView(R.layout.user_credentials);
-        getServerSettings();
-    }
-	
-	public void onCancelClick(View v) {
-	        this.finish();
+	protected void onCreate(Bundle bundle) {
+		super.onCreate(bundle);
+		this.setContentView(R.layout.user_credentials);
+		readServerSettings();
 	}
 
+	/** Closes the activity when cancel button is pushed.
+	 * @param view view */
+	public void onCancelClick(View view) {
+		this.finish();
+	}
+
+	/** Sends an authentication request when the save button is pushed.
+	 * @param v view 
+	 */
 	public void onSaveClick(View v) {
-		TextView tvUsername;
-        TextView tvPassword;
-        
-        // Qualified username, i.e, user@semanticassistants.com
-        String qUsername;
-        
-        String password;
+		TextView tvUsername = (TextView) this.findViewById(R.id.uc_txt_username);
+		TextView tvPassword = (TextView) this.findViewById(R.id.uc_txt_password);
 
-        tvUsername = (TextView) this.findViewById(R.id.uc_txt_username);
-        tvPassword = (TextView) this.findViewById(R.id.uc_txt_password);
+		//Qualified username, i.e, user@semanticassistants.com
+		String qUsername = tvUsername.getText().toString();
+		String username = qUsername.substring(0, qUsername.indexOf("@"));
+		String password = tvPassword.getText().toString();
 
-        qUsername = tvUsername.getText().toString();
-        String username = qUsername.substring(0, qUsername.indexOf("@"));
-        password = tvPassword.getText().toString();
+		//TODO do client-side validation like password length etc.
 
-        //TODO do client-side validation like password length etc.
-        
-        String request = "<authenticate><username>" + username + "</username><password>" + password + "</password></authenticate>";
+		String request = "<authenticate><username>" + username + "</username><password>" + password + "</password></authenticate>";
 		Representation representation = new StringRepresentation(request,MediaType.APPLICATION_XML);
-    	
-		String uri = serverURL + "/SemAssistRestlet/user";
-		System.out.println("sending auth req to " + uri);
+
+		String uri = serverURL + "/user";
+		Log.i(TAG, "Sending authentication request to " + uri);
 		Representation response = new ClientResource(uri).post(representation);
-        try {
-        	StringWriter writer = new StringWriter();
-        	response.write(writer);
-        	String responseString = writer.toString();
-        	Log.d(TAG, "Authentication response: " + responseString);
-        	
-        	//Let's do some nasty string manipulation here TODO change this later
-        	int temp = responseString.indexOf("<userKey>");
-        	String pubKeyMod = responseString.substring(temp + "<userKey>".length());
-        	temp = pubKeyMod.indexOf("</userKey>");
-        	pubKeyMod = pubKeyMod.substring(0, temp);
-        	System.out.println("pubKeyMod " + pubKeyMod);
-        	
-        	SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());        	
-        	Editor editor = settings.edit();
-        	editor.putString("modValue", pubKeyMod);
-        	editor.putString("username", qUsername);
-        	boolean result = editor.commit();
-        	if(result){
-        		Toast.makeText(this, "Successfully authenticated", Toast.LENGTH_LONG).show();            	
-        	}else{
-        		Toast.makeText(this, "Authentication failed", Toast.LENGTH_LONG).show();	
-        	}
-        	
+		try {
+			StringWriter writer = new StringWriter();
+			response.write(writer);
+			String responseString = writer.toString();
+			Log.i(TAG, "Authentication response: " + responseString);
+
+			//Let's do some nasty string manipulation here and TODO change this later
+			int temp = responseString.indexOf("<userKey>");
+			String pubKeyMod = responseString.substring(temp + "<userKey>".length());
+			temp = pubKeyMod.indexOf("</userKey>");
+			pubKeyMod = pubKeyMod.substring(0, temp);
+			Log.i(TAG, "pubKeyMod " + pubKeyMod);
+
+			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+			Editor editor = settings.edit();
+			editor.putString("modValue", pubKeyMod);
+			editor.putString("username", qUsername);
+			boolean result = editor.commit();
+			if(result){
+				Toast.makeText(this, R.string.authenticationSuccess, Toast.LENGTH_LONG).show();
+			}else{
+				Toast.makeText(this, R.string.authenticationFail, Toast.LENGTH_LONG).show();
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 
-        String accountType = this.getIntent().getStringExtra("auth.token");
-        if (accountType == null) {
-            accountType = SemAssistAuthenticator.ACCOUNT_TYPE;
-        }
+		String accountType = this.getIntent().getStringExtra("auth.token");
+		if (accountType == null) {
+			accountType = SemAssistAuthenticator.ACCOUNT_TYPE;
+		}
 
-        AccountManager accMgr = AccountManager.get(this);
+		AccountManager accMgr = AccountManager.get(this);
 
-        // Add the account to the Android Account Manager
-        final Account account = new Account(qUsername, accountType);
-        accMgr.addAccountExplicitly(account, password, null);
+		// Add the account to the Android Account Manager
+		final Account account = new Account(qUsername, accountType);
+		accMgr.addAccountExplicitly(account, password, null);
 
-        // Now we tell our caller, could be the Android Account Manager or even our own application
-        // that the process was successful
-
-        final Intent intent = new Intent();
-        intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, qUsername);
-        intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-        intent.putExtra(AccountManager.KEY_AUTHTOKEN, accountType);
-        this.setAccountAuthenticatorResult(intent.getExtras());
-        this.setResult(RESULT_OK, intent);
-        this.finish();
+		// Inform the caller (could be the Android Account Manager or the SA app) that the process was successful
+		final Intent intent = new Intent();
+		intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, qUsername);
+		intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
+		intent.putExtra(AccountManager.KEY_AUTHTOKEN, accountType);
+		this.setAccountAuthenticatorResult(intent.getExtras());
+		this.setResult(RESULT_OK, intent);
+		this.finish();
 	}
-	
-	private void getServerSettings(){
+
+	/**
+	 * Reads the Semantic Assistants server URL from the user preferences. First, it looks
+	 * into the application preference file. If there is no such preference key
+	 * in the application preferences, it gets the Android-specific values from servers.xml.
+	 */
+	private void readServerSettings(){
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 		serverURL = prefs.getString("selected_server_option", "-1");
 		if(serverURL.equals("-1")){
 			GlobalSettingsActivity.SERVERS_XML_FILE_PATH = getFilesDir().getAbsolutePath()+ File.separator + "servers.xml";
 			ArrayList<XMLElementModel> defaultServer = GlobalSettingsActivity.getClientPreference("android", "server");
-			serverURL = "http://" + defaultServer.get(0).getAttribute().get(ClientUtils.XML_HOST_KEY) + ":" + defaultServer.get(0).getAttribute().get(ClientUtils.XML_PORT_KEY);
+			serverURL = defaultServer.get(0).getAttribute().get(ClientUtils.XML_HOST_KEY) + ":" + defaultServer.get(0).getAttribute().get(ClientUtils.XML_PORT_KEY);
 		}
 	}
 }

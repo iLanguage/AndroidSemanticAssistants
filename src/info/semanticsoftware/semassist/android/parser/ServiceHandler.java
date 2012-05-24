@@ -8,8 +8,11 @@ import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
+import android.util.Log;
+
 public class ServiceHandler extends DefaultHandler{
-	
+
+	private static String TAG = "ServiceHandler";
 	/* Extract an Attribute
 	String attrValue = atts.getValue("thenumber");
 	int i = Integer.parseInt(attrValue);
@@ -43,7 +46,7 @@ public class ServiceHandler extends DefaultHandler{
 	@Override
 	public void endDocument() throws SAXException {
 		// Nothing to do
-		System.out.println("Finished parsing " + servicesList.getItem().size() + " services representation");
+		Log.i(TAG, "Finished parsing " + servicesList.getItem().size() + " services representation");
 	}
 
 	/** Gets called on opening tags like:

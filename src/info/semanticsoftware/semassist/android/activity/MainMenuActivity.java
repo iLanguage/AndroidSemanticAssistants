@@ -3,16 +3,20 @@ package info.semanticsoftware.semassist.android.activity;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.LinearLayout;
 
+/** The Semantic Assistants app launch activity.
+ * @author Bahar Sateli
+ */
 public class MainMenuActivity extends Activity {
 	private WebView mWebView;
-	private static final String TAG = "SemanticAssistants";
 
+	/** Called when the activity is created.
+	 * @param savedInstanceState saved instance state
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -31,14 +35,18 @@ public class MainMenuActivity extends Activity {
 		mWebView.loadUrl("file:///android_asset/main.html");
 	}
 
+	/** Attaches a click listener to the Available Assistants button. 
+	 * @param v view
+	 */
 	public void onAssistantsClick(View v) {
-		Log.d(TAG,"Clicked");
 		Intent getServices = new Intent(getBaseContext(), SemanticAssistantsActivity.class);
 		startActivity(getServices);
 	}
 
+	/** Attaches a click listener to the Global Settings button. 
+	 * @param v view
+	 */
 	public void onSettingsClick(View v) {
-		Log.d(TAG,"settings Clicked");
 		Intent getSettings = new Intent(getBaseContext(), GlobalSettingsActivity.class);
 		startActivity(getSettings);
 	}

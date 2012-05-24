@@ -33,12 +33,26 @@ import android.preference.ListPreference;
 import android.preference.Preference;
 import android.preference.Preference.OnPreferenceChangeListener;
 import android.preference.PreferenceActivity;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.util.Xml;
+import android.widget.Toast;
 
+/**
+ * The Semantic Assistants app settings activity.
+ * @author Bahar Sateli
+ * */
 public class GlobalSettingsActivity extends PreferenceActivity{
 
+	/** Logging tag. */
+	private final String TAG = "GlobalSettingsActivity";
+
+	/** The Semantic Assistants properties file path. */
 	public static String SERVERS_XML_FILE_PATH = "";
 
+	/** Called when the activity is created.
+	 * @param savedInstanceState saved instance state */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 	super.onCreate(savedInstanceState);
@@ -47,52 +61,70 @@ public class GlobalSettingsActivity extends PreferenceActivity{
 
 		populateServersList();
 
-		EditTextPreference serverCreator = (EditTextPreference) findPreference("new_server_info");
+		final EditTextPreference serverCreator = (EditTextPreference) findPreference("new_server_info");
+		TextWatcher watcher = new TextWatcher() {
+			@Override
+			public void onTextChanged(CharSequence s, int start, int before, int count) {
+				if(serverCreator.getEditText().getText().toString().length() == 0){
+					serverCreator.getEditText().setError("URL cannot be empty");
+				}
+			}
+
+			@Override
+			public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+			@Override
+			public void afterTextChanged(Editable s) {}
+		};
+
+		serverCreator.getEditText().addTextChangedListener(watcher);
 
 		serverCreator.setOnPreferenceChangeListener(new OnPreferenceChangeListener() {
 			@Override
 			public boolean onPreferenceChange(Preference arg0, Object arg1) {
 				final EditTextPreference serverCreator = (EditTextPreference) findPreference("new_server_info");
-				System.out.println(serverCreator.getEditText().getText());
 
 				String address = serverCreator.getEditText().getText().toString();
-				String[] tokens = address.split(":");
-				Map<String, String> map = new HashMap<String, String>();
-				System.out.println("input host is " + tokens[0]);
-				System.out.println("input port is " + tokens[1]);
-				map.put(ClientUtils.XML_HOST_KEY, tokens[0]);
-				map.put(ClientUtils.XML_PORT_KEY, tokens[1]);
-				setClientPreference("android", "server", map);
+				if(address.equals("")){
+					Toast.makeText(getApplicationContext(), "Invalid Server URL. Please try again.", Toast.LENGTH_LONG).show();
+					return false;
+				}else{
+					int colonPosition = address.lastIndexOf(":");
+					String host = address.substring(0, colonPosition);
+					String port = address.substring(colonPosition+1);
+					Map<String, String> map = new HashMap<String, String>();
+					Log.i(TAG, "input host is " + host);
+					Log.i(TAG, "input port is " + port);
+					map.put(ClientUtils.XML_HOST_KEY, host);
+					map.put(ClientUtils.XML_PORT_KEY, port);
+					setClientPreference("android", "server", map);
 
-				try {
-					FileInputStream fstream;
-					fstream = new FileInputStream(new File(SERVERS_XML_FILE_PATH));
-					DataInputStream in = new DataInputStream(fstream);
-					BufferedReader br = new BufferedReader(new InputStreamReader(in));
-					String strLine;
-					//Read File Line By Line
-					while ((strLine = br.readLine()) != null){
-						// Print the content on the console
-						System.out.println (strLine);
+					try {
+						FileInputStream fstream;
+						fstream = new FileInputStream(new File(SERVERS_XML_FILE_PATH));
+						DataInputStream in = new DataInputStream(fstream);
+						BufferedReader br = new BufferedReader(new InputStreamReader(in));
+						String strLine;
+						while ((strLine = br.readLine()) != null){
+							System.out.println (strLine);
+						}
+						in.close();
+						populateServersList();
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
 					}
-					//Close the input stream
-					in.close();
-					populateServersList();
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
+					catch (IOException e) {
+						e.printStackTrace();
+					}
+					return true;
 				}
-				// Get the object of DataInputStream
-				catch (IOException e) {
-					e.printStackTrace();
-				}
-				return true;
 			}
 		});
 
-		/* This is how you restrict the input type
+		/* To restrict the input type
 		 * serverCreator.getEditText().setKeyListener(DigitsKeyListener.getInstance());
 		 * serverCreator.getEditText().setInputType(InputType.TYPE_CLASS_NUMBER); */
-		
+
 	}
 
 	/**
@@ -167,17 +199,16 @@ public class GlobalSettingsActivity extends PreferenceActivity{
 			FileOutputStream fileos = new FileOutputStream(propertiesFile);
 			serializer.setOutput(fileos, "UTF-8");
 			serializer.startDocument(null, Boolean.valueOf(true));
-			//serializer.setFeature("http://xmlpull.org/v1/doc/features.html#indent-output", true);
 			serializer.startTag(null, "saProperties");
 			serializer.startTag(null, "global");
 
 			serializer.startTag(null, "lastCalledServer");
-			serializer.attribute(null, "host", "semassist.ilanguage.ca");
+			serializer.attribute(null, "host", "http://semassist.ilanguage.ca");
 			serializer.attribute(null, "port", "8182");
 			serializer.endTag(null, "lastCalledServer");
 
 			serializer.startTag(null, "server");
-			serializer.attribute(null, "host", "semassist.ilanguage.ca");
+			serializer.attribute(null, "host", "http://semassist.ilanguage.ca");
 			serializer.attribute(null, "port", "8182");
 			serializer.endTag(null, "server");
 
@@ -186,7 +217,7 @@ public class GlobalSettingsActivity extends PreferenceActivity{
 			serializer.startTag(null, "android");
 
 			serializer.startTag(null, "server");
-			serializer.attribute(null, "host", "semassist.ilanguage.ca");
+			serializer.attribute(null, "host", "http://semassist.ilanguage.ca");
 			serializer.attribute(null, "port", "8182");
 			serializer.endTag(null, "server");
 
@@ -196,7 +227,6 @@ public class GlobalSettingsActivity extends PreferenceActivity{
 			serializer.endDocument();
 			serializer.flush();
 			fileos.close();
-			System.out.println("file created");
 		}catch(Exception e)
 		{
 			e.printStackTrace();
@@ -208,18 +238,13 @@ public class GlobalSettingsActivity extends PreferenceActivity{
 			DataInputStream in = new DataInputStream(fstream);
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String strLine;
-			//Read File Line By Line
 			while ((strLine = br.readLine()) != null){
-				// Print the content on the console
 				System.out.println (strLine);
 			}
-			//Close the input stream
 			in.close();
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -249,12 +274,12 @@ public class GlobalSettingsActivity extends PreferenceActivity{
 			serializer.startTag(null, "global");
 
 			serializer.startTag(null, "lastCalledServer");
-			serializer.attribute(null, "host", "semassist.ilanguage.ca");
+			serializer.attribute(null, "host", "http://semassist.ilanguage.ca");
 			serializer.attribute(null, "port", "8182");
 			serializer.endTag(null, "lastCalledServer");
 
 			serializer.startTag(null, "server");
-			serializer.attribute(null, "host", "semassist.ilanguage.ca");
+			serializer.attribute(null, "host", "http://semassist.ilanguage.ca");
 			serializer.attribute(null, "port", "8182");
 			serializer.endTag(null, "server");
 
@@ -290,6 +315,7 @@ public class GlobalSettingsActivity extends PreferenceActivity{
 		}
 	}
 
+	/** Reads the list of servers and populates the list. */
 	private void populateServersList(){
 		final ListPreference serverSelector = (ListPreference) findPreference("selected_server_option");
 
@@ -300,9 +326,9 @@ public class GlobalSettingsActivity extends PreferenceActivity{
 
 		ArrayList<XMLElementModel> servers = getClientPreference("android", "server");
 		if(servers.size() != 0){
-			for(int i=0; i < servers.size(); i++){			
-				String URL = "http://" + servers.get(i).getAttribute().get(ClientUtils.XML_HOST_KEY) + ":" + servers.get(i).getAttribute().get(ClientUtils.XML_PORT_KEY);
-				list.add(URL);		
+			for(int i=0; i < servers.size(); i++){
+				String URL = servers.get(i).getAttribute().get(ClientUtils.XML_HOST_KEY) + ":" + servers.get(i).getAttribute().get(ClientUtils.XML_PORT_KEY);
+				list.add(URL);
 			}
 
 			entries = list.toArray(new CharSequence[list.size()]);
@@ -310,7 +336,7 @@ public class GlobalSettingsActivity extends PreferenceActivity{
 			serverSelector.setEntries(entries);
 			serverSelector.setEntryValues(entryValues);
 		}else{
-			System.out.println("servers " + servers.size());
+			Log.i(TAG, "Available servers " + servers.size());
 		}
 	}
 }

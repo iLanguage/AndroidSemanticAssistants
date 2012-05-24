@@ -37,7 +37,8 @@
                 android:layout_height="0dip"
                 android:layout_weight="1"
                 android:background="#BBCCDD"
-                android:text="hello">
+                android:hint="http://www.example.com:1234"
+                >
             </EditText>        
     </LinearLayout>
     

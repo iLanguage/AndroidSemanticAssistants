@@ -45,11 +45,11 @@ public class SemanticAssistantsService extends IntentService{
 		System.out.println("From prefs: " + serverURL);
 
 		if(serverURL.equals("-1")){
-			System.out.println("Not in prefs. Reading from XML");
+			Log.i(TAG, "Not in prefs. Reading from XML");
 			GlobalSettingsActivity.SERVERS_XML_FILE_PATH = getFilesDir().getAbsolutePath()+ File.separator + "servers.xml";
 			ArrayList<XMLElementModel> defaultServer = GlobalSettingsActivity.getClientPreference("android", "server");
 			serverURL = "http://" + defaultServer.get(0).getAttribute().get(ClientUtils.XML_HOST_KEY) + ":" + defaultServer.get(0).getAttribute().get(ClientUtils.XML_PORT_KEY);
-			System.out.println(serverURL);
+			Log.i(TAG, serverURL);
 		}
 
 		try{
@@ -60,7 +60,7 @@ public class SemanticAssistantsService extends IntentService{
 			Representation response = new ClientResource(uri).post(representation);
 			StringWriter writer = new StringWriter();
 			response.write(writer);
-			System.out.println(writer.toString());
+			Log.i(TAG, writer.toString());
 			boolean silent_mode = Boolean.parseBoolean(intent.getExtras().getString("SILENT_MODE"));
 			if(silent_mode){
 				Intent broadcast = new Intent("info.semanticsoftware.semassist.android.BROADCAST");
