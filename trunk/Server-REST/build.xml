@@ -150,7 +150,9 @@
 		<manifestclasspath property="jar.classpath" jarfile="${dist.dir}/${secure-war.name}">
     		<classpath refid="manifest.classpath"/>
     	</manifestclasspath>  
-
+	
+		<copy file="${src.dir}/info/semanticsoftware/semassist/server/rest/keystore.jks" todir="${web.dir}/classes/info/semanticsoftware/semassist/server/rest"/>
+		  
 		<war destfile="${dist.dir}/${secure-war.name}" webxml="${web.dir}/web.xml">
 			<fileset dir="." >
 				<include name="*.htm" />
@@ -158,7 +160,7 @@
 			
 			<!-- Jetty server in the executable WAR file needs the classes on root -->
 		  	<fileset dir="${web.dir}/classes" includes="**/*"/>
-
+		  
 			<!-- copy the dependencies -->
 			<lib dir="${lib.dir}"/>
 			
