@@ -26,13 +26,11 @@ package info.semanticsoftware.semassist.server.rest.resource;
 import java.io.IOException;
 import java.io.StringReader;
 
-import javax.servlet.ServletContext;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
 import info.semanticsoftware.semassist.server.core.security.authentication.AuthenticationUtils;
-import info.semanticsoftware.semassist.server.rest.SemAssist;
 import info.semanticsoftware.semassist.server.rest.model.RequestHandler;
 import info.semanticsoftware.semassist.server.rest.model.UserModel;
 
