@@ -243,15 +243,19 @@ public class SemanticAssistantsActivity extends ListActivity{
 	 * populates the list on the UI. 
 	 */
 	private void populateServicesList(){
-		Toast.makeText(this, "Connected to " + serverURL, Toast.LENGTH_LONG).show();
-		String[] values = null;
-		List<String> names = new ArrayList<String>();
-		for(int i=0; i < servicesList.getItem().size(); i++){
-			names.add(servicesList.getItem().get(i).getServiceName());
+		if(servicesList != null){
+			Toast.makeText(this, "Connected to " + serverURL, Toast.LENGTH_LONG).show();
+			String[] values = null;
+			List<String> names = new ArrayList<String>();
+			for(int i=0; i < servicesList.getItem().size(); i++){
+				names.add(servicesList.getItem().get(i).getServiceName());
+			}
+			values = names.toArray(new String[names.size()]);
+			ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.row, R.id.label, values);
+			setListAdapter(adapter);
+		}else{
+			Toast.makeText(this, "No assistants found! The server may be offline.", Toast.LENGTH_LONG).show();
 		}
-		values = names.toArray(new String[names.size()]);
-		ArrayAdapter<String> adapter = new ArrayAdapter<String>(this,R.layout.row, R.id.label, values);
-		setListAdapter(adapter);
 	}
 
 	/** Attaches a click listener to the list of available assistants. 

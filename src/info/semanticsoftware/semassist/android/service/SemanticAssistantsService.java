@@ -1,19 +1,14 @@
 package info.semanticsoftware.semassist.android.service;
 
 import info.semanticsoftware.semassist.android.activity.GlobalSettingsActivity;
-import info.semanticsoftware.semassist.android.restlet.RequestRepresentation;
+import info.semanticsoftware.semassist.android.intents.ServiceIntent;
+import info.semanticsoftware.semassist.android.intents.ServiceIntentFactory;
 import info.semanticsoftware.semassist.csal.ClientUtils;
 import info.semanticsoftware.semassist.csal.XMLElementModel;
 
 import java.io.File;
-import java.io.IOException;
-import java.io.StringWriter;
 import java.util.ArrayList;
 
-import org.restlet.data.MediaType;
-import org.restlet.representation.Representation;
-import org.restlet.representation.StringRepresentation;
-import org.restlet.resource.ClientResource;
 import android.app.IntentService;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -39,6 +34,7 @@ public class SemanticAssistantsService extends IntentService{
 	@Override
 	protected void onHandleIntent(Intent intent) {
 		String input = intent.getExtras().getString(Intent.EXTRA_TEXT);
+		String action = intent.getAction();
 		intent.setAction(null);
 		SharedPreferences prefs = this.getSharedPreferences("info.semanticsoftware.semassist.android.activity_preferences", MODE_MULTI_PROCESS);
 		String serverURL = prefs.getString("selected_server_option", "-1");
@@ -53,23 +49,20 @@ public class SemanticAssistantsService extends IntentService{
 		}
 
 		try{
-			RequestRepresentation request = new RequestRepresentation("Person and Location Extractor", null, input);
-			Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
-			//Representation response = new ClientResource("http://semassist.ilanguage.ca:8182/SemAssistRestlet/services/Person and Location Extractor").post(representation);
-			String uri = serverURL + "/services/Person and Location Extractor";
-			Representation response = new ClientResource(uri).post(representation);
-			StringWriter writer = new StringWriter();
-			response.write(writer);
-			Log.i(TAG, writer.toString());
+			ServiceIntent instance = ServiceIntentFactory.getService(action);
+			instance.setInputString(input);
+			instance.setCandidServerURL(serverURL);
+			instance.setRTParams(null);
+			String result = instance.execute();
+			System.out.println(result);
+
 			boolean silent_mode = Boolean.parseBoolean(intent.getExtras().getString("SILENT_MODE"));
 			if(silent_mode){
 				Intent broadcast = new Intent("info.semanticsoftware.semassist.android.BROADCAST");
-				broadcast.putExtra("serverResponse", writer.toString());
+				broadcast.putExtra("serverResponse", result);
 				sendOrderedBroadcast(broadcast, null);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}catch (Exception e) {
+			}//TODO handle other case
+		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}
 	}

@@ -1,21 +1,16 @@
 package info.semanticsoftware.semassist.android.restlet;
 
-import info.semanticsoftware.semassist.android.encryption.EncryptionUtils;
 import info.semanticsoftware.semassist.android.prefs.PrefUtils;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-import  android.util.Base64;
-import android.util.Log;
-
 public class RequestRepresentation {
 
 	private String serviceName;
 	private String input;
 	private Map<String, String> params = new HashMap<String, String>();
-	private static String TAG = "RequestRepresentation";
 
 	public RequestRepresentation(String iServiceName, Map<String,String> iParams, String input){
 		this.serviceName = iServiceName;

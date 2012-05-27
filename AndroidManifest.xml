@@ -1,104 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="info.semanticsoftware.semassist.android.activity"
-    android:versionCode="1"
-    android:versionName="1.0" >
+	package="info.semanticsoftware.semassist.android.activity"
+	android:versionCode="1"
+	android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="11" />
+<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="11" />
 	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
-	
-	    <!-- Permissions for web service calls -->
-    <uses-permission android:name="android.permission.INTERNET"></uses-permission>
-	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />	
-    
-    <!-- Permissions for creating and modifying contacts -->
-    <uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
+
+	<!-- Permissions for web service calls -->
+	<uses-permission android:name="android.permission.INTERNET"></uses-permission>
+	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+	<!-- Permissions for creating and modifying contacts -->
+	<uses-permission android:name="android.permission.READ_CONTACTS"></uses-permission>
 	<uses-permission android:name="android.permission.WRITE_CONTACTS"></uses-permission>
-	
+
 	<!-- Permissions for creating and modifying accounts -->
 	<uses-permission android:name="android.permission.GET_ACCOUNTS"></uses-permission>
 	<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"></uses-permission>
 	<uses-permission android:name="android.permission.MANAGE_ACCOUNTS" />
-	<uses-permission android:name="android.permission.USE_CREDENTIALS" />		
-	
+	<uses-permission android:name="android.permission.USE_CREDENTIALS" />
+
 	<!-- Permissions for synchronizing Semantic Assistants contacts -->
 	<uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
 	<uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-	
+
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"></uses-permission>
-	
+
 	<supports-screens android:largeScreens="true"
-			android:smallScreens="true" 
+			android:smallScreens="true"
 			android:anyDensity="true"
 			android:normalScreens="true"/>
-	
-    <application
-        android:name="info.semanticsoftware.semassist.android.application.SemAssistApp"
-        android:icon="@drawable/sa_logo"
-        android:label="@string/app_name" >
-        <activity
-            android:name=".MainMenuActivity"
-            android:label="@string/app_name" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        
-        <activity
-            android:name=".SemanticAssistantsActivity"
-            android:label="@string/app_name" >
-            <intent-filter android:label="Semantic Assistants">
-                <action android:name="android.intent.action.SEND" />
-                <category android:name="android.intent.category.DEFAULT" />
-                <data android:mimeType="text/*"/>
-            </intent-filter>
-        </activity>
-        
-        <activity
-            android:name=".SemanticResultsActivity"
-            android:label="@string/app_name" >
-        </activity>
-        
-        <activity
-            android:name=".GlobalSettingsActivity"
-            android:label="@string/app_name" >
-        </activity>
-        
-        <service
+
+	<application
+		android:name="info.semanticsoftware.semassist.android.application.SemAssistApp"
+		android:icon="@drawable/sa_logo"
+		android:label="@string/app_name" >
+		<activity
+			android:name=".MainMenuActivity"
+			android:label="@string/app_name" >
+			<intent-filter>
+			<action android:name="android.intent.action.MAIN" />
+			<category android:name="android.intent.category.LAUNCHER" />
+			</intent-filter>
+		</activity>
+
+		<activity
+			android:name=".SemanticAssistantsActivity"
+			android:label="@string/app_name" >
+			<intent-filter android:label="Semantic Assistants">
+			<action android:name="android.intent.action.SEND" />
+			<category android:name="android.intent.category.DEFAULT" />
+			<data android:mimeType="text/*"/>
+			</intent-filter>
+		</activity>
+
+		<activity
+			android:name=".SemanticResultsActivity"
+			android:label="@string/app_name" >
+		</activity>
+
+		<activity
+			android:name=".GlobalSettingsActivity"
+			android:label="@string/app_name" >
+		</activity>
+
+		<service
 			android:name="info.semanticsoftware.semassist.android.service.SemanticAssistantsService"
-			android:process=":semassist_process" 
+			android:process=":semassist_service" 
 			android:label="semassist">
-            <intent-filter android:label="Semantic Assistants">
-                <action android:name="PERSON_DETECTOR" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
+			<intent-filter android:label="Semantic Assistants Open Intents">
+				<action android:name="org.openintents.action.PERSON_EXTRACTOR" />
+				<category android:name="android.intent.category.DEFAULT" />
+			</intent-filter>
 		</service>
-		
-        <receiver android:name="info.semanticsoftware.semassist.android.service.SemanticAssistantsBroadcastReceiver"></receiver>
-    
-     <!-- Activity to ask users for account credentials -->
-        <activity
-            android:name="info.semanticsoftware.semassist.android.activity.AuthenticationActivity">
-        </activity>
-		
-        <!-- Semantic Assistants account authentication service -->
-        <service android:name="info.semanticsoftware.semassist.android.service.AuthenticationService" android:process=":auth">
- 			<intent-filter>
- 			    <action android:name="android.accounts.AccountAuthenticator" />
- 			</intent-filter>
+
+		<receiver android:name="info.semanticsoftware.semassist.android.service.SemanticAssistantsBroadcastReceiver"></receiver>
+
+		<!-- Activity to ask users for account credentials -->
+		<activity
+			android:name="info.semanticsoftware.semassist.android.activity.AuthenticationActivity">
+		</activity>
+
+		<!-- Semantic Assistants account authentication service -->
+		<service android:name="info.semanticsoftware.semassist.android.service.AuthenticationService" android:process=":auth">
+			<intent-filter>
+			<action android:name="android.accounts.AccountAuthenticator" />
+				</intent-filter>
 			<meta-data android:name="android.accounts.AccountAuthenticator" android:resource="@xml/authenticator" />
 		</service>
-	    
-	    <!-- Semantic Assistants contact synchronizing service -->
-        <service android:name="info.semanticsoftware.semassist.android.service.ContactsSyncAdapterService" android:process=":contacts">
-            <intent-filter>
-                <action android:name="android.content.SyncAdapter" />
-            </intent-filter>
-            <meta-data android:name="android.content.SyncAdapter" android:resource="@xml/sync_contacts" />
-            <meta-data android:name="android.provider.CONTACTS_STRUCTURE" android:resource="@xml/contacts" />
-		</service>
-		
-    </application>
 
+		<!-- Semantic Assistants contact synchronizing service -->
+		<service android:name="info.semanticsoftware.semassist.android.service.ContactsSyncAdapterService" android:process=":contacts">
+			<intent-filter>
+				<action android:name="android.content.SyncAdapter" />
+			</intent-filter>
+			<meta-data android:name="android.content.SyncAdapter" android:resource="@xml/sync_contacts" />
+			<meta-data android:name="android.provider.CONTACTS_STRUCTURE" android:resource="@xml/contacts" />
+		</service>
+	</application>
 </manifest>
