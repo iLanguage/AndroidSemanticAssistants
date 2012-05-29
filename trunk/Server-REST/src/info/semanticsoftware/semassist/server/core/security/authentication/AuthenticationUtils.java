@@ -182,6 +182,11 @@ public class AuthenticationUtils {
 		return priKey;
 	}
 	
+	/**
+	 * Returns a user's public key.
+	 * @param userName username
+	 * @return username's publickey
+	 * */
 	public PublicKey getPublicKey(final String userName){
 		PublicKey pubKey = null;
 		String mod = getModulusString(userName);
