@@ -23,12 +23,19 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.semanticsoftware.semassist.server.rest.model;
 
+import info.semanticsoftware.semassist.server.GateRuntimeParameter;
 import info.semanticsoftware.semassist.server.GateRuntimeParameterArray;
+import info.semanticsoftware.semassist.server.ServiceInfoForClient;
 import info.semanticsoftware.semassist.server.UriList;
 import info.semanticsoftware.semassist.server.UserContext;
 import info.semanticsoftware.semassist.server.rest.business.ServiceAgentSingleton;
 
 import java.io.StringReader;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import javax.xml.parsers.SAXParser;
 import javax.xml.parsers.SAXParserFactory;
 
@@ -59,30 +66,56 @@ public class RequestParser {
 	public String executeRequest(){
 		try {
 			SAXParserFactory spf = SAXParserFactory.newInstance();
-			SAXParser sp = spf.newSAXParser();
-			XMLReader xr = sp.getXMLReader();
+			SAXParser parser = spf.newSAXParser();
+			XMLReader reader = parser.getXMLReader();
 
-			/* Create a new ContentHandler and apply it to the XML-Reader*/
+			/* Create a new RequestHandler and apply it to the XML-Reader*/
 			RequestHandler handler = new RequestHandler();
-			xr.setContentHandler(handler);
+			reader.setContentHandler(handler);
 
 			/* Parse the XML data from the request string */
-			xr.parse(new InputSource(new StringReader(requestRepresentation)));
+			reader.parse(new InputSource(new StringReader(requestRepresentation)));
 
-			/* Get the parsed data to invoke the service */
+			/* Get the parsed data and the service name to invoke */
 			StringArray content = new StringArray();
 			UriList urilist = new UriList();
-
-			System.out.println("Invocation asked for " + handler.getServiceName());
-
+			String selectedServiceName = handler.getServiceName();
 			String encryptedText = handler.getInput();
-			
-			//STEP 3: Execute the request
 			urilist.getUriList().add("#literal");
 			content.getItem().add(encryptedText.trim());
+			System.out.println("Service invocation asked for: " + selectedServiceName);
 
-			String results = ServiceAgentSingleton.getInstance().invokeService(handler.getServiceName(), urilist, content, 0L, new GateRuntimeParameterArray(), new UserContext());
-			System.out.println("results" + results);
+			// Take care of the runtime parameters
+			List<GateRuntimeParameter> serviceParams = new ArrayList<GateRuntimeParameter>();
+			for(ServiceInfoForClient service : ServiceAgentSingleton.getInstance().getAvailableServices().getItem()){
+				if(service.getServiceName().equals(selectedServiceName)){
+					serviceParams = service.getParams();
+				}
+			}
+			Map<String, String> parsedParamsList = handler.getParams();
+			GateRuntimeParameterArray arrayToGo = new GateRuntimeParameterArray();
+			for(Iterator<GateRuntimeParameter> itr = serviceParams.iterator(); itr.hasNext();){
+				GateRuntimeParameter param = itr.next();
+				String paramName = param.getParamName();
+				String type = param.getType();
+				if(type.equals("int")){
+					param.setIntValue(Integer.parseInt(parsedParamsList.get(paramName)));
+				}else if(type.equals("string")){
+					param.setStringValue(parsedParamsList.get(paramName));
+				}else if(type.equals("double")){
+					param.setDoubleValue(Double.parseDouble(parsedParamsList.get(paramName)));
+				}else if(type.equals("boolean")){
+					param.setBooleanValue(Boolean.parseBoolean(parsedParamsList.get(paramName)));
+				}else if(type.equals("url")){
+					param.setUrlValue(parsedParamsList.get(paramName));
+				}
+				System.out.println(paramName + "=" + param.getStringValue());
+				arrayToGo.getItem().add(param);
+			}
+
+			// Execute the request
+			String results = ServiceAgentSingleton.getInstance().invokeService(selectedServiceName, urilist, content, 0L, arrayToGo, new UserContext());
+			System.out.println("Server response: " + results);
 			return results;
 		} catch (Exception e) {
 			e.printStackTrace();

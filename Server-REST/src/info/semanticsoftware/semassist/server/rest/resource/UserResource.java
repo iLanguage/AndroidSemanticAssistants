@@ -33,6 +33,7 @@ import javax.xml.parsers.SAXParserFactory;
 import info.semanticsoftware.semassist.server.core.security.authentication.AuthenticationUtils;
 import info.semanticsoftware.semassist.server.rest.model.RequestHandler;
 import info.semanticsoftware.semassist.server.rest.model.UserModel;
+import info.semanticsoftware.semassist.server.rest.utils.Constants;
 
 import org.restlet.data.MediaType;
 import org.restlet.data.Status;
@@ -93,18 +94,19 @@ public class UserResource extends ServerResource{
 
 			String username = handler.getUsername();
 			String password = handler.getPassword();
-			
+
+			// database lookup
 			AuthenticationUtils authUtil = AuthenticationUtils.getInstance();
+			// client response
 			if(authUtil.authenticateUser(username, password)){
 				String xml = new UserModel().getXML(username);
 				result = new StringRepresentation(xml, MediaType.APPLICATION_XML);
-
 				if (xml != null) {
 					return result;
-				} else {
-					setStatus(Status.CLIENT_ERROR_NOT_FOUND);
-					return new StringRepresentation("No such user");
 				}
+			}else {
+				//setStatus(Status.CLIENT_ERROR_NOT_FOUND);
+				return new StringRepresentation(Constants.AUHTENTICATION_FAIL);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
