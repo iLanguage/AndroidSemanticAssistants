@@ -26,7 +26,6 @@ package info.semanticsoftware.semassist.server.rest.model;
 import java.util.Iterator;
 
 import info.semanticsoftware.semassist.server.ServiceInfoForClient;
-import info.semanticsoftware.semassist.server.core.security.authentication.AuthenticationUtils;
 
 /** Provides a representation of a user in the system.
  * @author Bahar Sateli
@@ -48,7 +47,7 @@ public class UserModel {
 		StringBuilder xml = new StringBuilder();
 		xml.append("<user>");
 		xml.append("<userName>").append(userName).append("</userName>");
-		xml.append("<userKey>").append(AuthenticationUtils.getInstance().getModulusString(userName)).append("</userKey>");
+		//xml.append("<userKey>").append(AuthenticationUtils.getInstance().getModulusString(userName)).append("</userKey>");
 		xml.append("<link>").append(getLink(userName)).append("</link>");
 		xml.append("</user>");
 		return xml.toString();
@@ -60,7 +59,7 @@ public class UserModel {
 	 * @return partial URI for the user
 	 */
 	private String getLink(final String userName){
-		return "/users/" + userName;
+		return "/user/" + userName;
 	}
 
 }

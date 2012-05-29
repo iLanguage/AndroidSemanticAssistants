@@ -23,6 +23,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 package info.semanticsoftware.semassist.server.rest.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.xml.sax.Attributes;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
@@ -69,6 +72,14 @@ public class RequestHandler extends DefaultHandler{
 	/** Contains the <code><sessionIV></code> node value. */
 	private String sessionIV;
 
+	private Map<String, String> params = new HashMap<String, String>();
+
+	private boolean paramNameTag = false;
+
+	private boolean paramValueTag = false;
+
+	String tempParamName = "";
+
 	/** Returns the service name specified in the request. 
 	 * @return service name*/
 	public String getServiceName(){
@@ -105,18 +116,21 @@ public class RequestHandler extends DefaultHandler{
 		return this.sessionIV;
 	}
 
+	public Map<String, String> getParams(){
+		return this.params;
+	}
 	/** Gets invoked when parsing a request is initiated. 
 	 * @throws SAXException if the request cannot be parsed */
 	@Override
 	public void startDocument() throws SAXException {
-		System.out.println("Started parsing service request");
+		System.out.println("Started parsing service request.");
 	}
 
 	/** Gets invoked when parsing a request is finished. 
 	 * @throws SAXException if the request cannot be parsed */
 	@Override
 	public void endDocument() throws SAXException {
-		System.out.println("Finished parsing service request");
+		System.out.println("Finished parsing service request.");
 	}
 
 	/** Gets called on opening tags like <code><tag></code>.
@@ -136,6 +150,10 @@ public class RequestHandler extends DefaultHandler{
 			this.usernameTag = true;
 		}else if (qName.equals("password")) {
 			this.passwordTag = true;
+		}else if(qName.equals("name")){
+			this.paramNameTag = true;
+		}else if(qName.equals("value")){
+			this.paramValueTag = true;
 		}else if (qName.equals("sessionKey")) {
 			this.sessionKeyTag = true;
 		}else if (qName.equals("sessionIV")) {
@@ -158,6 +176,10 @@ public class RequestHandler extends DefaultHandler{
 			this.usernameTag = false;
 		}else if (qName.equals("password")) {
 			this.passwordTag = false;
+		}else if(qName.equals("name")){
+			this.paramNameTag = false;
+		}else if(qName.equals("value")){
+			this.paramValueTag = true;
 		}else if (qName.equals("sessionKey")) {
 			this.sessionKeyTag = false;
 		}else if (qName.equals("sessionIV")) {
@@ -179,6 +201,11 @@ public class RequestHandler extends DefaultHandler{
 			username = new String(ch, start, length);
 		}else if(this.passwordTag){
 			password = new String(ch, start, length).trim();
+		}else if(this.paramNameTag){
+			tempParamName = new String(ch, start, length).trim();
+		}else if(this.paramValueTag){
+			String tempParamValue = new String(ch, start, length).trim();
+			params.put(tempParamName, tempParamValue);
 		}else if(this.sessionKeyTag){
 			sessionKey = new String(ch, start, length).trim();
 		}else if(this.sessionIVTag){

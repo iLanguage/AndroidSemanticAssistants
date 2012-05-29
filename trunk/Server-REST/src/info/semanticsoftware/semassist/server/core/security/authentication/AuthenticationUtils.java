@@ -33,6 +33,7 @@ import java.security.PrivateKey;
 import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.RSAPrivateKeySpec;
+import java.security.spec.RSAPublicKeySpec;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -124,8 +125,8 @@ public class AuthenticationUtils {
 			System.out.println("Querying DB: " + prepStatement.toString());
 			ResultSet result = prepStatement.executeQuery();
 			while (result.next()) {
-	            pubKeyString = result.getString("mod");
-	        }
+				pubKeyString = result.getString("mod");
+			}
 			return pubKeyString;
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -178,7 +179,28 @@ public class AuthenticationUtils {
 		} catch (InvalidKeySpecException e) {
 			e.printStackTrace();
 		}
-		return priKey;		
+		return priKey;
+	}
+	
+	public PublicKey getPublicKey(final String userName){
+		PublicKey pubKey = null;
+		String mod = getModulusString(userName);
+		
+		BigInteger modulus = new BigInteger(mod);
+		BigInteger pub = new BigInteger("65537");
+		
+		RSAPublicKeySpec newSpec = new RSAPublicKeySpec(modulus, pub);
+		KeyFactory fact;
+		try {
+			fact = KeyFactory.getInstance("RSA");
+			pubKey = fact.generatePublic(newSpec);
+			return pubKey;
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		} catch (InvalidKeySpecException e) {
+			e.printStackTrace();
+		}
+		return pubKey;
 	}
 
 	/** Adds a new user to the USERS database.
