@@ -72,13 +72,17 @@ public class RequestHandler extends DefaultHandler{
 	/** Contains the <code><sessionIV></code> node value. */
 	private String sessionIV;
 
+	/** The <map between parameter's name and values. */
 	private Map<String, String> params = new HashMap<String, String>();
 
+	/** The <code><name></code> XML element representing a runtime parameter's name. */
 	private boolean paramNameTag = false;
 
+	/** The <code><value></code> XML element representing a runtime parameter's value. */
 	private boolean paramValueTag = false;
 
-	String tempParamName = "";
+	/** A temporary object to contain the parameter <code><name></code> node value. */
+	private String tempParamName = "";
 
 	/** Returns the service name specified in the request. 
 	 * @return service name*/
@@ -116,6 +120,9 @@ public class RequestHandler extends DefaultHandler{
 		return this.sessionIV;
 	}
 
+	/** Returns the runtime parameters map.
+	 * @return runtime parameters map
+	 */
 	public Map<String, String> getParams(){
 		return this.params;
 	}
