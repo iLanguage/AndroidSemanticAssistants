@@ -26,7 +26,9 @@ public class RequestRepresentation {
 		buffer.append("<invocation>");
 		String username = prefUtil.getUsername();
 		if(username != null){
-			username = username.substring(0, username.indexOf("@"));
+			if(username.indexOf("@") > -1){
+				username = username.substring(0, username.indexOf("@"));
+			}
 			buffer.append("<username>").append(username).append("</username>");
 		}
 
@@ -37,7 +39,7 @@ public class RequestRepresentation {
 				buffer.append("<param>");
 					buffer.append("<name>").append(name).append("</name>");
 					buffer.append("<value>");
-						params.get(name);
+					buffer.append(params.get(name));
 					buffer.append("</value>");
 				buffer.append("</param>");
 			}

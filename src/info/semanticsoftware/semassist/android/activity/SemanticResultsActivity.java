@@ -63,6 +63,8 @@ public class SemanticResultsActivity extends Activity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		String resultsXML = getIntent().getStringExtra("xml");
+		Vector<SemanticServiceResult> results = ClientUtils.getServiceResults(resultsXML);
 		setContentView(R.layout.results);
 
 		TableLayout tblResults = (TableLayout) findViewById(R.id.tblResultsLayout);
@@ -74,11 +76,10 @@ public class SemanticResultsActivity extends Activity {
 		TextView txtStart;
 		TextView txtEnd;
 		TextView txtFeats;
-		String resultsXML = getIntent().getStringExtra("xml");
 
-		Vector<SemanticServiceResult> results = ClientUtils.getServiceResults(resultsXML);
 		for(SemanticServiceResult current: results){
 			if (current.mResultType.equals(SemanticServiceResult.ANNOTATION)){
+
 				List<AnnotationInstance> annots = ServerResponseHandler.createAnnotation(current);
 				for(int i=0; i < annots.size(); i++){
 					resultRow = new TableRow(getApplicationContext());
@@ -117,7 +118,6 @@ public class SemanticResultsActivity extends Activity {
 				fileName = fileName.substring(fileName.lastIndexOf("/")+1);
 				System.out.println(fileName);
 				getFileContentTask task = new getFileContentTask();
-				System.out.println("Retrieving file content from " + SemanticAssistantsActivity.serverURL);
 				task.execute(SemanticAssistantsActivity.serverURL);
 			}
 		}
@@ -217,9 +217,10 @@ public class SemanticResultsActivity extends Activity {
 				}
 			}
 			Intent browserIntent = new Intent(Intent.ACTION_VIEW);
-		    browserIntent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
-		    browserIntent.setData(Uri.fromFile(LogFile));
+			browserIntent.setClassName("com.android.browser", "com.android.browser.BrowserActivity");
+			browserIntent.setData(Uri.fromFile(LogFile));
 			startActivity(browserIntent);
+			finish();
 		}
 	}
 }

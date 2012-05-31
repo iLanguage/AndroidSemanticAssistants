@@ -41,5 +41,5 @@
 	<string name="lblRTParams">No runtime parameters.</string>
 	<string name="account_name">Semantic Assistants</string>
 	<string name="authenticationSuccess">Successfully authenticated</string>
-	<string name="authenticationFail">Authentication failed</string>
+	<string name="authenticationFail">Authentication failed. Username or password is incorrect.</string>
 </resources>

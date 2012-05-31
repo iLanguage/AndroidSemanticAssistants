@@ -22,7 +22,9 @@ import java.security.NoSuchAlgorithmException;
 import java.security.UnrecoverableKeyException;
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
@@ -364,18 +366,20 @@ public class SemanticAssistantsActivity extends ListActivity{
 		lblParams.setTextAppearance(getApplicationContext(), R.style.titleText);
 		output.addView(lblParams);
 
+		LayoutParams txtParamsAttrbs = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
+		LinearLayout paramsLayout = new LinearLayout(this);
+		paramsLayout.setId(0);
+
 		if(params.size() > 0){
 			ScrollView scroll = new ScrollView(this);
-			LayoutParams txtParamsAttrbs = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 			scroll.setLayoutParams(txtParamsAttrbs);
-
-			LinearLayout paramsLayout = new LinearLayout(this);
 			paramsLayout.setOrientation(LinearLayout.VERTICAL);
 			scroll.addView(paramsLayout);
 			for(int j=0; j < params.size(); j++){
 				TextView lblParamName = new TextView(this);
 				lblParamName.setText(params.get(j).getParamName());
 				EditText tview = new EditText(this);
+				tview.setId(1);
 				tview.setText(params.get(j).getDefaultValueString());
 				LayoutParams txtViewLayoutParams = new LayoutParams(LayoutParams.FILL_PARENT, LayoutParams.WRAP_CONTENT);
 				tview.setLayoutParams(txtViewLayoutParams);
@@ -416,16 +420,41 @@ public class SemanticAssistantsActivity extends ListActivity{
 	/** Asynchronous task to invoke an assistant. */
 	class InvocationTask extends AsyncTask<Void, Void, Void>{
 		String responseString = "";
-
+		Map<String, String> userParams = new HashMap<String,String>();
 		/** Sends a POST request to invoke a selected assistant. */
 		@Override
 		protected Void doInBackground(Void... params) {
 			if(serverURL.indexOf("https") < 0){
-				System.out.println("non secure post");
-				RequestRepresentation request = new RequestRepresentation(selectedService, null, txtInput.getText().toString());
+				LinearLayout paramsLayout = (LinearLayout) findViewById(0);
+				ArrayList<EditText> paramsList = new ArrayList<EditText>();
+				if(paramsLayout != null){
+					// find all the parameters text edits
+					for( int i = 0; i < paramsLayout.getChildCount(); i++ ){
+						if( paramsLayout.getChildAt( i ) instanceof EditText ){
+							paramsList.add( (EditText) paramsLayout.getChildAt( i ));
+						}
+					}
+
+					// find their names in the service object
+					List<GateRuntimeParameter> PipelineParamsList = null;
+					ServiceInfoForClientArray list = getServices();
+					for(int i=0; i < list.getItem().size(); i++){
+						if(list.getItem().get(i).getServiceName().equals(selectedService)){
+							PipelineParamsList = list.getItem().get(i).getParams();
+							break;
+						}
+					}
+
+					// prepare for request representation
+					for(int i=0; i < PipelineParamsList.size(); i++){
+						userParams.put(PipelineParamsList.get(i).getParamName(), paramsList.get(i).getText().toString());
+					}
+				}
+
+				RequestRepresentation request = new RequestRepresentation(selectedService, userParams, txtInput.getText().toString());
 				Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
 				String uri = serverURL + "/service";
-				Log.i(TAG, "Sending POST via Restlet to " + uri);
+				Log.i(TAG, "Sending POST invocation request via Restlet to " + uri);
 				Representation response = new ClientResource(uri).post(representation);
 				try {
 					StringWriter writer = new StringWriter();
@@ -444,6 +473,8 @@ public class SemanticAssistantsActivity extends ListActivity{
 				return null;
 			}else{
 				try{
+					URI uri = new URI(serverURL+"/service");
+					Log.i(TAG, "Sending secure POST invocation request to " + uri);
 					HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
 					DefaultHttpClient client = new DefaultHttpClient();
 
@@ -468,7 +499,6 @@ public class SemanticAssistantsActivity extends ListActivity{
 					RequestRepresentation request = new RequestRepresentation(selectedService, null, txtInput.getText().toString());
 					Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
 
-					URI uri = new URI(serverURL+"/service");
 					HttpPost post = new HttpPost(uri);
 					post.setEntity(new StringEntity(representation.getText()));
 
@@ -489,6 +519,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 				intent.putExtra("xml", responseString);
 				Log.i(TAG, "Parsing server response: " + responseString);
 				startActivity(intent);
+				finish();
 			}
 			return null;
 		}

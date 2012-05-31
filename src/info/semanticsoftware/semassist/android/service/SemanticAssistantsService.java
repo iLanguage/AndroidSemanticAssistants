@@ -1,6 +1,7 @@
 package info.semanticsoftware.semassist.android.service;
 
 import info.semanticsoftware.semassist.android.activity.GlobalSettingsActivity;
+import info.semanticsoftware.semassist.android.activity.SemanticResultsActivity;
 import info.semanticsoftware.semassist.android.intents.ServiceIntent;
 import info.semanticsoftware.semassist.android.intents.ServiceIntentFactory;
 import info.semanticsoftware.semassist.csal.ClientUtils;
@@ -52,16 +53,23 @@ public class SemanticAssistantsService extends IntentService{
 			ServiceIntent instance = ServiceIntentFactory.getService(action);
 			instance.setInputString(input);
 			instance.setCandidServerURL(serverURL);
+			//FIXME add RTP handling
 			instance.setRTParams(null);
 			String result = instance.execute();
 			System.out.println(result);
 
 			boolean silent_mode = Boolean.parseBoolean(intent.getExtras().getString("SILENT_MODE"));
 			if(silent_mode){
+				System.out.println(silent_mode);
 				Intent broadcast = new Intent("info.semanticsoftware.semassist.android.BROADCAST");
 				broadcast.putExtra("serverResponse", result);
 				sendOrderedBroadcast(broadcast, null);
-			}//TODO handle other case
+			}else{
+				// open the results activity
+				Intent resultsIntent = new Intent(getBaseContext(), SemanticResultsActivity.class);
+				resultsIntent.putExtra("xml", result);
+				startActivity(resultsIntent);
+			}
 		} catch (Exception e) {
 			System.out.println(e.getMessage());
 		}

@@ -1,6 +1,9 @@
 package info.semanticsoftware.semassist.android.activity;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.StringWriter;
 import java.util.ArrayList;
 
@@ -10,6 +13,7 @@ import org.restlet.representation.StringRepresentation;
 import org.restlet.resource.ClientResource;
 
 import info.semanticsoftware.semassist.android.service.SemAssistAuthenticator;
+import info.semanticsoftware.semassist.android.utils.Constants;
 import android.accounts.Account;
 import android.accounts.AccountAuthenticatorActivity;
 import android.accounts.AccountManager;
@@ -19,12 +23,29 @@ import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import info.semanticsoftware.semassist.android.activity.R;
+import info.semanticsoftware.semassist.android.encryption.CustomSSLSocketFactory;
 import info.semanticsoftware.semassist.csal.ClientUtils;
 import info.semanticsoftware.semassist.csal.XMLElementModel;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.conn.scheme.Scheme;
+import org.apache.http.conn.scheme.SchemeRegistry;
+import org.apache.http.conn.ssl.SSLSocketFactory;
+import org.apache.http.conn.ssl.X509HostnameVerifier;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.conn.SingleClientConnManager;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+
+import java.security.KeyStore;
 
 /**
  * Provides an activity to authenticate users.
@@ -61,63 +82,111 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity{
 
 		//Qualified username, i.e, user@semanticassistants.com
 		String qUsername = tvUsername.getText().toString();
-		String username = qUsername.substring(0, qUsername.indexOf("@"));
+		String username = null;
+		if(qUsername.indexOf("@") > 0){
+			username = qUsername.substring(0, qUsername.indexOf("@"));
+		}else{
+			username = qUsername;
+		}
 		String password = tvPassword.getText().toString();
 
 		//TODO do client-side validation like password length etc.
-
-		String request = "<authenticate><username>" + username + "</username><password>" + password + "</password></authenticate>";
-		Representation representation = new StringRepresentation(request,MediaType.APPLICATION_XML);
-
-		String uri = serverURL + "/user";
-		Log.i(TAG, "Sending authentication request to " + uri);
-		Representation response = new ClientResource(uri).post(representation);
-		try {
-			StringWriter writer = new StringWriter();
-			response.write(writer);
-			String responseString = writer.toString();
-			Log.i(TAG, "Authentication response: " + responseString);
-
-			//Let's do some nasty string manipulation here and TODO change this later
-			int temp = responseString.indexOf("<userKey>");
-			String pubKeyMod = responseString.substring(temp + "<userKey>".length());
-			temp = pubKeyMod.indexOf("</userKey>");
-			pubKeyMod = pubKeyMod.substring(0, temp);
-			Log.i(TAG, "pubKeyMod " + pubKeyMod);
-
+		String response = authenicate(username, password);
+		if(!response.equals(Constants.AUHTENTICATION_FAIL)){
 			SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
 			Editor editor = settings.edit();
-			editor.putString("modValue", pubKeyMod);
-			editor.putString("username", qUsername);
+			editor.putString("username", username);
 			boolean result = editor.commit();
 			if(result){
 				Toast.makeText(this, R.string.authenticationSuccess, Toast.LENGTH_LONG).show();
+				String accountType = this.getIntent().getStringExtra("auth.token");
+				if (accountType == null) {
+					accountType = SemAssistAuthenticator.ACCOUNT_TYPE;
+				}
+
+				AccountManager accMgr = AccountManager.get(this);
+
+				// Add the account to the Android Account Manager
+				String accountName = username + "@semanticassistants.com";
+				final Account account = new Account(accountName, accountType);
+				accMgr.addAccountExplicitly(account, password, null);
+
+				// Inform the caller (could be the Android Account Manager or the SA app) that the process was successful
+				final Intent intent = new Intent();
+				intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, accountName);
+				intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
+				intent.putExtra(AccountManager.KEY_AUTHTOKEN, accountType);
+				this.setAccountAuthenticatorResult(intent.getExtras());
+				this.setResult(RESULT_OK, intent);
+				this.finish();
 			}else{
-				Toast.makeText(this, R.string.authenticationFail, Toast.LENGTH_LONG).show();
+				Toast.makeText(this, "Could not write the preferences.", Toast.LENGTH_LONG).show();
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		}else{
+			Toast.makeText(this, R.string.authenticationFail, Toast.LENGTH_LONG).show();
 		}
+	}
 
-		String accountType = this.getIntent().getStringExtra("auth.token");
-		if (accountType == null) {
-			accountType = SemAssistAuthenticator.ACCOUNT_TYPE;
+	private String authenicate(String username, String password) {
+		String uri = serverURL + "/user";
+		String request = "<authenticate><username>" + username + "</username><password>" + password + "</password></authenticate>";
+		Representation representation = new StringRepresentation(request,MediaType.APPLICATION_XML);
+		String serverResponse = null;
+
+		if(serverURL.indexOf("https") < 0){
+			Log.i(TAG, "Sending authentication request to " + uri);
+			Representation response = new ClientResource(uri).post(representation);
+			try {
+				StringWriter writer = new StringWriter();
+				response.write(writer);
+				serverResponse = writer.toString();
+				Log.i(TAG, "Authentication response: " + serverResponse);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}else{
+			try{
+				Log.i(TAG, "Sending authentication request to " + uri);
+				HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;
+				DefaultHttpClient client = new DefaultHttpClient();
+	
+				SchemeRegistry registry = new SchemeRegistry();
+				final KeyStore ks = KeyStore.getInstance("BKS");
+				// NOTE: the keystore must have been generated with BKS 146 and not later
+				final InputStream in = getApplicationContext().getResources().openRawResource(R.raw.clientkeystorenew);  
+				try {
+					ks.load(in,getString(R.string.keystorePassword).toCharArray());
+				} finally {
+					in.close();
+				}
+	
+				SSLSocketFactory socketFactory = new CustomSSLSocketFactory(ks);
+				socketFactory.setHostnameVerifier((X509HostnameVerifier) hostnameVerifier);
+				registry.register(new Scheme("https", socketFactory, 443));
+				SingleClientConnManager mgr = new SingleClientConnManager(client.getParams(), registry);
+				DefaultHttpClient httpClient = new DefaultHttpClient(mgr, client.getParams());
+	
+				// Set verifier
+				HttpsURLConnection.setDefaultHostnameVerifier(hostnameVerifier);
+	
+				HttpPost post = new HttpPost(uri);
+				post.setEntity(new StringEntity(representation.getText()));
+	
+				HttpResponse response = httpClient.execute(post);
+				HttpEntity entity = response.getEntity();
+				InputStream inputstream = entity.getContent();
+				InputStreamReader inputstreamreader = new InputStreamReader(inputstream);
+				BufferedReader bufferedreader = new BufferedReader(inputstreamreader);
+	
+				String string = null;
+				while ((string = bufferedreader.readLine()) != null) {
+					serverResponse += string;
+				}
+			} catch (Exception e){
+				e.printStackTrace();
+			}
 		}
-
-		AccountManager accMgr = AccountManager.get(this);
-
-		// Add the account to the Android Account Manager
-		final Account account = new Account(qUsername, accountType);
-		accMgr.addAccountExplicitly(account, password, null);
-
-		// Inform the caller (could be the Android Account Manager or the SA app) that the process was successful
-		final Intent intent = new Intent();
-		intent.putExtra(AccountManager.KEY_ACCOUNT_NAME, qUsername);
-		intent.putExtra(AccountManager.KEY_ACCOUNT_TYPE, accountType);
-		intent.putExtra(AccountManager.KEY_AUTHTOKEN, accountType);
-		this.setAccountAuthenticatorResult(intent.getExtras());
-		this.setResult(RESULT_OK, intent);
-		this.finish();
+		return serverResponse;
 	}
 
 	/**

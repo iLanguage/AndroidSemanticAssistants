@@ -63,8 +63,9 @@ public abstract class ServiceIntent {
 	}
 
 	public String execute(){
-		System.out.println("factory execute for " + pipelineName + " on server " + candidServerURL);
+		System.out.println("factory execute for " + pipelineName + " on server " + candidServerURL + " params " + RTParams + " input " + inputString );
 		if(candidServerURL.indexOf("https") < 0){
+			System.out.println("non secure post to " + candidServerURL);
 			RequestRepresentation request = new RequestRepresentation(pipelineName, RTParams, inputString);
 			Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
 			Representation response = new ClientResource(candidServerURL).post(representation);
@@ -76,6 +77,7 @@ public abstract class ServiceIntent {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+			System.out.println("$$$ " + responseString);
 			return responseString;
 		}else{
 			try{
