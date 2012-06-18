@@ -61,6 +61,41 @@ editing the file \verb=/etc/security/limits=:
 \end{verbatim}
 
 \section{Installation}
+\subsection{\sa Server RESTful interface}
+\paragraph{401 Unauthorized Access to Tomcat Manager Error.} This exception is thrown when you don't have the correct credentials for the Tomcat Manager application or the permissions have not been set for the Manager application yet. A sample console log for this exception looks like:
+
+\begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
+/SemanticAssistants/Server-REST/build.xml:220: java.io.IOException: Server returned HTTP response code: 401 for URL: http://localhost:8080/manager/deploy?path=\%2FSemAssistRestlet
+	at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1436)
+	at org.apache.catalina.ant.AbstractCatalinaTask.execute(AbstractCatalinaTask.java:223)
+	at org.apache.catalina.ant.DeployTask.execute(DeployTask.java:201)
+	at org.apache.tools.ant.UnknownElement.execute(UnknownElement.java:291)
+	at sun.reflect.GeneratedMethodAccessor4.invoke(Unknown Source)
+	at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:25)
+	at java.lang.reflect.Method.invoke(Method.java:597)
+	at org.apache.tools.ant.dispatch.DispatchUtils.execute(DispatchUtils.java:106)
+	at org.apache.tools.ant.Task.perform(Task.java:348)
+	at org.apache.tools.ant.Target.execute(Target.java:390)
+	at org.apache.tools.ant.Target.performTasks(Target.java:411)
+	at org.apache.tools.ant.Project.executeSortedTargets(Project.java:1399)
+	at org.apache.tools.ant.Project.executeTarget(Project.java:1368)
+	at org.apache.tools.ant.helper.DefaultExecutor.executeTargets(DefaultExecutor.java:41)
+	at org.apache.tools.ant.Project.executeTargets(Project.java:1251)
+	at org.apache.tools.ant.Main.runBuild(Main.java:809)
+	at org.apache.tools.ant.Main.startAnt(Main.java:217)
+	at org.apache.tools.ant.launch.Launcher.run(Launcher.java:280)
+	at org.apache.tools.ant.launch.Launcher.main(Launcher.java:109)
+\end{lstlisting}
+
+Although Manager application is installed in Tomcat web server by default, for security reasons, no user is defined to operate this application. To create such user, you need to modify the \texttt{\$TOMCAT\_HOME/conf/tomcat-users.xml} file. By default, Tomcat user configuration file has sample user and role entries wrapped in a comment. Remove the comments, i.e., \texttt{<!-- -->}, around them and add these two lines to your XML document.
+
+\begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
+<role rolename="manager"/>
+<user username="aUsername" password="aPassword" roles="manager"/>
+\end{lstlisting}
+
+Then restart your Tomcat server and try the Ant script again by updating the credentials you defined here in the \url{SemanticAssistants/Server-REST/build.xml} file.
+
 \subsection{Eclipse Plug-In}
 \label{trouble:eclipse_install}
 \paragraph{The Plug-in does not show up in Eclipse.} This problem happens when the plug-in could not successfully install itself on your Eclipse. The most common cause of this is when you have not enough permissions on your Eclipse installation folder. For Eclipse plug-in to install itself, it needs write permission to the \texttt{configurations} folder. Login as root or obtain the adequate permissions to write into the Eclipse installation folder and restart application.

@@ -123,3 +123,79 @@ In summary, to integrate a new NLP service, two steps are necessary:
   details on the OWL NLP description format, please refer to
   Section~\ref{sec:owl}.
 \end{enumerate}
+
+\section{\sa RESTful Interface} In addition to the SOAP interface described above, the \sa server also offers a RESTful interface. This server interface conforms to the REpresentational Transfer Protocol\footnote{REST Web Architecture, \url{http://dl.acm.org/citation.cfm?doid=514183.514185}} constraints and allows clients to inquire and invoke NLP services via light-weight HTTP requests. The current supported actions of our RESTful interface are \texttt{GET} and \texttt{POST} requests and its default representation format is XML. Table~\ref{tab:rest_actions} shows the how to use the \sa RESTful web interface.
+
+\begin{table}[htb]
+ \centering\small\sffamily
+ \begin{tabular}{p{0.25\textwidth}@{\hspace*{4mm}}p{0.07\textwidth}@{\hspace*{4mm}}p{0.6\textwidth}}
+   \toprule
+   \textbf{URL} & \textbf{Method} & \textbf{Application} \\
+   \midrule
+   /services & GET &
+   \emph{Retrieves the representation of all available assistants} \\
+
+   & & \\
+
+   /service/\{serviceName\} & POST & \emph{Invokes the specified service} \\
+
+   & & \\
+   
+   /users & GET & \emph{Retrieves the representation of all users (requires admin access)} \\
+   
+      & & \\
+
+   /user/\{username\} & POST & \emph{Registers a new user} \\
+
+& & \\
+
+   /user/\{usename\} & GET & \emph{Retrieves the representation of the specified user} \\
+
+   \bottomrule
+\end{tabular}
+ \caption{The \sa RESTful Web Interface}
+ \label{tab:rest_actions}
+\end{table}
+ 
+ \subsection{Deployment Options}
+ The \sa RESTful web interface is essentially a Java Web Archive (WAR) file that like any other Java web application, needs be deployed in a web container. In the following, we describe how the \sa WAR file can be automatically deployed on an Apache Tomcat\footnote{Apache Tomcat Web Server, \url{http://tomcat.apache.org/}} server as well as inside a console.
+ 
+Before proceeding to deploy the server, we have to build the WAR file first. To do so, browse to \url{SemanticAssistants/Server-REST} folder and type \texttt{ant pack}. This command will automatically resolve all the dependencies of the RESTful project, compiles the source code and builds a WAR file, named  \texttt{SemAssistRestlet.war}, in the \url{dist} folder.
+ 
+\subsubsection{Deploying on Apache Tomcat}
+Apache Tomcat is an open source web server and a container for Java web applications. The Ant build script in the \url{Server-REST} folder has a special target that automatically deploys the \url{SemAssistRestlet.war} file on a provided Tomcat installation file using the Tomcat's Manager application. The Manager application allows deploying and undeploying various applications without the need to restart the Tomcat server.
+
+To use this option, you need:
+
+\begin{itemize}
+\item A Tomcat installation on your system
+\item The Tomcat Manager application\footnote{The Manager application is installed by default on context path \texttt{/manager} in Tomcat 5 and later.}
+\item Have Tomcat and Manager user credentials in hand\footnote{You can find these credentials in \texttt{\$TOMCAT\_HOME/conf/tomcat-users.xml} file.}
+\end{itemize}
+
+Once you have the Tomcat and Manager credentials, proceed to edit the \texttt{build.xml} file in \url{SemanticAssistants/Server-REST} folder. Find the following lines in the file and replace the dummy values with your credentials:
+
+\begin{lstlisting}[language=XML,numbers=left,xleftmargin=8mm,columns=flexible]
+    <!-- tomcat properties - replace with correct values -->
+    <property name="tomcat.manager.url"       value="http://localhost:8080/manager"/>
+    <property name="tomcat.manager.username"       value="test"/>
+    <property name="tomcat.manager.password"       value="test"/>
+\end{lstlisting}
+
+Now type \texttt{ant deploy} in your console for the Ant script to automatically deploy the \url{SemAssistRestlet.war} file in your Tomcat. You can test the RESTful interface by pointing your browser to \texttt{http://localhost:8080/SemAssistRestlet/services}. If the application is successfully deployed in Tomcat, you should see an XML document listing available services of the connected \sa server.
+
+Similarly, you can stop or undeploy the RESTful interface using \texttt{ant stop} and \texttt{ant undeploy} commands respectively.
+ 
+\subsubsection{Running as a standalone application}
+The \url{SemAssistRestlet.war} file comes with an embedded Jetty\footnote{Jetty Web Server, \url{http://jetty.codehaus.org/jetty/}} web server that allows the application to run without the need for an external web container. Embedding the Jetty server inside our application, creates an executable WAR file that requires nothing but a Java runtime environment to run. In order to start the RESTful server, browse to \url{SemanticAssistants/Server-REST/dist} and type \texttt{java -jar SemAssistRestlet.war}. This command will start the RESTful web server on its default port \texttt{8182} and print logs on your console. To test the server, open your web browser and go to \texttt{http://localhost:8182/services}. If the server has started successfully, you should see an XML document in your browser that presents a list all the available services in the connected \sa server.
+
+You can also run the RESTful server on a custom port. To do this, send your preferred port number as an input argument to the executable WAR file by typing \texttt{java -jar SemAssistRestlet.war 1234}. This command will start the server on \texttt{http://localhost:1234}.
+
+\section{Server Authentication}
+One of the major concerns when transmitting data in a client-server architecture is the protection of data from being sniffed or hijacked by eavesdroppers. This can be achieved by encrypting the communication channel with cryptographic algorithms. HyperText Transfer Protocol Secure (HTTPS) is a combination of HTTP and Secure Socket Layer (SSL) protocol that uses industry-strength encryption algorithms to secure a channel between a client and a server. In addition, it allows clients to verify the authenticity of the server that they are sending their data to. The \sa RESTful web server also offers a secure interface that is published on the HTTPS protocol. 
+
+To start the secure interface, browse to the \url{SemanticAssistants/Server-REST/dist} folder and type \texttt{java -jar SemAssistRestlet-Secure.war}. Then point your web browser to \texttt{https://localhost:8183/services}. Your browser should prompt you saying that the certificate of this URL is not verified. This is because the certificate that the RESTful web server is presenting to your browser is not verified by a leading SSL Certificate Authority, since it is used in a development environment. You can safely proceed to let your browser accept the certificate and present you an XML document listing the available services of the connected \sa server. 
+
+Similar to the \sa unsecured RESTful interface, you can customize the HTTPS server port number by passing an argument to the WAR file, i.e., \texttt{java -jar SemAssistRestlet-Secure.war 1234}.
+
+Note that the presented approach takes advantage of the embedded Jetty server inside the \sa RESTful web server. If you choose to deploy the RESTful web server on a different web container, please consult the web server's corresponding user guide on how to configure an SSL server.
