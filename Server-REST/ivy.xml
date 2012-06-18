@@ -93,6 +93,10 @@
             <artifact name="servlet-api" ext="jar"/>
 	</dependency>
 	
+	<dependency org="org.jsslutils" name="jsslutils" rev="1.0.5">
+	            <artifact name="jsslutils" ext="jar"/>
+	</dependency>
+	
 	<dependency org="org.eclipse.jetty.aggregate" name="jetty-all-server" rev="7.0.2.RC0">
 		<exclude name="geronimo-annotation_1.0_spec" />
 		<exclude name="geronimo-jaspic_1.0_spec" />
