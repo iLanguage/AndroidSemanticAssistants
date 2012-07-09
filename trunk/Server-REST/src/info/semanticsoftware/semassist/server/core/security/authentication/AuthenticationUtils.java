@@ -211,6 +211,7 @@ public class AuthenticationUtils {
 	/** Adds a new user to the USERS database.
 	 * @param userName username
 	 * @param password password
+	 * @param accType account type
 	 * @param devKey user's developer key (optional) */
 	public void addUser(final String userName, final String password, final String accType, final String devKey){
 		loadDBIntoMemory();
@@ -265,10 +266,10 @@ public class AuthenticationUtils {
 		}
 	}
 
-	/** Convenience method to add users to the database via commandline
+	/** Convenience method to add users to the database via commandline.
 	 * @param args commandline arguments
 	 */
-	public static void main(String args[]){
+	public static void main(final String[] args){
 		AuthenticationUtils obj = AuthenticationUtils.getInstance();
 		obj.addUser(args[0], args[1], args[2], null);
 	}
