@@ -120,7 +120,7 @@ public class ClientUtils {
 
 			// without authentication
 			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "baharpass");
-			
+
 			/* faulty requests for testing */
 			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "");
 			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "wrongpassword");
