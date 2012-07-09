@@ -72,6 +72,9 @@ public class RequestHandler extends DefaultHandler{
 	/** Contains the <code><sessionIV></code> node value. */
 	private String sessionIV;
 
+	/** Boolean value representing whether the request needs user authentication */
+	private boolean needsAuthentication = false;
+
 	/** The <map between parameter's name and values. */
 	private Map<String, String> params = new HashMap<String, String>();
 
@@ -83,6 +86,9 @@ public class RequestHandler extends DefaultHandler{
 
 	/** A temporary object to contain the parameter <code><name></code> node value. */
 	private String tempParamName = "";
+
+	/** The <code><authenticationNeeded></code> XML element representing user authentication */
+	private boolean authenticationTag = false;
 
 	/** Returns the service name specified in the request. 
 	 * @return service name*/
@@ -126,6 +132,14 @@ public class RequestHandler extends DefaultHandler{
 	public Map<String, String> getParams(){
 		return this.params;
 	}
+
+	/** Returns the user authentication value
+	 * @return true if request needs user authentication, false otherwise
+	 */
+	public boolean needsAuthentication(){
+		return this.needsAuthentication;
+	}
+
 	/** Gets invoked when parsing a request is initiated. 
 	 * @throws SAXException if the request cannot be parsed */
 	@Override
@@ -165,6 +179,8 @@ public class RequestHandler extends DefaultHandler{
 			this.sessionKeyTag = true;
 		}else if (qName.equals("sessionIV")) {
 			this.sessionIVTag = true;
+		}else if(qName.equals("authenticationNeeded")){
+			this.authenticationTag = true;
 		}
 	}
 
@@ -191,6 +207,8 @@ public class RequestHandler extends DefaultHandler{
 			this.sessionKeyTag = false;
 		}else if (qName.equals("sessionIV")) {
 			this.sessionIVTag = false;
+		}else if(qName.equals("authenticationNeeded")){
+			this.authenticationTag = false;
 		}
 	}
 
@@ -217,6 +235,13 @@ public class RequestHandler extends DefaultHandler{
 			sessionKey = new String(ch, start, length).trim();
 		}else if(this.sessionIVTag){
 			sessionIV = new String(ch, start, length).trim();
+		}else if(this.authenticationTag){
+			String value = new String(ch, start, length).toLowerCase().trim();
+			if(value.equals("yes")){
+				needsAuthentication = true;
+			}else{
+				needsAuthentication = false;
+			}
 		}
 	}
 }
