@@ -13,7 +13,7 @@ import org.restlet.resource.ClientResource;
  *  */
 public class ClientUtils {
 
-	/**
+	  /**
 	 * Creates an XML representation for a service invocation request.
 	 * @param serviceName NLP service name to invoke
 	 * @param params list of runtime parameters
@@ -68,14 +68,22 @@ public class ClientUtils {
 		return buffer.toString();
 	}
 
-	public static void main(String[] args){
+	/**
+	 * Test cases for server authentication modes.
+	 * @param args runtime arguments
+	 */
+	public static void main(final String[] args){
 		try{
-			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "baharpass");
+			// authentication mode needed
+			String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "baharpass");
 
+			// without authentication
+			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "baharpass");
+			
 			/* faulty requests for testing */
 			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "");
 			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "wrongpassword");
-			String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", false, "bahar" , "bahar");
+			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", false, "bahar" , "bahar");
 
 			Representation representation = new StringRepresentation(request);
 			String uri = "http://localhost:8182/service";
