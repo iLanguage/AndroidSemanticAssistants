@@ -79,11 +79,11 @@ public class RequestParser {
 
 			/* Do we need user authentication? */
 			if(handler.needsAuthentication()){
-				System.out.println("user asks for authentication");
+				System.out.println("Request asks for authentication mode. Looking up credentials in the database...");
 				// do the DB look up
 				if(!AuthenticationUtils.getInstance().authenticateUser(handler.getUsername(), handler.getPassword())){
-					System.err.println("Invalid user credentials.");
-					return "";
+					System.err.println("Invalid user credentials. Aborting the request...");
+					return "Authentication failed.";
 				}
 			}
 			
