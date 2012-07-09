@@ -28,6 +28,7 @@ import info.semanticsoftware.semassist.server.GateRuntimeParameterArray;
 import info.semanticsoftware.semassist.server.ServiceInfoForClient;
 import info.semanticsoftware.semassist.server.UriList;
 import info.semanticsoftware.semassist.server.UserContext;
+import info.semanticsoftware.semassist.server.core.security.authentication.AuthenticationUtils;
 import info.semanticsoftware.semassist.server.rest.business.ServiceAgentSingleton;
 
 import java.io.StringReader;
@@ -76,6 +77,16 @@ public class RequestParser {
 			/* Parse the XML data from the request string */
 			reader.parse(new InputSource(new StringReader(requestRepresentation)));
 
+			/* Do we need user authentication? */
+			if(handler.needsAuthentication()){
+				System.out.println("user asks for authentication");
+				// do the DB look up
+				if(!AuthenticationUtils.getInstance().authenticateUser(handler.getUsername(), handler.getPassword())){
+					System.err.println("Invalid user credentials.");
+					return "";
+				}
+			}
+			
 			/* Get the parsed data and the service name to invoke */
 			StringArray content = new StringArray();
 			UriList urilist = new UriList();
