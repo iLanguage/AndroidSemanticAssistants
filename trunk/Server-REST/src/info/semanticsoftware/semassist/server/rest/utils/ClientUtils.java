@@ -116,15 +116,15 @@ public class ClientUtils {
 	public static void main(final String[] args){
 		try{
 			// authentication mode needed
-			String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "baharpass");
+			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "admin" , "admin");
 
 			// without authentication
-			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "baharpass");
+			String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", false, null , null);
 
 			/* faulty requests for testing */
-			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "");
-			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "wrongpassword");
-			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", false, "bahar" , "bahar");
+			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "admin" , "");
+			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "admin" , "wrongpassword");
+			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", false, "admin" , "admin");
 
 			Representation representation = new StringRepresentation(request);
 			String uri = "http://localhost:8182/service";

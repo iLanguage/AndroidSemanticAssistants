@@ -40,7 +40,7 @@ public class ServiceAgentSingleton
 	private static String serverHost ="minion.cs.concordia.ca";
 
 	/** Port number value */
-	private static String serverPort = "2011";
+	private static String serverPort = "8879";
 
 	/** Returns the class singleton object.
 	 * @return Semantic Assistants broker 

@@ -84,9 +84,11 @@ public class RequestParser {
 				if(!AuthenticationUtils.getInstance().authenticateUser(handler.getUsername(), handler.getPassword())){
 					System.err.println("Invalid user credentials. Aborting the request...");
 					return "Authentication failed.";
+				}else{
+					System.out.println("Credentials OK. Executing service invocation request...");
 				}
 			}
-			
+
 			/* Get the parsed data and the service name to invoke */
 			StringArray content = new StringArray();
 			UriList urilist = new UriList();
