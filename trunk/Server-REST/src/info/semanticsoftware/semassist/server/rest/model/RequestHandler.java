@@ -75,7 +75,7 @@ public class RequestHandler extends DefaultHandler{
 	/** Boolean value representing whether the request needs user authentication */
 	private boolean needsAuthentication = false;
 
-	/** The <map between parameter's name and values. */
+	/** The map between parameter's name and values. */
 	private Map<String, String> params = new HashMap<String, String>();
 
 	/** The <code><name></code> XML element representing a runtime parameter's name. */
@@ -87,7 +87,7 @@ public class RequestHandler extends DefaultHandler{
 	/** A temporary object to contain the parameter <code><name></code> node value. */
 	private String tempParamName = "";
 
-	/** The <code><authenticationNeeded></code> XML element representing user authentication */
+	/** The <code><authenticationNeeded></code> XML element representing user authentication. */
 	private boolean authenticationTag = false;
 
 	/** Returns the service name specified in the request. 
@@ -133,8 +133,8 @@ public class RequestHandler extends DefaultHandler{
 		return this.params;
 	}
 
-	/** Returns the user authentication value
-	 * @return true if request needs user authentication, false otherwise
+	/** Returns the user authentication value.
+	 * @return true if request needs user authentication, false otherwise.
 	 */
 	public boolean needsAuthentication(){
 		return this.needsAuthentication;
