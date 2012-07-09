@@ -70,15 +70,15 @@ public class ClientUtils {
 
 	public static void main(String[] args){
 		try{
-			String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "baharpass");
+			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "baharpass");
 
 			/* faulty requests for testing */
 			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "");
 			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", true, "bahar" , "wrongpassword");
-			//String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", false, "bahar" , "bahar");
+			String request = createXMLServiceRequest("Person and Location Extractor", null, "Hello John", false, "bahar" , "bahar");
 
 			Representation representation = new StringRepresentation(request);
-			String uri = "http://192.168.1.102:8182/service";
+			String uri = "http://localhost:8182/service";
 			Representation response = new ClientResource(uri).post(representation);
 			StringWriter writer = new StringWriter();
 			response.write(writer);
