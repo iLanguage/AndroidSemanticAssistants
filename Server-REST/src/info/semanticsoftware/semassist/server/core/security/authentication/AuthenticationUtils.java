@@ -69,7 +69,7 @@ public class AuthenticationUtils {
 				Class.forName("org.h2.Driver");
 				// Setup the connection with the DB
 				//TODO move the credentials to the servlet's properties
-				connection = DriverManager.getConnection("jdbc:h2:~/H2DB/UsersDB", "dbadmin", "dbpass");
+				connection = DriverManager.getConnection("jdbc:h2:~/Users", "dbadmin", "dbpass");
 				connection.setAutoCommit(false);
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
@@ -212,7 +212,7 @@ public class AuthenticationUtils {
 	 * @param userName username
 	 * @param password password
 	 * @param devKey user's developer key (optional) */
-	public void addUser(final String userName, final String password, final String devKey){
+	public void addUser(final String userName, final String password, final String accType, final String devKey){
 		loadDBIntoMemory();
 		PreparedStatement prepStatement;
 		try {
@@ -224,16 +224,23 @@ public class AuthenticationUtils {
 			BigInteger mod = encUtil.getModulus(pubkey);
 			BigInteger pubEx = encUtil.getPubEx(pubkey);
 
+			String reqNum = "0";
+			if(accType.toLowerCase().equals("basic")){
+				reqNum = "1000";
+			}else if(accType.toLowerCase().equals("premium")){
+				reqNum = "10000";
+			}
+
 			PrivateKey priKey = encUtil.getPrivateKey(pair);
 			BigInteger priEx = encUtil.getPriEx(priKey);
-
-			prepStatement = connection.prepareStatement("INSERT INTO USERS (USERNAME, PASSWORD, MOD, PRIKEY, PUBKEY) VALUES (?, ?, ?, ?, ?)");
+			prepStatement = connection.prepareStatement("INSERT INTO USERS (USERNAME, PASSWORD, MOD, PRIKEY, PUBKEY, ACCTYPE, REQNUM) VALUES (?, ?, ?, ?, ?, ?, ?)");
 			prepStatement.setString(1, userName);
 			prepStatement.setString(2, password);
 			prepStatement.setString(3, mod.toString());
 			prepStatement.setString(4, priEx.toString());
 			prepStatement.setString(5, pubEx.toString());
-
+			prepStatement.setString(6, accType.toLowerCase());
+			prepStatement.setString(7, reqNum);
 			/*if(devKey != null){
 				prepStatement.setBigDecimal(6, new BigDecimal(new BigInteger(devKey)));
 			}*/
@@ -263,6 +270,6 @@ public class AuthenticationUtils {
 	 */
 	public static void main(String args[]){
 		AuthenticationUtils obj = AuthenticationUtils.getInstance();
-		obj.addUser(args[0], args[1], null);
+		obj.addUser(args[0], args[1], args[2], null);
 	}
 }
