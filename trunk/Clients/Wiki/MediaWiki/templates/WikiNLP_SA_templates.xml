@@ -1,0 +1,163 @@
+<mediawiki xmlns="http://www.mediawiki.org/xml/export-0.4/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mediawiki.org/xml/export-0.4/ http://www.mediawiki.org/xml/export-0.4.xsd" version="0.4" xml:lang="en">
+  <siteinfo>
+    <sitename>GenWiki</sitename>
+    <base>http://loompa.cs.concordia.ca/GenWiki/index.php/Main_Page</base>
+    <generator>MediaWiki 1.16.1</generator>
+    <case>first-letter</case>
+    <namespaces>
+      <namespace key="-2" case="first-letter">Media</namespace>
+      <namespace key="-1" case="first-letter">Special</namespace>
+      <namespace key="0" case="first-letter" />
+      <namespace key="1" case="first-letter">Talk</namespace>
+      <namespace key="2" case="first-letter">User</namespace>
+      <namespace key="3" case="first-letter">User talk</namespace>
+      <namespace key="4" case="first-letter">GenWiki</namespace>
+      <namespace key="5" case="first-letter">GenWiki talk</namespace>
+      <namespace key="6" case="first-letter">File</namespace>
+      <namespace key="7" case="first-letter">File talk</namespace>
+      <namespace key="8" case="first-letter">MediaWiki</namespace>
+      <namespace key="9" case="first-letter">MediaWiki talk</namespace>
+      <namespace key="10" case="first-letter">Template</namespace>
+      <namespace key="11" case="first-letter">Template talk</namespace>
+      <namespace key="12" case="first-letter">Help</namespace>
+      <namespace key="13" case="first-letter">Help talk</namespace>
+      <namespace key="14" case="first-letter">Category</namespace>
+      <namespace key="15" case="first-letter">Category talk</namespace>
+      <namespace key="102" case="first-letter">Property</namespace>
+      <namespace key="103" case="first-letter">Property talk</namespace>
+      <namespace key="104" case="first-letter">Type</namespace>
+      <namespace key="105" case="first-letter">Type talk</namespace>
+      <namespace key="108" case="first-letter">Concept</namespace>
+      <namespace key="109" case="first-letter">Concept talk</namespace>
+    </namespaces>
+  </siteinfo>
+  <page>
+    <title>Template:ListType</title>
+    <id>23</id>
+    <revision>
+      <id>186</id>
+      <timestamp>2011-12-01T00:36:50Z</timestamp>
+      <contributor>
+        <username>Sysop</username>
+        <id>1</id>
+      </contributor>
+      <text xml:space="preserve">{{#ask: [[hasType::{{{type}}}]]
+|?{{{type}}}={{{type}}} Entities Found
+|format=table
+|headers=plain
+|default=No pages found!
+|mainlabel=Page Name
+}}</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:SemAssist-Block</title>
+    <id>7</id>
+    <revision>
+      <id>13</id>
+      <timestamp>2011-11-14T22:16:56Z</timestamp>
+      <contributor>
+        <username>Sysop</username>
+        <id>1</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial import of SA templates</comment>
+      <text xml:space="preserve">&lt;table style=&quot;border: 2px dotted;
+border-color: #545454;
+background-color: #F0F0F0;
+	padding: .5em 1em;
+	float: left;
+	margin-bottom: 2em;
+	color: #000;&quot;&gt;
+&lt;tr&gt;&lt;td&gt;{{{content}}}&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br&gt;</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:SemAssist-End</title>
+    <id>6</id>
+    <revision>
+      <id>11</id>
+      <timestamp>2011-11-14T22:16:56Z</timestamp>
+      <contributor>
+        <username>Sysop</username>
+        <id>1</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial import of SA templates</comment>
+      <text xml:space="preserve">&lt;noinclude&gt;{{{serviceName}}} {{{doc}}}&lt;/noinclude&gt;</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:SemAssist-Start</title>
+    <id>2</id>
+    <revision>
+      <id>3</id>
+      <timestamp>2011-11-14T22:16:56Z</timestamp>
+      <contributor>
+        <username>Sysop</username>
+        <id>1</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial import of SA templates</comment>
+      <text xml:space="preserve">&lt;br&gt;
+'''{{{serviceName}}}''' on {{{doc}}}
+[{{{url}}} (View)]</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:SemAssist-TableEnd</title>
+    <id>5</id>
+    <revision>
+      <id>9</id>
+      <timestamp>2011-11-14T22:16:56Z</timestamp>
+      <contributor>
+        <username>Sysop</username>
+        <id>1</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision: Initial import of SA templates</comment>
+      <text xml:space="preserve">|}</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:SemAssist-TableRow</title>
+    <id>4</id>
+    <revision>
+      <id>170</id>
+      <timestamp>2011-12-01T00:24:11Z</timestamp>
+      <contributor>
+        <username>Sysop</username>
+        <id>1</id>
+      </contributor>
+      <minor/>
+      <comment>1 revision</comment>
+      <text xml:space="preserve">|- valign=&quot;top&quot;
+|[[hasType::{{{type}}}| ]][[{{{type}}}::{{{content}}}| ]]{{{content}}}
+|style=&quot;text-align: center;&quot; | [[Property:{{{type}}}|{{{type}}}]]
+|style=&quot;text-align: center;&quot; | {{{start}}}
+|style=&quot;text-align: center;&quot; | {{{end}}}
+|
+{{{features}}}</text>
+    </revision>
+  </page>
+  <page>
+    <title>Template:SemAssist-TableStart</title>
+    <id>3</id>
+    <revision>
+      <id>31</id>
+      <timestamp>2011-11-15T04:24:47Z</timestamp>
+      <contributor>
+        <username>Sysop</username>
+        <id>1</id>
+      </contributor>
+      <text xml:space="preserve">{| class=&quot;wikitable&quot; style=&quot;height:50px&quot;
+! Content
+! width=&quot;80&quot; | Type
+! width=&quot;50&quot; style=&quot;text-align: center;&quot;| Start
+! width=&quot;50&quot; style=&quot;text-align: center;&quot;| End
+! Features</text>
+    </revision>
+  </page>
+</mediawiki>
