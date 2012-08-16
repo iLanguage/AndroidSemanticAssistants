@@ -69,19 +69,19 @@ public class MediaWikiHelper extends WikiHelper{
 	private String wikiPass;
 
 	/** Annotation case flag. */
-	static boolean annotationCase = false;
+	private static boolean annotationCase = false;
 
 	/** Boundless Annotation case flag. */
-	static boolean boundlessAnnotationCase = false;
+	private static boolean boundlessAnnotationCase = false;
 
 	/** File case flag. */
-	static boolean fileCase = false;
+	private static boolean fileCase = false;
 
 	/** Document case flag. */
-	static boolean documentCase = false;
+	private static boolean documentCase = false;
 
 	/** A string object to hold file and document contents. */
-	static String outputString = "";
+	private static String outputString = "";
 
 	/** A map object to consolidate each document annotations. */
 	private static MultiMap annotsMap  = null;
@@ -92,14 +92,14 @@ public class MediaWikiHelper extends WikiHelper{
 	 * @return String page markup content
 	 * */
 	@Override
-	public String getPageContent(String pageName) {
+	public String getPageContent(final String pageName) {
 		createBot();
 		SimpleArticle sa = null;
 		try {
-/*		   bot = new MediaWikiBot("http://localhost/mediawiki-1.16/index.php");
-		   bot.login("wikisysop", "adminpass");
-		   bot = new MediaWikiBot("http://localhost/smartwiki/index.php");
-		   bot.login("admin", "bahar");
+			/*bot = new MediaWikiBot("http://localhost/mediawiki-1.16/index.php");
+			bot.login("wikisysop", "adminpass");
+			bot = new MediaWikiBot("http://localhost/smartwiki/index.php");
+			bot.login("admin", "bahar");
 			bot = new MediaWikiBot(wikiAddress);
 			bot.login(wikiUser, wikiPass);*/
 			if(bot.isLoggedIn()){
@@ -108,19 +108,19 @@ public class MediaWikiHelper extends WikiHelper{
 				System.out.println("Bot successfully logged in to the wiki...");
 				ConsoleLogger.log("Retrieving page content...");
 				//TODO remove debugging code
-			   System.out.println("Retrieving page content: " + pageName);
-			   sa = new SimpleArticle(bot.readContent(pageName));
-			   return sa.getText();
+				System.out.println("Retrieving page content: " + pageName);
+				sa = new SimpleArticle(bot.readContent(pageName));
+				return sa.getText();
 			}else{
 				ConsoleLogger.log("Bot could not log in to the wiki. Please check the credentials.");
 				//TODO remove debugging code
 				System.out.println("Bot could not log in to the wiki. Please check the credentials.");
 			}
-	   } catch (ActionException e) {
-		e.printStackTrace();
-	   } catch (ProcessException e) {
-		e.printStackTrace();
-	   }
+		} catch (ActionException e) {
+			e.printStackTrace();
+		} catch (ProcessException e) {
+			e.printStackTrace();
+		}
 		return "";
 	}
 
@@ -130,7 +130,7 @@ public class MediaWikiHelper extends WikiHelper{
 	 * @param password bot password
 	*/
 	@Override
-	public void setCredentials(String address, String username, String password) {
+	public void setCredentials(final String address, final String username, final String password) {
 		wikiAddress = address;
 		wikiUser = username;
 		wikiPass = password;
@@ -159,73 +159,68 @@ public class MediaWikiHelper extends WikiHelper{
 		}
 		parseResults(content);
 
-        if(annotationCase){	
-        try{
-            @SuppressWarnings("unchecked")
-    		Set<String> documents = annotsMap.keySet();
-            for(String document: documents){
-            	//String docToken = ServiceInvocationHandler.tokens[Integer.parseInt(document)];
-            	// complete URL
-            	String docToken = document;
-            	//String docLocalURL = docToken.substring(docToken.lastIndexOf("/")+1);
-    			//FIXME this is hack for MediaWiki, should be fixed
-            	int temp = docToken.lastIndexOf("index.php") + "index.php".length() + 1;
-    			// local name
-            	String docLocalURL = docToken.substring(temp);
-            	String resultsToWrite = getAnnotationResult(document, docToken, docLocalURL);
+		if(annotationCase){	
+			try{
+				@SuppressWarnings("unchecked")
+				Set<String> documents = annotsMap.keySet();
+				for(String document: documents){
+					//String docToken = ServiceInvocationHandler.tokens[Integer.parseInt(document)];
+					//complete URL
+					String docToken = document;
+					//String docLocalURL = docToken.substring(docToken.lastIndexOf("/")+1);
+					//FIXME this is hack for MediaWiki, should be fixed
+					int temp = docToken.lastIndexOf("index.php") + "index.php".length() + 1;
+					// local name
+					String docLocalURL = docToken.substring(temp);
+					String resultsToWrite = getAnnotationResult(document, docToken, docLocalURL);
 
-            	try{
+					try{
+						//int tokenNum = Integer.parseInt(document);
+						//String pageURL = ServiceInvocationHandler.tokens[tokenNum];
+						//String pageURL = document;
+						//int index = pageURL.lastIndexOf("/");
+						///int index = pageURL.lastIndexOf("index.php") + "index.php".length() + 1;
+						///pageURL = pageURL.substring(index);
+						System.out.println("DEBUGG:: writing to " + docLocalURL);
+						Article article = new Article(bot, targetPrefix.concat(docLocalURL));
+						//FIXME: without this the bot replaces the text, why? I have no idea!
+						String pageContent = article.getText();
+						String finale = SemAssistServlet.getWiki().getParser().updateTemplate(pageContent, InvokeCommand.serviceName, docLocalURL, resultsToWrite.toString());
+						// Clear the article
+						article.setText("");
+						article.setText(finale);
+						article.save();
+					} catch (NumberFormatException e){
+						e.printStackTrace();
+					}catch (ActionException e) {
+						e.printStackTrace();
+					} catch (ProcessException e) {
+						e.printStackTrace();
+					} catch (Exception e){
+						e.printStackTrace();
+					}
+				}
+				annotsMap.clear();
+			}catch(NumberFormatException e){
+				System.out.println(e.getMessage());
+			}
+			ConsoleLogger.log(log);
+			annotationCase = false;
+			return;
+		}
+		if(boundlessAnnotationCase){
+			try{
+				//FIXME fix the index
+				String docToken = ServiceInvocationHandler.tokens[0];
+				int temp = docToken.lastIndexOf("index.php") + "index.php".length() + 1;
+				//String docLocalURL = docToken.substring(docToken.lastIndexOf("/")+1);
+				String docLocalURL = docToken.substring(temp);
+				String resultsToWrite = getBoundlessResult(docToken,docLocalURL);
 
-            		//int tokenNum = Integer.parseInt(document);
-            		//String pageURL = ServiceInvocationHandler.tokens[tokenNum];
-            		//String pageURL = document;
-    				//int index = pageURL.lastIndexOf("/");
-            		///int index = pageURL.lastIndexOf("index.php") + "index.php".length() + 1;
-    				///pageURL = pageURL.substring(index);
-            		System.out.println("DEBUGG:: writing to " + docLocalURL);
-    				Article article = new Article(bot, targetPrefix.concat(docLocalURL));
-    				//FIXME: without this the bot replaces the text, why? I have no idea!
-    				String pageContent = article.getText();
-
-    				String finale = SemAssistServlet.getWiki().getParser().updateTemplate(pageContent, InvokeCommand.serviceName, docLocalURL, resultsToWrite.toString());
-
-    				// Clear the article
-    				article.setText("");
-
-    				article.setText(finale);
-
-    				article.save();
-    			} catch (NumberFormatException e){
-    				e.printStackTrace();
-    			}catch (ActionException e) {
-    				e.printStackTrace();
-    			} catch (ProcessException e) {
-    				e.printStackTrace();
-    			} catch (Exception e){
-    				e.printStackTrace();
-    			}
-            }
-            annotsMap.clear();
-	        }catch(NumberFormatException e){
-	        	System.out.println(e.getMessage());
-	        }
-	        ConsoleLogger.log(log);
-	        annotationCase = false;
-            return;
-        }
-        if(boundlessAnnotationCase){
-        	try{
-        		//FIXME fix the index
-            	String docToken = ServiceInvocationHandler.tokens[0];
-            	int temp = docToken.lastIndexOf("index.php") + "index.php".length() + 1;
-            	//String docLocalURL = docToken.substring(docToken.lastIndexOf("/")+1);
-            	String docLocalURL = docToken.substring(temp);
-            	String resultsToWrite = getBoundlessResult(docToken,docLocalURL);
-
-        		//int index = docToken.lastIndexOf("/");
+				//int index = docToken.lastIndexOf("/");
 				//String pageURL = docToken.substring(index + 1);
-        		Article article = new Article(bot, targetPrefix.concat(docLocalURL));
-        		//FIXME: without this the bot replaces the text, why? I have no idea!
+				Article article = new Article(bot, targetPrefix.concat(docLocalURL));
+				//FIXME: without this the bot replaces the text, why? I have no idea!
 				String pageContent = article.getText();
 
 				String cleanedContent = SemAssistServlet.getWiki().getParser().updateTemplate(pageContent, InvokeCommand.serviceName, docLocalURL, resultsToWrite);
@@ -244,14 +239,14 @@ public class MediaWikiHelper extends WikiHelper{
 			} catch (Exception e){
 				e.printStackTrace();
 			}
-	        ConsoleLogger.log(log);
+			ConsoleLogger.log(log);
 			boundlessAnnotationCase = false;
-        	return;
-        }
-        if(fileCase){
-        	try{
-        		Article article = new Article(bot, InvokeCommand.serviceName);
-        		//FIXME: without this the bot replaces the text, why? I have no idea!
+			return;
+		}
+		if(fileCase){
+			try{
+				Article article = new Article(bot, InvokeCommand.serviceName);
+				//FIXME: without this the bot replaces the text, why? I have no idea!
 				@SuppressWarnings("unused")
 				String pageContent = article.getText();
 				// Clear the article
@@ -270,23 +265,23 @@ public class MediaWikiHelper extends WikiHelper{
 			}
 			ConsoleLogger.log("Results will be written in: " + InvokeCommand.serviceName);
 			outputString = "";
-        	fileCase = false;
-        	return;
-        }
-        if(documentCase){
-        	documentCase = false;
-        	return;
-        }
+			fileCase = false;
+			return;
+		}
+		if(documentCase){
+			documentCase = false;
+			return;
+		}
 	}
 
 	/**
 	* Writes the input content to a specified wiki page.
 	* @param targetName wiki page name
-	* @param _content content to write
-	* @param extenral shows whether target is another wiki engine
+	* @param contentToWrite content to write
+	* @param external shows whether target is another wiki engine
 	*/
 	@Override
-	public void writeToOtherPage(String targetName, String _content, boolean external) {
+	public void writeToOtherPage(final String targetName, final String contentToWrite, final boolean external) {
 		MediaWikiBot wikibot = null;
 		if(external){
 			wikibot = createBot(ServerResponseHandler.getWikiAddress(), ServerResponseHandler.getWikiUser(), ServerResponseHandler.getWikiPass());
@@ -294,61 +289,58 @@ public class MediaWikiHelper extends WikiHelper{
 			createBot();
 			wikibot = bot;
 		}
-		parseResults(_content);
-        if(annotationCase){
-        	try{
-            @SuppressWarnings("unchecked")
-    		Set<String> documents = annotsMap.keySet();
-            for(String document: documents){
-            	//String docToken = ServiceInvocationHandler.tokens[Integer.parseInt(document)];
-            	//String docLocalURL = docToken.substring(docToken.lastIndexOf("/")+1);
-            	//String resultsToWrite = getAnnotationResult(document, docToken, docLocalURL);
-            	String docToken = document;
-            	int temp = docToken.lastIndexOf("index.php") + "index.php".length() + 1;
-            	//String docLocalURL = docToken.substring(docToken.lastIndexOf("/")+1);
-            	String docLocalURL = docToken.substring(temp);
-            	String resultsToWrite = getAnnotationResult(document, docToken, docLocalURL);
-            	try{
-            		Article article = new Article(wikibot, targetName);
+		parseResults(contentToWrite);
+		if(annotationCase){
+			try{
+				@SuppressWarnings("unchecked")
+				Set<String> documents = annotsMap.keySet();
+				for(String document: documents){
+					//String docToken = ServiceInvocationHandler.tokens[Integer.parseInt(document)];
+					//String docLocalURL = docToken.substring(docToken.lastIndexOf("/")+1);
+					//String resultsToWrite = getAnnotationResult(document, docToken, docLocalURL);
+					String docToken = document;
+					int temp = docToken.lastIndexOf("index.php") + "index.php".length() + 1;
+					//String docLocalURL = docToken.substring(docToken.lastIndexOf("/")+1);
+					String docLocalURL = docToken.substring(temp);
+					String resultsToWrite = getAnnotationResult(document, docToken, docLocalURL);
+					try{
+						Article article = new Article(wikibot, targetName);
 
-            		//FIXME: without this the bot replaces the text, why? I have no idea!
-    				String content = article.getText();
-    				String finale = SemAssistServlet.getWiki().getParser().updateTemplate(content, InvokeCommand.serviceName, docLocalURL, resultsToWrite.toString());
-
-    				// Clear the article
-    				article.setText("");
-
-    				article.setText(finale);
-
-    				article.save();
-    			} catch (NumberFormatException e){
-    				e.printStackTrace();
-    			}catch (ActionException e) {
-    				e.printStackTrace();
-    			} catch (ProcessException e) {
-    				e.printStackTrace();
-    			} catch (Exception e){
-    				e.printStackTrace();
-    			}
-            }
-            annotsMap.clear();
-        	}catch(NumberFormatException e){
-        		System.out.println(e.getMessage());
-        	}
-    		ConsoleLogger.log("Results will be written in: " + targetName);
-        	annotationCase = false;
-            return;
-        }
-        if(boundlessAnnotationCase){
-            //FIXME fix the index
-        	String docToken = ServiceInvocationHandler.tokens[0];
-        	int temp = docToken.lastIndexOf("index.php") + "index.php".length() + 1;
-        	//String docLocalURL = docToken.substring(docToken.lastIndexOf("/")+1);
-        	String docLocalURL = docToken.substring(temp);
-        	String resultsToWrite = getBoundlessResult(docToken,docLocalURL);
-        	try{
-        		Article article = new Article(wikibot, targetName);
-        		//FIXME: without this the bot replaces the text, why? I have no idea!
+						//FIXME: without this the bot replaces the text, why? I have no idea!
+						String content = article.getText();
+						String finale = SemAssistServlet.getWiki().getParser().updateTemplate(content, InvokeCommand.serviceName, docLocalURL, resultsToWrite.toString());
+						// Clear the article
+						article.setText("");
+						article.setText(finale);
+						article.save();
+				} catch (NumberFormatException e){
+					e.printStackTrace();
+				}catch (ActionException e) {
+					e.printStackTrace();
+				} catch (ProcessException e) {
+					e.printStackTrace();
+				} catch (Exception e){
+					e.printStackTrace();
+				}
+			}
+				annotsMap.clear();
+			}catch(NumberFormatException e){
+				System.out.println(e.getMessage());
+			}
+			ConsoleLogger.log("Results will be written in: " + targetName);
+			annotationCase = false;
+			return;
+		}
+		if(boundlessAnnotationCase){
+			//FIXME fix the index
+			String docToken = ServiceInvocationHandler.tokens[0];
+			int temp = docToken.lastIndexOf("index.php") + "index.php".length() + 1;
+			//String docLocalURL = docToken.substring(docToken.lastIndexOf("/")+1);
+			String docLocalURL = docToken.substring(temp);
+			String resultsToWrite = getBoundlessResult(docToken,docLocalURL);
+			try{
+				Article article = new Article(wikibot, targetName);
+				//FIXME: without this the bot replaces the text, why? I have no idea!
 				String content = article.getText();
 				String cleanedContent = SemAssistServlet.getWiki().getParser().updateTemplate(content, InvokeCommand.serviceName, docLocalURL, resultsToWrite);
 				// Clear the article
@@ -365,15 +357,15 @@ public class MediaWikiHelper extends WikiHelper{
 			} catch (Exception e){
 				e.printStackTrace();
 			}
-    		ConsoleLogger.log("Results will be written in: " + targetName);
+			ConsoleLogger.log("Results will be written in: " + targetName);
 			outputString = "";
 			boundlessAnnotationCase = false;
-        	return;
-        }
-        if(fileCase){
-        	try{
-        		Article article = new Article(bot, InvokeCommand.serviceName);
-        		//FIXME: without this the bot replaces the text, why? I have no idea!
+			return;
+		}
+		if(fileCase){
+			try{
+				Article article = new Article(bot, InvokeCommand.serviceName);
+				//FIXME: without this the bot replaces the text, why? I have no idea!
 				@SuppressWarnings("unused")
 				String content = article.getText();
 				// Clear the article
@@ -392,252 +384,240 @@ public class MediaWikiHelper extends WikiHelper{
 			}
 			ConsoleLogger.log("Results will be written in: " + InvokeCommand.serviceName);
 			outputString = "";
-        	fileCase = false;
-        	return;
-        }
-        if(documentCase){
-        	documentCase = false;
-        	return;
-        }
+			fileCase = false;
+			return;
+		}
+		if(documentCase){
+			documentCase = false;
+			return;
+		}
 	}
 
 	/******************************/
-	/**** Should be refactored ****/
+	/**** Below should be refactored ****/
 	/******************************/
 
-	public static String getAnnotationsString(SemanticServiceResult current){
-	       
-		   HashMap<String, AnnotationVectorArray> annotationsPerDocument = new HashMap<String, AnnotationVectorArray>();
+	/**
+	 * Returns the content of an annotation as a string.
+	 * @param current the semantic service result object
+	 * @return string content of the service result
+	 * */
+	public static String getAnnotationsString(final SemanticServiceResult current){
+		HashMap<String, AnnotationVectorArray> annotationsPerDocument = new HashMap<String, AnnotationVectorArray>();
 
-        // Keys are document IDs or URLs
-        HashMap<String, AnnotationVector> map = current.mAnnotations;
-        Set<String> keys = map.keySet();
+		// Keys are document IDs or URLs
+		HashMap<String, AnnotationVector> map = current.mAnnotations;
+		Set<String> keys = map.keySet();
 
-        for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); )
-        {
-            String docID = it2.next();
+		for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); ){
+			String docID = it2.next();
 
-            if( annotationsPerDocument.get( docID ) == null )
-            {
-                annotationsPerDocument.put( docID, new AnnotationVectorArray() );
-            }
+			if( annotationsPerDocument.get( docID ) == null ){
+				annotationsPerDocument.put( docID, new AnnotationVectorArray() );
+			}
 
-            AnnotationVectorArray v = annotationsPerDocument.get( docID );
-            v.mAnnotVectorArray.add( map.get( docID ) );
-        }
-
-        // Assemble annotations string
-        if( annotationsPerDocument.size() > 0 )
-        {
-            return getAnnotationsString(annotationsPerDocument);
-        }
-        
-        return "Could not read the annotation content!";
-	       
-	     }
-	   
-	   static String getAnnotationsString( HashMap<String, AnnotationVectorArray> map )
-	    {
-	        if( map == null )
-	        {
-	            return "";
-	        }
-
-	        StringBuffer sb = new StringBuffer();
-
-	        // The key is annotation document ID (URL or number), the values are
-	        // annotation instances, basically
-	        Set<String> keys = map.keySet();
-
-	        for( Iterator<String> it = keys.iterator(); it.hasNext(); )
-	        {
-	            String docID = it.next();
-	            try{
-		            sb.append( "Annotations for document " + ServiceInvocationHandler.tokens[Integer.parseInt(docID)] + ":" + System.getProperty("line.separator"));
-		            System.out.println( "Annotations for document " + ServiceInvocationHandler.tokens[Integer.parseInt(docID)] + ":" + System.getProperty("line.separator"));
-	            }catch(Exception e){
-	            	e.printStackTrace();
-	            }
-	            AnnotationVectorArray va = map.get( docID );
-	            sb.append( getAnnotationsString( va ) );
-	        }
-
-	        return sb.toString();
-	    }
-	   
-	   static String getAnnotationsString( AnnotationVectorArray annotVectorArr )
-	    {
-
-	        StringBuffer strBuffer = new StringBuffer();
-
-
-	        if( annotVectorArr == null )
-	        {
-	            return "";
-	        }
-
-
-	        for( Iterator<AnnotationVector> it = annotVectorArr.mAnnotVectorArray.iterator(); it.hasNext(); )
-	        {
-	            AnnotationVector annotVector = it.next();
-
-	            strBuffer.append( "Annotation Type: " + annotVector.mType + System.getProperty("line.separator"));
-
-	            System.out.println( "Annotation Type: " + annotVector.mType + System.getProperty("line.separator"));
-
-	            strBuffer.append( listAnnotations( annotVector ) );
-	        }
-
-	        // sort annotations by start
-
-	        //FIXME check Elian's changes in ClientUtils class for sorting annotation by offset
-	        // ClientUtils.SortAnnotations( annotVectorArr );
-	        //
-
-	        //for ( Iterator<Annotation> it2 = ClientUtils.mAnnotArray.iterator(); it2.hasNext(); )
-	       // {
-	            // Create Side Notes
-	        //}
-
-	        return strBuffer.toString();
-
-	    }
-
-	    static String listAnnotations( AnnotationVector as )
-	    {
-	        if( as == null )
-	        {
-	            return "";
-	        }
-
-	        StringBuffer sb = new StringBuffer();
-
-	        for( Iterator<Annotation> it = as.mAnnotationVector.iterator(); it.hasNext(); )
-	        {
-	            Annotation annotation = it.next();
-
-	            if( annotation.mContent != null && !annotation.mContent.equals( "" ) )
-	            {
-	                sb.append( "Start: " + annotation.mStart + ", end: " + annotation.mEnd + ", content: " + annotation.mContent + System.getProperty("line.separator") );
-	            }
-
-	            if( annotation.mFeatures == null || annotation.mFeatures.size() == 0 )
-	            {
-	                sb.append(System.getProperty("line.separator"));
-	                continue;
-	            }
-
-	            if( annotation.mFeatures.size() > 1 )
-	            {
-	                sb.append( "Features: " + System.getProperty("line.separator") + System.getProperty("line.separator"));
-	            }
-
-	            Set<String> keys = annotation.mFeatures.keySet();
-
-
-	            for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); )
-	            {
-	                String currentKey = it2.next();
-	                sb.append( currentKey + ": " + annotation.mFeatures.get( currentKey ) + System.getProperty("line.separator") + System.getProperty("line.separator"));
-	            }
-
-	            sb.append(System.getProperty("line.separator"));
-	        }
-	        return sb.toString();
-	    }
-
-		/**
-		* Returns the content of a boundless annotation as a string.
-		* @param String the wiki page name
-		* @param String the wiki page URL
-		* @return String Content of a boundless annotation
-		*/
-		static String getBoundlessResult(String docToken, String docLocalURL){
-			StringBuffer resultsToWrite = new StringBuffer();
-	        resultsToWrite.append(System.getProperty("line.separator"));
-	    	resultsToWrite.append("{{SemAssist-Start|serviceName="+ InvokeCommand.serviceName + "|doc=" + docLocalURL + "|url=" + docToken +"}}");
-	        resultsToWrite.append(System.getProperty("line.separator"));
-	        resultsToWrite.append(SemAssistServlet.getWiki().getParser().translateBoundlessAnnotation(outputString));
-	        resultsToWrite.append(System.getProperty("line.separator"));
-	    	resultsToWrite.append("{{SemAssist-End|serviceName="+ InvokeCommand.serviceName + "|doc=" + docLocalURL + "}}");
-	    	System.out.println("DEBUGG:: resultsToWrite " + resultsToWrite.toString());
-	    	return resultsToWrite.toString();
+			AnnotationVectorArray v = annotationsPerDocument.get( docID );
+			v.mAnnotVectorArray.add( map.get( docID ) );
 		}
 
-		/**
-		* Returns the content of an annotation as a string.
-		* @param document the source document ID
-		* @param docToken the wiki page name
-		* @param docLocalURL the wiki page URL
-		* @return String content of an annotation
-		*/
-		static String getAnnotationResult(String document, String docToken, String docLocalURL){
-	    	StringBuffer resultsToWrite = new StringBuffer();
-			resultsToWrite.append(System.getProperty("line.separator"));
-	    	resultsToWrite.append("{{SemAssist-Start|serviceName="+ InvokeCommand.serviceName + "|doc=" + docLocalURL + "|url=" + docToken +"}}");
-	    	resultsToWrite.append(System.getProperty("line.separator"));
-	    	resultsToWrite.append("{{SemAssist-TableStart}}");
-	    	resultsToWrite.append(System.getProperty("line.separator"));
-
-	    	@SuppressWarnings("unchecked")
-	    	Collection<AnnotationVector> annotsForDocument = (Collection<AnnotationVector>) annotsMap.get(document);
-	    	for(Iterator<AnnotationVector> itr = annotsForDocument.iterator(); itr.hasNext();){
-	    		AnnotationVector annotsVector = itr.next();
-	    		resultsToWrite.append(SemAssistServlet.getWiki().getParser().translateAnnotation(annotsVector));
-	    	}
-	    	resultsToWrite.append("{{SemAssist-TableEnd}}");
-	    	resultsToWrite.append(System.getProperty("line.separator"));
-	    	resultsToWrite.append("{{SemAssist-End|serviceName="+ InvokeCommand.serviceName + "|doc=" + docLocalURL + "}}");
-	    	return resultsToWrite.toString();
+		// Assemble annotations string
+		if( annotationsPerDocument.size() > 0 ){
+			return getAnnotationsString(annotationsPerDocument);
 		}
 
-		/**
-		* Parses the XML result and delegates the control to the right method.
-		* @param String XML message
-		*/
-		static void parseResults(String _content){
-				// returns result in sorted by type
-		        Vector<SemanticServiceResult> results = ClientUtils.getServiceResults( _content );
-		        //FIXME what's this for?
-		        /*// Key is annotation document URL or ID
-		        HashMap<String, AnnotationVectorArray> annotationsPerDocument = new HashMap<String, AnnotationVectorArray>();*/
-		        for( Iterator<SemanticServiceResult> it = results.iterator(); it.hasNext(); ){
-		            SemanticServiceResult current = it.next();
-		            if( current.mResultType.equals( SemanticServiceResult.ANNOTATION ) ){  
-		            	if(annotsMap == null){
-		            		annotsMap = new MultiValueMap();
-		            	}
+		return "Could not read the annotation content!";
+	}
 
-		            	/** List of annotations that maps document IDs to annotation instances */
-		    			HashMap<String, AnnotationVector> allAnnotations = current.mAnnotations;
-		    			Set<String> documents = allAnnotations.keySet();
-			        	String documentID=null;
-		    			for( Iterator<String> it2 = documents.iterator(); it2.hasNext(); ){
-		    				documentID = it2.next();
-		    				annotsMap.put(documentID, allAnnotations.get(documentID));
-		    			}
-		    			annotationCase = true;
-		            }else if(current.mResultType.equals( SemanticServiceResult.BOUNDLESS_ANNOTATION)){
-		            	outputString = getAnnotationsString(current);
-		            	boundlessAnnotationCase = true;
-		            }else if(current.mResultType.equals( SemanticServiceResult.DOCUMENT)){
-		            	documentCase = true;
-		            }else if(current.mResultType.equals( SemanticServiceResult.FILE)){
-		            	outputString = SemAssistServlet.broker.getResultFile(current.mFileUrl);
-		            	fileCase = true;
-		            }
-		        }
+	/**
+	 * Returns a string representation the annotations for the documents
+	 * provides in the map.
+	 * @param map annotation vector array
+	 * @return string representation of the the annotations for the documents provides in the map.
+	 * */
+	private static String getAnnotationsString(final HashMap<String, AnnotationVectorArray> map ){
+		if( map == null ){
+			return "";
 		}
+
+		StringBuffer sb = new StringBuffer();
+
+		// The key is annotation document ID (URL or number), the values are
+		// annotation instances, basically
+		Set<String> keys = map.keySet();
+
+		for( Iterator<String> it = keys.iterator(); it.hasNext(); ){
+			String docID = it.next();
+			try{
+				sb.append( "Annotations for document " + ServiceInvocationHandler.tokens[Integer.parseInt(docID)] + ":" + System.getProperty("line.separator"));
+				System.out.println( "Annotations for document " + ServiceInvocationHandler.tokens[Integer.parseInt(docID)] + ":" + System.getProperty("line.separator"));
+			}catch(Exception e){
+				e.printStackTrace();
+			}
+			AnnotationVectorArray va = map.get( docID );
+			sb.append( getAnnotationsString( va ) );
+		}
+
+		return sb.toString();
+	}
+
+	/**
+	 * Returns a string representation of an annotation vector array.
+	 * @param annotVectorArr annotation vector array
+	 * @return string representation of the provided annotation vector array
+	 * */
+	private static String getAnnotationsString(final AnnotationVectorArray annotVectorArr ){
+		StringBuffer strBuffer = new StringBuffer();
+		if( annotVectorArr == null ){
+			return "";
+		}
+		for( Iterator<AnnotationVector> it = annotVectorArr.mAnnotVectorArray.iterator(); it.hasNext(); ){
+			AnnotationVector annotVector = it.next();
+			strBuffer.append( "Annotation Type: " + annotVector.mType + System.getProperty("line.separator"));
+			System.out.println( "Annotation Type: " + annotVector.mType + System.getProperty("line.separator"));
+			strBuffer.append( listAnnotations( annotVector ) );
+		}
+		// sort annotations by start
+		//FIXME check Elian's changes in ClientUtils class for sorting annotation by offset
+		// ClientUtils.SortAnnotations( annotVectorArr );
+
+		//for ( Iterator<Annotation> it2 = ClientUtils.mAnnotArray.iterator(); it2.hasNext(); )
+		// {
+			//Create Side Notes
+		//}
+
+		return strBuffer.toString();
+	}
+
+	/**
+	 * Returns the string representation of the provided annotations.
+	 * @param as annotation vector
+	 * @return string representation of the annotations in the vector
+	 * */
+	private static String listAnnotations(final AnnotationVector as ){
+		if( as == null ){
+			return "";
+		}
+
+		StringBuffer sb = new StringBuffer();
+
+		for( Iterator<Annotation> it = as.mAnnotationVector.iterator(); it.hasNext(); ){
+			Annotation annotation = it.next();
+			if( annotation.mContent != null && !annotation.mContent.equals( "" ) ){
+				sb.append( "Start: " + annotation.mStart + ", end: " + annotation.mEnd + ", content: " + annotation.mContent + System.getProperty("line.separator") );
+			}
+
+		if( annotation.mFeatures == null || annotation.mFeatures.size() == 0 ){
+			sb.append(System.getProperty("line.separator"));
+			continue;
+		}
+
+		if( annotation.mFeatures.size() > 1 ){
+			sb.append( "Features: " + System.getProperty("line.separator") + System.getProperty("line.separator"));
+		}
+
+		Set<String> keys = annotation.mFeatures.keySet();
+		for( Iterator<String> it2 = keys.iterator(); it2.hasNext(); ){
+			String currentKey = it2.next();
+			sb.append( currentKey + ": " + annotation.mFeatures.get( currentKey ) + System.getProperty("line.separator") + System.getProperty("line.separator"));
+		}
+
+			sb.append(System.getProperty("line.separator"));
+		}
+		return sb.toString();
+	}
+
+	/**
+	* Returns the content of a boundless annotation as a string.
+	* @param String the wiki page name
+	* @param String the wiki page URL
+	* @return String Content of a boundless annotation
+	*/
+	private static String getBoundlessResult(final String docToken, final String docLocalURL){
+		StringBuffer resultsToWrite = new StringBuffer();
+		resultsToWrite.append(System.getProperty("line.separator"));
+		resultsToWrite.append("{{SemAssist-Start|serviceName="+ InvokeCommand.serviceName + "|doc=" + docLocalURL + "|url=" + docToken +"}}");
+		resultsToWrite.append(System.getProperty("line.separator"));
+		resultsToWrite.append(SemAssistServlet.getWiki().getParser().translateBoundlessAnnotation(outputString));
+		resultsToWrite.append(System.getProperty("line.separator"));
+		resultsToWrite.append("{{SemAssist-End|serviceName="+ InvokeCommand.serviceName + "|doc=" + docLocalURL + "}}");
+		System.out.println("DEBUGG:: resultsToWrite " + resultsToWrite.toString());
+		return resultsToWrite.toString();
+	}
+
+	/**
+	* Returns the content of an annotation as a string.
+	* @param document the source document ID
+	* @param docToken the wiki page name
+	* @param docLocalURL the wiki page URL
+	* @return String content of an annotation
+	*/
+	private static String getAnnotationResult(final String document, final String docToken, final String docLocalURL){
+		StringBuffer resultsToWrite = new StringBuffer();
+		resultsToWrite.append(System.getProperty("line.separator"));
+		resultsToWrite.append("{{SemAssist-Start|serviceName="+ InvokeCommand.serviceName + "|doc=" + docLocalURL + "|url=" + docToken +"}}");
+		resultsToWrite.append(System.getProperty("line.separator"));
+		resultsToWrite.append("{{SemAssist-TableStart}}");
+		resultsToWrite.append(System.getProperty("line.separator"));
+
+		@SuppressWarnings("unchecked")
+		Collection<AnnotationVector> annotsForDocument = (Collection<AnnotationVector>) annotsMap.get(document);
+		for(Iterator<AnnotationVector> itr = annotsForDocument.iterator(); itr.hasNext();){
+			AnnotationVector annotsVector = itr.next();
+			resultsToWrite.append(SemAssistServlet.getWiki().getParser().translateAnnotation(annotsVector));
+		}
+		resultsToWrite.append("{{SemAssist-TableEnd}}");
+		resultsToWrite.append(System.getProperty("line.separator"));
+		resultsToWrite.append("{{SemAssist-End|serviceName="+ InvokeCommand.serviceName + "|doc=" + docLocalURL + "}}");
+		return resultsToWrite.toString();
+	}
+
+	/**
+	* Parses the XML result and delegates the control to the right method.
+	* @param String XML message
+	*/
+	private static void parseResults(final String responseXML){
+			// returns result in sorted by type
+			Vector<SemanticServiceResult> results = ClientUtils.getServiceResults( responseXML );
+			//FIXME what's this for?
+			/*// Key is annotation document URL or ID
+			HashMap<String, AnnotationVectorArray> annotationsPerDocument = new HashMap<String, AnnotationVectorArray>();*/
+			for( Iterator<SemanticServiceResult> it = results.iterator(); it.hasNext(); ){
+			SemanticServiceResult current = it.next();
+			if( current.mResultType.equals( SemanticServiceResult.ANNOTATION ) ){  
+				if(annotsMap == null){
+					annotsMap = new MultiValueMap();
+				}
+			
+				/** List of annotations that maps document IDs to annotation instances */
+				HashMap<String, AnnotationVector> allAnnotations = current.mAnnotations;
+				Set<String> documents = allAnnotations.keySet();
+				String documentID=null;
+				for( Iterator<String> it2 = documents.iterator(); it2.hasNext(); ){
+					documentID = it2.next();
+					annotsMap.put(documentID, allAnnotations.get(documentID));
+				}
+				annotationCase = true;
+			}else if(current.mResultType.equals( SemanticServiceResult.BOUNDLESS_ANNOTATION)){
+				outputString = getAnnotationsString(current);
+				boundlessAnnotationCase = true;
+			}else if(current.mResultType.equals( SemanticServiceResult.DOCUMENT)){
+				documentCase = true;
+			}else if(current.mResultType.equals( SemanticServiceResult.FILE)){
+				outputString = SemAssistServlet.broker.getResultFile(current.mFileUrl);
+				fileCase = true;
+			}
+			}
+	}
 
 	/** Returns a MediaWikiBot object with the provided credentials.
 	 * @return {@link MediaWikiBot} the MediaWiki bot
 	 */
 	@Override
 	public void createBot() {
-	   /*bot = new MediaWikiBot("http://localhost/mediawiki-1.16/index.php");
-	   bot.login("wikisysop", "adminpass");
-	   bot = new MediaWikiBot("http://localhost/smartwiki/index.php");
-	   bot.login("admin", "bahar");*/
+		/*bot = new MediaWikiBot("http://localhost/mediawiki-1.16/index.php");
+		bot.login("wikisysop", "adminpass");
+		bot = new MediaWikiBot("http://localhost/smartwiki/index.php");
+		bot.login("admin", "bahar");*/
 		try {
 			System.out.println("Creating a bot: " + wikiAddress + wikiUser + wikiPass);
 			bot = new MediaWikiBot(wikiAddress);
@@ -657,7 +637,7 @@ public class MediaWikiHelper extends WikiHelper{
 	 * @param iWikiPass the bot password
 	 * @return {@link MediaWikiBot} the MediaWiki bot
 	 */
-	private MediaWikiBot createBot(String iWikiAddress, String iWikiUser, String iWikiPass) {
+	private MediaWikiBot createBot(final String iWikiAddress, final String iWikiUser, final String iWikiPass) {
 		try {
 			System.out.println("Creating a bot: " + iWikiAddress + iWikiUser + iWikiPass);
 			MediaWikiBot bot = new MediaWikiBot(iWikiAddress);
@@ -676,7 +656,7 @@ public class MediaWikiHelper extends WikiHelper{
 	* @param String the entity type to query
 	*/
 	@Override
-	public void createTypePage(String type) {
+	public void createTypePage(final String type) {
 		try {
 			Article article = new Article(bot, "Property:"+type);
 			//article.setText("List of pages containing " + type + " entities:<br>" + "{{#ask: [[hasType::"+type +"]] |format=ul | default=No pages found!}}");
