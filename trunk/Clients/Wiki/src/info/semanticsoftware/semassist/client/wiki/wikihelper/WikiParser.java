@@ -23,18 +23,44 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package info.semanticsoftware.semassist.client.wiki.wikihelper;
 
 import info.semanticsoftware.semassist.csal.result.AnnotationVector;
-
+/**
+ * An abstract class for wiki parsers.
+ * @author Bahar Sateli
+ * */
 public abstract class WikiParser {
-	/** Removes Semantic Assistants templates from wiki markup */
+	/** Removes Semantic Assistants templates from wiki markup. 
+	 * @param input string to remove templates from
+	 * @return filtered input
+	 */
 	abstract public String removeAllTemplates(String input);
-	/** Removes a specific Semantic Assistants service templates from wiki markup */
+	/** Removes a specific Semantic Assistants service templates from wiki markup.
+	 * @param inpt input document string
+	 * @param serviceName NLP service name to find
+	 * @param doc document URL
+	 * @return filtered string without the service results markup 
+	 */
 	abstract public String removeServiceTemplates(String input, String serviceName, String doc);
-	/** Updates a service template with new results */
+	/** Updates a service template with new results. 
+	 * @param originalContent the original wiki markup
+	 * @param serviceName NLP service name to find
+	 * @param pageURL page URL address to find
+	 * @param results the results to replace
+	 * @return updated wiki page markup
+	 */
 	abstract public String updateTemplate(String originalContent, final String serviceName, final String pageURL, final String results);
-	/** Transforms annotation results to templates */
+	/** Transforms annotation results to templates. 
+	 * @param annotsVector annotation vector to be translated to wiki markup
+	 * @return string representation of the annotations
+	 * */
 	abstract public String translateAnnotation(AnnotationVector annotsVector);
-	/** Transforms boundless annotation results to templates */
+	/** Transforms boundless annotation results to templates.
+	 * @param input a boundless annotation string content
+	 * @return the boundless annotation wiki markup
+	 */
 	abstract public String translateBoundlessAnnotation(String input);
-	/** Transforms wiki markup to HTML code */
+	/** Transforms wiki markup to HTML code. 
+	 * @param markupContent wiki markup to be tranformed to HTML
+	 * @return HTML representation of the wiki markup
+	 * */
 	abstract public String transformToHTML(String markupContent);
 }
