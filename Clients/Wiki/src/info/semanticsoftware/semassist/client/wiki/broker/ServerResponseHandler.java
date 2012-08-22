@@ -98,35 +98,35 @@ public class ServerResponseHandler {
 	}
 
 	
-	/** Sets the wiki bot username
+	/** Sets the wiki bot username.
 	 * @param input wiki bot username
 	 * */
 	public static void setWikiUser(final String input){
 		wikiUser = input;
 	}
 
-	/** Sets the wiki bot password
+	/** Sets the wiki bot password.
 	 * @param input wiki bot password
 	 * */
 	public static void setWikiPass(final String input){
 		wikiPass = input;
 	}
 
-	/** Gets the wiki address URL
+	/** Gets the wiki address URL.
 	 * @return the wiki address URL
 	 * */
 	public static String getWikiAddress(){
 		return wikiAddress;
 	}
 
-	/** Gets the wiki bot username
+	/** Gets the wiki bot username.
 	 * @return wiki bot username
 	 * */
 	public static String getWikiUser(){
 		return wikiUser;
 	}
 
-	/** Gets the wiki bot password
+	/** Gets the wiki bot password.
 	 * @return wiki bot password
 	 * */
 	public static String getWikiPass(){

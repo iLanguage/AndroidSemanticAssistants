@@ -23,7 +23,14 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package info.semanticsoftware.semassist.client.wiki.wikihelper;
 
 import java.util.List;
-
+/**
+ * Abstract class for wiki ontology keeper classes. This class
+ * defines the methods needed to interpret each wiki's capabilities.
+ * */
 public abstract class WikiOntologyKeeper {
-	abstract public List<String> getNamespaces();
+
+	/** Returns the list of available namespaces of the wiki. 
+	 * @return list of available namespaces as strings
+	 * */
+	public abstract List<String> getNamespaces();
 }

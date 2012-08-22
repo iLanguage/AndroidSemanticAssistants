@@ -36,6 +36,11 @@ import java.util.Map;
 import javax.xml.namespace.QName;
 import javax.xml.ws.WebServiceException;
 
+/**
+* This class provides a service broker to connect
+* to the Semantic Assistants server.
+* @author Bahar Sateli
+*/
 public class ServiceAgentSingleton
 {
 	/** Semantic Service Broker Service static instance. */
@@ -53,6 +58,7 @@ public class ServiceAgentSingleton
 	/** Semantic Assistants server address defined by user. */
 	private static String serverAddress = "";
 
+	/** Boolean variable to show if the default server settings should be used. */
 	public static boolean defaultSettings = true;
 
 	/**
@@ -100,8 +106,8 @@ public class ServiceAgentSingleton
 	/** 
 	 * Adds a new server element to the wiki's preferences section.
 	 * 
-	 * @param String server's host name
-	 * @param String server's port number
+	 * @param host server's host name
+	 * @param port server's port number
 	 * */
 	public static void addNewServer(final String host, final String port){
 		Map<String,String> map = new HashMap<String, String>();
@@ -113,7 +119,7 @@ public class ServiceAgentSingleton
 
 	/** 
 	 * Sets the server host and port number to be used by broker.
-	 * @param String address of the server in form of HOSTNAME:PORTNUMBER
+	 * @param address address of the server in form of HOSTNAME:PORTNUMBER
 	 * */
 	public static void setServer(final String address){
 		try {

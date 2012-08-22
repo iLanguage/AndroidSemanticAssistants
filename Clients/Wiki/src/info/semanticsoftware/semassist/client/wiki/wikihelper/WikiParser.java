@@ -32,14 +32,14 @@ public abstract class WikiParser {
 	 * @param input string to remove templates from
 	 * @return filtered input
 	 */
-	abstract public String removeAllTemplates(String input);
+	public abstract String removeAllTemplates(String input);
 	/** Removes a specific Semantic Assistants service templates from wiki markup.
 	 * @param inpt input document string
 	 * @param serviceName NLP service name to find
 	 * @param doc document URL
 	 * @return filtered string without the service results markup 
 	 */
-	abstract public String removeServiceTemplates(String input, String serviceName, String doc);
+	public abstract String removeServiceTemplates(String input, String serviceName, String doc);
 	/** Updates a service template with new results. 
 	 * @param originalContent the original wiki markup
 	 * @param serviceName NLP service name to find
@@ -47,20 +47,20 @@ public abstract class WikiParser {
 	 * @param results the results to replace
 	 * @return updated wiki page markup
 	 */
-	abstract public String updateTemplate(String originalContent, final String serviceName, final String pageURL, final String results);
+	public abstract String updateTemplate(String originalContent, final String serviceName, final String pageURL, final String results);
 	/** Transforms annotation results to templates. 
 	 * @param annotsVector annotation vector to be translated to wiki markup
 	 * @return string representation of the annotations
 	 * */
-	abstract public String translateAnnotation(AnnotationVector annotsVector);
+	public abstract String translateAnnotation(AnnotationVector annotsVector);
 	/** Transforms boundless annotation results to templates.
 	 * @param input a boundless annotation string content
 	 * @return the boundless annotation wiki markup
 	 */
-	abstract public String translateBoundlessAnnotation(String input);
+	public abstract String translateBoundlessAnnotation(String input);
 	/** Transforms wiki markup to HTML code. 
 	 * @param markupContent wiki markup to be tranformed to HTML
 	 * @return HTML representation of the wiki markup
 	 * */
-	abstract public String transformToHTML(String markupContent);
+	public abstract String transformToHTML(String markupContent);
 }

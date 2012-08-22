@@ -45,7 +45,7 @@ public class HTMLGenerator {
 	 * @param services The array of ServiceInfoForClient objects
 	 * @return String The HTML code
 	 * */
-	public static String servicesCombobox(ServiceInfoForClientArray services){
+	public static String servicesCombobox(final ServiceInfoForClientArray services){
 
 		StringBuffer result = new StringBuffer();
 		result.append("<select id=\"semAssistServices\" name=\"serviceName\" size=1>");
@@ -64,7 +64,7 @@ public class HTMLGenerator {
 	 * @param name name of the selected service in the UI 
 	 * @return String The HTML code
 	 * */
-	public static String serviceRTP(ServiceInfoForClientArray services, String name){
+	public static String serviceRTP(final ServiceInfoForClientArray services, final String name){
 		StringBuffer result = new StringBuffer();
 		boolean serviceFound = false;
 
