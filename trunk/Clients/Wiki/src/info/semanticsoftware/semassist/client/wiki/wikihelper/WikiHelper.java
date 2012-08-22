@@ -22,11 +22,43 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 package info.semanticsoftware.semassist.client.wiki.wikihelper;
 
+/**
+ * This class provides abstract helper functions to communicate with a wiki engine.
+ * @author Bahar Sateli 
+ */
 public abstract class WikiHelper {
+	/** Returns the give page name's content as a string
+	 * @param pageName wiki page name
+	 * @return the pageNames's content
+	 */
 	public abstract String getPageContent(final String pageName);
-	public abstract void setCredentials(String address, String username, String password);
+
+	/** Sets the credential that is to be used by the wiki bot.
+	 * @param address wiki address URL
+	 * @param username bot's username
+	 * @param password bot's password
+	 */
+	public abstract void setCredentials(final String address, final String username, final String password);
+
+	/** Writes the given content into the target page within the same wiki engine as the resource.
+	 * @param targetName wiki page name
+	 * @param _content content to be written into the target page
+	 */
 	public abstract void writeToSamePage(final String targetName, String _content);
+
+	/** Writes the given content into the target page, either within the wiki engine or
+	  * to an external one (that is decided by the value of external input argument)
+	  * @param targetName wiki page name
+	  * @param _content content to be written
+	  * @param external boolean variable to indicate wether the destination is an external wiki
+	  */
 	public abstract void writeToOtherPage(final String targetName, String _content, boolean external);
+
+	/** Creates a wiki bot. */
 	public abstract void createBot();
-	public abstract void createTypePage(String type);
+
+	/** Creates a wiki page for semantic entity retrieval.
+	 * @param type entity type
+	 */
+	public abstract void createTypePage(final String type);
 }

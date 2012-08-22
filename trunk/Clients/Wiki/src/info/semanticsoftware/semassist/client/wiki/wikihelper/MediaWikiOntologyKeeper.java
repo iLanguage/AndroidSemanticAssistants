@@ -38,10 +38,10 @@ import edu.stanford.smi.protegex.owl.model.OWLProperty;
  * @author Bahar Sateli
  * */
 public class MediaWikiOntologyKeeper extends WikiOntologyKeeper{
-	/**
-	 * Reads the MediaWiki ontology and returns the list of namespaces.
+
+	/** Reads the MediaWiki ontology and returns the list of namespaces.
 	 * @return List<String> of namespaces
-	 * */
+	 */
 	public List<String> getNamespaces(){
 		List<String> namespaces = new ArrayList<String>();
 		try{

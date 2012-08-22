@@ -26,12 +26,19 @@ package info.semanticsoftware.semassist.client.wiki.wikihelper;
  * @author Bahar Sateli
  */
 public abstract class WikiEngine {
-	/** Returns wiki's helper class. */
+
+	/** Returns wiki's helper class.
+	 * @return the wiki helper singleton object
+	 */
 	public abstract WikiHelper getHelper();
 
-	/** Returns wiki's ontology keeper class. */
+	/** Returns wiki's ontology keeper class. 
+	 * @return the wiki ontology keeper singleton object
+	 */
 	public abstract WikiOntologyKeeper getOntologyKeeper();
 
-	/** Returns wiki's parser class. */
+	/** Returns wiki's parser class. 
+	 * @return the wiki parser singleton object
+	 */
 	public abstract WikiParser getParser();
 }

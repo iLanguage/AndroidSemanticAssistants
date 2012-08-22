@@ -528,9 +528,9 @@ public class MediaWikiHelper extends WikiHelper{
 
 	/**
 	* Returns the content of a boundless annotation as a string.
-	* @param String the wiki page name
-	* @param String the wiki page URL
-	* @return String Content of a boundless annotation
+	* @param docToken the wiki page name
+	* @param docLocalURL the wiki page URL
+	* @return String content of a boundless annotation
 	*/
 	private static String getBoundlessResult(final String docToken, final String docLocalURL){
 		StringBuffer resultsToWrite = new StringBuffer();
@@ -573,7 +573,7 @@ public class MediaWikiHelper extends WikiHelper{
 
 	/**
 	* Parses the XML result and delegates the control to the right method.
-	* @param String XML message
+	* @param responseXML XML message
 	*/
 	private static void parseResults(final String responseXML){
 			// returns result in sorted by type
@@ -653,7 +653,7 @@ public class MediaWikiHelper extends WikiHelper{
 
 	/**
 	* Creates a new page wiki Semantic MediaWiki query.
-	* @param String the entity type to query
+	* @param type the entity type to query
 	*/
 	@Override
 	public void createTypePage(final String type) {

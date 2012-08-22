@@ -38,10 +38,10 @@ import info.semanticsoftware.semassist.client.wiki.utils.Parser;
  */
 public class MediaWikiParser extends WikiParser{
 
-	/** Semantic Assistants template start line */
+	/** Semantic Assistants template start line. */
 	private static final String TEMPLATE_SEMASSIST_START = "{{SemAssist-Start";
 
-	/** Semantic Assistants template end line */
+	/** Semantic Assistants template end line. */
 	private static final String TEMPLATE_SEMASSIST_END = "{{SemAssist-End";
 
 	/** 
@@ -53,7 +53,7 @@ public class MediaWikiParser extends WikiParser{
 	 * @return String updated template content
 	 * */
 	@Override
-	public String updateTemplate(String originalContent, String serviceName,String pageURL, String results) {
+	public String updateTemplate(String originalContent, final String serviceName, final String pageURL, final String results) {
 		int startIndex = originalContent.indexOf(TEMPLATE_SEMASSIST_START+"|serviceName="+ serviceName + "|doc=" + pageURL);
 		if(startIndex == -1){
 			return originalContent.concat(results);
@@ -69,7 +69,7 @@ public class MediaWikiParser extends WikiParser{
 	}
 
 	/**
-	 * Transforms the annotation results to MediaWiki templates
+	 * Transforms the annotation results to MediaWiki templates.
 	 * @param annotsVector vector of annotations parsed from server XML response
 	 * @return String MediaWiki template code containing the annotation
 	 * */
@@ -77,50 +77,50 @@ public class MediaWikiParser extends WikiParser{
 	public String translateAnnotation(final AnnotationVector annotsVector) {
 		StringBuffer contentBuffer = new StringBuffer();
 		String type = annotsVector.mType;
-        Vector<Annotation> annots = annotsVector.mAnnotationVector;
-        if(annots.size() == 0){
-        	contentBuffer.append("{{SemAssist-TableRow|content= No annotations found |type=" + type + "|start= |end= |features= }}" + System.getProperty("line.separator"));
-        }else{
-    		System.out.println("Creating type page: " + type);
-        	SemAssistServlet.getWiki().getHelper().createTypePage(type);
-            for(int i=0; i < annots.size(); i++){
-            	String content = annots.get(i).mContent;
-            	String start = String.valueOf(annots.get(i).mStart);
-            	String end = String.valueOf(annots.get(i).mEnd);
+		Vector<Annotation> annots = annotsVector.mAnnotationVector;
+		if(annots.size() == 0){
+			contentBuffer.append("{{SemAssist-TableRow|content= No annotations found |type=" + type + "|start= |end= |features= }}" + System.getProperty("line.separator"));
+		}else{
+			System.out.println("Creating type page: " + type);
+			SemAssistServlet.getWiki().getHelper().createTypePage(type);
+			for(int i=0; i < annots.size(); i++){
+				String content = annots.get(i).mContent;
+				String start = String.valueOf(annots.get(i).mStart);
+				String end = String.valueOf(annots.get(i).mEnd);
 
-            	Set<String> featureNames = annots.get(i).mFeatures.keySet();
-            	String features= "";            	
-            	for(Iterator<String> it3 = featureNames.iterator(); it3.hasNext();){
-            		String name = it3.next();
-            		String value = annots.get(i).mFeatures.get(name);
-            		if(value.equals("") || value.equals(" ")){
-            			value = "-";
-            		}
-            		//features += name+"="+value+" ";
-            		features += System.getProperty("line.separator");
-            		features += "* " + name+": "+value+" ";
-            	}
-            	contentBuffer.append("{{SemAssist-TableRow|content=" + content + "|type=" + type + "|start=" + start + "|end=" + end + "|features=" + features +"}}");
-            	contentBuffer.append(System.getProperty("line.separator"));
-            }
-        }
-        return contentBuffer.toString();
+				Set<String> featureNames = annots.get(i).mFeatures.keySet();
+				String features= "";
+				for(Iterator<String> it3 = featureNames.iterator(); it3.hasNext();){
+					String name = it3.next();
+					String value = annots.get(i).mFeatures.get(name);
+					if(value.equals("") || value.equals(" ")){
+						value = "-";
+					}
+					//features += name+"="+value+" ";
+					features += System.getProperty("line.separator");
+					features += "* " + name+": "+value+" ";
+				}
+				contentBuffer.append("{{SemAssist-TableRow|content=" + content + "|type=" + type + "|start=" + start + "|end=" + end + "|features=" + features +"}}");
+				contentBuffer.append(System.getProperty("line.separator"));
+			}
+		}
+		return contentBuffer.toString();
 	}
 
 	/**
-	 * Transforms the boudnless annotation results to MediaWiki templates
+	 * Transforms the boudnless annotation results to MediaWiki templates.
 	 * @param input string content of the boundless annotation
 	 * @return String MediaWiki template code containing the boundless annotation
 	 * */
 	@Override
-	public String translateBoundlessAnnotation(String input) {
+	public String translateBoundlessAnnotation(final String input) {
 		StringBuffer contentBuffer = new StringBuffer();
 		contentBuffer.append("{{SemAssist-Block|content=" + input + "}}");
-        return contentBuffer.toString();
+		return contentBuffer.toString();
 	}
 
 	/**
-	 * Transforms a wiki page raw markup to HTML code
+	 * Transforms a wiki page raw markup to HTML code.
 	 * @param markupContent wiki page raw markup
 	 * @return String HTML representation of wiki page
 	 * */
@@ -134,12 +134,12 @@ public class MediaWikiParser extends WikiParser{
 	}
 
 	/**
-	 * Removes all Semantic Assistants templates from a wiki page markup
+	 * Removes all Semantic Assistants templates from a wiki page markup.
 	 * @param input the wiki page content
 	 * @return String cleaned wiki page markup
 	 * */
 	@Override
-	public String removeAllTemplates(String input) {
+	public String removeAllTemplates(final String input) {
 		int startIndex = input.indexOf(TEMPLATE_SEMASSIST_START);
 		if(startIndex == -1){
 			return input;
@@ -155,14 +155,14 @@ public class MediaWikiParser extends WikiParser{
 	}
 
 	/**
-	 * Removes a specific Semantic Assistants template from a wiki page markup
+	 * Removes a specific Semantic Assistants template from a wiki page markup.
 	 * @param input the wiki page content
 	 * @param serviceName service name to look for
 	 * @param doc document name to look for
 	 * @return String cleaned wiki page markup
 	 * */
 	@Override
-	public String removeServiceTemplates(String input, String serviceName, String doc) {
+	public String removeServiceTemplates(final String input, final String serviceName, final String doc) {
 		int startIndex = input.indexOf(TEMPLATE_SEMASSIST_START+"|serviceName="+serviceName + "|doc=" + doc);
 		if(startIndex == -1){
 			return input;

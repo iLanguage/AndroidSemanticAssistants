@@ -45,7 +45,7 @@ public class ParamsCommand extends Command{
 	 * @param response HTTP response object
 	 * */
 	@Override
-	public void execute(HttpServletRequest request, HttpServletResponse response) {
+	public void execute(final HttpServletRequest request, HttpServletResponse response) {
 		// first, resolve the request
 		initializeParemeters(request);
 

@@ -60,7 +60,7 @@ public class SemAssistServlet extends HttpServlet {
 	/** Auto-generated universal version identifier for this class. */
 	private static final long serialVersionUID = 1L;
 
-	/** Semantic Assistants server broker object */
+	/** Semantic Assistants server broker object. */
 	public static SemanticServiceBroker broker = null;
 
 	/** Array of available services read from Semantic Assistants server. */
@@ -104,9 +104,12 @@ public class SemAssistServlet extends HttpServlet {
 	}
 
 	/**
+	 * Initializes the servlet.
+	 * @param config Servlet configuration object
 	 * @see Servlet#init(ServletConfig)
+	 * @throws ServletException if the servlet cannot be initialized
 	 */
-	public void init(ServletConfig config) throws ServletException {
+	public void init(final ServletConfig config) throws ServletException {
 		ServletContext context = config.getServletContext();
 		ONTOLOGY_REPO = context.getRealPath("/ontology-repository");
 		WIKI_ONTOLOGY = context.getRealPath("/ontology-repository/WikiOntology.owl");
@@ -122,16 +125,20 @@ public class SemAssistServlet extends HttpServlet {
 	}
 
 	/**
+	 * @param request incoming HTTP request
+	 * @param response outgoing HTTP response
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 * @throws ServletException if an exception happens in the servlet state
+	 * @throws IOException if the response cannot be written into the channel
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(final HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}
 
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(final HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);
 	}
 
@@ -142,7 +149,7 @@ public class SemAssistServlet extends HttpServlet {
 	 * @throws ServletException a general exception when servlet encounters difficulty
 	 * @throws IOException a general exception when servlet encounters IO difficulty
 	 * */
-	protected synchronized void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected synchronized void doProcess(final HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// Reset the servlet's memory
 		thisWikiEngine = "";
 		thisWikiAddress = "";
@@ -303,7 +310,7 @@ public class SemAssistServlet extends HttpServlet {
 	}
 
 	/**
-	 * Returns the wiki object
+	 * Returns the wiki object.
 	 * @return WikiEngine the wiki object
 	 */
 	public static WikiEngine getWiki(){
@@ -314,7 +321,7 @@ public class SemAssistServlet extends HttpServlet {
 	 * Sends a request to the wiki bot to read the content
 	 * of a page with a logged in bot.
 	 * @return String HTML content of the page
-	 * @throws Exceptin if the connection cannot be established
+	 * @throws Exception if the connection cannot be established
 	 */
 	public String read() throws Exception {
 		try{

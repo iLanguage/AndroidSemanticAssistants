@@ -35,12 +35,12 @@ public class Wiki {
 	private String version;
 
 	/**
-	 * Class constructor. Creates a wiki instance in memory
+	 * Class constructor. Creates a wiki instance in memory.
 	 * using the provided arguments.
 	 * @param _engine wiki engine name
 	 * @param _version wiki version identifier
 	 * */
-	public Wiki(String _engine, String _version){
+	public Wiki(final String _engine, final String _version){
 		this.engine = _engine;
 		this.version = _version;
 	}
