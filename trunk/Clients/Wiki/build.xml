@@ -48,14 +48,22 @@
 		<property name="web.dir"  value="${basedir}/WebContent/WEB-INF"/>
 		<property name="build.dir" value="${web.dir}/classes"/>
 		<property name="lib.dir"	value="${web.dir}/lib"/>
+		<property name="sa.lib.dir"	value="${semassist.home}/Lib"/>
+		<property name="parser.dir"	value="${lib.dir}/wikiParser"/>
 	
 		<!-- Used for testing -->
 		<property name="test.src"	   value="${basedir}/test.src"/>
 		<property name="test.result" value="${basedir}/test.result"/>
-		<property name="compile.debug"    value="false" />  
+		<property name="compile.debug"    value="false" />
+		
+		<antcall target="getParser"/>
+		  
 		<path id="compile.classpath">
 			<pathelement location="${junit.home}/junit.jar" />
 			<fileset dir="${lib.dir}" >
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${sa.lib.dir}" >
 				<include name="*.jar" />
 			</fileset>
 		</path>
@@ -76,6 +84,18 @@
 		<ivy:retrieve pattern="${lib.dir}/[artifact].[ext]"/>
 		<!--copy file="${csal.jar}" todir="${lib.dir}"/-->
 	</target>
+	
+	<target name="getParser">
+		<mkdir dir="${parser.dir}"/>
+		<get src="http://download.eclipse.org/mylyn/snapshots/nightly/docs/wikitext-standalone-latest.zip" dest="${parser.dir}"/>
+		<unzip src="${parser.dir}/wikitext-standalone-latest.zip" dest="${parser.dir}/unzip"/>
+		<copy todir="${lib.dir}">
+			<fileset dir="${parser.dir}/unzip/wikitext-standalone-1.8.0-SNAPSHOT">
+				<include name="org.eclipse.mylyn.wikitext.*.jar"/>
+			</fileset>
+		</copy>
+		<delete dir="${parser.dir}"/>
+	</target>
 
 
     <!-- This target compiles the CSAL to the dist -->  
@@ -84,7 +104,7 @@
     </target>
 
     <!-- This target compiles all the classes -->  
-    <target name="compile" depends="init" description="Compile the source" >
+    <target name="compile" depends="init, copycsal, resolve" description="Compile the source" >
         <!-- Compile the java code from ${src.dir} into ${build.dir} -->
         <mkdir dir="${build.dir}" />
         <javac srcdir="${src.dir}/" destdir="${build.dir}" debug="false" debuglevel="lines,vars,source"  classpath="${build.dir}"  includeantruntime="${antruntime}">
