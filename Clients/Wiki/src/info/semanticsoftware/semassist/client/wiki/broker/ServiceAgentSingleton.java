@@ -61,6 +61,11 @@ public class ServiceAgentSingleton
 	/** Boolean variable to show if the default server settings should be used. */
 	public static boolean defaultSettings = true;
 
+	/** Private class constructor. */
+	private ServiceAgentSingleton(){
+		//defeat instantiation for utility class
+	}
+
 	/**
 	 * This method is the global access point to the singleton instance of this class.
 	 * 

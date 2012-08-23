@@ -1,0 +1,13 @@
+.SemAssist
+{
+	font-size: 14px;
+    border: dotted 2px; 
+    border-color: #0000CD;
+	background-color:#d0e4fe;
+}
+
+.SemAssist-title
+{
+	font-size:18px;
+	font-weight:bold;
+}

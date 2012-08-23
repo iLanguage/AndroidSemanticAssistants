@@ -20,7 +20,6 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
-
 package info.semanticsoftware.semassist.client.wiki.broker;
 
 import info.semanticsoftware.semassist.client.wiki.servlets.SemAssistServlet;
@@ -53,21 +52,26 @@ public class ServerResponseHandler {
 	/** Password for the bot to login to the wiki. */
 	private static String wikiPass = null;
 
+	/** Private class constructor. */
+	private ServerResponseHandler(){
+		//defeat instantiation for utility class
+	}
+
 	/**
 	 * Writes the analysis results to the specified wiki page.
-	 * @param _responseContent NLP analysis results
+	 * @param responseContent NLP analysis results
 	 * */
-	public static void writeResponse(String _responseContent){
+	public static void writeResponse(final String responseContent){
 		try{
 			if(target.equals("self")){
-				SemAssistServlet.getWiki().getHelper().writeToSamePage(targetName, _responseContent);
+				SemAssistServlet.getWiki().getHelper().writeToSamePage(targetName, responseContent);
 			}else if(target.equals("other")){
 					//MWHelper.writeToOtherPage(targetName, _responseContent, MWHelper.getInstance());
-				SemAssistServlet.getWiki().getHelper().writeToOtherPage(targetName, _responseContent, false);
+				SemAssistServlet.getWiki().getHelper().writeToOtherPage(targetName, responseContent, false);
 			}else if(target.equals("otherWiki")){
 				// The function is the same, we just use a different bot
 				//MWHelper.writeToOtherPage(targetName, _responseContent, MWHelper.getNewBot(wikiAddress, wikiUser, wikiPass));
-				SemAssistServlet.getWiki().getHelper().writeToOtherPage(targetName, _responseContent, true);
+				SemAssistServlet.getWiki().getHelper().writeToOtherPage(targetName, responseContent, true);
 			}else{
 				System.out.println("Undefined target option!");
 			}

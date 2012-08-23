@@ -125,6 +125,7 @@ public class SemAssistServlet extends HttpServlet {
 	}
 
 	/**
+	 * Processes an HTTP GET request and acts upon the action.
 	 * @param request incoming HTTP request
 	 * @param response outgoing HTTP response
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -136,7 +137,12 @@ public class SemAssistServlet extends HttpServlet {
 	}
 
 	/**
+	 * Processes an HTTP POST request and acts upon the action.
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 * @param request HTTP request object
+	 * @param response HTTP response object
+	 * @throws ServletException if the post request cannot be handled by the servlet
+	 * @throws IOException if the response cannot be written to the response object
 	 */
 	protected void doPost(final HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		doProcess(request, response);

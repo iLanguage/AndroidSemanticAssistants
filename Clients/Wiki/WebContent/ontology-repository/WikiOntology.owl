@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://localhost/WikiOntology.owl#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+    xmlns:cu="http://localhost/ConceptUpper.owl#"
+    xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://localhost/WikiOntology.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://localhost/ConceptUpper.owl"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="Content_Page">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Page"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="WikiMarkup">
+    <rdfs:subClassOf rdf:resource="http://localhost/ConceptUpper.owl#ArtificialLanguage"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Talk_Page">
+    <rdfs:subClassOf>
+      <owl:Class rdf:about="#Page"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Namespace"/>
+  <owl:Class rdf:about="#Page">
+    <rdfs:subClassOf rdf:resource="http://localhost/ConceptUpper.owl#Artifact"/>
+  </owl:Class>
+  <owl:Class rdf:ID="Virtual_Namespace">
+    <rdfs:subClassOf rdf:resource="#Namespace"/>
+  </owl:Class>
+  <owl:Class rdf:ID="History">
+    <rdfs:subClassOf>
+      <owl:Class rdf:ID="Metadata"/>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="Wiki">
+    <rdfs:subClassOf rdf:resource="http://localhost/ConceptUpper.owl#Tool"/>
+  </owl:Class>
+  <owl:ObjectProperty rdf:ID="hasMetadata">
+    <rdfs:range rdf:resource="#Metadata"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasContent">
+    <rdfs:range>
+      <owl:Class>
+        <owl:unionOf rdf:parseType="Collection">
+          <rdf:Description rdf:about="http://localhost/ConceptUpper.owl#Format"/>
+          <owl:Class rdf:about="#WikiMarkup"/>
+        </owl:unionOf>
+      </owl:Class>
+    </rdfs:range>
+    <rdfs:domain rdf:resource="#Page"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="hasTalkpage">
+    <rdfs:domain rdf:resource="#Content_Page"/>
+    <rdfs:range rdf:resource="#Talk_Page"/>
+  </owl:ObjectProperty>
+  <owl:ObjectProperty rdf:ID="belongsToNS">
+    <rdfs:range rdf:resource="#Namespace"/>
+    <rdfs:domain rdf:resource="#Page"/>
+  </owl:ObjectProperty>
+  <owl:DatatypeProperty rdf:ID="hasVersion">
+    <rdfs:domain rdf:resource="#Wiki"/>
+  </owl:DatatypeProperty>
+  <owl:DatatypeProperty rdf:ID="hasEngine">
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+    <rdfs:domain rdf:resource="#Wiki"/>
+  </owl:DatatypeProperty>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.4, Build 533)  http://protege.stanford.edu -->
