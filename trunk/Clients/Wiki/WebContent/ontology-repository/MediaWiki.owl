@@ -1,0 +1,305 @@
+<?xml version="1.0"?>
+<rdf:RDF
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:protege="http://protege.stanford.edu/plugins/owl/protege#"
+    xmlns:wo="http://localhost/WikiOntology.owl#"
+    xmlns:xsp="http://www.owl-ontologies.com/2005/08/07/xsp.owl#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+    xmlns="http://localhost/MediaWiki.owl#"
+    xmlns:swrl="http://www.w3.org/2003/11/swrl#"
+    xmlns:swrlb="http://www.w3.org/2003/11/swrlb#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xml:base="http://localhost/MediaWiki.owl">
+  <owl:Ontology rdf:about="">
+    <owl:imports rdf:resource="http://localhost/WikiOntology.owl"/>
+  </owl:Ontology>
+  <owl:Class rdf:ID="P_Project">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Content_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_Project">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Project</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#hasTalkpage"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="P_Project_Talk"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="P_Template">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Content_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_Template">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Template</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#hasTalkpage"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="P_Template_Talk"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="P_Category">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Content_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_Category">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Category</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="P_Category_Talk"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#hasTalkpage"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="P_Help_Talk">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Talk_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_Help">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Help</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#P_Category_Talk">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Talk_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_Category_Talk">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Category_Talk</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="P_Help">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Content_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue rdf:resource="#NS_Help"/>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#hasTalkpage"/>
+        <owl:someValuesFrom rdf:resource="#P_Help_Talk"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="P_Article">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Content_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_Main">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Main</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#hasTalkpage"/>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="P_Article_Talk"/>
+        </owl:someValuesFrom>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="P_File">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Content_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:someValuesFrom>
+          <owl:Class rdf:ID="P_File_Talk"/>
+        </owl:someValuesFrom>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#hasTalkpage"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_File">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >File</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#P_Template_Talk">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Talk_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_Template_Talk">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Template_Talk</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="P_User_Talk">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Talk_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_User_Talk">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >User_Talk</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:ID="P_User_Page">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Content_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_User">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >User</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#hasTalkpage"/>
+        <owl:someValuesFrom rdf:resource="#P_User_Talk"/>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#P_File_Talk">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Talk_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_File_Talk">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >File_Talk</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#P_Article_Talk">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Talk_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_Talk">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Talk</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <owl:Class rdf:about="#P_Project_Talk">
+    <rdfs:subClassOf rdf:resource="http://localhost/WikiOntology.owl#Talk_Page"/>
+    <rdfs:subClassOf>
+      <owl:Restriction>
+        <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#belongsToNS"/>
+        <owl:hasValue>
+          <wo:Namespace rdf:ID="NS_Project_Talk">
+            <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+            >Project_Talk</NS_Value>
+          </wo:Namespace>
+        </owl:hasValue>
+      </owl:Restriction>
+    </rdfs:subClassOf>
+  </owl:Class>
+  <rdf:Property rdf:about="http://localhost/WikiOntology.owl#belongToNS"/>
+  <owl:DatatypeProperty rdf:ID="NS_Value">
+    <rdfs:domain rdf:resource="http://localhost/WikiOntology.owl#Namespace"/>
+    <rdfs:range rdf:resource="http://www.w3.org/2001/XMLSchema#string"/>
+  </owl:DatatypeProperty>
+  <wo:Namespace rdf:ID="NS_Help_Talk">
+    <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Help_Talk</NS_Value>
+  </wo:Namespace>
+  <wo:Wiki rdf:ID="MediaWiki">
+    <wo:hasVersion rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >1.16</wo:hasVersion>
+    <wo:hasEngine xml:lang="en">MediaWiki</wo:hasEngine>
+  </wo:Wiki>
+  <wo:Virtual_Namespace rdf:ID="Special">
+    <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Special</NS_Value>
+  </wo:Virtual_Namespace>
+  <wo:Namespace rdf:ID="NS_MediaWiki">
+    <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MediaWiki</NS_Value>
+  </wo:Namespace>
+  <wo:Namespace rdf:ID="NS_MediaWiki_Talk">
+    <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >MediaWiki_Talk</NS_Value>
+  </wo:Namespace>
+  <wo:Virtual_Namespace rdf:ID="Media">
+    <NS_Value rdf:datatype="http://www.w3.org/2001/XMLSchema#string"
+    >Media</NS_Value>
+  </wo:Virtual_Namespace>
+  <wo:WikiMarkup rdf:ID="MediaWiki_Markup"/>
+  <rdf:Description rdf:about="http://localhost/WikiOntology.owl#hasMetadata">
+    <rdfs:domain>
+      <rdf:Description rdf:about="http://localhost/WikiOntology.owl#Page">
+        <rdfs:subClassOf>
+          <owl:Restriction>
+            <owl:onProperty rdf:resource="http://localhost/WikiOntology.owl#hasMetadata"/>
+            <owl:someValuesFrom rdf:resource="http://localhost/WikiOntology.owl#History"/>
+          </owl:Restriction>
+        </rdfs:subClassOf>
+      </rdf:Description>
+    </rdfs:domain>
+  </rdf:Description>
+</rdf:RDF>
+
+<!-- Created with Protege (with OWL Plugin 3.4, Build 533)  http://protege.stanford.edu -->

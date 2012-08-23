@@ -56,11 +56,16 @@ public class ServiceInvocationHandler {
 	/** List of document URLs to process. */
 	public static String[] tokens;
 
+	/** Private class constructor. */
+	private ServiceInvocationHandler(){
+		//defeat initialization for utility class
+	}
+
 	/**
 	 * Adds the entry to the list of documents.
 	 * @param entries a concatinated list of document URLs
 	 * */
-	public static void setStringArray(String entries){
+	public static void setStringArray(final String entries){
 		stringArray.getItem().clear();
 		uriList.getUriList().clear();
 		tokens = entries.split("\\|");
@@ -108,7 +113,7 @@ public class ServiceInvocationHandler {
 	 * @param name pipeline name
 	 * @param entries concatinated list of runtime parameters
 	 * */
-	public static void setRTParams(ServiceInfoForClientArray services, String name, String entries){
+	public static void setRTParams(final ServiceInfoForClientArray services, final String name, final String entries){
 		rtpArray.getItem().clear();
 		// String of runtime parameters read from the request cookie
 		String[] tokens = entries.split("\\|");

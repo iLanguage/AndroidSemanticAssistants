@@ -1,4 +1,4 @@
-/*
+<!--
 Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
@@ -19,40 +19,17 @@ GNU Affero General Public License for more details.
 
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
-*/
-package info.semanticsoftware.semassist.client.wiki.command;
-
-/** Enumeration class for Servlet commands. */
-enum Commands {params, proxy, invoke, server};
-
-/**
- * Command Factory class implements Factory Design Pattern.
- * @author Bahar Sateli
- * */
-public class CommandFactory {
-
-	/** 
-	 * Private constructor since it is a utility class.
-	 */
-	private CommandFactory(){}
-
-	/**
-	 * Returns a concrete command object based on the input.
-	 * @param command command name retrieved from request
-	 * @return Command command object created from the factory
-	 * */
-	public static Command getCommand(final String command){
-		switch(Commands.valueOf(command.toLowerCase())){
-		case proxy:
-			return new ProxyCommand();
-		case params:
-			return new ParamsCommand();
-		case invoke:
-			return new InvokeCommand();
-		case server:
-			return new ServerCommand();
-		default:
-			return null;
-		}
-	}
-}
+-->
+<%@page import="info.semanticsoftware.semassist.wiki.servlets.SemAssistServlet"%>
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Semantic Assistants</title>
+</head>
+<body>
+I think, I THINK you're lost!! :)
+</body>
+</html>

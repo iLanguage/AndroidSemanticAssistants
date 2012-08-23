@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<!--
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+   This file is part of the Semantic Assistants architecture.
+
+   Copyright (C) 2012-2013 Semantic Software Lab, http://www.semanticsoftware.info
+
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+   
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<project name="Wiki-NLP" default="dist" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant">
+    
+    <property name="semassist.home"           value="../../" />
+
+    <!-- Machine specific settings should go in SemassistProperties.xml -->
+    <import file ="${semassist.home}/SemassistProperties.xml"/>
+	
+	<!-- Ivy task definition -->
+  	<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpath="${ivy.jar.dir}/ivy.jar"/>
+    
+    <description>
+        Wiki integration for the Semantic Assistants architecture
+    </description>
+
+	<target name="init">
+		<!-- Ivy properties - do not edit -->
+		<property name="ivy.install.version" value="2.0.0-beta2" />
+		<property name="ivy.home" value="ivy" />
+		<property name="ivy.jar.dir" value="${ivy.home}/lib" />
+		<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+	  
+		<!-- Top Directories -->
+		<property name="docs.dir"  value="${basedir}/Javadoc"/>
+		<property name="src.dir"   value="${basedir}/src"/>
+		<property name="dist.dir"  value="${basedir}/dist"/>
+		<property name="web.dir"  value="${basedir}/WebContent/WEB-INF"/>
+		<property name="build.dir" value="${web.dir}/classes"/>
+		<property name="lib.dir"	value="${web.dir}/lib"/>
+	
+		<!-- Used for testing -->
+		<property name="test.src"	   value="${basedir}/test.src"/>
+		<property name="test.result" value="${basedir}/test.result"/>
+		<property name="compile.debug"    value="false" />  
+		<path id="compile.classpath">
+			<pathelement location="${junit.home}/junit.jar" />
+			<fileset dir="${lib.dir}" >
+				<include name="*.jar" />
+			</fileset>
+		</path>
+    </target>
+      
+	<!-- If ivy.jar already exists, the build will skip this step -->
+	<target name="download-ivy" description="Download ivy.jar from Maven central repository to resolve dependencies.">
+    	<mkdir dir="${ivy.jar.dir}"/>
+		<get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar" dest="${ivy.jar.file}" usetimestamp="true"/>
+	</target>
+	
+	<target name="resolve" depends="init, download-ivy" description="Download JAR files via ivy">
+		<path id="ivy.lib.path">
+			<fileset dir="ivy/lib" includes="*.jar"/>
+		</path>
+		<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/> 
+	 	<ivy:settings file="${basedir}/ivysettings.xml" />
+		<ivy:retrieve pattern="${lib.dir}/[artifact].[ext]"/>
+		<!--copy file="${csal.jar}" todir="${lib.dir}"/-->
+	</target>
+
+
+    <!-- This target compiles the CSAL to the dist -->  
+    <target name="copycsal" description="Copy CSAL.jar" >
+      <copy file="${csal.home}/dist/${csal.name}" todir="${lib.dir}"/>
+    </target>
+
+    <!-- This target compiles all the classes -->  
+    <target name="compile" depends="init" description="Compile the source" >
+        <!-- Compile the java code from ${src.dir} into ${build.dir} -->
+        <mkdir dir="${build.dir}" />
+        <javac srcdir="${src.dir}/" destdir="${build.dir}" debug="false" debuglevel="lines,vars,source"  classpath="${build.dir}"  includeantruntime="${antruntime}">
+            <compilerarg value="${compile.args}" />
+            <classpath refid="compile.classpath" />
+        </javac>
+    </target>
+
+    <!-- Pack the compiled classes into a jar archive  -->
+    <target name="dist" depends="compile"  description="Create jar from the compiled classes" >
+        <!-- Create the distribution directory -->
+        <mkdir dir="${dist.dir}"/>
+        <jar jarfile="${dist.dir}/ProtocolHandlerAddon_java.uno.jar" basedir="${build.dir}">
+            <manifest>
+                <attribute name="RegistrationClassName" value="ProtocolHandlerAddon"/>
+            </manifest>
+        </jar>
+    </target>
+
+    <!-- Generates Javadoc output -->
+    <target name="javadoc">
+        <javadoc sourcepath="${src.dir}"
+		 destdir="${docs.dir}"
+		 defaultexcludes="yes" author="true" version="true"
+		 use="true" link="true" encoding="UTF-8" 
+		 windowtitle="Semantic Assistants: OpenOffice.org Writer Plug-in">
+	  <sourcepath>
+            <pathelement location="${src.dir}" />
+	  </sourcepath>
+          <doctitle><![CDATA[<h1>Semantic Assistants: Wiki-NLP Integration</h1>]]></doctitle>
+          <bottom><![CDATA[<i>Copyright &copy; 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
+          </javadoc>
+    </target>
+
+<!--
+   <target name="junit" depends="compile" description="Performs unit tests.">
+        <javac srcdir="${test.src}" destdir="${build.dir}" debug="true" deprecation="true" includeantruntime="${antruntime}">
+        	<classpath refid="compile.classpath"/>
+        </javac>
+        <mkdir dir="${test.result}"/>
+        <junit failureproperty="junit.failed"  printsummary="yes">
+            <formatter type="xml"/>
+            <batchtest todir="${test.result}">
+                <fileset dir="${build.dir}">
+                   <include name="**/*Test.class"/>
+                   <include name="**/Test*.class"/>
+                </fileset>
+            </batchtest>
+            <classpath>
+               <path refid="compile.classpath"/>
+               <pathelement location="${build.dir}"/>
+            </classpath>
+        </junit>
+        <fail message="JUnit test failure." if="junit.failed"/>
+    </target>
+-->
+
+    <!-- Findbugs analysis >
+    <target name="findbugs" depends="compile">
+      <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
+            classpath="${findbugs.classpath}" />
+      <findbugs home="${findbugs.home}"      
+            output="xml:withMessages"
+            outputFile="findbugsXml.SA.xml" >
+	<auxClasspath path="${ant.jar}:${gate.jar}:${gate-home}/lib/log4j-1.2.14.jar:${csal.home}/dist/${csal.name}:${commons-lang.jar}:${ooo-classes-common}/unoloader.jar:${ooo-classes-common}/juh.jar:${ooo-classes-common}/ridl.jar:${ooo-classes-common}/jurt.jar:${ooo-classes-common}/java_uno.jar:${office.home.dir}/basis-link/program/classes/unoil.jar:${office.home.dir}/basis-link/sdk/classes/com/sun/star/lib/loader/*.class" />
+	<sourcePath path="${src.dir}" />
+	<class location="${build.dir}" />
+      </findbugs>
+    </target-->
+
+  <!-- Clear all build output -->
+    <target name="clean">
+        <delete includeemptydirs="true" quiet="true">
+            <fileset dir="${build.dir}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
+            <fileset dir="${dist.dir}" excludes="**/CVS,**/CVS/**,**/.cvsignore"/>
+	    	<!--fileset file="${dist.dir}/${csal.name}"/-->
+        </delete>
+        <delete dir="${docs.dir}"/>
+        <delete dir="${test.result}"/>
+    </target>
+</project>

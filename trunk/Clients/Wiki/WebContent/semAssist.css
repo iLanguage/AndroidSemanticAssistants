@@ -1,0 +1,40 @@
+.SemAssist-title
+{
+	font-size:18px;
+	font-weight:bold;
+	font-family: "Trebuchet MS", Geneva, Arial, Helvetica, Verdana, sans-serif;
+	color: white;
+	left: 0px;
+	right: 0px;
+	top: 0px;
+	width: 100%; 
+	background-color: #336699;
+}
+
+html, body {
+	height: 100%;
+	padding: 0;
+}
+
+.SemAssist{
+/* 	font-size:13px; */
+/* 	font-family: "Trebuchet MS", Geneva, Arial, Helvetica, Verdana, sans-serif; */
+}
+
+.semAssist-main{
+	width: 99%;
+}
+
+#left{
+	padding: 10;
+	float: left;
+}
+
+#right{
+	padding: 10;
+	float: left;
+}
+
+#label{
+	font-weight:bold;
+}
