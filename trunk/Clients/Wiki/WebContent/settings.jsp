@@ -20,7 +20,7 @@ GNU Affero General Public License for more details.
 You should have received a copy of the GNU Affero General Public License
 along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
-<%@page import="info.semanticsoftware.semassist.wiki.html.HTMLGenerator"%>
+<%@page import="info.semanticsoftware.semassist.client.wiki.html.HTMLGenerator"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
@@ -37,7 +37,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 	window.onload = function start(){
 		$(document).delegate("#btnSetCookies", "click", setCookie);
 		// fill the fields
-		var address = document.referrer.toLowerCase();
+		var address = document.referrer;
 		var index = address.lastIndexOf("index.php")+"index.php".length;
 		address = address.substring(0,index);
 		$("#thisWikiAddress").val(address);
