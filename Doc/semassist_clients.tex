@@ -1118,6 +1118,125 @@ The sequence diagram in Figure~\ref{fig:mozilla_development_notes_java_component
   \label{fig:mozilla_development_notes_java_component_sequence_diagram_invoke_service}
 \end{figure}
 
+\section{Wiki Integration}
+Wikis are web-based software applications that allow users to collaboratively create and edit web page content, through a Web browser using a simplified syntax. The ease-of-use and ``open'' philosophy of wikis have brought them to the attention of organizations and online communities, leading to a wide-spread adoption as a simple and ``quick'' way of collaborative knowledge management. \sa architecture provides an extensible wiki connector component that allows a multitude of wiki engines to connect to a \sa server and employ various NLP services on their content.
+
+The wiki connector component is designed regardless of what underlying wiki engine intends to use the NLP services within its environment. This means that the wiki component does not have any concrete wiki engine specifications hard coded in its implementation. Rather, it provides an extensible interface so that various wiki engines can be added to its architecture with little effort.
+
+As a concrete application, we have developed the integration of \sa with the MediaWiki\footnote{MediaWiki, \url{http://www.mediawiki.org}} -- a popular wiki engine best known from the Wikipedia project. In the following sections, we will describe the SA-MediaWiki integration in details, as well as the core, reusable features of the wiki component.
+
+\subsection{Features}
+The ultimate goal of the Wiki-SA integration is to provide a seamless integration of NLP capabilities within a wiki environment, with the least possible modifications on its engine. To this end, the Wiki-SA integration adopts a collaborative approach, where a number of different components communicate with each other over standard protocols.
+
+\subsubsection{Storing User Preferences} The Wiki-NLP integration communicates a \sa server based on the values of special cookies inside the user browser. To store such values, the first time a user asks for the NLP interface in the wiki, he is temporarily redirected to a different page shown in Figure~\ref{fig:wiki_config}, where he can configure the following items:
+
+\begin{itemize}\itemsep1mm
+\item The wiki engine and version
+\item The base URL of the wiki\footnote{The Wiki-NLP integration tries to guess the base URL of the wiki API, based on the wiki location. You should, however, check whether the suggested address is indeed correct and uses the right capitalization. For example, ``\emph{http://localhost/mywiki}'' and ``\emph{http://localhost/MyWiki}'' are not considered the same.} (i.e., from which the wiki API can be accessed)
+\item A user name and password that can be used by the Wiki-NLP integration to communicate with the wiki engine
+\item The \sa server to connect to
+\end{itemize}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=0.9\textwidth]{pictures/wiki_config.png}
+\caption{Configuring the Wiki-NLP integration}
+\label{fig:wiki_config}
+\end{figure}
+
+Once the user saves the configuration, the provided information is stored in the user's browser and will remain for the consequent Wiki-SA interactions. The configuration page is only shown to users once, in the beginning of their session unless the cookies are explicitly removed by the user. Clicking on the ``Save'' button, will return the user to the previous page that the user was viewing.
+
+\subsubsection{NLP Service Invocation}
+Once the configuration settings are stored in the user's browser, users can inquire about the available NLP by clicking on the ``Semantic Assistants'' link the wiki menu bar. This action will reload the page, but this time the NLP user interface is appended to the bottom of the current wiki page. This user interface shown in Figure~\ref{fig:semassist_ui} allows the users to view a dynamically generated list of available assistants and select wiki pages of interest to a so-called ``collection''. The list pages in the collection is temporarily stored in the browser, hence, users can continue browsing to other pages of the wiki.
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{pictures/semassist_ui.png}
+\caption{The Wiki-NLP interface in MediaWiki}
+\label{fig:semassist_ui}
+\end{figure}
+
+Once the collection is prepared and an assistant is selected from the list, the second tab of the Wiki-NLP interface allows users to choose where they would like the results to be stored. Illustrated in Figure~\ref{fig:semassist_target}, the current available choices in the integration are:
+
+\begin{itemize}\itemsep1mm
+\item \emph{``Same Page''}, i.e., the results will be written in the same page as the resource. If the user has multiple pages in the collection, each results will be written into its corresponding source page. The current, option for this item are a wiki page's main ``body'', or its associated ``talk''\footnote{In some MediaWiki skins, a talk page is also known as the ``discussion'' page.} section.
+\item \emph{``Another Page''}, i.e., writing the results to a different page in the wiki. If the user has multiple pages in the collection, the results of each wiki page will be aggregated into one output and written into the specified wiki page. In order to precisely choose a destination for this option, users have to select a namespace from a list of available namespaces in the wiki, as well as a type a unique page name. If the specified wiki page exists in the wiki, the results will be appended to the end of the page, otherwise a new wiki page will be automatically created.
+\item \emph{Another Wiki} i.e., writing the results of the analysis into a different wiki than the source, provided that its engine is supported by the integration. Needless to say, users must provide the integration with (1) the address of the destination wiki, (2) its underlying wiki engine and version, (3) a valid username and password, and (4) a valid page name. Similar to the previous option, the results of the analysis will be aggregated and made persistent in the destination wiki page.
+\end{itemize}
+
+\begin{figure}
+\centering
+\includegraphics[width=\textwidth]{pictures/semassist_target.png}
+\caption{The Wiki-NLP interface in MediaWiki}
+\label{fig:semassist_target}
+\end{figure}
+
+The ``Console'' tab of the Wiki-NLP interface shows user-friendly logs of the NLP service execution and indicates where the results are written, if the execution is successfully done.
+
+\subsubsection{Global Settings}
+Similar to other \sa clients, users can dynamically change which \sa server they want their wiki to connect to. The ``Global Settings'' tab in the Wiki-NLP interface shown in Figure~\ref{fig:semassist_settings}, allows users to select a \sa server from a list of pre-defined addresses, as well as defining a custom end point. Once the user clicks the ``connect'' button, the selected server address is stored in the user cookies and will take effect as soon as the user refreshes the browser.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=\textwidth]{pictures/semassist_settings.png}
+\caption{Global settings of the Wiki-NLP integration}
+\label{fig:semassist_settings}
+\end{figure}
+
+\subsection{Installation}
+The Wiki-SA integration is composed of two separate components: a server-side component and a wiki plug-in. While the server-side component is the same for different wiki systems, each wiki extension should be implemented for a specific engine. If you prefer to use the services available on our public repository, you can skip the next section and continue on to the wiki plug-in installation.
+
+\subsubsection{Server-Side Component}
+In order to install the server-side component, browse to \url{Clients/Wiki} folder in the \sa folder and type \texttt{ant pack}. This command will automatically build the server-side component as a \texttt{.WAR} file that can be deployed on any Java Servlet Container program, such as the Apache Tomcat. Deploying the servlet on a container varies from one program to the other. Please consult the user guide of your container of choice for this matter.
+
+Once the server-side is deployed and started, it is automatically published on the container's default port number. For example, if your Tomcat is configured to use port \texttt{8080} as its default port, the servlet will be accessible on \texttt{http://HOSTNAME:8080/SA-WikiConnector}.
+
+\subsubsection{Wiki Plug-in}
+The Wiki-SA integration needs to be introduced to the wiki through a plug-in. Here, we will provide the details of installing the \sa extension for MediaWiki, available in \url{Clients/Wiki/MediaWiki/extension} folder. Simply copy the \texttt{\sa} folder to \url{PATH_TO_YOUR_MEDIAWIKI/extensions} folder. Next you have to \emph{install} the extension on the wiki engine by adding the following line to the \url{LocalProperties.php} file present in the root of your MediaWiki installation folder.
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=PHP,numbers=left,xleftmargin=4mm,columns=flexible]
+include_once("$IP/extensions/SemanticAssistants/SemanticAssistants.php");
+\end{lstlisting}
+\caption{Installing the \sa extension on the MediaWiki engine}
+\label{list:mediawiki_sa_extension_install}
+\end{figure}
+
+Adding this line is all that is needed to enable your wiki user to inquire and invoke NLP pipeline on the wiki content. However, the extension by default connects the public \sa wiki component. If you have installed the server-side component described in the previous section, you have to change the default wiki component address to the servlet deployed on your container. Find the following line in \url{PATH_TO_YOUR_MEDIAWIKI/extensions/SemanticAssistants/SemanticAssistants.php} file and update in accordingly, by changing the \emph{``http://loompa.cs.concordia.ca:8080/''} to where your wiki component is published:
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=PHP,numbers=left,xleftmargin=4mm,columns=flexible]
+print("<li> <a href=\"http://loompa.cs.concordia.ca:8080/SA-WikiConnector/SemAssistServlet?action=proxy\">Semantic Assistants</a></li>");\end{lstlisting}
+\caption{Configuring the \sa MediaWiki extension file}
+\label{list:mediawiki_sa_extension_config}
+\end{figure}
+
+You can verify the successful installation of the \sa extension, by viewing the ``\texttt{Special:Version}'' page of your wiki: The \sa extension must be listed under the ``Installed extensions'' section of the page (Figure~\ref{fig:semassist_plugin} (a)), and a ``Semantic Assistants'' link is added to the wiki menu bar (Figure~\ref{fig:semassist_plugin} (b)).
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.8]{pictures/semassist_plugin.png}
+\caption{The \sa extension installed on MediaWiki}
+\label{fig:semassist_plugin}
+\end{figure}
+
+
+\subsubsection{Wiki Templates}
+The NLP pipelines results are made persistent in the wiki once the analysis is finished. For a more user-friendly results, there are pre-defined, customizable templates in the \sa Wiki-NLP integration that embed the generated results in a wiki table format. In order to use the templates in your MediaWiki instance, you have to import them to your wiki repository. Browse to the ``\texttt{Special Pages}'' page of your wiki and click on the ``\texttt{Import Pages}'' link under the ``\texttt{Page Tools}'' section\footnote{In the default installation of MediaWiki, permission of importing pages to the wiki is limited to users with the ``admin'' role.}. From the ``\texttt{Import XML data}'' box click on the ``\texttt{Browse}'' button and upload the \texttt{WikiNLP\_SA\_templates.xml} file located in the \url{Clients/Wiki/MediaWiki/templates} folder, as shown in Figure~\ref{fig:wiki_template_import}.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{pictures/wiki_template_import.png}
+\caption{Importing the \sa templates to MediaWiki}
+\label{fig:wiki_template_import}
+\end{figure}
+
+Note that there are no templates for the ``File'' and ``Document'' output types (see Section~\ref{sec:response}) and the content of the generated output is written to the wiki repository as regular wiki pages.
+
+%\subsection{Development Notes}
+
 \section{Android Application}
 Mobile phones use a variety of operating systems that transform them from a traditional handheld device for talking into general-purpose computing platforms. Android OS\footnote{Google's Android Platform~\url{http://developer.android.com}}, is an open source platform for mobile and tablet development led by Google Inc. It is a comprehensive Linux-based platform that supports most of the Java Platform and features its own extensive user interface framework. This platform is widely used by programmers to create applications and games for handheld devices. We have leveraged this platform to create an application that allows users to use novel NLP solutions inside their devices. This app, henceforth referred to as the \sa App, not only can be used as a standalone application, but also plays the role of a system-wide NLP service provider for other applications. Note that the \sa App was originally implemented based on Android 3.0 Platform\footnote{Android 3.0 Platform,~\url{http://developer.android.com/sdk/android-3.0.html}} (Honeycomb) but its backward compatibility has also been tested with Android 2.2. It is, however, recommended that the app be used in Android 3.0+ versions.
 
