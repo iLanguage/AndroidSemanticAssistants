@@ -1343,10 +1343,10 @@ As the directory structure suggests, in order to introduce a new wiki engine to 
   enum Wikis {mediawiki, xwiki};
 
   public static WikiEngine getWiki(final String engine){
-    switch(Commands.valueOf(command.toLowerCase())){
-		case proxy:
+    switch(Wikis.valueOf(engine.toLowerCase())){
+		case mediawiki:
 			return new MediaWiki();
-		case params:
+		case xwiki:
 			return new XWiki();
 		default:
 			return null;
