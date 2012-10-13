@@ -480,7 +480,6 @@ metadata maintained by the architecture and so becomes immediately available to
 any connected client.
 
 \begin{figure}[htb]
-\label{fig:eclipse_services}
 \begin{center}
   \includegraphics[width=0.5\textwidth]{pictures/eclipse_services.jpg}
   \caption{A List of Available NLP Services}
@@ -1235,7 +1234,130 @@ The NLP pipelines results are made persistent in the wiki once the analysis is f
 
 Note that there are no templates for the ``File'' and ``Document'' output types (see Section~\ref{sec:response}) and the content of the generated output is written to the wiki repository as regular wiki pages.
 
-%\subsection{Development Notes}
+\subsection{Development Notes}
+In this section, we provide further details on the underlying architecture of the Wiki-NLP architecture and how more wiki engines can be added to the integration.
+
+\subsubsection{System Architecture}
+As stated earlier, the Wiki-NLP architecture is a collaborative approach, combining the power of an extensible server-side component and a lightweight wiki-side plug-in. While the server-side wiki component is responsible for executing the NLP services, the wiki extension handles all the wiki-specific tasks, such as manipulating the wiki menu bar or patrolling changes in the wiki repository. In our system architecture, illustrated in Figure~\ref{fig:wikinlp_arch},the communication between the two aforementioned components and the user's browser is carried out over the HTTP protocol using JavaScript code that is dynamically injected into the user's browser.
+
+\begin{figure}
+\centering
+\includegraphics[width=0.9\textwidth]{pictures/wikinlp_arch}
+\caption{The Wiki-NLP integration architecture}
+\label{fig:wikinlp_arch}
+\end{figure}
+
+An analysis session is started when the user clicks on the \sa link in the wiki, like the one shown in Figure~\ref{fig:semassist_plugin}, or the wiki extensions makes a headless request to the wiki component. If the request parameters are not sufficient, the user is redirected to the settings page. Otherwise, the wiki component loads the requesting wiki ontology from its repository (see the next section) and generates a custom user interface based on the wiki capabilities, e.g., its list of namespaces, etc. The user interface is then injected into the user's browser, as shown in Figure~\ref{fig:semassist_ui}.
+
+Once an NLP service execution is sent to the wiki component, the service call is delegated to the designated \sa server and the results are transformed and written back to the wiki repository.
+
+\subsubsection{Wiki Ontologies}
+
+we adopted a semantics-based approach, in which different wiki engines are introduced to the integration architecture through their \emph{ontology} files. By using OWL as the ontology language to formally describe a wiki, the integration does not need to know about their concrete implementation; rather it uses automatic reasoning on their ontologies to discover each wiki's structure and capabilities.
+
+\begin{figure}
+\centering
+\includegraphics[scale=0.7]{pictures/wiki_onto.pdf}
+\caption{Wiki Upper Ontology}
+\label{fig:wiki_onto}
+\end{figure}
+
+To facilitate the process of ontology definition, we have designed a generic \emph{upper ontology} for wiki systems shown in Figure~\ref{fig:wiki_onto}, which also includes concepts defined in the \sa upper ontology~[\cite{aswc08}] -- a multi-purpose ontology that describes five core concepts to model the relationships between users, their tasks, the artifacts involved and their format and language.  
+
+\begin{table}
+\centering
+\caption{Concepts in the wiki upper ontology}
+\label{tab:wiki_onto_concepts}
+\textsf{\small
+\begin{tabular}{l l l}
+  \hline 
+  \textbf{Concept}&\textbf{Description} &\textbf{Example} \\
+  \hline
+  Wiki & \emph{wiki engine}  & MediaWiki
+  \\
+  Page & \emph{Wiki elements encompassing textual content} & ``Semantic Web''
+  \\
+  Namespace & \emph{Category names to differentiate pages at a high level}  & ``Help'', ``Project''
+  \\  
+  Resource & \emph{Files with arbitrary formats} & Picture.jpg
+  \\
+  Metadata & \emph{Metadata associated with wiki pages}  & History, Semantic Annotations
+  \\
+  Wiki Markup & \emph{Ontological representation of wiki syntax} & MediaWiki Markup\\
+\hline
+\end{tabular}}
+\end{table}
+
+The wiki upper ontology is designed using Prot\'{e}g\'{e}\footnote{Prot\'{e}g\'{e}, \url{http://protege.stanford.edu/}} and reflects the concepts that are common to all wiki engines. Thus, for the MediaWiki engine, we merely have to instantiate the upper ontology manually or automatically using special scripts to define the concrete structure of each wiki instance, e.g., its available namespaces. Table~\ref{tab:wiki_onto_concepts} summarizes the concepts of the wiki upper ontology.
+
+\subsubsection{Results Transformation and Presentation}
+The ultimate goal of our Wiki-NLP integration is to create a ``self-aware'' wiki that can develop and organize its content. Therefore, unless the results from NLP services are presented to users or become persistent in the wiki, the integration would not add any valuable advancement to the current state of the underlying wiki system. Transforming the NLP service results to wiki markup is a task handled by special parser classes in the wiki helper module described in the previous section.
+
+\begin{figure}[h!]
+\centering
+\includegraphics[width=0.7\columnwidth]{pictures/result_transform.pdf}
+\caption{Transforming NLP service results to wiki markup}
+\label{fig:result_transform}
+\end{figure}
+
+Following a successful NLP service execution, results are passed from the \sa server to the service broker module in form of an XML message (see Figure~\ref{list:response1} for an example). The wiki component then interprets the server's XML response and parses the message into an array of Java objects. The service result objects are then transformed to wiki markup by the wiki helper classes in the wiki component and prepared for the \emph{templating mechanism}. 
+
+The templating mechanism is the process of embedding service results into MediaWiki templates for presentation. This mechanism separates the data model from its presentation and provides the opportunity to create multiple views for a single model for different purposes. Templating is a collaborative task performed by the wiki component and the wiki extension. The wiki component prepares the markup by placing the results within their corresponding templates and storing them in the wiki's database. Once the wiki page is viewed by the user, the templates installed on the wiki by the \sa extension will render the template markup to generate appropriate HTML representations for NLP results, such as tables or lists. Figure~\ref{fig:result_transform} shows the workflow of the transformation of server XML response messages to MediaWiki markup.
+
+\subsubsection{Wiki Component Structure}
+The Wiki-SA Connector component, shown in Figure~\ref{fig:wikinlp_arch}, is technically an HTTP proxy sever written using the Java Servlet\footnote{Java Servlet API, \url{http://download.oracle.com/docs/cd/E17802_01/products/ products/servlet/2.5/docs/servlet-2_5-mr2/}} technology. As mentioned earlier, it acts as an intermediator between the \sa server, the wiki system and the user's browser by intercepting their communication. For each of these three endpoints, there exists a module in the servlet, specifically concerned with the endpoint's business logic. This way, having separate modules allows the sub-components to evolve and extend independently.
+
+\blankline
+\noindent
+\textbf{Service Broker Module. }{The service broker module is the connecting point of the integration to the \sa server. Every service execution request that is received by the integration component is translated into a Java method call in this module, which in turn triggers the execution of one or multiple NLP services in the \sa server.}
+
+\blankline
+\noindent
+\textbf{User Interface Module. }{This module is responsible for generating the integration user interface within a wiki environment. Since wikis are accessible through Web browsers, this module is designed to generate an HTML representation of the Semantic Assistants user interface and inject it to the the user's browser using JavaScript. Figure~\ref{fig:semassist-ui} shows how the generated user interface is added to a wiki page to give its users the impression that they are still interacting with the wiki's native interface. Through this user interface, users can find the \emph{Available Assistants} (bottom left) and invoke arbitrary NLP services by dynamically querying the \sa repository of service descriptions. This way, any language service that is offered by a \sa server is presented in the user interface to the user. Moreover, the generated user interface allows users to combine multiple pages of the wiki in a \emph{collection}, i.e., a list of user-selected page URLs, and invoke the NLP service on them at once.}
+
+\blankline
+\noindent
+\textbf{Wiki Helper Module. }{The wiki helper module encompasses the classes required for communicating with the MediaWiki engine. The classes in this module are responsible for providing the NLP pipelines with input data by reading wiki pages from the database and eventually transforming the results to their corresponding template markup and storing them in the wiki database.}
+
+
+Earlier we stated that the wiki component is responsible for maintaining and reasoning on the available wiki ontologies. This process is achieved by special ontology keeper classes that upon each servlet bootstrapping, run over the wiki repository OWL files and create an in-memory model of the wikis, by parsing them using Prot\'{e}g\'{e}'s OWL libraries. This module also provide reasoning capabilities on wiki ontologies using the SPARQL\footnote{SPARQL Query Language for RDF, \url{http://www.w3.org/TR/rdf-sparql-query/}} language.
+
+\subsubsection{Extending the Wiki Component}
+One main requirement in the design of Wiki-NLP is wiki independence. With this requirement in mind, we have realized an extensible architecture where wikis can be added to the integration wiki little effort. The directory structure of the server-side wiki component found in \url{Clients/Wiki/src/info/semanticsoftware/semassist/client/wiki} is as follows:
+
+\begin{enumerate}
+\item\url{broker}: This folder contains the classes that handle the NLP service execution in the \sa server, as well as partial refinement of the results.
+\item\url{command}: This folder contains classes pertaining to the Factory Design Pattern that generate various commands that the servlet can handle. The commands themselves are implemented using the Command Design Pattern. 
+\item\url{html}: This folder contains classes that generate an HTML representation of the Wiki-NLP user interface.
+\item\url{servlets}: This folder contains the front controller classes in our proxy design.
+\item\url{utils}: This folder contains utility classes related to the wiki component, such as logging and abstract parser classes.
+\item\url{wikihelper}: This folder contains the classes pertaining to the Factory Design Pattern that generate various wiki engine instances and their corresponding parsers on the fly. Essentially, the Wiki-NLP integration provides three abstract classes, namely, \texttt{WikiHelper.java}, \texttt{WikiParser.java}, \texttt{WikiOntolgyKeeper.java}, that provide abstract methods to communicate with the wiki engine, transform the results to wiki markup and query the wiki ontology files, respectively. 
+\end{enumerate}
+
+As the directory structure suggests, in order to introduce a new wiki engine to the integration architecture, the three mentioned classes in the \texttt{wikihelper} package needs to be extended. The current \texttt{wikihelper} package contains example classes for the MediaWiki engine. Similarly, if your wiki engine is called XWiki, you need to create \texttt{XWikiHelper.java}, \texttt{XWikiParser.java} and \texttt{XWikiOntologyKeeper.java} classes that extend the corresponding abstract classes. Oncee these three classes are implemented, simply extend the factory pattern in the \texttt{WikiFactory.java} by adding the name of your wiki engine to the switch statement, as shown in Figure~\ref{list:wiki_factory_extend}:
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=Java,numbers=left,xleftmargin=4mm,columns=flexible]
+  /** Enumeration class for Servlet commands. */
+  enum Wikis {mediawiki, xwiki};
+
+  public static WikiEngine getWiki(final String engine){
+    switch(Commands.valueOf(command.toLowerCase())){
+		case proxy:
+			return new MediaWiki();
+		case params:
+			return new XWiki();
+		default:
+			return null;
+		}
+  }
+\end{lstlisting}
+\caption{Extending the wiki factory class}
+\label{list:wiki_factory_extend}
+\end{figure}
+
+Next, create a class called \texttt{XWiki.java} and reference a singleton access to your wiki helper, parser and ontology keeper classes, just like the code in \texttt{MediaWiki.java}. Finally, place your wiki ontology \texttt{.owl} file in \url{Clients/Wiki/WebContent/ontology-repository} folder and your wiki will show up in the list of supported engines once the servlet is restarted.
 
 \section{Android Application}
 Mobile phones use a variety of operating systems that transform them from a traditional handheld device for talking into general-purpose computing platforms. Android OS\footnote{Google's Android Platform~\url{http://developer.android.com}}, is an open source platform for mobile and tablet development led by Google Inc. It is a comprehensive Linux-based platform that supports most of the Java Platform and features its own extensive user interface framework. This platform is widely used by programmers to create applications and games for handheld devices. We have leveraged this platform to create an application that allows users to use novel NLP solutions inside their devices. This app, henceforth referred to as the \sa App, not only can be used as a standalone application, but also plays the role of a system-wide NLP service provider for other applications. Note that the \sa App was originally implemented based on Android 3.0 Platform\footnote{Android 3.0 Platform,~\url{http://developer.android.com/sdk/android-3.0.html}} (Honeycomb) but its backward compatibility has also been tested with Android 2.2. It is, however, recommended that the app be used in Android 3.0+ versions.
@@ -1286,8 +1408,8 @@ Once the \sa server is selected from the Global Settings activity, users can inq
 \begin{figure}[htb]
 \centering
 \includegraphics[scale=0.35]{pictures/android_invoke_main.jpg}
-\caption{Adding a new server to the \sa App settings}
-\label{fig:android_new_server}
+\caption{Invoking an NLP service through the \sa App settings}
+\label{fig:android_invoke_main}
 \end{figure}
 
 Users have three options on how to provide a pipeline with text input:
