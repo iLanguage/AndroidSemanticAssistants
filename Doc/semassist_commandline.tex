@@ -1,0 +1,97 @@
+% Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+%
+% This file is part of the Semantic Assistants architecture.
+%
+% Copyright (C) 2009, 2010, 2011, 2012, 2013 Semantic Software Lab, http://www.semanticsoftware.info
+% The Semantic Assistants architecture is free software: you can
+% redistribute and/or modify it under the terms of the GNU Affero General
+% Public License as published by the Free Software Foundation, either
+% version 3 of the License, or (at your option) any later version.
+%   
+% This program is distributed in the hope that it will be useful,
+% but WITHOUT ANY WARRANTY; without even the implied warranty of
+% MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+% GNU Affero General Public License for more details.
+% 
+% You should have received a copy of the GNU Affero General Public License
+% along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+\chapter{Command-Line Client}
+\label{sec:sacl:clc}
+This is a simple example client to access the server from the command line.
+It is located under \url{SemanticAssistants/Clients/CommandLine} and is meant to demonstrate and test to plug-in developers various Semantic Assistant functionalities.
+
+\begin{enumerate}
+\item To compile: \emph{ant compile}
+\item To run: \emph{./runclient.sh}
+\end{enumerate}
+
+The \texttt{runclient.sh} script helps with the
+class path setting, but also adds some difficulty with getting quotes right
+when passing parameters to the program. For example, to list all
+available services, you can run
+\begin{verbatim}
+    ./runclient.sh listall
+\end{verbatim}
+to query the server for all available NLP services. For the default
+installation, you should see an output like:
+\begin{verbatim}
+    Retrieving service info from server...   done
+    Listing services:
+    Yahoo Search
+    IR Information Extractor
+    Person and Location Extractor
+\end{verbatim}
+Now you can invoke one of the services. For example, to extract all
+person and location entities from a Wikipedia article, you can run
+\begin{verbatim}
+    ./runclient.sh invoke "\"Person and Location Extractor\"" \
+    "docs=http://en.wikipedia.org/w/index.php?title=Christiane_Kubrick&printable=yes"
+\end{verbatim}
+If everything works, you will see the raw service response (in XML
+format).  Note again that the server has to be running and both the
+CSAL and command-line client must have been compiled successfully.
+
+\section*{Connecting to any Server}
+The user is able to specify the Server information (Host and Port) of
+a local or distant server.  To achieve that the \url{params} part of the
+command needs to be used.  The only extra info needed is appending the
+following string to the end of the command:
+\begin{verbatim}
+    "params=(Host=<target Host>,Port=<target server port>)"
+\end{verbatim}
+
+For example:
+\begin{verbatim}
+    "params=(Host=localhost,Port=8080)"
+\end{verbatim}
+
+This parameter list may be added at every invocation.
+
+\section*{Configuring Client Preferences}
+The Semantic Assistant CSAL architecture makes it is possible to configure persistent server connection and runtime preferences for the command-line client via the \texttt{semassist-settings.xml} file described in section \ref{sec:pref_management}.
+Run the following to see all configurations relevant to the command-line client. The output should be similar to this:
+\begin{verbatim}
+    ./runclient.sh listpref
+
+    global preferences:
+    lastCalledServer.port=8879
+    lastCalledServer.host=minion.cs.concordia.ca
+    server.port=8879
+    server.host=minion.cs.concordia.ca
+    server.port=8879
+    server.host=assistant.cs.concordia.ca
+
+    cmdline preferences:
+\end{verbatim}
+
+To then create new or override existing preferences in either the global or the client scopes, you can run something like the following:
+\begin{verbatim}
+    ./runclient.sh setpref cmdline server.host=localhost
+    ./runclient.sh setpref cmdline server.port=8080
+\end{verbatim}
+Note that while any preference can be configured, only supported ones will take effect for the command-line client.
+Only the following preferences are currently supported: \texttt{server.host}, \texttt{server.port}, \texttt{lastCalledServer.host} and \texttt{lastCalledServer.port}.
+
+
