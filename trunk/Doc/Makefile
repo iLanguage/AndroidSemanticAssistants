@@ -2,7 +2,7 @@
 #
 # This file is part of the Semantic Assistants architecture.
 #
-# Copyright (C) 2009, 2010, 2011 Semantic Software Lab, http://www.semanticsoftware.info
+# Copyright (C) 2009, 2010, 2011, 2012 Semantic Software Lab, http://www.semanticsoftware.info
 #
 # The Semantic Assistants architecture is free software: you can
 # redistribute and/or modify it under the terms of the GNU Affero General
@@ -25,7 +25,7 @@ LATEX2HTMLOPTIONS="xhtml,1,frames,info,jpeg" "" "-d./semassist/"
 
 all: semassist.pdf 
 
-semassist.pdf: semassist.tex semassist.bib semassist_overview.tex semassist_install.tex semassist_server.tex semassist_clients.tex semassist_services.tex semassist_development.tex semassist_troubleshooting.tex pictures/abstraction.jpg pictures/arch_impl.pdf pictures/highlighting.jpg pictures/oolist.jpg pictures/oomenu.jpg pictures/ooparams.jpg pictures/ooresult_clip.jpg pictures/seqInvoke1.pdf pictures/sidenotes.jpg 
+semassist.pdf: semassist*.tex semassist.bib pictures/abstraction.jpg pictures/arch_impl.pdf pictures/highlighting.jpg pictures/oolist.jpg pictures/oomenu.jpg pictures/ooparams.jpg pictures/ooresult_clip.jpg pictures/seqInvoke1.pdf pictures/sidenotes.jpg 
 	$(LATEX) semassist.tex
 	$(BIBTEX) semassist
 	$(LATEX) semassist.tex
