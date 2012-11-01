@@ -82,6 +82,30 @@ Similar to other \sa clients, users can dynamically change which \sa server they
 \label{fig:semassist_settings}
 \end{figure}
 
+\subsection{Semantic Annotations}
+All of the annotations extracted by the NLP services from the wiki content are formalized and made persistent in the wiki. Each annotation, as described in Section~\ref{sec:response}, bears a ''type'' property that indicated the semantic type of the extracted entity, e.g., \emph{Person, Location}. This minimal relationship is semantically demonstrated by adding special Semantic MediaWiki markup around the extracted entity. For example, when processing the sentence \emph{``Mary is from Canada.''}, two annotations will be generated in form of \texttt{[[hasType::Person$|$Mary]]} and \texttt{[[hasType::Location$|$Canada]]}. These markup are then written to the destination wiki page by the integration and eventually interpreted to formal models by the Semantic MediaWiki semantic engine.
+
+Once the content of the wiki in enriched with semantic annotations, these NLP-provided metadata can be exploited in various ways. For example, It can be exported from the wiki as RDF triples for Open Linked Data contexts. You can do so by browsing to the \path{Special:ExportRDF} page of your wiki and providing the name of the page that you'd like to export as RDF. Figure~\ref{list:smw_rdf} shows an excerpt from the RDF data generated from the example sentence above.
+
+\begin{figure}[h!]
+\centering
+\begin{lstlisting}[language=XML,numbers=left,xleftmargin=4mm,columns=flexible]
+<swivt:Subject rdf:about="&wiki;SamplePage">
+   <rdfs:label>SamplePage</rdfs:label>
+      <swivt:page rdf:resource="&wikiurl;SamplePage"/>
+      <rdfs:isDefinedBy rdf:resource="&wikiurl;Special:ExportRDF/SamplePage"/>
+      <property:HasType rdf:resource="&wiki;Person"/>
+      <property:Person rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Mary</property:Person>
+      <property:HasType rdf:resource="&wiki;Location"/>
+      <property:Location rdf:datatype="http://www.w3.org/2001/XMLSchema#string">Canada</property:Location>
+</swivt:Subject>
+\end{lstlisting}
+\caption{Generated RDF from NLP-generated semantic annotations}
+\label{list:smw_rdf}
+\end{figure}
+
+The presence of the semantic annotations in wiki pages also introduces a new search feature to the wiki: semantic entity retrieval. Users can search the wiki for entities using their semantic properties. For example, a user can search for all the pages of the wiki that contain entities of type \emph{Location}. This is possible by browsing to that specific property wiki page, e.g., \path{Property:Location}, or clicking on the \texttt{Person} type link in the annotations tables inside once of the analyzed wiki pages. The provided wiki page not only shows a list of all the wiki pages that contain that certain semantic type, but also provides a list of the entities that were found on each page.
+
 \section{Installation}
 The Wiki-SA integration is composed of two separate components: a server-side component and a wiki plug-in. While the server-side component is the same for different wiki systems, each wiki plug-in should be implemented for a specific engine. If you prefer to use the services available in our public repository, you can skip the next section and continue on to the wiki plug-in installation.
 
