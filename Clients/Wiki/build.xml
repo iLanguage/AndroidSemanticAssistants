@@ -175,7 +175,7 @@
 		 destdir="${docs.dir}"
 		 defaultexcludes="yes" author="true" version="true"
 		 use="true" link="true" encoding="UTF-8" 
-		 windowtitle="Semantic Assistants: OpenOffice.org Writer Plug-in">
+		 windowtitle="Semantic Assistants: Wiki-NLP Integration">
 	  <sourcepath>
             <pathelement location="${src.dir}" />
 	  </sourcepath>
@@ -219,6 +219,18 @@
 	<class location="${build.dir}" />
       </findbugs>
     </target-->
+
+<!-- Findbugs analysis -->
+    <target name="findbugs" depends="compile">
+      <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
+            classpath="${findbugs.classpath}" />
+      <findbugs home="${findbugs.home}"      
+            output="xml:withMessages"
+            outputFile="findbugsXml.SA.xml" >
+	<sourcePath path="${basedir}/src" />
+	<class location="${basedir}/bin/" />
+      </findbugs>
+    </target>
 
   <!-- Clear all build output -->
     <target name="clean">
