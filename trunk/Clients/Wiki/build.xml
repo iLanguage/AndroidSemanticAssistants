@@ -20,7 +20,7 @@
    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 
-<project name="Wiki-NLP" default="dist" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant">
+<project name="Wiki-NLP" default="pack" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant">
     
     <property name="semassist.home"           value="../../" />
 
@@ -50,13 +50,14 @@
 		<property name="lib.dir"	value="${web.dir}/lib"/>
 		<property name="sa.lib.dir"	value="${semassist.home}/Lib"/>
 		<property name="parser.dir"	value="${lib.dir}/wikiParser"/>
+		<property name="war.name"	value="SA-WikiConnector.war"/>
 	
 		<!-- Used for testing -->
 		<property name="test.src"	   value="${basedir}/test.src"/>
 		<property name="test.result" value="${basedir}/test.result"/>
 		<property name="compile.debug"    value="false" />
 		
-		<antcall target="getParser"/>
+		<!--antcall target="getParser"/-->
 		  
 		<path id="compile.classpath">
 			<pathelement location="${junit.home}/junit.jar" />
@@ -85,6 +86,7 @@
 		<!--copy file="${csal.jar}" todir="${lib.dir}"/-->
 	</target>
 	
+	<!-- Temporary solution for the license incompatibility -->
 	<target name="getParser">
 		<mkdir dir="${parser.dir}"/>
 		<get src="http://download.eclipse.org/mylyn/snapshots/nightly/docs/wikitext-standalone-latest.zip" dest="${parser.dir}"/>
@@ -101,6 +103,11 @@
     <!-- This target compiles the CSAL to the dist -->  
     <target name="copycsal" description="Copy CSAL.jar" >
       <copy file="${csal.home}/dist/${csal.name}" todir="${lib.dir}"/>
+      <copy todir="${lib.dir}">
+      	<fileset dir="${semassist.home}/Lib">
+			<include name="*.jar"/>
+      	</fileset>
+      </copy>
     </target>
 
     <!-- This target compiles all the classes -->  
@@ -112,17 +119,55 @@
             <classpath refid="compile.classpath" />
         </javac>
     </target>
+    
+    <target name="pack" depends="compile, prepare" description="Package all files in a WAR">
+		<mkdir dir="${dist.dir}"/>
+		<path id="manifest.classpath">
+       		<fileset dir="${lib.dir}" includes="**/*.jar"/>
+       	</path>
+		
+		<manifestclasspath property="jar.classpath" jarfile="${dist.dir}/${war.name}">
+    		<classpath refid="manifest.classpath"/>
+    	</manifestclasspath>  
 
-    <!-- Pack the compiled classes into a jar archive  -->
-    <target name="dist" depends="compile"  description="Create jar from the compiled classes" >
-        <!-- Create the distribution directory -->
-        <mkdir dir="${dist.dir}"/>
-        <jar jarfile="${dist.dir}/ProtocolHandlerAddon_java.uno.jar" basedir="${build.dir}">
-            <manifest>
-                <attribute name="RegistrationClassName" value="ProtocolHandlerAddon"/>
-            </manifest>
-        </jar>
-    </target>
+		<war destfile="${dist.dir}/${war.name}" webxml="${web.dir}/web.xml">
+			<fileset dir="${dist.dir}/temp"/>
+
+			<!-- copy the dependencies -->
+			<lib dir="${lib.dir}"/>
+			
+			<!-- copy the classes -->
+			<classes dir="${web.dir}/classes"/>
+		</war>
+		<delete dir="${dist.dir}/temp"/>
+   </target>
+   
+   <target name="prepare" depends="init">
+   	<mkdir dir="${dist.dir}/temp"/>
+   	<copy todir="${dist.dir}/temp">
+   		<fileset dir="${basedir}/WebContent" >
+				<include name="*.htm" />
+				<include name="*.jsp" />
+				<include name="*.js" />
+				<include name="*.css" />
+		</fileset>
+   	</copy>
+   	<copy todir="${dist.dir}/temp/ontology-repository">
+   		<fileset dir="${basedir}/WebContent/ontology-repository">
+				<exclude name="**/.svn/*"/>
+		</fileset>
+   	</copy>
+   	<copy todir="${dist.dir}/temp/semAssist">
+   		<fileset dir="${basedir}/WebContent/semAssist">
+				<exclude name="**/.svn/*"/>
+		</fileset>
+   	</copy>
+   	<copy todir="${dist.dir}/temp/images">
+   		<fileset dir="${basedir}/WebContent/images">
+				<exclude name="**/.svn/*"/>
+		</fileset>
+   	</copy>
+   </target>
 
     <!-- Generates Javadoc output -->
     <target name="javadoc">
