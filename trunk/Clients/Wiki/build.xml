@@ -57,7 +57,7 @@
 		<property name="test.result" value="${basedir}/test.result"/>
 		<property name="compile.debug"    value="false" />
 		
-		<!--antcall target="getParser"/-->
+		<antcall target="getParser"/>
 		  
 		<path id="compile.classpath">
 			<pathelement location="${junit.home}/junit.jar" />
@@ -170,7 +170,7 @@
    </target>
 
     <!-- Generates Javadoc output -->
-    <target name="javadoc">
+    <target name="javadoc" depends="init">
         <javadoc sourcepath="${src.dir}"
 		 destdir="${docs.dir}"
 		 defaultexcludes="yes" author="true" version="true"
@@ -207,19 +207,6 @@
     </target>
 -->
 
-    <!-- Findbugs analysis >
-    <target name="findbugs" depends="compile">
-      <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
-            classpath="${findbugs.classpath}" />
-      <findbugs home="${findbugs.home}"      
-            output="xml:withMessages"
-            outputFile="findbugsXml.SA.xml" >
-	<auxClasspath path="${ant.jar}:${gate.jar}:${gate-home}/lib/log4j-1.2.14.jar:${csal.home}/dist/${csal.name}:${commons-lang.jar}:${ooo-classes-common}/unoloader.jar:${ooo-classes-common}/juh.jar:${ooo-classes-common}/ridl.jar:${ooo-classes-common}/jurt.jar:${ooo-classes-common}/java_uno.jar:${office.home.dir}/basis-link/program/classes/unoil.jar:${office.home.dir}/basis-link/sdk/classes/com/sun/star/lib/loader/*.class" />
-	<sourcePath path="${src.dir}" />
-	<class location="${build.dir}" />
-      </findbugs>
-    </target-->
-
 <!-- Findbugs analysis -->
     <target name="findbugs" depends="compile">
       <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
@@ -229,7 +216,7 @@
             outputFile="findbugsXml.SA.xml" >
 	<auxClasspath path="${ant.jar}:${gate.jar}:${gate-home}/lib/log4j-1.2.14.jar:${csal.home}/dist/${csal.name}" />
 	<sourcePath path="${basedir}/src" />
-	<class location="${basedir}/bin/" />
+	<class location="${basedir}/WebContent/WEB-INF/classes" />
       </findbugs>
     </target>
 
