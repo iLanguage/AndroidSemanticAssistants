@@ -28,6 +28,9 @@ package info.semanticsoftware.semassist.client.wiki.wikihelper;
  * @author Bahar Sateli
  */
 public class WikiFactory {
+
+	/** Enumeration class for wiki engines. */
+	enum Wikis {mediawiki};
 	/** 
 	 * Private constructor since it is a utility class.
 	 */
@@ -39,6 +42,11 @@ public class WikiFactory {
 	 * @return WikiEngine wiki engine object created from the factory
 	 * */
 	public static WikiEngine getWiki(final String engine){
+	    switch(Wikis.valueOf(engine.toLowerCase())){
+	      case mediawiki:
 		return new MediaWiki();
+	      default:
+		return null;
+	    }		
 	}
 }
