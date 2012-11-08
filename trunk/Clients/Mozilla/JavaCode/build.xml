@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+   This file is part of the Semantic Assistants architecture.
+   Copyright (C) 2012, 2013 Semantic Software Lab, http://www.semanticsoftware.info
+   Rene Witte
+   Bahar Sateli
+
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+
+<project name="semassist-rest-tagging" default="dist" basedir="." 
+   xmlns:ivy="antlib:org.apache.ivy.ant" xmlns="antlib:org.apache.tools.ant">
+
+	<!-- Ivy task definition -->
+	<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpath="${ivy.jar.dir}/ivy.jar"/>
+
+   <target name="init" description="Initialize build properties">
+	<property name="semassist.home"           value="../../../" />
+
+	<!-- build properties - do not edit -->
+	<property name="project.name"      value="SAHTMLTagger"/>
+	<property name="war.name"      value="${project.name}.war"/>
+	<property name="dist.dir"       value="dist"/>
+	<property name="docs.dir"       value="docs"/>
+	<property name="src.dir"       value="src"/>
+	<property name="web.dir"       value="WebContent/WEB-INF"/>
+	<property name="lib.dir"       value="${web.dir}/lib"/>
+	<property name="csal.jar"       value="${semassist.home}/CSAL/dist/CSAL.jar"/>
+	<path id="compile.classpath">
+		<fileset dir="${lib.dir}" >
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	<!-- Ivy properties - do not edit -->
+	<property name="ivy.install.version" value="2.0.0-beta2" />
+	<property name="ivy.home" value="ivy" />
+	<property name="ivy.jar.dir" value="${ivy.home}/lib" />
+	<property name="ivy.jar.file" value="${ivy.jar.dir}/ivy.jar" />
+	
+   </target>
+
+<!-- If ivy.jar already exists, the build will skip this step -->
+  <target name="download-ivy" description="Download ivy.jar from Maven central repository to resolve dependencies.">
+    <mkdir dir="${ivy.jar.dir}"/>
+    <get src="http://repo1.maven.org/maven2/org/apache/ivy/ivy/${ivy.install.version}/ivy-${ivy.install.version}.jar"
+      dest="${ivy.jar.file}" usetimestamp="true"/>
+  </target>
+
+  <target name="resolve" depends="init, download-ivy" description="Download JAR files via ivy">
+        <path id="ivy.lib.path">
+        <fileset dir="ivy/lib" includes="*.jar"/>
+        </path>
+        <taskdef resource="org/apache/ivy/ant/antlib.xml"
+         uri="antlib:org.apache.ivy.ant" classpathref="ivy.lib.path"/> 
+        <ivy:settings file="${basedir}/ivysettings.xml" />
+        <ivy:retrieve pattern="${lib.dir}/[artifact].[ext]"/>
+        <copy file="${csal.jar}" todir="${lib.dir}"/>
+  </target>
+  
+  <target name="compile" depends="resolve" description="Compile the source" >
+      <javac srcdir="${src.dir}" debug="true" debuglevel="lines,vars,source" destdir="${web.dir}/classes" includeantruntime="${antruntime}">
+      	<!--compilerarg value="${compile.args}"/-->
+          <classpath refid="compile.classpath" />
+      </javac>
+  </target>
+  
+	<target name="dist" depends="compile" description="Creates an executable JAR">
+		<mkdir dir="${dist.dir}/temp"/>
+		<copy todir="${dist.dir}/temp/">
+			<fileset dir="${web.dir}/classes"/>
+		</copy>
+		<path id="manifest.classpath">
+			<fileset dir="${lib.dir}" includes="**/*.jar"/>
+		</path>
+		<manifestclasspath property="jar.classpath" jarfile="${dist.dir}/SAHTMLTagger.jar">
+			<classpath refid="manifest.classpath"/>
+		</manifestclasspath>  
+		<jar destfile="${dist.dir}/SAHTMLTagger.jar" basedir="${dist.dir}/temp" update="true">
+		<manifest>
+			<attribute name="Main-Class" value="info.semanticsoftware.semassist.service.HTMLTagger.Bootstrap"/>
+			<attribute name="Class-Path" value="${jar.classpath}"/>
+		</manifest>
+		</jar>
+		<delete dir="${dist.dir}/temp"/>
+	</target>
+  
+   <target name="clean" depends="init" description="Delete generated class files and ivy folder">
+	<delete dir="${ivy.home}"/>
+   	<delete includeEmptyDirs="true">
+	  <fileset dir="${web.dir}/classes"/>
+	</delete>
+	 	<delete includeEmptyDirs="true">
+	  <fileset dir="${lib.dir}"/>
+	</delete>
+   </target>
+   
+   <target name="clean-all" depends="init" description="Delete all generated files including the WAR file">
+    	<antcall target="clean"/>
+    	<delete dir="${dist.dir}"/>
+    </target>
+</project>

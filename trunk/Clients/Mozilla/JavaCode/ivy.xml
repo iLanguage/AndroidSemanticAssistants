@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+   This file is part of the Semantic Assistants architecture.
+   Copyright (C) 2012, 2013 Semantic Software Lab, http://www.semanticsoftware.info
+   Rene Witte
+   Bahar Sateli
+
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+   
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ivy-module version="2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+  <info organisation="info.semanticsoftware" module="Semantic Assistants Server" revision="1.0"/>
+  <configurations>
+    <conf name="default"/>
+  </configurations>
+  
+  <dependencies defaultconf="*->master(default),runtime(default)">
+    <dependency org="org.restlet.jee" name="org.restlet" rev="2.0.0">
+	<artifact name="org.restlet" ext="jar"/>
+        <exclude org="org.osgi" />
+    </dependency>
+    <dependency org="org.restlet.jee" name="org.restlet.ext.servlet" rev="2.0.0">
+        <artifact name="org.restlet.ext.servlet" ext="jar"/>
+    </dependency>
+
+    <dependency org="org.restlet.jse" name="org.restlet.ext.jetty" rev="2.0.0">
+    	<artifact name="org.restlet.ext.jetty" ext="jar"/>
+    	<exclude org="org.jsslutils" />
+    	<exclude name="jetty-ajp" />
+		<exclude name="jetty-continuation" />
+		<exclude name="jetty-http" />
+		<exclude name="jetty-io" />
+		<exclude name="jetty-server" />
+		<exclude name="jetty-util" />
+    </dependency>
+
+    <dependency org="javax.servlet" name="servlet-api" rev="2.5">
+            <artifact name="servlet-api" ext="jar"/>
+	</dependency>
+	
+	<dependency org="org.eclipse.jetty.aggregate" name="jetty-all-server" rev="7.0.2.RC0">
+		<exclude name="geronimo-annotation_1.0_spec" />
+		<exclude name="geronimo-jaspic_1.0_spec" />
+		<exclude name="geronimo-jta_1.1_spec" />
+		<exclude name="activation" />
+		<exclude name="mail" />
+		<exclude org="asm" />
+	</dependency>
+
+	<dependency org="org.jsoup" name="jsoup" rev="1.6.3">
+		<artifact name="jsoup" ext="jar"/>
+	</dependency>
+
+   </dependencies>
+</ivy-module>
