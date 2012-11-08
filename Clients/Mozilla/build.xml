@@ -42,6 +42,14 @@
 		<ant dir="${plugin.dir}" inheritAll="false" target="dist"/>
 	</target>
 
+	<target name="findbugs" depends="init" description="Fingbugs analysis target">
+		<ant dir="${java.dir}" inheritAll="false" target="findbugs"/>
+	</target>
+
+	<target name="javadoc" depends="init" description="Javadoc target">
+		<ant dir="${java.dir}" inheritAll="false" target="javadoc"/>
+	</target>
+		
 	<target name="clean" depends="init" description="Cleaning the build generated files">
 		<ant dir="${java.dir}" inheritAll="false" target="clean"/>
 		<ant dir="${plugin.dir}" inheritAll="false" target="clean"/>
