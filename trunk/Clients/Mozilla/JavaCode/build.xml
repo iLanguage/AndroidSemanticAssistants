@@ -130,6 +130,7 @@
 
    <target name="clean" depends="init" description="Delete generated class files and ivy folder">
 	<delete dir="${ivy.home}"/>
+	<delete dir="${dist.dir}"/>
    	<delete includeEmptyDirs="true">
 	  <fileset dir="${web.dir}/classes"/>
 	</delete>
