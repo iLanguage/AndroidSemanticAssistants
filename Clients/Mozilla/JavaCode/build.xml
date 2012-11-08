@@ -97,7 +97,35 @@
 		</jar>
 		<delete dir="${dist.dir}/temp"/>
 	</target>
-  
+ 
+<!-- Findbugs analysis -->
+<target name="findbugs" depends="compile">
+      <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
+            classpath="${findbugs.classpath}" />
+      <findbugs home="${findbugs.home}"      
+            output="xml:withMessages"
+            outputFile="findbugsXml.SA.xml" >
+	<auxClasspath path="${ant.jar}:${gate.jar}:${gate-home}/lib/log4j-1.2.14.jar:${csal.home}/dist/${csal.name}" />
+	<sourcePath path="${basedir}/src" />
+	<class location="${basedir}/bin/" />
+      </findbugs>
+ </target> 
+
+ <!-- Generates Javadoc output -->
+    <target name="javadoc">
+        <javadoc sourcepath="${src.dir}"
+		 destdir="${docs.dir}"
+		 defaultexcludes="yes" author="true" version="true"
+		 use="true" link="true" encoding="UTF-8" 
+		 windowtitle="Semantic Assistants: Mozilla Client">
+	  <sourcepath>
+            <pathelement location="${src.dir}" />
+	  </sourcepath>
+          <doctitle><![CDATA[<h1>Semantic Assistants: Mozilla Client</h1>]]></doctitle>
+          <bottom><![CDATA[<i>Copyright &copy; 2011 Semantic Software Lab. http://www.semanticsoftware.info/</i>]]></bottom>
+          </javadoc>
+    </target>
+
    <target name="clean" depends="init" description="Delete generated class files and ivy folder">
 	<delete dir="${ivy.home}"/>
    	<delete includeEmptyDirs="true">
