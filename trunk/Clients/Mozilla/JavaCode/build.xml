@@ -27,9 +27,11 @@
 	<!-- Ivy task definition -->
 	<taskdef resource="org/apache/ivy/ant/antlib.xml" uri="antlib:org.apache.ivy.ant" classpath="${ivy.jar.dir}/ivy.jar"/>
 
-   <target name="init" description="Initialize build properties">
-	<property name="semassist.home"           value="../../../" />
-
+	 <!-- Machine specific settings should go in SemassistProperties.xml -->
+        <property name="semassist.home"           value="../../../" />	
+	<import file ="${semassist.home}/SemassistProperties.xml"/>
+   
+	<target name="init" description="Initialize build properties">
 	<!-- build properties - do not edit -->
 	<property name="project.name"      value="SAHTMLTagger"/>
 	<property name="war.name"      value="${project.name}.war"/>
@@ -107,12 +109,12 @@
             outputFile="findbugsXml.SA.xml" >
 	<auxClasspath path="${ant.jar}:${gate.jar}:${gate-home}/lib/log4j-1.2.14.jar:${csal.home}/dist/${csal.name}" />
 	<sourcePath path="${basedir}/src" />
-	<class location="${basedir}/bin/" />
+	<class location="${web.dir}/classes" />
       </findbugs>
  </target> 
 
  <!-- Generates Javadoc output -->
-    <target name="javadoc">
+    <target name="javadoc" depends="init">
         <javadoc sourcepath="${src.dir}"
 		 destdir="${docs.dir}"
 		 defaultexcludes="yes" author="true" version="true"
