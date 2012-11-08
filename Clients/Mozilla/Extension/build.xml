@@ -36,7 +36,7 @@
 	</target>
   
   	<target name="clean" depends="init" description="Deletes the generated .xpi file">
-		<delete file="${dist.dir}/${dist.name}.xpi" />	
+		<delete dir="${dist.dir}"/>
 	</target>
 
 	<target name="doc" description="Generates JsDoc from the source files">
