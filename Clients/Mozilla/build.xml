@@ -41,4 +41,9 @@
 		<echo message="Packaging the plug-in file..."/>
 		<ant dir="${plugin.dir}" inheritAll="false" target="dist"/>
 	</target>
+
+	<target name="clean" depends="init" description="Cleaning the build generated files">
+		<ant dir="${java.dir}" inheritAll="false" target="clean"/>
+		<ant dir="${plugin.dir}" inheritAll="false" target="clean"/>
+	</target>
 </project>
