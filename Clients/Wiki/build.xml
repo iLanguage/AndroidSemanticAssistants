@@ -92,7 +92,7 @@
 		<get src="http://download.eclipse.org/mylyn/snapshots/nightly/docs/wikitext-standalone-latest.zip" dest="${parser.dir}"/>
 		<unzip src="${parser.dir}/wikitext-standalone-latest.zip" dest="${parser.dir}/unzip"/>
 		<copy todir="${lib.dir}">
-			<fileset dir="${parser.dir}/unzip/wikitext-standalone-1.8.0-SNAPSHOT">
+			<fileset dir="${parser.dir}/unzip/wikitext-standalone-1.9.0-SNAPSHOT">
 				<include name="org.eclipse.mylyn.wikitext.*.jar"/>
 			</fileset>
 		</copy>
@@ -121,6 +121,7 @@
     </target>
     
     <target name="pack" depends="compile, prepare" description="Package all files in a WAR">
+		<delete file="${lib.dir}/servlet-api.jar"/>
 		<mkdir dir="${dist.dir}"/>
 		<path id="manifest.classpath">
        		<fileset dir="${lib.dir}" includes="**/*.jar"/>
