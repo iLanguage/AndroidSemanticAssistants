@@ -39,8 +39,15 @@ The primary motivation for this integration is to enable wiki users -- novice or
 \end{description}
 
 \noindent
-For some real-world examples on how the \wikinlp integration can be applied to
-various domains, please visit our
-\href{http://www.semanticsoftware.info/semantic-assistants-wiki-nlp-showcase}{showcase}
-web page.
+%For some real-world examples on how the \wikinlp integration can be applied to
+%various domains, please visit our
+%\href{http://www.semanticsoftware.info/semantic-assistants-wiki-nlp-showcase}{showcase}
+%web page.
+
+\subsection{Installation}
+The Liferay Portlet integration consists of two components: a server-side component and a portlet. The portlet connects to our public repository on a remote server where all named entity extraction techniques are provided. For the integration of the Semantic Assistants portlet into your Liferay portal you have two options: On the on hand you are able to download the war-file and to put into the deploy folder of your Liferay distribution. Liferay detects the new component and deploys it, automatically. On the other hand it is possible to download the source files and to build the code in your development environment first, before deploying it. In this part we are going to describe the first option, for the second possibility, please go to the development notes. Note that the following instructions based upon a Liferay Portal server installation version 6.1.1 CE GA2. 
+
+
+\subsection{Portlet deployment}
+Go to our sourceforge repository and copy the provided SemanticAssistantsPortlet.war-file into the deploy folder of your Liferay distribution. Liferay polls on this folder every few seconds, so it will find the new portlet and will deploy it automatically. As soon as the deployment was successful, the new portlet is availabe in the general portlet container. In order to add the SemanticAssistantsPortlet to your webpage, please log in to your portal, go to Add --> more and you will find a new category Semantic Assistants with two portlets. Select the SemanticAssistants portlet and drag it on your webpage. As an example, we also added a SAContent portlet to demonstrate how to use the Semantic Assistance portlet.
 
