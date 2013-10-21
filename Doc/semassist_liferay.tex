@@ -16,5 +16,31 @@
 % You should have received a copy of the GNU Affero General Public License
 % along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-\chapter{Liferay Integration}
+\chapter{Liferay Portal Integration}
 \label{chap:liferay}
+A data portal is a web-based software application, which provides a central entry point to an enormous amount of heterogenous data sources. By means of personalized access to content, portal data can be adapted to its users and their assigned roles. A portal consists of several portlets, which are displayed as different containers on the webpage. They are independent from each other, but different communication techniques allow the transmission of information from one portlet to another. (reference to JSR 268?)
+
+Portals are often used as enterprise or large-scale information systems to enhance the communication and collaboration among users, such as Yahoo.com \footnote{Liferay, \url{http://www.yahoo.com}}. 
+
+The \sa architecture provides a portlet for the Liferay \footnote{Liferay, \url{http://www.liferay.com}} portal, a popular open source portal, that allows to connect to a \sa server and employs various NLP services on the content.
+
+\section{Introduction}
+In the following sections, we describe the Liferay portal integration in detail, as well as the core, reusable features of the NLP integration.
+
+\subsection{Use Cases of NLP in Liferay Portal}
+In the design and implementation of our NLP integration, we took one major use case into account.
+
+\begin{description}
+\item[Text Mining Assistants for Portal Users.] 
+
+
+The primary motivation for this integration is to enable wiki users -- novice or expert -- to benefit from modern text mining techniques directly within their wiki environment. Wikis have become powerful knowledge management platforms, while remaining easy to use and offering high customizability, from personal wikis to enterprise solutions. With a majority of content in natural language, wikis can greatly benefit from natural language processing techniques. Rather than relying on external NLP applications, we bring NLP as an integrated feature to wiki systems, thereby adding new human/AI collaboration patterns, where users work together with semantic assistants on developing, structuring and improving wiki content.
+
+\end{description}
+
+\noindent
+For some real-world examples on how the \wikinlp integration can be applied to
+various domains, please visit our
+\href{http://www.semanticsoftware.info/semantic-assistants-wiki-nlp-showcase}{showcase}
+web page.
+
