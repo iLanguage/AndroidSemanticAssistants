@@ -22,7 +22,7 @@ A data portal is a web-based software application, which provides a central entr
 
 Portals are often used as enterprise or large-scale information systems to enhance the communication and collaboration among users, such as Yahoo.com\footnote{Yahoo!, \url{http://www.yahoo.com}}. 
 
-The \sa architecture provides a portlet for the Liferay \footnote{Liferay, \url{http://www.liferay.com}} portal, a popular open source portal, that allows to connect to a \sa server and employs various NLP services on the content.
+The \sa architecture provides a portlet for the Liferay \footnote{Liferay, \url{http://www.liferay.com}} portal, a popular open source portal that allows to connect to a \sa server and employs various NLP services on the content.
 
 \section{Introduction}
 In the following sections, we describe the Liferay portal integration in detail, as well as the core, reusable features of the NLP integration.
@@ -32,8 +32,8 @@ In the design and implementation of our NLP integration, we took one major use c
 
 \begin{description}
 \item[Text Mining Assistants for Portal Users.] 
-%The primary motivation for this integration is to enable wiki users -- novice or expert -- to benefit from modern text mining techniques directly within their wiki environment. Wikis have become powerful knowledge management platforms, while remaining easy to use and offering high customizability, from personal wikis to enterprise solutions. With a majority of content in natural language, wikis can greatly benefit from natural language processing techniques. Rather than relying on external NLP applications, we bring NLP as an integrated feature to wiki systems, thereby adding new human/AI collaboration patterns, where users work together with semantic assistants on developing, structuring and improving wiki content.
-
+\item[Indexing Portal Content.] 
+\item[Automatic Summarization.]
 \end{description}
 
 \noindent
@@ -43,16 +43,10 @@ In the design and implementation of our NLP integration, we took one major use c
 %web page.
 
 \section{Installation}
-The Liferay Portlet integration consists of two components: a server-side component and a portlet. The portlet connects to our public repository on a remote server where all named entity extraction techniques are provided. For the integration of the \sa portlet into your Liferay portal you have two options: On the one hand you are able to download the war-file and to put into the deploy folder of your Liferay distribution. Liferay detects the new component and deploys it, automatically. On the other hand it is possible to download the source files and to build the code in your development environment first, before deploying it. In this part we are going to describe the first option, for the second possibility, please go to the development notes. Note that the following instructions are based upon a Liferay Portal server installation version 6.1.1 CE GA2. 
-
+The SA-Liferay integration consists of two components: a server-side component and a portlet. The portlet connects to a back-end \sa server in hold of a repository of various NLP pipelines that can be invoked on a given portal content. For the integration of the \sa portlet into your Liferay portal you have two options: On the one hand you are able to download the war-file and to put into the deploy folder of your Liferay distribution. Liferay detects the new component and deploys it, automatically. On the other hand it is possible to download the source files and to build the code in your development environment first, before deploying it. In this part we are going to describe the first option, for the second possibility, please go to the development notes. Additionally, it is necessary to install a new theme and to apply it to the webpage, containing the SemanticAssistants portlet. That theme contains a JavaScript library (jQuery) which is essential for running the \sa portlet properly. Note that the following instructions are based on a Liferay Portal server installation version 6.1.1 CE GA2. 
 
 \subsection{\sa Portlet Deployment}
-Go to our sourceforge repository and copy the provided SemanticAssistantsPortlet.war-file into the deploy folder of your Liferay distribution. Liferay polls on this folder every few seconds, so it will find the new portlet and will deploy it automatically. As soon as the deployment was successful, the new portlet is available in the general portlet container. In order to add the SemanticAssistantsPortlet to your web page, please log in to your portal, go to Add \textgreater More and you will find a new category Semantic Assistants with two portlets. Select the SemanticAssistants portlet and drag it on your web page. As an example, we also added a SASampleContent portlet to demonstrate how to use the \sa portlet.
-
-
-\section{User Interface}
-
-Similar to other portlets in Liferay, the \sa portlet can be added to any portal web page. In order to add the \sa portlet, choose \texttt{Add \textgreater~More} from the top menu and then click on the \texttt{add} link or drag the portlet name into the desired web page as shown in Figure~\ref{fig:liferay_add_portlet}.
+In order to deploy the \sa portlet into your portal, you have to copy the \texttt{SemanticAssistantsPortlet.war} file into the deploy folder of your Liferay installation. Liferay polls on this folder every few seconds, so it will find the new portlet and deploy it automatically. As soon as the deployment was successful, the new portlet will be available in the general portlet container. Similar to other portlets in Liferay, the \sa portlet can be added to any portal web page. In order to add the \sa portlet, choose \texttt{Add \textgreater~More} from the top menu and then you can find the portlet under the \sa category and click on the \texttt{add} link or drag the portlet name into the desired web page as shown in Figure~\ref{fig:liferay_add_portlet}.
 
 \begin{figure}
 \centering
@@ -61,6 +55,10 @@ Similar to other portlets in Liferay, the \sa portlet can be added to any portal
 \label{fig:liferay_add_portlet}
 \end{figure}
 
+\subsection{Theme Deployment}
+Several functions in the Semantic Assistants portlet need the jquery-libraries for a successful execution. Thus, you have to download and install the SemanticAssistant theme. Go to our build server and a copy the SemanticAssistantTheme.war file into the deploy folder of your Liferay distribution. Liferay automatically detects and deploys the new component. Then go to your Liferay portal, login in and go to that webpage, which contains the SemanticAssitantsPortlet. Select on top \texttt{Manage \textgreater~Page}. On the right side of the opening dialog you see a link to the Look and Feel section. Click on that link and another side appears, where you are able to switch the theme. Select ``Define a specific look and fee'' and scroll down. At the end of the page you will find all available themes including the new SemanticAssistant theme - please select it. Now the theme is applied to your webpage and you can close all administrative dialogs.
+
+\section{User Interface}
 Once the portlet is added to the page, you can inquire about available NLP services by selecting a \sa endpoint from the provided combobox. Selecting a server address will dynamically load the list of available services along with their description and runtime parameters. To select an assistant, click on the service's name in order to expand the service information box as shown in Figure~\ref{fig:liferay_sa_portlet}. Optionally, you can customize the execution of the NLP pipelines by modifying their runtime parameters.
 
 \begin{figure}
@@ -83,10 +81,14 @@ In order to invoke an assistant, you need to first provide the content that is g
 
 You can send the content portlet text for analysis by clicking on the ``Send for Analysis'' button. Then choose a server endpoint address from the \sa portlet combobox and select a desired service to be executed on the provided content. In Figure~\ref{fig:liferay_results_portlet} you can see the ``Person and Location Extractor'' service results ran on the provided content. The offsets of the NLP results are used to highlight the terms in the portlet's original content.
 
-
 \begin{figure}
 \centering
 \includegraphics[scale=0.6]{pictures/liferay_results_portlet.png}
 \caption{NLP Results highlighted in a sample content portlet}
 \label{fig:liferay_results_portlet}
 \end{figure}
+
+\section{development notes}
+\subsection{directory structure}
+\subsection{deploying portlets from source code}
+\subsection{communication between portlets}
