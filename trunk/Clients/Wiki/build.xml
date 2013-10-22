@@ -92,7 +92,7 @@
 		<get src="http://download.eclipse.org/mylyn/snapshots/nightly/docs/wikitext-standalone-latest.zip" dest="${parser.dir}"/>
 		<unzip src="${parser.dir}/wikitext-standalone-latest.zip" dest="${parser.dir}/unzip"/>
 		<copy todir="${lib.dir}">
-			<fileset dir="${parser.dir}/unzip/wikitext-standalone-1.9.0-SNAPSHOT">
+			<fileset dir="${parser.dir}/unzip/wikitext-standalone-2.0.0-SNAPSHOT">
 				<include name="org.eclipse.mylyn.wikitext.*.jar"/>
 			</fileset>
 		</copy>
