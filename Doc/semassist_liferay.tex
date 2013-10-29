@@ -18,22 +18,20 @@
 
 \chapter{Liferay Portal Integration}
 \label{chap:liferay}
-A data portal is a web-based software application, which provides a central entry point to an enormous amount of heterogeneous data sources. By means of personalized access to content, portal data can be adapted to its users and their assigned roles. A portal consists of several portlets, which are displayed as different containers on the webpage. They are independent from each other, but different communication techniques allow the transmission of information from one portlet to another\footnote{For more information please refer to Java Specification Request (JSR 268), ~\url{http://jcp.org/en/jsr/detail?id=268}}.
+A data portal is a web-based software application, which provides a central entry point to an enormous amount of heterogeneous data sources. Portals are often used as enterprise or large-scale information systems to enhance the communication and collaboration among users, such as Yahoo.com\footnote{Yahoo!, \url{http://www.yahoo.com}}. By means of personalized access to content, portal data can be adapted to its users and their assigned roles. A portal consists of several portlets, which are displayed as different containers on the webpage. They are independent from each other, yet different communication techniques allow the transmission of information from one portlet to another\footnote{For more information please refer to Java Specification Request (JSR 268), ~\url{http://jcp.org/en/jsr/detail?id=268}}.
 
-Portals are often used as enterprise or large-scale information systems to enhance the communication and collaboration among users, such as Yahoo.com\footnote{Yahoo!, \url{http://www.yahoo.com}}. 
-
-The \sa architecture provides a portlet for the Liferay \footnote{Liferay, \url{http://www.liferay.com}} portal, a popular open source portal that allows to connect to a \sa server and employs various NLP services on the content.
+The \sa framework provides a custom portlet for the Liferay\footnote{Liferay, \url{http://www.liferay.com}}, a popular open source portal, which allows users to employ various text mining techniques on arbitrary portal textual content.
 
 \section{Introduction}
-In the following sections, we describe the Liferay portal integration in detail, as well as the core, reusable features of the NLP integration.
+As portals grow in content size one prominent issue that hinders their usability is associated with the wealth of information available in the portal repository. These mostly heterogeneous information are aggregated from various sources and presented to users based on their assigned roles. Ideally, an \emph{intelligent} portal must be able to offer content to users, taking into account contextual information beyond their roles and permissions. To this end, the portal needs to somewhat have an \emph{understanding} of what is available in the portal. Leveraging state-of-the-art techniques from the Natural Language Processing (NLP) domain allows portals to automatically process textual content and the SA-Liferay integration aims at bringing the NLP power to this popular portal system and its users in a seamless, user-friendly manner.
 
-\subsection{Use Cases of NLP in Liferay Portal}
-In the design and implementation of our NLP integration, we took one major use case into account.
+\subsection{Use Cases of NLP in Portals}
+In order to provide more concrete use cases of NLP techniques in the context of portals, we iterate over some example scenarios in the following.
 
 \begin{description}
-\item[Text Mining Assistants for Portal Users.] 
-\item[Indexing Portal Content.] 
-\item[Automatic Summarization.]
+\item[Named Entity Recognition.] When dealing with large volume of textual documents or reading lengthy pages, a portal's \emph{intelligent assistants} can help users to automatically find named entities, such as persons, locations and organization names from a text to quickly grasp an understanding of the document at hand, without thoroughly reading the page. 
+\item[Indexing Portal Content.] Ordinarily, an index page exists for large document collections that allows information seekers to find where in the collection a certain term is mentioned, much like the index found at the end of books. Using a combination of NLP techniques, one can automatically index the portal content and use it as a new facet for searching or discovering terms within the portal system.
+\item[Automatic Summarization.] Another somewhat ambitious use case of NLP within the context of portals is the generation of automatic summarizes from one or a collection of selected documents in portals. Automatic focused or personalized summaries of the portal content can help portal users to find documents of interest in a more efficient way.
 \end{description}
 
 \noindent
@@ -90,5 +88,5 @@ You can send the content portlet text for analysis by clicking on the ``Send for
 
 \section{development notes}
 \subsection{directory structure}
-\subsection{deploying portlets from source code}
-\subsection{communication between portlets}
+\subsection{Deploying Portlets from Source Code}
+\subsection{Inter-Portlet Communication}
