@@ -41,10 +41,16 @@ In order to provide more concrete use cases of NLP techniques in the context of 
 %web page.
 
 \section{Installation}
-The SA-Liferay integration consists of two components: a server-side component and a portlet. The portlet connects to a back-end \sa server in hold of a repository of various NLP pipelines that can be invoked on a given portal content. For the integration of the \sa portlet into your Liferay portal you have two options: On the one hand you are able to download the war-file and to put into the deploy folder of your Liferay distribution. Liferay detects the new component and deploys it, automatically. On the other hand it is possible to download the source files and to build the code in your development environment first, before deploying it. In this part we are going to describe the first option, for the second possibility, please go to the development notes. Additionally, it is necessary to install a new theme and to apply it to the webpage, containing the SemanticAssistants portlet. That theme contains a JavaScript library (jQuery) which is essential for running the \sa portlet properly. Note that the following instructions are based on a Liferay Portal server installation version 6.1.1 CE GA2. 
+The SA-Liferay integration consists of two components: a server-side component and a portlet. The server-side component is essentially an instance of the \sa server installed on a local or remote machine (See Chapter~\ref{chap:serv}). The \sa portlet available in our public repository to connect to our public \sa server and work out of the box, but still can be configured to connect a custom endpoint (See Section~\ref{sec:server_change}). The \sa portlet has to be manually installed on the portal and configured to connect to the back-end \sa server in hold of a repository of various NLP pipelines, henceforth, allowing users to invoke various services on the portal content. 
+
+There are two options available to install the \sa portlet on a portal: You can merely deploy the portlet's binary file available in our public distribution with its default configuration. Alternatively, if you would like to build the portlet binary file directly from the source code, or wish to modify the portlet's default behaviour (e.g., change the \sa server endpoint address), please refer to the Development Notes section at the end of this chapter.
+
+Additionally, it is necessary to install the \sa theme (explained in Section~\ref{sec:theme_deploy}) and apply it to the webpage containing the \sa portlet for it to make use of the JavaScript library (jQuery) essential for inquiring and invoking the \sa portlet assistants properly. 
+
+Note that the following instructions are based on a Liferay Portal server installation version 6.1.1 CE GA2. 
 
 \subsection{\sa Portlet Deployment}
-In order to deploy the \sa portlet into your portal, you have to copy the \texttt{SemanticAssistantsPortlet.war} file into the deploy folder of your Liferay installation. Liferay polls on this folder every few seconds, so it will find the new portlet and deploy it automatically. As soon as the deployment was successful, the new portlet will be available in the general portlet container. Similar to other portlets in Liferay, the \sa portlet can be added to any portal web page. In order to add the \sa portlet, choose \texttt{Add \textgreater~More} from the top menu and then you can find the portlet under the \sa category and click on the \texttt{add} link or drag the portlet name into the desired web page as shown in Figure~\ref{fig:liferay_add_portlet}.
+In order to deploy the \sa portlet into your portal, you have to copy the \texttt{SemanticAssistantsPortlet.war} file into the \texttt{deploy} folder of your Liferay installation. Liferay polls on this folder every few seconds, so it will find the new portlet and deploy it automatically. As soon as the deployment is successful, the new portlet will be available in the general portlet container and similar to other portlets in Liferay, the \sa portlet can be added to any portal web page. In order to add the \sa portlet, choose \texttt{Add \textgreater~More} from the top menu and then you can find the portlet under the \sa category and click on the \texttt{add} link or drag the portlet name into the desired web page as shown in Figure~\ref{fig:liferay_add_portlet}.
 
 \begin{figure}
 \centering
@@ -54,6 +60,7 @@ In order to deploy the \sa portlet into your portal, you have to copy the \textt
 \end{figure}
 
 \subsection{Theme Deployment}
+\label{sec:theme_deploy}
 Several functions in the Semantic Assistants portlet need the jquery-libraries for a successful execution. Thus, you have to download and install the SemanticAssistant theme. Go to our build server and a copy the SemanticAssistantTheme.war file into the deploy folder of your Liferay distribution. Liferay automatically detects and deploys the new component. Then go to your Liferay portal, login in and go to that webpage, which contains the SemanticAssitantsPortlet. Select on top \texttt{Manage \textgreater~Page}. On the right side of the opening dialog you see a link to the Look and Feel section. Click on that link and another side appears, where you are able to switch the theme. Select ``Define a specific look and fee'' and scroll down. At the end of the page you will find all available themes including the new SemanticAssistant theme - please select it. Now the theme is applied to your webpage and you can close all administrative dialogs.
 
 \section{User Interface}
@@ -86,7 +93,11 @@ You can send the content portlet text for analysis by clicking on the ``Send for
 \label{fig:liferay_results_portlet}
 \end{figure}
 
-\section{development notes}
-\subsection{directory structure}
+\section{Development Notes}
+\subsection{Project Directory Structure}
 \subsection{Deploying Portlets from Source Code}
+\label{sec:src_deploy}
 \subsection{Inter-Portlet Communication}
+\subsection{Embedding NLP Results in Your Own Portlet}
+\subsection{Modifying the \sa Server Endpoint}
+\label{sec:server_change}
