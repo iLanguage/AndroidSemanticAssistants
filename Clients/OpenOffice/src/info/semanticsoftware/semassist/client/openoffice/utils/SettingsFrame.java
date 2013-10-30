@@ -395,7 +395,7 @@ public class SettingsFrame extends JFrame
     private static final JCheckBox jCheckBox4 =
       new JCheckBox("Open HTML results in external Browser", ClientPreferences.isBrowserResultHandling());
     private static final JCheckBox jCheckBox5 =
-      new JCheckBox("Refresn Annotations on Pipeline Re-Invocation", ClientPreferences.isRefreshAnnotations());
+      new JCheckBox("Refresh Annotations on Pipeline Re-Invocation", ClientPreferences.isRefreshAnnotations());
     private static final JTextField jSideNoteFontSizeField =
       new JTextField(Float.toString(ClientPreferences.getSideNoteFontSize()));
     private final JComboBox serversCombo = new JComboBox();
