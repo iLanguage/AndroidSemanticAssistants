@@ -18,20 +18,20 @@
 
 \chapter{Liferay Portal Integration}
 \label{chap:liferay}
-A data portal is a web-based software application, which provides a central entry point to an enormous amount of heterogeneous data sources. Portals are often used as enterprise or large-scale information systems to enhance the communication and collaboration among users, such as Yahoo.com\footnote{Yahoo!, \url{http://www.yahoo.com}}. By means of personalized access to content, portal data can be adapted to its users and their assigned roles. A portal consists of several portlets, which are displayed as different containers on the webpage. They are independent from each other, yet different communication techniques allow the transmission of information from one portlet to another\footnote{For more information please refer to Java Specification Request (JSR 268), ~\url{http://jcp.org/en/jsr/detail?id=268}}.
+A data portal is a web-based software application, which provides a central entry point to an enormous amount of heterogeneous data sources. Portals are often used as enterprise or large-scale information systems to enhance the communication and collaboration among users, such as Yahoo.com\footnote{Yahoo!, \url{http://www.yahoo.com}}. By means of personalized access to content, portal data can be adapted to its users and their assigned roles. A portal consists of several portlets, which are displayed as different data containers on the webpage. They are independent from each other, yet different communication techniques allow the transmission of information from one portlet to another\footnote{For more information please refer to Java Specification Request (JSR 268), \url{http://jcp.org/en/jsr/detail?id=268}}.
 
-The \sa framework provides a custom portlet for the Liferay\footnote{Liferay, \url{http://www.liferay.com}}, a popular open source portal, which allows users to employ various text mining techniques on arbitrary portal textual content.
+The \sa framework provides a custom portlet for Liferay\footnote{Liferay, \url{http://www.liferay.com}}, a popular open source portal, which allows its users to employ various text mining techniques on arbitrary portal content.
 
 \section{Introduction}
-As portals grow in content size one prominent issue that hinders their usability is associated with the wealth of information available in the portal repository. These mostly heterogeneous information are aggregated from various sources and presented to users based on their assigned roles. Ideally, an \emph{intelligent} portal must be able to offer content to users, taking into account contextual information beyond their roles and permissions. To this end, the portal needs to somewhat have an \emph{understanding} of what is available in the portal. Leveraging state-of-the-art techniques from the Natural Language Processing (NLP) domain allows portals to automatically process textual content and the SA-Liferay integration aims at bringing the NLP power to this popular portal system and its users in a seamless, user-friendly manner.
+As portals grow in size one prominent issue that hinders their usability is associated with the wealth of information available in the portal repository. These mostly heterogeneous information are aggregated from various sources and presented to users based on their assigned roles. Ideally, an \emph{intelligent} portal must be able to offer content to users, taking into account contextual information beyond their roles and permissions. To this end, the portal needs to somewhat have an \emph{understanding} of what is available in the portal. Leveraging state-of-the-art techniques from the Natural Language Processing (NLP) domain allows portals to automatically process textual content and the SA-Liferay integration aims at bringing the NLP power to this popular portal system and its users in a seamless, user-friendly manner.
 
 \subsection{Use Cases of NLP in Portals}
 In order to provide more concrete use cases of NLP techniques in the context of portals, we iterate over some example scenarios in the following.
 
 \begin{description}
-\item[Named Entity Recognition.] When dealing with large volume of textual documents or reading lengthy pages, a portal's \emph{intelligent assistants} can help users to automatically find named entities, such as persons, locations and organization names from a text to quickly grasp an understanding of the document at hand, without thoroughly reading the page. 
+\item[Named Entity Recognition.] When dealing with large volume of textual documents or reading lengthy pages, a portal's \emph{intelligent assistants} can help users to automatically find named entities, such as persons, locations and organization names in a given text to quickly grasp an idea of the document at hand, without thoroughly reading the page. 
 \item[Indexing Portal Content.] Ordinarily, an index page exists for large document collections that allows information seekers to find where in the collection a certain term is mentioned, much like the index found at the end of books. Using a combination of NLP techniques, one can automatically index the portal content and use it as a new facet for searching or discovering terms within the portal system.
-\item[Automatic Summarization.] Another somewhat ambitious use case of NLP within the context of portals is the generation of automatic summarizes from one or a collection of selected documents in portals. Automatic focused or personalized summaries of the portal content can help portal users to find documents of interest in a more efficient way.
+\item[Automatic Summarization.] Another somewhat ambitious use case of NLP within the context of portals is the generation of automatic summarizes from one or a collection of selected documents. Automatically-generated focused or personalized summaries of portal content can help users find documents of interest in a more efficient way.
 \end{description}
 
 \noindent
@@ -41,7 +41,7 @@ In order to provide more concrete use cases of NLP techniques in the context of 
 %web page.
 
 \section{Installation}
-The SA-Liferay integration consists of two components: a server-side component and a portlet. The server-side component is essentially an instance of the \sa server installed on a local or remote machine (See Chapter~\ref{chap:serv}). The \sa portlet available in our public repository to connect to our public \sa server and work out of the box, but still can be configured to connect a custom endpoint (See Section~\ref{sec:server_change}). The \sa portlet has to be manually installed on the portal and configured to connect to the back-end \sa server in hold of a repository of various NLP pipelines, henceforth, allowing users to invoke various services on the portal content. 
+The SA-Liferay integration consists of two components: a server-side component and a custom portlet to be installed on the portal. The server-side component is essentially an instance of the \sa server installed on a local or remote machine (See Chapter~\ref{chap:serv}). The \sa portlet available in our public repository is configured to connect to our public \sa server, but still can be modified to connect a custom endpoint (See Section~\ref{sec:server_change}). The \sa portlet has to be manually installed on the portal and configured to connect to the back-end \sa server in hold of a repository of various NLP pipelines, henceforth, allowing users to invoke various services on the portal content. 
 
 There are two options available to install the \sa portlet on a portal: You can merely deploy the portlet's binary file available in our public distribution with its default configuration. Alternatively, if you would like to build the portlet binary file directly from the source code, or wish to modify the portlet's default behaviour (e.g., change the \sa server endpoint address), please refer to the Development Notes section at the end of this chapter.
 
@@ -61,7 +61,7 @@ In order to deploy the \sa portlet into your portal, you have to copy the \textt
 
 \subsection{Theme Deployment}
 \label{sec:theme_deploy}
-Several functions in the Semantic Assistants portlet need the jquery-libraries for a successful execution. Thus, you have to download and install the SemanticAssistant theme. Go to our build server and a copy the SemanticAssistantTheme.war file into the deploy folder of your Liferay distribution. Liferay automatically detects and deploys the new component. Then go to your Liferay portal, login in and go to that webpage, which contains the SemanticAssitantsPortlet. Select on top \texttt{Manage \textgreater~Page}. On the right side of the opening dialog you see a link to the Look and Feel section. Click on that link and another side appears, where you are able to switch the theme. Select ``Define a specific look and fee'' and scroll down. At the end of the page you will find all available themes including the new SemanticAssistant theme - please select it. Now the theme is applied to your webpage and you can close all administrative dialogs.
+Several functions in the \sa portlet need jQuery library for a successful execution. Thus, you have to download and install the \sa theme available in our build server. Simply copy the \texttt{SemanticAssistantTheme.war} file into the deploy folder of your Liferay distribution. Liferay automatically detects and deploys the new component. Then go to your Liferay portal, login in and browse to the webpage that contains the \sa portlet. From the top of the page select \texttt{Manage \textgreater~Page}. From the right-hand sidebar select ``Look and Feel'' to switch the theme associated with the \sa portlet. From the presented dialog, under the ``Define a specific look and feel'', select the \sa theme for your portlet.
 
 \section{User Interface}
 Once the portlet is added to the page, you can inquire about available NLP services by selecting a \sa endpoint from the provided combobox. Selecting a server address will dynamically load the list of available services along with their description and runtime parameters. To select an assistant, click on the service's name in order to expand the service information box as shown in Figure~\ref{fig:liferay_sa_portlet}. Optionally, you can customize the execution of the NLP pipelines by modifying their runtime parameters.
@@ -95,8 +95,33 @@ You can send the content portlet text for analysis by clicking on the ``Send for
 
 \section{Development Notes}
 \subsection{Project Directory Structure}
+The directory structure of the \sa portlet found in \texttt{Clients/Portal/Liferay/} is as follows:
+
+\begin{description}
+\item [build.xml] This is a custom ANT script for automatically resolving the portlet's dependencies.
+\item [docroot] Main resource folder of the portlet.
+\begin{description}
+\item[css] Contains Cascading Style Sheet documents for the portlet user interface.
+\item[js] Contains JavaScript files for the portlet's service inquiry and invocation.
+\item[jsp] Contains the front-end interface of the portlet.
+\item[META-INF] Contains metadata of the portlet -- used during packaging of the portlet into a binary archive file.
+\item[WEB-INF] Contains the actual source code of the portal, as well as referenced libraries and configuration files.
+\end{description}
+
+\item [ivy.xml] Enlists the dependencies of the portlet source code. Whatever dependencies are listed in this XML file will be searched for and downloaded by Ivy.
+\item [ivysettings.xml] Describes the Ivy configuration, such as the list of software repositories.
+\end{description}
+
 \subsection{Deploying Portlets from Source Code}
 \label{sec:src_deploy}
+As mentioned earlier in this chapter, the \sa portal can also be deployed to Liferay portal by building it directly from the source code. To do so you will need to download the Liferay SDK\footnote{Liferay Plugins SDK,~\url{http://www.liferay.com/community/wiki/-/wiki/Main/Plugins+SDK}} and have ANT installed in your system. Provided, follow the steps below:
+
+\begin{enumerate}
+\item Copy the \texttt{SemanticAssistants-portlet} folder in the \texttt{portlets} folder of your Liferay SDK.
+\item Browse to the \sa portlet top-level directory (which contains the \texttt{build.xml} file) in your terminal and type ``\texttt{ant resolve}''. This will automatically download all the project's dependencies so you could compile and build the portlet's WAR file.
+\item 
+\end{enumerate}
+
 \subsection{Inter-Portlet Communication}
 \subsection{Embedding NLP Results in Your Own Portlet}
 \subsection{Modifying the \sa Server Endpoint}
