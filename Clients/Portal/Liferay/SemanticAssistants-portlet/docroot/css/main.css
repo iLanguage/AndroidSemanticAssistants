@@ -1,0 +1,43 @@
+/*
+Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
+
+This file is part of the Semantic Assistants architecture.
+
+Copyright (C) 2013, 2014 Semantic Software Lab, http://www.semanticsoftware.info
+
+The Semantic Assistants architecture is free software: you can
+redistribute and/or modify it under the terms of the GNU Affero General
+Public License as published by the Free Software Foundation, either
+version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
+
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see http://www.gnu.org/licenses/.
+*/
+
+.sa-list {
+	margin: 0;
+	padding: 0;
+}
+p.sa-heading{
+	margin: 2px;
+	padding: 2px 0px 2px 15px;
+	cursor: pointer;
+	position: relative;
+	background-repeat:no-repeat;
+	background-position: 3px center;
+	background-color: #9FC1D6;
+}
+
+div.sa-content{
+	padding: 5px 10px;
+	background-color:#fafafa;
+}
+
+fieldset.sa {
+	border:1px solid LightSteelBlue;
+}

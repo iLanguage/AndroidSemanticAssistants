@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!--
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+   This file is part of the Semantic Assistants architecture.
+
+   Copyright (C) 2013-2014 Semantic Software Lab, http://www.semanticsoftware.info
+
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+   
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<!DOCTYPE liferay-portlet-app PUBLIC "-//Liferay//DTD Portlet Application 6.1.0//EN" "http://www.liferay.com/dtd/liferay-portlet-app_6_1_0.dtd">
+
+<liferay-portlet-app>
+	<portlet>
+		<portlet-name>SemanticAssistants</portlet-name>
+		<icon>/icon.png</icon>
+		<instanceable>false</instanceable>
+		<header-portlet-css>/css/main.css</header-portlet-css>
+		<footer-portlet-javascript>/js/main.js</footer-portlet-javascript>
+		<css-class-wrapper>SemanticAssistants-portlet</css-class-wrapper>
+	</portlet>
+	<role-mapper>
+		<role-name>administrator</role-name>
+		<role-link>Administrator</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>guest</role-name>
+		<role-link>Guest</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>power-user</role-name>
+		<role-link>Power User</role-link>
+	</role-mapper>
+	<role-mapper>
+		<role-name>user</role-name>
+		<role-link>User</role-link>
+	</role-mapper>
+</liferay-portlet-app>
