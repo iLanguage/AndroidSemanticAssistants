@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+   This file is part of the Semantic Assistants architecture.
+   Copyright (C) 2013, 2014 Semantic Software Lab, http://www.semanticsoftware.info
+
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+   
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<ivy-module version="2.0"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:noNamespaceSchemaLocation="http://ant.apache.org/ivy/schemas/ivy.xsd">
+  <info organisation="info.semanticsoftware" module="Semantic Assistants Portal Integration" revision="1.0"/>
+  <configurations>
+    <conf name="default"/>
+  </configurations>
+  
+  <dependencies defaultconf="*->master(default),runtime(default)">
+
+    <dependency org="com.liferay.portal" name="util-bridges" rev="6.1.1">
+    <artifact name="util-bridges" ext="jar"/>
+    </dependency>
+
+    <dependency org="com.liferay.portal" name="util-java" rev="6.1.1">
+      <artifact name="util-java" ext="jar"/>
+    </dependency>
+
+    <dependency org="com.liferay.portal" name="util-taglib" rev="6.1.1">
+      <artifact name="util-taglib" ext="jar"/>
+    </dependency>
+
+    <dependency org="commons-collections" name="commons-collections" rev="3.2.1"/>
+      <dependency org="com.google.code.gson" name="gson" rev="2.2.4"/>
+    </dependencies>
+
+    <!--dependency org="com.liferay.portal" name="portal-kernel" rev="5.2.3">
+    <artifact name="portal-kernel" ext="jar"/>
+    </dependency-->
+    
+    <!-- Removed this dependency as it is known to be the cause of issue #470>
+    <dependency org="com.liferay.portal" name="portal-service" rev="6.1.1"/>-->
+
+    <!--dependency org="javax.portlet" name="portlet-api" rev="2.0-r12">
+    <artifact name="portlet-api" ext="jar"/>
+    <exclude name="pluto-1.1.0.jar"/>
+    </dependency-->
+</ivy-module>

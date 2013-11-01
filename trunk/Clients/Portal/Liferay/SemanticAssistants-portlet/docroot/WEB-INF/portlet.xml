@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!--
+   Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+
+   This file is part of the Semantic Assistants architecture.
+
+   Copyright (C) 2013-2014 Semantic Software Lab, http://www.semanticsoftware.info
+
+   The Semantic Assistants architecture is free software: you can
+   redistribute and/or modify it under the terms of the GNU Affero General
+   Public License as published by the Free Software Foundation, either
+   version 3 of the License, or (at your option) any later version.
+   
+   This program is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU Affero General Public License for more details.
+   
+   You should have received a copy of the GNU Affero General Public License
+   along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<portlet-app xmlns="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd http://java.sun.com/xml/ns/portlet/portlet-app_2_0.xsd" version="2.0">
+	<portlet>
+		<portlet-name>SemanticAssistants</portlet-name>
+		<display-name>Semantic Assistants</display-name>
+		<portlet-class>com.semanticassistants.client.portal.liferay.SemanticAssistantsPortlet</portlet-class>
+		<init-param>
+			<name>view-template</name>
+			<value>/jsp/view.jsp</value>
+		</init-param>
+		<expiration-cache>0</expiration-cache>
+		<supports>
+			<mime-type>text/html</mime-type>
+		</supports>
+		<portlet-info>
+			<title>Semantic Assistants</title>
+			<short-title>Semantic Assistants</short-title>
+			<keywords>Semantic Assistants</keywords>
+		</portlet-info>
+		<security-role-ref>
+			<role-name>administrator</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>guest</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>power-user</role-name>
+		</security-role-ref>
+		<security-role-ref>
+			<role-name>user</role-name>
+		</security-role-ref>
+		 <supported-public-render-parameter>sa_text</supported-public-render-parameter>	
+		  <supported-public-render-parameter>sa_result</supported-public-render-parameter>	
+		  <supported-public-render-parameter>sa_result_type</supported-public-render-parameter>
+	</portlet>         
+        <public-render-parameter>
+            <identifier>sa_text</identifier>
+            <qname xmlns:x="http://abc.com/semantic_assistants_text">x:param1</qname>
+        </public-render-parameter>
+         <public-render-parameter>
+            <identifier>sa_result</identifier>
+            <qname xmlns:x="http://abc.com/semantic_assistants_result">x:param1</qname>
+        </public-render-parameter>
+        <public-render-parameter>
+            <identifier>sa_result_type</identifier>
+            <qname xmlns:x="http://abc.com/semantic_assistants_result_type">x:param1</qname>
+        </public-render-parameter>
+</portlet-app>
