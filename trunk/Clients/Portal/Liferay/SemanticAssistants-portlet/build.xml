@@ -105,6 +105,19 @@
 	<delete file="docroot/${web.dir}/src/service.properties"/-->
    </target>
    
+   <!-- Findbugs analysis -->
+    <target name="findbugs" depends="deploy">
+      <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
+            classpath="${findbugs.classpath}" />
+      <findbugs home="${findbugs.home}"      
+            output="xml:withMessages"
+            outputFile="findbugsXml.SA.xml" >
+	<auxClasspath path="${ant.jar}:${gate.jar}:${gate-home}/lib/log4j-1.2.14.jar:${csal.home}/dist/${csal.name}" />
+	<sourcePath path="${basedir}/src" />
+	<class location="${basedir}/WebContent/WEB-INF/classes" />
+      </findbugs>
+    </target>
+   
    <!--target name="clean-all" depends="init" description="Delete all generated files including the WAR file">
     	<antcall target="clean"/>
     	<delete dir="${dist.dir}"/>
