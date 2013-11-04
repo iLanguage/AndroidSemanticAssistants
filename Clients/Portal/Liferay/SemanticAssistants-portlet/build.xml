@@ -83,7 +83,7 @@
   </target>
   
  <target name="copyCSAL" depends="init" description="Copies CSAL.jar file from the build server workspace -- temporary solution">
-  <get src="http://assistant.cs.concordia.ca:8080/job/Semantic%20Assistants/ws/semantic-assist/CSAL/dist/CSAL.jar" dest="${lib.dir}"/>
+  <get src="http://assistant.cs.concordia.ca:8080/job/Semantic%20Assistants/lastSuccessfulBuild/artifact/semantic-assist/CSAL/dist/CSAL.jar" dest="${lib.dir}"/>
  </target>
    <target name="clean" depends="init" description="Delete generated class files and ivy folder">
    
