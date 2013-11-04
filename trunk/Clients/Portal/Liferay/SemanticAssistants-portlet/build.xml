@@ -106,7 +106,7 @@
    </target>
    
    <!-- Findbugs analysis -->
-    <target name="findbugs" depends="deploy">
+    <target name="findbugs" depends="init, deploy">
       <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
             classpath="${findbugs.classpath}" />
       <findbugs home="${findbugs.home}"      
