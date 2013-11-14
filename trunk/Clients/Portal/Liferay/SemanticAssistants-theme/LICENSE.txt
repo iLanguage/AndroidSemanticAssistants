@@ -1,0 +1,3 @@
+== SEMANTIC ASSISTANTS THEME LICENSE ==
+
+The Semantic Assistants theme has been generated using the Liferay SDK 6.1.1 for demonstration purposes. Therefore, the theme is hereby released under the LGPL license as originally declared by Liferay.
