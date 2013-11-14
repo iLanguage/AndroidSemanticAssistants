@@ -23,7 +23,7 @@
 \section{Overview}
 The \sa project aims to bring natural language processing (NLP)
 techniques directly to end users by integrating them with common
-desktop applications, such as word processors, email clients, or Web
+desktop and web applications, such as word processors, email clients, or Web
 browsers. To facilitate the connection between NLP frameworks and
 (desktop) clients, a service-oriented architecture
 (Figure~\ref{fig:arch}) has been developed that allows to integrate
@@ -75,9 +75,7 @@ Assistants architecture, as shown in Figure~\ref{fig:arch}:
 
 \paragraph{Tier 1} of the architecture consists of client applications
 and a \emph{Client-Side Abstraction Layer (CSAL)}. Currently, there
-are two example clients distributed with the system, a simple
-command-line client for testing purposes and a plug-in for the
-OpenOffice.org \emph{Writer} word processor. The client-side abstraction
+are a number of both desktop and web-based example clients distributed with the system. The client-side abstraction
 layer consists partly of hand-written Java classes that provide
 common client-side functionality, partly of automatically generated
 Java classes. The communication between client and server is
@@ -102,10 +100,10 @@ them when they are requested by a client.
 service descriptions, which are authored in the Web Ontology Language
 (OWL).  Tier~4 further contains external documents, which the NLP
 subsystem must be able to access. Finally, we possibly have
-pre-indexed documents as part of the resources tier. For indexing,
-GATE uses Apache's Lucene indexer\footnote{Apache Lucene, see
-  \url{http://lucene.apache.org/}} as a subsystem, and allows us,
-through its API, to create and access indices.
+pre-indexed documents as part of the resources tier. 
+
+% BS: Nothing to do with Lucene in this project, I commented this part out. 
+% For indexing, GATE uses Apache's Lucene indexer\footnote{Apache Lucene, see \url{http://lucene.apache.org/}} as a subsystem, and allows us, through its API, to create and access indices.
 
 
 \section{System Components}
@@ -139,9 +137,9 @@ with the following components:
   methods that are frequently required when integrating NLP into
   desktop clients.
 
-\item[Clients:] Two example clients come with the architecture: a
-  command-line client and a plug-in for the OpenOffice.org Writer word
-  processor. 
+\item[Clients:] A number of desktop and web-based example clients come with the architecture: a
+  command-line client, a plug-in for the OpenOffice.org Writer word
+  processor, a plug-in for the Eclipse IDE and two integration for wiki and portal systems. 
 
 \item[Example Resources:] NLP functionality is provided to clients
   through Web services. To match clients with suitable services
