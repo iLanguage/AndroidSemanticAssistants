@@ -112,7 +112,7 @@
       <findbugs home="${findbugs.home}"      
             output="xml:withMessages"
             outputFile="findbugsXml.SA.xml" >
-	<!--auxClasspath path="${ant.jar}:${gate.jar}:${gate-home}/lib/log4j-1.2.14.jar:${csal.home}/dist/${csal.name}" /-->
+        <auxClasspath refid="compile.classpath" />	
 	<sourcePath path="${src.dir}" />
 	<class location="docroot/${web.dir}/classes" />
       </findbugs>
