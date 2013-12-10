@@ -94,7 +94,8 @@ public class MediaWikiHelper extends WikiHelper{
 	@Override
 	public String getPageContent(final String pageName) {
 		createBot();
-		SimpleArticle sa = null;
+		//SimpleArticle sa = null;
+		Article sa = null;
 		try {
 			/*bot = new MediaWikiBot("http://localhost/mediawiki-1.16/index.php");
 			bot.login("wikisysop", "adminpass");
@@ -109,7 +110,9 @@ public class MediaWikiHelper extends WikiHelper{
 				ConsoleLogger.log("Retrieving page content...");
 				//TODO remove debugging code
 				System.out.println("Retrieving page content: " + pageName);
-				sa = new SimpleArticle(bot.readContent(pageName));
+				//FIXME i think JWBF 2.0 has removed the backward compatibility for this
+				//sa = new SimpleArticle(bot.readContent(pageName));
+				sa = bot.getArticle(pageName);
 				return sa.getText();
 			}else{
 				ConsoleLogger.log("Bot could not log in to the wiki. Please check the credentials.");
@@ -622,9 +625,6 @@ public class MediaWikiHelper extends WikiHelper{
 			System.out.println("Creating a bot: " + wikiAddress + wikiUser + wikiPass);
 			bot = new MediaWikiBot(wikiAddress);
 			bot.login(wikiUser, wikiPass);
-		} catch (MalformedURLException e1) {
-			   System.err.println("Could not access the wiki. The wiki URL is malformed.");
-			   e1.printStackTrace();
 		} catch (ActionException e) {
 			e.printStackTrace();
 		}
@@ -642,9 +642,6 @@ public class MediaWikiHelper extends WikiHelper{
 			System.out.println("Creating a bot: " + iWikiAddress + iWikiUser + iWikiPass);
 			MediaWikiBot bot = new MediaWikiBot(iWikiAddress);
 			bot.login(iWikiUser, iWikiPass);
-		} catch (MalformedURLException e1) {
-			   System.err.println("Could not access the wiki. The wiki URL is malformed.");
-			   e1.printStackTrace();
 		} catch (ActionException e) {
 			e.printStackTrace();
 		} 
