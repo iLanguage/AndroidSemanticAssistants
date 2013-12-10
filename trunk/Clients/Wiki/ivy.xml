@@ -3,7 +3,7 @@
    Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
 
    This file is part of the Semantic Assistants architecture.
-   Copyright (C) 2012, 2013 Semantic Software Lab, http://www.semanticsoftware.info
+   Copyright (C) 2013, 2014 Semantic Software Lab, http://www.semanticsoftware.info
    Rene Witte
    Bahar Sateli
 
@@ -42,11 +42,13 @@
 		<artifact name="wikitext.mediawiki" ext="jar"/>
 	</dependency>
 
-	<dependency org="net.sourceforge" name="jwbf" rev="1.3.3">
-		<artifact name="jwbf" ext="jar"/>
+	<dependency org="net.sourceforge" name="jwbf" rev="2.0.0"/>
+	<!-- New dependencies introduced because of JWBF 2.0 -->
+	<dependency org="com.google.guava" name="guava" rev="14.0.1">
+	    <artifact name="guava" ext="jar"/>
 	</dependency>
-
-	<dependency org="commons-collections" name="commons-collections" rev="3.2">
+	
+	<dependency org="commons-collections" name="commons-collections" rev="3.2.1">
 		<artifact name="commons-collections" ext="jar"/>	
 	</dependency>
 	
