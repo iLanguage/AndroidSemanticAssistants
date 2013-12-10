@@ -1,5 +1,5 @@
 <!--
-Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
+Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
@@ -30,6 +30,9 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 <title>Semantic Assistants</title>
 </head>
 <body>
-I think, I THINK you're lost!! :)
+<h1>Semantic Assistants Wiki-NLP Integration</h1>
+You are seeing this page because you are trying to directly access the Wiki-NLP integration servlet, perhaps through a browser.
+
+For more information please visit <a href="http://www.semanticsoftware.info/semantic-assistants-wiki-nlp">our Wiki-NLP integration webpage</a>.
 </body>
 </html>
