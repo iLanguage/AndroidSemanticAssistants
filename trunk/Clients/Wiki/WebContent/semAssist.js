@@ -29,7 +29,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 	window.onload = start;
 	
-	var proxyServer = "http://loompa.cs.concordia.ca:8080/Wiki-NLP/SemAssistServlet?action=";
+	var proxyServer = "http://loompa.cs.concordia.ca:8080/SA-WikiConnector/SemAssistServlet?action=";
 
 	function start(){
 		fixRelativePaths();
