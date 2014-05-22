@@ -75,7 +75,7 @@ function wfToolboxLink(&$monobook) {
 // Load system messages wfLoadExtensionMessages('ToolboxLink');
 // Print a bulleted link
 #echo sprintf("<li> <a href=\"%s\">%s</a></li>",'http://oompa:8080/Wiki-NLP/SemAssistServlet?action=proxy',wfMsg('Semantic Assistants')); 
-print("<li> <a href=\"http://loompa.cs.concordia.ca:8080/Wiki-NLP/SemAssistServlet?action=proxy\">Semantic Assistants</a></li>");
+print("<li> <a href=\"http://loompa.cs.concordia.ca:8080/SA-WikiConnector/SemAssistServlet?action=proxy\">Semantic Assistants</a></li>");
 return true;
 }
 ?>
