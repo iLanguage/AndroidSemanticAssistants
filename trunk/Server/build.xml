@@ -49,7 +49,7 @@
         <pathelement location="${protege-owl.home}/arq.jar" />
         <pathelement location="${ant.jar}" />
         <pathelement location="${commons-lang.jar}" /> <!-- used for xml encoding -->
-    	<pathelement location="${gate-home}/lib/junit.jar" />
+    	<pathelement location="${junit.classpath}" />
 	<pathelement location="${lib.home}/icu4j-3.8.jar" />
     </path>    
   
