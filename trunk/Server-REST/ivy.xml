@@ -109,6 +109,7 @@
 	<!--dependency org="org.jsslutils" name="jsslutils" rev="1.0.7">
 		<exclude org="junit"/>
 	</dependency-->
+	<dependency org="com.google.code.gson" name="gson" rev="2.2.4"/>
 
    </dependencies>
 </ivy-module>
