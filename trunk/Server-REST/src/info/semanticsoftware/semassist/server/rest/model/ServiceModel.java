@@ -3,7 +3,7 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
-Copyright (C) 2012, 2013 Semantic Software Lab, http://www.semanticsoftware.info
+Copyright (C) 2013, 2014 Semantic Software Lab, http://www.semanticsoftware.info
 Rene Witte
 Bahar Sateli
 
@@ -24,6 +24,8 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package info.semanticsoftware.semassist.server.rest.model;
 
 import java.util.Iterator;
+
+import com.google.gson.Gson;
 
 import info.semanticsoftware.semassist.server.SemanticServiceBroker;
 import info.semanticsoftware.semassist.server.ServiceInfoForClient;
@@ -60,6 +62,20 @@ public class ServiceModel {
 		}
 		buffer.append("</services>");
 		return buffer.toString();
+	}
+	
+	public String getAllJSON(){
+		Gson gson = new Gson();
+		StringBuffer buffer = new StringBuffer();
+		while (iterator.hasNext()) {
+			buffer.append(gson.toJson(iterator.next()));
+			buffer.append(",");
+		}
+		
+		String output = buffer.toString();
+		String representation = output.substring(0, output.lastIndexOf(","));
+		//String jsonp = callback + "([" + representation + "]);";
+		return representation;
 	}
 
 	/**
@@ -108,6 +124,29 @@ public class ServiceModel {
 		}
 
 		return xml.toString();
+	}
+	
+	public String getJSON(final String serviceName) {
+		ServiceInfoForClient serviceObject = null;
+		String json = null;
+
+		while(iterator.hasNext()){
+			ServiceInfoForClient service = iterator.next();
+			System.out.println(service.getServiceName());
+			if(service.getServiceName().equals(serviceName)){
+				serviceObject = service;
+				break;
+			}
+		}
+
+		if(serviceObject != null){
+			Gson gson = new Gson();
+			json = gson.toJson(serviceObject);
+		}else{
+			System.err.println("Service not found");
+		}
+
+		return json;
 	}
 
 	/**
