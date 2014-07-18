@@ -3,7 +3,7 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
-Copyright (C) 2012, 2013 Semantic Software Lab, http://www.semanticsoftware.info
+Copyright (C) 2013, 2014 Semantic Software Lab, http://www.semanticsoftware.info
 Rene Witte
 Bahar Sateli
 
@@ -28,6 +28,27 @@ package info.semanticsoftware.semassist.server.rest.utils;
  * */
 public class Constants {
 
+	public enum MIME_TYPES {
+		//JSON, XML;
+
+		APPJSON("APPLICATION/JSON"), 
+		JSON("JSON"),
+		XML("XML"),
+		APPXML("APPLICATION/XML"),
+		APPXHTML("APPLICATION/XHTML+XML"),
+		TEXT("TEXT/HTML");
+
+		   private String value;
+		   private MIME_TYPES(String value)
+		   {
+		      this.value = value;
+		   }
+
+		   public String toString()
+		   {
+		      return this.value; //This will return , # or +
+		   }
+	}
 	/**
 	 * Protected constructor.
 	 */
