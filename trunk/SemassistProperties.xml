@@ -105,7 +105,7 @@
     <property name="junit.classpath"          value="${junit.home}/junit.jar" />
     <property name="checkstyle.home"          value="${durmtools}/checkstyle" />
     <property name="checkstyle.config"        value="${checkstyle.home}/durm_checks.xml" />
-    <property name="checkstyle.classpath"     value="${checkstyle.home}/checkstyle-5.3-all.jar" />
+    <property name="checkstyle.classpath"     value="${checkstyle.home}/checkstyle-5.7-all.jar" />
     <property name="checkstyle.report"        value="checkstyle-result.xml" />
     <property name="pmd.home"                 value="${durmtools}/pmd" />
     <property name="findbugs.home"            value="${durmtools}/findbugs" />
