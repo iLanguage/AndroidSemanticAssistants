@@ -93,7 +93,7 @@
 		<get src="https://hudson.eclipse.org/hudson/job/mylyn-docs-nightly/lastSuccessfulBuild/artifact/org.eclipse.mylyn.wikitext-standalone/target/wikitext-standalone-latest.zip" dest="${parser.dir}"/>
 		<unzip src="${parser.dir}/wikitext-standalone-latest.zip" dest="${parser.dir}/unzip"/>
 		<copy todir="${lib.dir}">
-			<fileset dir="${parser.dir}/unzip/wikitext-standalone-2.2.0-SNAPSHOT">
+			<fileset dir="${parser.dir}/unzip/wikitext-standalone-2.3.0-SNAPSHOT">
 				<include name="org.eclipse.mylyn.wikitext.*.jar"/>
 			</fileset>
 		</copy>
