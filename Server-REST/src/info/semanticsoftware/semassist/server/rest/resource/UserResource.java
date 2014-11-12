@@ -3,7 +3,7 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
-Copyright (C) 2012, 2013 Semantic Software Lab, http://www.semanticsoftware.info
+Copyright (C) 2014 Semantic Software Lab, http://www.semanticsoftware.info
 Rene Witte
 Bahar Sateli
 
@@ -59,7 +59,7 @@ public class UserResource extends ServerResource{
 	public Representation getXML() {
 		String userName = (String) getRequest().getAttributes().get("userName");
 		StringRepresentation representation = null;
-		String xml = new UserModel().getXML(userName);
+		String xml = new UserModel().getXML(userName,null,null,null);
 		representation = new StringRepresentation(xml, MediaType.APPLICATION_XML);
 
 		if (xml != null) {
@@ -97,13 +97,10 @@ public class UserResource extends ServerResource{
 
 			// database lookup
 			AuthenticationUtils authUtil = AuthenticationUtils.getInstance();
-			// client response
-			if(authUtil.authenticateUser(username, password)){
-				String xml = new UserModel().getXML(username);
-				result = new StringRepresentation(xml, MediaType.APPLICATION_XML);
-				if (xml != null) {
-					return result;
-				}
+			// response to client
+			String authResponse = authUtil.authenticateUser(username, password);
+			if(authResponse != null){
+					return new StringRepresentation(authResponse);
 			}else {
 				//setStatus(Status.CLIENT_ERROR_NOT_FOUND);
 				return new StringRepresentation(Constants.AUHTENTICATION_FAIL);

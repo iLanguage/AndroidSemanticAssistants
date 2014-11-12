@@ -3,7 +3,7 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
-Copyright (C) 2013, 2014 Semantic Software Lab, http://www.semanticsoftware.info
+Copyright (C) 2014 Semantic Software Lab, http://www.semanticsoftware.info
 Rene Witte
 Bahar Sateli
 
@@ -36,7 +36,8 @@ public class Constants {
 		XML("XML"),
 		APPXML("APPLICATION/XML"),
 		APPXHTML("APPLICATION/XHTML+XML"),
-		TEXT("TEXT/HTML");
+		TEXT("TEXT/HTML"),
+		TEXTXML("TEXT/XML"),;
 
 		   private String value;
 		   private MIME_TYPES(String value)

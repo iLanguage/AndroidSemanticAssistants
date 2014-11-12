@@ -3,7 +3,7 @@
    Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
 
    This file is part of the Semantic Assistants architecture.
-   Copyright (C) 2012, 2013 Semantic Software Lab, http://www.semanticsoftware.info
+   Copyright (C) 2014 Semantic Software Lab, http://www.semanticsoftware.info
    Rene Witte
    Bahar Sateli
 
@@ -110,6 +110,6 @@
 		<exclude org="junit"/>
 	</dependency-->
 	<dependency org="com.google.code.gson" name="gson" rev="2.2.4"/>
-
+	<dependency org="mysql" name="mysql-connector-java" rev="5.1.34"/>
    </dependencies>
 </ivy-module>

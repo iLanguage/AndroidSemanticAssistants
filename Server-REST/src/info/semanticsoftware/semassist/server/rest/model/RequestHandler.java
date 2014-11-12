@@ -3,7 +3,7 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
-Copyright (C) 2012, 2013 Semantic Software Lab, http://www.semanticsoftware.info
+Copyright (C) 2014 Semantic Software Lab, http://www.semanticsoftware.info
 Rene Witte
 Bahar Sateli
 
@@ -71,6 +71,9 @@ public class RequestHandler extends DefaultHandler{
 
 	/** Contains the <code><sessionIV></code> node value. */
 	private String sessionIV;
+	
+	/** Contains the <code><sessionId></code> node value. */
+	private String sessionId;
 
 	/** Boolean value representing whether the request needs user authentication */
 	private boolean needsAuthentication = false;
@@ -89,6 +92,9 @@ public class RequestHandler extends DefaultHandler{
 
 	/** The <code><authenticationNeeded></code> XML element representing user authentication. */
 	private boolean authenticationTag = false;
+	
+	/** The <code><sessionId></code> XML element representing user session. */
+	private boolean sessionIdTag = false;
 
 	/** Returns the service name specified in the request. 
 	 * @return service name*/
@@ -125,7 +131,13 @@ public class RequestHandler extends DefaultHandler{
 	public String getSessionIVString(){
 		return this.sessionIV;
 	}
-
+	
+	/** Returns the session ID specified in the request. 
+	 * @return session id string representation */
+	public String getSessionId(){
+		return this.sessionId;
+	}
+	
 	/** Returns the runtime parameters map.
 	 * @return runtime parameters map
 	 */
@@ -181,6 +193,8 @@ public class RequestHandler extends DefaultHandler{
 			this.sessionIVTag = true;
 		}else if(qName.equals("authenticationNeeded")){
 			this.authenticationTag = true;
+		}else if(qName.equals("sessionId")){
+			this.sessionIdTag = true;
 		}
 	}
 
@@ -209,6 +223,8 @@ public class RequestHandler extends DefaultHandler{
 			this.sessionIVTag = false;
 		}else if(qName.equals("authenticationNeeded")){
 			this.authenticationTag = false;
+		}else if(qName.equals("sessionId")){
+			this.sessionIdTag = false;
 		}
 	}
 
@@ -235,6 +251,8 @@ public class RequestHandler extends DefaultHandler{
 			sessionKey = new String(ch, start, length).trim();
 		}else if(this.sessionIVTag){
 			sessionIV = new String(ch, start, length).trim();
+		}else if(this.sessionIdTag){
+			sessionId = new String(ch, start, length).trim();
 		}else if(this.authenticationTag){
 			String value = new String(ch, start, length).toLowerCase().trim();
 			if(value.equals("yes")){
@@ -244,4 +262,6 @@ public class RequestHandler extends DefaultHandler{
 			}
 		}
 	}
+
+	
 }
