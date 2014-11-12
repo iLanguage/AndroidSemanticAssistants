@@ -3,7 +3,7 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
-Copyright (C) 2012, 2013 Semantic Software Lab, http://www.semanticsoftware.info
+Copyright (C) 2014 Semantic Software Lab, http://www.semanticsoftware.info
 Rene Witte
 Bahar Sateli
 
@@ -81,12 +81,19 @@ public class RequestParser {
 			if(handler.needsAuthentication()){
 				System.out.println("Request asks for authentication mode. Looking up credentials in the database...");
 				// do the DB look up
-				if(!AuthenticationUtils.getInstance().authenticateUser(handler.getUsername(), handler.getPassword())){
-					System.err.println("Invalid user credentials. Aborting the request...");
+				
+				if(!AuthenticationUtils.getInstance().isAuthorizedUser(handler.getUsername(), handler.getSessionId())){
+					System.err.println("Invalid user session. Aborting the request...");
 					return "Authentication failed.";
 				}else{
 					System.out.println("Credentials OK. Executing service invocation request...");
 				}
+				/*if(!AuthenticationUtils.getInstance().authenticateUser(handler.getUsername(), handler.getPassword())){
+					System.err.println("Invalid user credentials. Aborting the request...");
+					return "Authentication failed.";
+				}else{
+					System.out.println("Credentials OK. Executing service invocation request...");
+				}*/
 			}
 
 			/* Get the parsed data and the service name to invoke */

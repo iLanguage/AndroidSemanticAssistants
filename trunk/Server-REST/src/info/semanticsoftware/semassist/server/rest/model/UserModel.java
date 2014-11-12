@@ -3,7 +3,7 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
-Copyright (C) 2012, 2013 Semantic Software Lab, http://www.semanticsoftware.info
+Copyright (C) 2014 Semantic Software Lab, http://www.semanticsoftware.info
 Rene Witte
 Bahar Sateli
 
@@ -41,13 +41,18 @@ public class UserModel {
 	/**
 	 * Returns XML representation of a user.
 	 * @param userName username
+	 * @param num_req number of remaining requests
+	 * @param acc_type user's account type
 	 * @return XML representation of the specified user with public key value or null
 	 */
-	public String getXML(final String userName) {
+	public String getXML(final String userName, final String sessionId, final String acc_type, final String num_req) {
 		StringBuilder xml = new StringBuilder();
 		xml.append("<user>");
 		xml.append("<userName>").append(userName).append("</userName>");
 		//xml.append("<userKey>").append(AuthenticationUtils.getInstance().getModulusString(userName)).append("</userKey>");
+		xml.append("<sessionId>").append(sessionId).append("</sessionId>");
+		xml.append("<accType>").append(acc_type).append("</accType>");
+		xml.append("<reqNum>").append(num_req).append("</reqNum>");
 		xml.append("<link>").append(getLink(userName)).append("</link>");
 		xml.append("</user>");
 		return xml.toString();

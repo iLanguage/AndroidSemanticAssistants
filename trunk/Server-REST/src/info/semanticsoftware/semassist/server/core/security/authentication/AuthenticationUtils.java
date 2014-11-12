@@ -3,7 +3,7 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
-Copyright (C) 2012, 2013 Semantic Software Lab, http://www.semanticsoftware.info
+Copyright (C) 2014 Semantic Software Lab, http://www.semanticsoftware.info
 Rene Witte
 Bahar Sateli
 
@@ -24,6 +24,7 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 package info.semanticsoftware.semassist.server.core.security.authentication;
 
 import info.semanticsoftware.semassist.server.core.security.encryption.EncryptionUtils;
+import info.semanticsoftware.semassist.server.rest.model.UserModel;
 
 import java.math.BigInteger;
 import java.security.KeyFactory;
@@ -39,6 +40,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Properties;
+import java.util.UUID;
 
 public class AuthenticationUtils {
 
@@ -62,15 +65,20 @@ public class AuthenticationUtils {
 		return instance;
 	}
 
-	/** Loads the H2 database object into memory. */
+	/** Loads the MySQL database object into memory. */
 	public void loadDBIntoMemory(){
 		if(connection == null){
 			try {
-				Class.forName("org.h2.Driver");
-				// Setup the connection with the DB
-				//TODO move the credentials to the servlet's properties
-				connection = DriverManager.getConnection("jdbc:h2:~/Users", "dbadmin", "dbpass");
-				connection.setAutoCommit(false);
+				Class.forName("com.mysql.jdbc.Driver");
+				String db_url = "jdbc:mysql://DB_ADDRESS";
+				Properties connProp = new Properties();
+				connProp.put("user", "DB_USER");
+				connProp.put("password", "DB_PASS");
+				connProp.put("autoReconnect", "true");
+				connProp.put("maxReconnects", "3");
+				connection = DriverManager.getConnection(db_url, connProp);
+				connection.setAutoCommit(true);
+				System.out.println("Database connection established.");
 			} catch (ClassNotFoundException e) {
 				e.printStackTrace();
 			} catch (SQLException e) {
@@ -83,33 +91,81 @@ public class AuthenticationUtils {
 	 * @param userName username
 	 * @param password password
 	 * @return true if the credentials are valid, false otherwise */
-	public boolean authenticateUser(final String userName, final String password){
-		boolean isValidUser = false;
+	public String authenticateUser(final String userName, final String password){
+		String userRepresentation = null;
 		loadDBIntoMemory();
-
+		UUID sessionid = UUID.randomUUID();
+	    String sessionidString = sessionid.toString();
 		PreparedStatement prepStatement;
 		try {
-			prepStatement = connection.prepareStatement("SELECT password FROM USERS WHERE USERNAME = ?");
+			prepStatement = connection.prepareStatement("SELECT user_id, password FROM USERS WHERE USERNAME = ?");
 			prepStatement.setString(1, userName);
 			ResultSet resultSet = prepStatement.executeQuery();
-
+			String acc_type = null;
+			String num_req = null;
 			if (resultSet.next()) {
 				String retrievedPassword = resultSet.getString("password");
+				String retrievedUserID = resultSet.getString("user_id");
 				if(retrievedPassword.equals(password)){
-					isValidUser = true;
-				}else{
-					isValidUser = false;
+					updateUserSessionInApp(retrievedUserID, sessionidString);
+					try {
+						prepStatement = connection.prepareStatement("SELECT num_request, acc_type FROM SA_APP WHERE user_id = ?");
+						prepStatement.setString(1, retrievedUserID);
+						ResultSet accInfo = prepStatement.executeQuery();
+						if (accInfo.next()) {
+							acc_type = accInfo.getString("acc_type");
+							num_req = accInfo.getString("num_request");
+						}
+					}catch(Exception e){
+						e.printStackTrace();
+					}
+					userRepresentation = new UserModel().getXML(userName, sessionidString, acc_type, num_req);
 				}
-				return isValidUser;
+				return userRepresentation;
 			}else{
 				System.out.println("Authentication failed. No such credentials.");
-				return isValidUser = false;
+				return userRepresentation;
 			}
 
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return isValidUser;
+		return userRepresentation;
+
+	}	
+
+	private void updateUserSessionInApp(String retrievedUserID, String sessionidString) {
+		loadDBIntoMemory();
+		PreparedStatement prepStatement;
+		try {
+			prepStatement = connection.prepareStatement("UPDATE SA_APP SET session_id = ? WHERE user_id = ?");
+			prepStatement.setString(1, sessionidString);
+			prepStatement.setString(2, retrievedUserID);
+			prepStatement.executeUpdate();
+		}catch(Exception e){
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public boolean isAuthorizedUser(String username, String sessionId) {
+		loadDBIntoMemory();
+		PreparedStatement prepStatement;
+		try {
+			prepStatement = connection.prepareStatement("SELECT session_id FROM SA_APP WHERE user_id = (SELECT user_id FROM USERS WHERE USERNAME= ?)");
+			prepStatement.setString(1, username);
+			ResultSet resultSet = prepStatement.executeQuery();
+
+			if (resultSet.next()) {
+				String retrievedSessionID = resultSet.getString("session_id");
+				if(retrievedSessionID.equals(sessionId)){
+					return true;
+				}
+			}
+		}catch(Exception e){
+			e.printStackTrace();
+		}	
+		return false;
 	}
 
 	/** Returns the modulus part of the specified username's public/private keys.
@@ -122,7 +178,6 @@ public class AuthenticationUtils {
 		try {
 			PreparedStatement prepStatement = connection.prepareStatement("SELECT mod FROM USERS WHERE USERNAME = ?");
 			prepStatement.setString(1, userName);
-			System.out.println("Querying DB: " + prepStatement.toString());
 			ResultSet result = prepStatement.executeQuery();
 			while (result.next()) {
 				pubKeyString = result.getString("mod");
@@ -144,7 +199,6 @@ public class AuthenticationUtils {
 		try {
 			PreparedStatement prepStatement = connection.prepareStatement("SELECT priKey FROM USERS WHERE USERNAME = ?");
 			prepStatement.setString(1, userName);
-			System.out.println("Querying DB: " + prepStatement.toString());
 			ResultSet result = prepStatement.executeQuery();
 			while (result.next()) {
 				priKeyString = result.getString("priKey");

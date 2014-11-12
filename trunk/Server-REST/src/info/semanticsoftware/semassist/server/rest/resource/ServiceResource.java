@@ -3,7 +3,7 @@ Semantic Assistants -- http://www.semanticsoftware.info/semantic-assistants
 
 This file is part of the Semantic Assistants architecture.
 
-Copyright (C) 2013, 2014 Semantic Software Lab, http://www.semanticsoftware.info
+Copyright (C) 2014 Semantic Software Lab, http://www.semanticsoftware.info
 Rene Witte
 Bahar Sateli
 
@@ -70,16 +70,17 @@ public class ServiceResource extends ServerResource {
 		accepts = (accepts == null) ? "xml" : accepts;
 		System.out.println("Request Accepts: " + accepts);
 
-		switch (Constants.MIME_TYPES.valueOf(accepts.toUpperCase())) {
-		case JSON:
+		switch (Constants.MIME_TYPES.valueOf(accepts.toUpperCase().replace("/", ""))) {
+		case JSON:{
 			String json = new ServiceModel().getJSON(serviceName);
 			representation = new StringRepresentation(json,
 					MediaType.APPLICATION_JSON);
 			break;
-
+		}
 		case XML:
 		case APPXHTML:
 		case APPXML:
+		case TEXTXML:{
 			String xml = new ServiceModel().getXML(serviceName);
 			if (xml == null) {
 				setStatus(Status.CLIENT_ERROR_NOT_FOUND);
@@ -88,6 +89,7 @@ public class ServiceResource extends ServerResource {
 			representation = new StringRepresentation(xml,
 					MediaType.APPLICATION_XML);
 			break;
+			}
 		case TEXT:
 			// TODO send a plain text representation
 			break;
@@ -108,6 +110,7 @@ public class ServiceResource extends ServerResource {
 	 * */
 	@Post
 	public StringRepresentation invoke(final Representation representation) {
+		System.out.println(representation == null);
 		try {
 			System.out.println("Request Content-Length size: "
 					+ representation.getSize() + " bytes.");
