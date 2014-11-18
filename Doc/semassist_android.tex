@@ -24,14 +24,14 @@ In the following sections, we describe the \sa App features and provide a guide 
 \section{Features}
 The user interface shown in Figure~\ref{fig:android_main} is the \sa main activity (user interface). This means that once the app is installed on the device, this is the main entry to the application. It allows users to connect to a specific \sa server and invoke an assistant on the provided text input.
 
-\begin{figure}[htb]
+\begin{figure}
 \centering
 \includegraphics[scale=0.35]{pictures/android_main.jpg}
 \caption{\sa Android App Main Activity}
 \label{fig:android_main}
 \end{figure}
 \subsection{\sa Account}
-Each android-enabled device has at least one built-in account type, i.e., the Google account. Android is designed in such a way that the same account can be registered to a variety of account-based services. For example, the Gmail account that is set up on the Android device is not just used for e-mailing , but for all the Google account-based applications. The same concept applies to the \sa App that uses the \emph{\sa account} type for its applications. Just like another accounts, you first need to sign up for a \sa Account before using the application.
+Each android-enabled device has at least one built-in account type, i.e., the Google account. Android is designed in such a way that the same account can be registered to a variety of account-based services. For example, the Gmail account that is set up on the Android device is not just used for e-mailing , but for all the Google account-based applications, like Picasa. The same concept applies to the \sa App that uses the \emph{\sa account} type for its applications. Just like another accounts, you first need to sign up for a \sa Account before using the application.
 
 Once you have obtained your credentials, on your device browse to \texttt{Settings $\rightarrow$ Accounts and Sync $\rightarrow$ Add Account} and choose the ``\sa'' option from the list. In the provided user interface, type in your \sa accounts credentials and press \texttt{Sign in}. If authenticated successfully, your \sa account will appear in the list of your device accounts.
 
@@ -43,16 +43,16 @@ Once you have obtained your credentials, on your device browse to \texttt{Settin
 \label{sec:android_global_settings}
 Similar to other \sa clients, the \sa App allows users to connect to various arbitrary servers to inquire about their available assistants. On the \sa App main activity, press the \texttt{Global Settings} button. The application settings activity will pop up that allows you to define a new server location or choose one from a list of available servers as shown in Figure~\ref{fig:android_global_settings}.
 
-\begin{figure}[htb]
+\begin{figure}
 \centering
 \includegraphics[scale=0.35]{pictures/android_global_settings.jpg}
 \caption{\sa App Global Settings Activity}
 \label{fig:android_global_settings}
 \end{figure}
 
-In order to add a new server location, click on the \texttt{Add a new server} option and type in the server URL by concatenating the server address, including its protocol and port number, like in Figure~\ref{fig:android_new_server}. In order to choose the newly defined server, choose the \texttt{Select a server} option from the Global Settings activity and select it from the list.
+In order to add a new server location, click on the \texttt{Add a new server} option and type in the server URL including its protocol, as well as the port number, like in Figure~\ref{fig:android_new_server}. In order to choose the newly defined server, choose the \texttt{Select a server} option from the \texttt{Global Settings} activity and select it from the list.
 
-\begin{figure}[htb]
+\begin{figure}[b]
 \centering
 \includegraphics[scale=0.5]{pictures/android_new_server.jpg}
 \caption{Adding a new server to the \sa App settings}
@@ -60,7 +60,7 @@ In order to add a new server location, click on the \texttt{Add a new server} op
 \end{figure}
 
 \subsection{NLP Service Invocation}
-Once the \sa server is selected from the Global Settings activity, users can inquire about its available assistants. From the \sa App main activity, press the \texttt{Available Assistants} button to open the service invocation activity. This activity, as shown in Figure~\ref{fig:android_invoke_main}, presents the list of available assistants and an input text area for the text to be analyzed. By selecting each assistants from the list, the app will provide detailed information of what the assistant does and allows to customize the pipeline execution through providing runtime parameters.
+Once the \sa server is selected from the Global Settings activity, users can inquire about its available assistants. From the \sa App main activity, press the \texttt{Available Assistants} button to open the service invocation activity. This activity, as shown in Figure~\ref{fig:android_invoke_main}, presents the list of available assistants and an input text area for the text to be analyzed. By selecting each assistant from the list, the app will provide detailed information of what the assistant does and allows you to customize the pipeline execution through modifying the runtime parameters.
 
 \begin{figure}[htb]
 \centering
@@ -71,20 +71,33 @@ Once the \sa server is selected from the Global Settings activity, users can inq
 
 Users have three options on how to provide a pipeline with text input:
 \begin{itemize}
-\item{\textbf{Manually typing in the text. }}{Using the device keyboard, type in the text that is to be analyzed.}
-\item{\textbf{Sharing text with the \sa from other apps. }}{The \sa App listens for sharing event in the Android platform. This means that from within applications that provide a sharing mechanism, the selected text can be directly placed into the \sa Apps activity input.}
-\item{\textbf{Sending input to the \sa service. }}{As we will explain more in Section \ref{sec:android_service}, the text input can be sent via a service argument (extra). The difference between this option and the previous bullet is that in the sharing option, the \sa App takes care of the result handling instead of the invoking application. Also in this service invocations, the NLP service to be executed is pre-defined and cannot be changed at a later stage.}
+\item{\textbf{Manually typing in the text. }}{Using the device keyboard, type in the text that is to be analyzed, then invoke the desired assistant from the list.}
+\item{\textbf{Sharing text with the \sa from other apps. }}{The \sa App listens for sharing event in the Android platform. This means that from within applications that provide a sharing mechanism, the selected text can be directly placed into the \sa Apps activity input.
+
+In this option, copy the text you would like to analyze and choose the \texttt{Share} item from the contextual menu of the system. Then select the \texttt{Semantic Assistants} as the recipient of the shared text.}
+\item{\textbf{Sending input to the \sa service. }}{As we will explain more in Section \ref{sec:android_service}, the text input can be sent via a service argument (i.e., an Android \texttt{Extra} object). The difference between this option and the previous bullet is that in the sharing option, the \sa App takes care of the result handling instead of the application that originally requested the service. Also in this service invocation option, the NLP service to be executed is pre-defined (by the requesting app) and cannot be changed at a later stage.}
 \end{itemize}
-Once done with typing, select an assistants from the left-side list and press the \texttt{Invoke} button. Depending on the type of the results, you would either see the annotations in a new activity or the resulting file will be opened in the device browser.
+Once you selected the text for analysis, select an assistants from the left-side list and press the \texttt{Invoke} button to start the service execution. Depending on the type of the results, you would either see the annotations in a new activity or the resulting file will be opened in the device browser.
 
 \section{Installation}
-TBD
+The \sa app can be installed directly on your Android device through the Google Play store\footnote{Google Play Store~\url{https://play.google.com/store}} website. Browse to \url{https://play.google.com/store/apps/details?id=info.semanticsoftware.semassist.android} and press the ``Install'' button to download the app on to your device.
+
+Alternatively, you can download the signed \texttt{.apk} file from our public repository and copy it to your device, e.g. on your SD card. Then open the file in your device's file browser; the system will prompt you to install the app.
 
 \section{\sa App Service}
 \label{sec:android_service}
-As mentioned earlier, the \sa App also plays the role of a system-wide service provider, meaning that other external applications can use the \sa App's functionality. This is done through using Android services, i.e., application components that can perform long-running operations in the background. Each available service in the \sa App has a unique name that should be indicated when the external application invokes the service.
+As mentioned earlier, the \sa App also plays the role of a system-wide service provider, meaning that other external applications can use the \sa App's functionalities in their workflow. This is done through using Android \emph{services}, i.e., application components that can perform long-running operations in the background. Each available service in the \sa App has a unique name that should be indicated when the external application invokes the service.
 
-To better demonstrate this feature, we will illustrate a demo app that uses a \sa service. The demo in example, called iForgotWho, is an app that helps users to find potential ``contacts'' from a given text and upon user accept, automatically adds them to the device contact book. However, the iForgotWho app does not find the contacts by itself, rather it uses the \sa App's \texttt{person\_extractor} service. For this, the iForgotWho needs to (1) invoke the service using its complete identifier (available in the \sa App manifest file), (2) send along the text to be analyzed, and (3) indicate whether the \sa App should present the results or iForgotWho takes care of it. Once all the data is provided to the \sa App, the NLP service is executed and the results are passed back to iForgotWho app. Then, iForgotWho presented the list of all the person entities found in the text to the user, whom which ultimately decide whether they should be added to the device contact book. Figure~\ref{fig:android_service} illustrates this sequence.
+To better demonstrate this feature, we will illustrate a demo app that uses a \sa service. The demo in example, called iForgotWho, is an app that helps users to find potential \emph{contacts} from a given text and upon the user's acceptance, automatically adds them to the device's contact book. 
+
+However, the iForgotWho app does not find the contacts by itself, rather it uses the \sa App's \texttt{person\_extractor} service. For this, the iForgotWho needs to:
+\begin{enumerate}
+\item invoke the \texttt{person\_extractor} service using its complete identifier (available in the \sa App manifest file);
+\item send along the text to be analyzed; and
+\item indicate whether the \sa App should present the results or the application itself will tak care of it, by initializing the \texttt{SILENT\_MODE} argument when making the service call.
+\end{enumerate}
+
+Once all the data is provided to the \sa App, the NLP service is executed and the results are passed back to iForgotWho app. Then, iForgotWho presents the list of all the person entities found in the text to the user, whom which ultimately decides whether they should be added to the contact book. 
 
 \section{Development Notes}
 In this section, we provide technical notes about the \sa App and how external Android application developers can integrate NLP capabilities in their apps using the \sa services.
