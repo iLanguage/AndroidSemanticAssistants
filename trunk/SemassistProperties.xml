@@ -33,6 +33,9 @@
     <property name="gate-home"                value="${durmtools}/GATE/gate" />
     <property name="gate.jar"                 value="${gate-home}/bin/gate.jar" />
     <property name="jdk.home"                 value="${durmtools}/jdk" />
+
+    <!-- Used by Android clients -->
+    <property name="sdk.dir"                  value="${durmtools}/android-sdk-linux" />
      
     <!-- Used by Open Office Writer Plug-In-->
     <property name="office.home.dir"          value="${durmtools}/OpenOffice"/>
