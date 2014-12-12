@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+ Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+ 
+ Copyright (C) 2014 Semantic Software Lab, http://www.semanticsoftware.info
+ Rene Witte
+ Bahar Sateli
+ 
+ This file is part of the Semantic Assistants architecture, and is free
+ software, licensed under the GNU Lesser General Public License as published 
+ by the Free Software Foundation, either version 3 of the License, or 
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Lesser General Public License for more details.
+ 
+ You should have received a copy of the GNU Lesser General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+    <TextView 
+    android:layout_width="fill_parent"
+    android:layout_height="35dip"
+    android:paddingTop="8dip"
+    android:paddingLeft="10dip" 
+    android:text="@string/lblPrefConnectivity"
+    android:textStyle="bold"
+    android:background="#5a6368"/>
+    
+    <TextView
+		android:id="@+id/lblPrefServer"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/lblPrefServer"
+		android:paddingTop="10dip"
+		android:paddingLeft="20dip"
+		android:clickable="true"
+		android:onClick="selectServer"
+		style="@style/normalPrefText"/>
+
+	<TextView
+		android:id="@+id/lblPrefServerSumm"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingLeft="20dip"
+		android:paddingBottom="10dip"
+		android:text="@string/lblPrefServerSumm" />
+	
+	    <TextView
+		android:id="@+id/lblNewServer"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/lblNewServer"
+		android:paddingLeft="20dip"
+		android:clickable="true"
+		android:onClick="addServer"
+		style="@style/normalPrefText"/>
+
+	<TextView
+		android:id="@+id/lblNewServerSumm"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingLeft="20dip"
+		android:paddingBottom="10dip"
+		android:text="@string/lblNewServerSumm" />
+    
+    <TextView 
+    android:layout_width="fill_parent"
+    android:layout_height="35dip"
+    android:paddingTop="10dip"
+    android:paddingLeft="10dip" 
+    android:text="@string/lblUserSettings"
+    android:textStyle="bold"
+    android:background="#5a6368"/>
+    
+    <TextView
+		android:id="@+id/lblUsername"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/lblUsername"
+		android:paddingTop="10dip"
+		android:paddingLeft="20dip"
+		style="@style/normalPrefText"/>
+
+	<TextView
+		android:id="@+id/txtUsername"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingLeft="20dip"
+		android:text="@string/txtUsername" />
+	
+		<TextView
+		android:id="@+id/lblAccountType"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/lblAccountType"
+		android:paddingTop="10dip"
+		android:paddingLeft="20dip"
+		style="@style/normalPrefText"/>
+
+	<TextView
+		android:id="@+id/txtAccountType"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingLeft="20dip"
+		android:text="@string/txtAccountType" />
+	
+	
+	<TextView
+		android:id="@+id/lblRequestNum"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/lblRequestNum"
+		android:paddingTop="10dip"
+		android:paddingLeft="20dip"
+		style="@style/normalPrefText"/>
+
+	<TextView
+		android:id="@+id/txtRequestNum"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingLeft="20dip"
+		android:text="@string/txtRequestNum" />
+
+</LinearLayout>
+<!-- 
+you could also increase the clickable area around the textviews
+http://stackoverflow.com/questions/2949407/can-i-increase-a-buttons-onclick-area-programmatically
+ -->
