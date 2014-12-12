@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- 
+ Semantic Assistants - http://www.semanticsoftware.info/semantic-assistants
+ 
+ Copyright (C) 2014 Semantic Software Lab, http://www.semanticsoftware.info
+ Rene Witte
+ Bahar Sateli
+ 
+ This file is part of the Semantic Assistants architecture, and is free
+ software, licensed under the GNU Lesser General Public License as published 
+ by the Free Software Foundation, either version 3 of the License, or 
+ (at your option) any later version.
+ 
+ This program is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ GNU Lesser General Public License for more details.
+ 
+ You should have received a copy of the GNU Lesser General Public License
+ along with this program.  If not, see <http://www.gnu.org/licenses/>.
+-->
+<resources>
+	<string name="app_name">Semantic Assistants</string>
+	<string name="btnInvokeLabel">Invoke</string>
+	<string name="btnClearLabel">Clear</string>
+	<string name="lblServiceList">Available assistants:</string>
+	<string name="lblServiceName">Service Name: </string>
+	<string name="lblServiceDesc">Service Description: </string>
+	<string name="lblServiceParams">Service Parameters: </string>
+	<string name="lblInput">Text input:</string>
+	<string name="txtInputSample">Type your content here&#8230;</string>
+	<string name="strSlogan">Semantics for the Masses</string>
+
+	<string name="lblContent">Content</string>
+	<string name="lblType">Type</string>
+	<string name="lblStart">Start</string>
+	<string name="lblEnd">End</string>
+	<string name="lblFeats">Features</string>
+
+	<string name="keystorePassword">SemAssist</string>
+
+	<!-- Accessibility -->
+	<string name="strLogo">Semantic Assistants Logo</string>
+	<string name="strAssistBtn">Available Assistants Button</string>
+	<string name="strSettBtn">Global Settings Button</string>
+
+	<!-- Preferences -->
+	<string name="lblPrefConnectivity">Server Settings</string>
+	<string name="lblPrefServer">Select a server</string>
+	<string name="lblServerDialog">Semantic Assistants Server</string>
+	<string name="lblPrefServerSumm">Choose a server to find the available assistants</string>
+	<string name="selected_server_option">Selected Server</string>
+	
+	<string name="lblNewServer">Add a new server</string>
+	<string name="lblNewServerSumm">Define a Semantic Assistants server</string>
+	<string name="lblAddServerDialog">Type in the server address</string>
+	<string name="lblAddButton">Add</string>
+	<string name="lblCancelButton">Cancel</string>
+	<string name="lblHost">Hostname</string>
+	<string name="lblPort">Port No.</string>
+
+	<string name="lblAccountUser">Username</string>
+	<string name="lblAccountPass">Password</string>
+	<string name="lblSignIn">Sign in</string>
+	<string name="lblCancel">Cancel</string>
+	<string name="lblHostHint">http://server.example.com</string>
+	<string name="lblPortHint">1234</string>
+
+	<string name="lblUserSettings">User Settings</string>
+	<string name="lblUsername">Username</string>
+	<string name="txtUsername">No user found on device</string>
+
+	<string name="lblAccountType">Account Type</string>
+	<string name="txtAccountType">No account type found on device</string>
+	
+	<string name="lblRequestNum">Number of Remaining Allowed Requests</string>
+	<string name="txtRequestNum">0</string>
+
+	<!-- Dynamic views -->
+	<string name="btnAllServices">&lt; All Services</string>
+	<string name="lblRTParams">No runtime parameters.</string>
+	<string name="account_name">Semantic Assistants</string>
+	<string name="authenticationSuccess">Successfully authenticated</string>
+	<string name="authenticationFail">Authentication failed. Username or password is incorrect.</string>
+	
+	<!-- Toast messages -->
+	<string name="txtServerOffline">No assistants found! The server may be offline.</string>
+	
+</resources>

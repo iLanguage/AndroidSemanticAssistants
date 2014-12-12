@@ -1,6 +1,0 @@
-<?xml version="1.0" encoding="utf-8"?>
-<!-- This is to let Android know that our sync provider handles Contacts
-	for the Semantic Assistants Account type-->
-<sync-adapter xmlns:android="http://schemas.android.com/apk/res/android"
-    android:contentAuthority="com.android.contacts"
-    android:accountType="info.semanticsoftware.semassist.account"/>
