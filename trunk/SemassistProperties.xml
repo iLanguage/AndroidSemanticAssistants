@@ -36,6 +36,8 @@
 
     <!-- Used by Android clients -->
     <property name="sdk.dir"                  value="${durmtools}/android-sdk-linux" />
+    <property name="android.lib.dir"              value="${semassist.home}/Clients/Android/SemanticAssistantsLib" />
+
      
     <!-- Used by Open Office Writer Plug-In-->
     <property name="office.home.dir"          value="${durmtools}/OpenOffice"/>

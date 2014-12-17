@@ -106,4 +106,17 @@
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
 
+    <!-- Findbugs analysis -->
+    <target name="findbugs">
+      <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" 
+            classpath="${findbugs.classpath}" />
+      <findbugs home="${findbugs.home}"      
+            output="xml:withMessages"
+            outputFile="findbugsXml.SA.xml" >
+        <auxClasspath path="${ant.jar}:${csal.home}/dist/${csal.name}:${android.lib.dir}/bin/classes.jar:${android.lib.dir}/libs:${sdk.dir}/tools/lib:${sdk.dir}/platforms/android-19:${jdk.home}/jre/lib" />
+        <sourcePath path="${basedir}/src" />
+        <class location="${basedir}/bin/classes" />
+      </findbugs>
+    </target>
+
 </project>
