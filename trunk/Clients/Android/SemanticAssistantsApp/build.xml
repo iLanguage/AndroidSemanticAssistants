@@ -112,7 +112,8 @@
             classpath="${findbugs.classpath}" />
       <findbugs home="${findbugs.home}"      
             output="xml:withMessages"
-            outputFile="findbugsXml.SA.xml" >
+            outputFile="findbugsXml.SA.xml" 
+	    excludeFilter="sa-android-findbugs-exclude.xml">
         <auxClasspath path="${ant.jar}:${csal.home}/dist/${csal.name}:${android.lib.dir}/bin/classes.jar:${android.lib.dir}/libs:${sdk.dir}/tools/lib:${sdk.dir}/platforms/android-19:${jdk.home}/jre/lib" />
         <sourcePath path="${basedir}/src" />
         <class location="${basedir}/bin/classes" />
