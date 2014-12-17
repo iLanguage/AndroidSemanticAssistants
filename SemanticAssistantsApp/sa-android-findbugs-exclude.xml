@@ -1,0 +1,5 @@
+<FindBugsFilter>
+<Match>
+ <Class name="~info\.semanticsoftware\.semassist\.android\.activity\.R.*" />
+</Match>
+</FindBugsFilter>
