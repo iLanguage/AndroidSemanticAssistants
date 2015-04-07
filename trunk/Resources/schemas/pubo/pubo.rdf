@@ -16,7 +16,7 @@
   xmlns:sdo="http://salt.semanticauthoring.org/ontologies/sdo#"
   xmlns:swc="http://data.semanticweb.org/ns/swc/ontology#">
 
-<rdf:Property rdf:about="containsNE"
+<rdf:Property rdf:about="containsNE">
     <rdfs:label xml:lang="en">containsNE</rdfs:label>
     <rdfs:comment>The relation between a sentence and a (linked) named entity.</rdfs:comment>
     <rdfs:domain rdf:resource="sro:RhetoricalElement"/>
