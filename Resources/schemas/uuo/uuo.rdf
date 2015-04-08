@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE rdf:RDF [
+<!ENTITY xsd 'http://www.w3.org/2001/XMLSchema#'>
+<!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+<!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+]>
+
+<rdf:RDF
+  xmlns     = "http://lod.semanticsoftware.info/uuo/uuo#"
+  xmlns:uuo = "http://lod.semanticsoftware.info/uuo/uuo#"
+  xml:base  = "http://lod.semanticsoftware.info/uuo/uuo#"
+  xmlns:rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs= "http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:xsd = "http://www.w3.org/2001/XMLSchema#"
+  xmlns:foaf = "http://xmlns.com/foaf/spec/">
+
+    <rdfs:Class rdf:about="User">
+        <rdfs:comment xml:lang="en">Users of the system.</rdfs:comment>
+        <rdfs:label xml:lang="en">User</rdfs:label>
+        <rdfs:subClassOf rdf:resource="foaf:Person"/>
+    </rdfs:Class>
+
+</rdf:RDF>
