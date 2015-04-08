@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE rdf:RDF [
+<!ENTITY xsd 'http://www.w3.org/2001/XMLSchema#'>
+<!ENTITY rdf 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+<!ENTITY rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+]>
+<rdf:RDF
+xmlns     = "http://lod.semanticsoftware.info/into/into#"
+xml:base  = "http://lod.semanticsoftware.info/into/into#"
+xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+<!-- preferenceEndDate for UserPreferences -->
+<rdf:Property rdf:about="preferenceEndDate">
+     <rdfs:label xml:lang="en">preferenceEndDate</rdfs:label>
+	 <rdfs:comment xml:lang="en">end date for a user preference</rdfs:comment>
+	 <rdfs:domain rdf:resource="http://intelleo.eu/ontologies/user-model/ns/UserPreferences"/>
+     <rdfs:range rdf:resource='http://www.w3.org/TR/xmlschema-2/#date'/>
+</rdf:Property>
+
+<!-- ProjectPreferences, subClassOf http://intelleo.eu/ontologies/user-model/ns/UserPreferences -->
+<rdfs:Class rdf:about="ProjectPreferences">
+	<rdfs:label xml:lang="en">ProjectPreferences</rdfs:label>
+	<rdfs:comment xml:lang="en">a user's project specific topic preferences</rdfs:comment>
+    <rdfs:subClassOf rdf:resource="http://intelleo.eu/ontologies/user-model/ns/UserPreferences"/>
+</rdfs:Class>
+
+<!-- project specific topic preferences defined as resources-->
+<rdf:Property rdf:about="prefTopic">
+	<rdfs:label xml:lang="en">prefTopic</rdfs:label>
+	<rdfs:comment xml:lang="en">project specific topic preferences defined as resources</rdfs:comment>
+     <rdfs:domain rdf:resource="ProjectPreferences"/>
+     <rdfs:range rdf:resource="http://www.w3.org/TR/rdf-schema/#ch_resource"/>
+</rdf:Property>
+
+
+<!-- project specific topic preferences defined as string literals -->
+<rdf:Property rdf:about="prefKeyword">
+	<rdfs:label xml:lang="en">prefKeyword</rdfs:label>
+	<rdfs:comment xml:lang="en">project specific topic preferences defined as string literals</rdfs:comment>
+     <rdfs:domain rdf:resource="ProjectPreferences"/>
+     <rdfs:range rdf:resource="http://www.w3.org/TR/xmlschema-2/#string"/>
+</rdf:Property>
+
+<!-- defines a relation between ProjectPreferences and a project -->
+<rdf:Property rdf:about="validForProject">
+     <rdfs:label xml:lang="en">validForProject</rdfs:label>
+	<rdfs:comment xml:lang="en">defines a relation between ProjectPreferences and a project</rdfs:comment>
+     <rdfs:domain rdf:resource="ProjectPreferences"/>
+     <rdfs:range rdf:resource="http://xmlns.com/foaf/spec/#term_Project"/>
+</rdf:Property>
+
+</rdf:RDF> 
