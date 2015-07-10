@@ -60,14 +60,16 @@
   
   <!-- PMD analysis -->
   <target name="pmd">
-    <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask" classpathref="pmd.classpath"/>
-    <pmd>
-      <ruleset>rulesets/favorites.xml</ruleset>
-      <formatter type="xml" toFile="pmd_report.xml"/>
-        <fileset dir=".">
-            <include name="**/*.java"/>
-	    <exclude name="Resources/" />
-        </fileset>
+    <taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
+      <classpath refid="pmd.classpath" />
+    </taskdef>
+    <pmd shortFilenames="true">
+      <sourceLanguage name="java" version="1.7"/>
+      <ruleset>java-basic,java-imports,java-unusedcode,java-design,java-strings,java-optimizations,java-finalizers,java-unnecessary</ruleset>
+      <formatter type="xml" toFile="pmd_report.xml">
+	 <param name="linkPrefix" value="http://pmd.sourceforge.net/xref/"/>
+      </formatter>
+      <fileset dir="." includes="**/*.java" excludes="Resources/" />
     </pmd>
   </target>
 

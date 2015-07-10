@@ -27,6 +27,7 @@
     <property name="csal.name"                value="CSAL.jar" />
     <property name="javadoc.home"             value="${semassist.home}/Javadoc" />
 
+
     <!-- Machine dependent properties. Need to be modified. -->
     <property name="durmtools"                value="/usr/local/durmtools" />
     <property name="jaxws.home"               value="${durmtools}/jaxws-ri" />
