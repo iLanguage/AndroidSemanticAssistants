@@ -49,8 +49,8 @@
 
   <!-- Checkstyle analysis -->
   <target name="checkstyle" description="Source code analysis using checkstyle">
-    <taskdef resource="checkstyletask.properties"
-             classpath="${checkstyle.classpath}"/>
+    <taskdef resource="com/puppycrawl/tools/checkstyle/ant/checkstyle-ant-task.properties"
+         classpath="${checkstyle.classpath}"/>    
     <checkstyle config="${checkstyle.config}"
 		failOnViolation="false" >
       <formatter type="xml" tofile="${checkstyle.report}"/>
