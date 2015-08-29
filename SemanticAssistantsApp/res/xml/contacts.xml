@@ -24,7 +24,7 @@
 
     <ContactsDataKind
         android:mimeType="vnd.android.cursor.item/vnd.info.semanticsoftware.semassist.contact"
-        android:icon="@drawable/icon"
+        android:icon="@drawable/ic_launcher"
         android:summaryColumn="data2"
         android:detailColumn="data3"
         android:detailSocialSummary="true" />

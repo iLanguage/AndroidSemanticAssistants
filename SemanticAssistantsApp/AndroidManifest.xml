@@ -54,7 +54,7 @@
 
 	<application
 		android:name="info.semanticsoftware.semassist.android.application.SemAssistApp"
-		android:icon="@drawable/sa_logo"
+		android:icon="@drawable/ic_launcher"
 		android:label="@string/app_name"
 		>
 		
