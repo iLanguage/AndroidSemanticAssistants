@@ -21,6 +21,8 @@
 -->
 <resources>
 	<string name="app_name">Semantic Assistants</string>
+	<string name="btnAvailableAssistantsLabel">Assistants</string>
+	<string name="btnGlobalSettingsLabel">Settings</string>
 	<string name="btnInvokeLabel">Invoke</string>
 	<string name="btnClearLabel">Clear</string>
 	<string name="lblServiceList">Available assistants:</string>
@@ -37,6 +39,9 @@
 	<string name="lblEnd">End</string>
 	<string name="lblFeats">Features</string>
 
+	<string name="lblAvailableAssistants">Available Assistants</string>
+	<string name="lblGlobalSettings">Global Settings</string>
+	
 	<string name="keystorePassword">SemAssist</string>
 
 	<!-- Accessibility -->

@@ -48,29 +48,28 @@
         android:layout_weight="0.79" />
 
 	<LinearLayout
-	    xmlns:android="http://schemas.android.com/apk/res/android"
 	    android:id="@+id/button_area"
 	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:layout_gravity="center_horizontal"
 	    android:orientation="horizontal" >
 
-	    <ImageButton
+	    <Button
 	        android:id="@+id/av_assist"
 	        android:layout_width="wrap_content"
 	        android:layout_height="50dip"
 	        android:onClick="onAssistantsClick"
 	        android:layout_gravity="center_horizontal"
 	        android:contentDescription="@string/strAssistBtn"
-	        android:src="@drawable/av_assist" />
+	        android:text="@string/btnAvailableAssistantsLabel"/>
 	
-	    <ImageButton
+	    <Button
 	        android:id="@+id/gl_sett"
 	        android:layout_width="wrap_content"
 	        android:layout_height="50dip"
 	        android:onClick="onSettingsClick"
 	        android:layout_gravity="center_horizontal"
 	        android:contentDescription="@string/strSettBtn"
-	        android:src="@drawable/gl_sett" />
+	        android:text="@string/btnGlobalSettingsLabel"/>
 	</LinearLayout>
 </LinearLayout>
