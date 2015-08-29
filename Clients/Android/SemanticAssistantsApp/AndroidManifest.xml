@@ -85,12 +85,12 @@
 		
 		<activity
 			android:name=".PreferencesActivity"
-			android:label="@string/app_name" >
+			android:label="@string/lblGlobalSettings" >
 		</activity>
 
 		<activity
 			android:name=".GlobalSettingsActivity"
-			android:label="@string/app_name" >
+			android:label="@string/lblGlobalSettings" >
 		</activity>
 
 		<service
