@@ -24,6 +24,7 @@ import info.semanticsoftware.semassist.android.application.SemAssistApp;
 import info.semanticsoftware.semassist.android.encryption.CustomSSLSocketFactory;
 import info.semanticsoftware.semassist.android.parser.ServiceParser;
 import info.semanticsoftware.semassist.android.restlet.RequestRepresentation;
+import info.semanticsoftware.semassist.android.utils.Constants;
 import info.semanticsoftware.semassist.csal.ClientUtils;
 import info.semanticsoftware.semassist.csal.XMLElementModel;
 import info.semanticsoftware.semassist.server.GateRuntimeParameter;
@@ -177,7 +178,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 		 */
 		protected String doInBackground(String... urls) {
 			try {
-				System.out.println(urls[0]);
+				Log.d(Constants.TAG, urls[0]);
 				final String url = urls[0] + "/services";
 				
 				if(urls[0].indexOf("https") < 0){
@@ -226,7 +227,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 					String string = null;
 					String out = "";
 					while ((string = bufferedreader.readLine()) != null) {
-						System.out.println("Received " + string);
+						Log.d(Constants.TAG, "Received " + string);
 						out += string;
 					}
 
@@ -485,7 +486,7 @@ public class SemanticAssistantsActivity extends ListActivity{
 					StringWriter writer = new StringWriter();
 					response.write(writer);
 					responseString = writer.toString();
-					System.out.println(responseString);
+					Log.d(Constants.TAG, responseString);
 
 					// open the results activity
 					Intent intent = new Intent(getBaseContext(), SemanticResultsActivity.class);

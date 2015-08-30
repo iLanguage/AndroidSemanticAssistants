@@ -172,7 +172,7 @@ public class AuthenticationActivity extends AccountAuthenticatorActivity{
 
 	private String authenicate(String username, String password) {
 		String uri = serverURL + "/user";
-		System.out.println(uri);
+		Log.d(Constants.TAG, uri);
 		String request = "<authenticate><username>" + username + "</username><password>" + password + "</password></authenticate>";
 		Representation representation = new StringRepresentation(request,MediaType.APPLICATION_XML);
 		String serverResponse = null;

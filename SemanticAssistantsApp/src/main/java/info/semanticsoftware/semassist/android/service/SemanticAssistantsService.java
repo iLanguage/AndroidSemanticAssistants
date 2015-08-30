@@ -24,6 +24,7 @@ import info.semanticsoftware.semassist.android.activity.GlobalSettingsActivity;
 import info.semanticsoftware.semassist.android.activity.SemanticResultsActivity;
 import info.semanticsoftware.semassist.android.intents.ServiceIntent;
 import info.semanticsoftware.semassist.android.intents.ServiceIntentFactory;
+import info.semanticsoftware.semassist.android.utils.Constants;
 import info.semanticsoftware.semassist.csal.ClientUtils;
 import info.semanticsoftware.semassist.csal.XMLElementModel;
 
@@ -59,7 +60,7 @@ public class SemanticAssistantsService extends IntentService{
 		intent.setAction(null);
 		SharedPreferences prefs = this.getSharedPreferences("info.semanticsoftware.semassist.android.activity_preferences", MODE_MULTI_PROCESS);
 		String serverURL = prefs.getString("selected_server_option", "-1");
-		System.out.println("From prefs: " + serverURL);
+		Log.d(Constants.TAG, "From prefs: " + serverURL);
 
 		if(serverURL.equals("-1")){
 			Log.i(TAG, "Not in prefs. Reading from XML");
@@ -76,11 +77,11 @@ public class SemanticAssistantsService extends IntentService{
 			//FIXME add RTP handling
 			instance.setRTParams(null);
 			String result = instance.execute();
-			//System.out.println(result);
+			//Log.d(Constants.TAG, result);
 
 			boolean silent_mode = Boolean.parseBoolean(intent.getExtras().getString("SILENT_MODE"));
 			if(silent_mode){
-				System.out.println(silent_mode);
+				Log.d(Constants.TAG,"silent_mode "+ silent_mode);
 				Intent broadcast = new Intent("info.semanticsoftware.semassist.android.BROADCAST");
 				broadcast.putExtra("serverResponse", result);
 				sendOrderedBroadcast(broadcast, null);
@@ -91,7 +92,7 @@ public class SemanticAssistantsService extends IntentService{
 				startActivity(resultsIntent);
 			}
 		} catch (Exception e) {
-			System.out.println(e.getMessage());
+			Log.d(Constants.TAG, e.getMessage());
 		}
 	}
 }

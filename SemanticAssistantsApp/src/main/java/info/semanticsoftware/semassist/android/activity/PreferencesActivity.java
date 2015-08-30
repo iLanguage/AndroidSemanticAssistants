@@ -21,6 +21,7 @@
 package info.semanticsoftware.semassist.android.activity;
 
 import info.semanticsoftware.semassist.android.application.SemAssistApp;
+import info.semanticsoftware.semassist.android.utils.Constants;
 import info.semanticsoftware.semassist.csal.ClientUtils;
 import info.semanticsoftware.semassist.csal.XMLElementModel;
 
@@ -57,6 +58,7 @@ import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.util.Xml;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -166,7 +168,7 @@ public class PreferencesActivity extends Activity{
 				// Check if such client exists in the XML file or if there are more than one target
 				NodeList clientElement = doc.getElementsByTagName(client);
 				if(clientElement.getLength() == 0 || clientElement.getLength() > 1){
-					System.out.println("WARNING: Cannot resolve client: \"" + client + "\"");
+					Log.w(Constants.TAG, " Cannot resolve client: \"" + client + "\"");
 				}else{
 					Element clientTag = (Element) clientElement.item(0);
 					NodeList children = clientTag.getChildNodes();
@@ -185,7 +187,7 @@ public class PreferencesActivity extends Activity{
 
 					// if there is no such element in the XML file, results are empty
 					if (result.isEmpty()) {
-						System.out.println("WARNING: No \"" + element + "\" element found for client \"" + client + "\"");
+						Log.w(Constants.TAG, " No \"" + element + "\" element found for client \"" + client + "\"");
 					}
 				}
 			} catch (ParserConfigurationException e) {
@@ -255,7 +257,7 @@ public class PreferencesActivity extends Activity{
 			BufferedReader br = new BufferedReader(new InputStreamReader(in));
 			String strLine;
 			while ((strLine = br.readLine()) != null){
-				System.out.println (strLine);
+				Log.d(Constants.TAG, strLine);
 			}
 			in.close();
 		} catch (FileNotFoundException e) {

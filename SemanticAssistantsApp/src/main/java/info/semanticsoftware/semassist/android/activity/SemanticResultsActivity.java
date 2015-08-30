@@ -24,6 +24,7 @@ import info.semanticsoftware.semassist.android.application.SemAssistApp;
 import info.semanticsoftware.semassist.android.business.AnnotationInstance;
 import info.semanticsoftware.semassist.android.business.ServerResponseHandler;
 import info.semanticsoftware.semassist.android.encryption.CustomSSLSocketFactory;
+import info.semanticsoftware.semassist.android.utils.Constants;
 import info.semanticsoftware.semassist.csal.ClientUtils;
 import info.semanticsoftware.semassist.csal.result.SemanticServiceResult;
 
@@ -70,6 +71,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -142,7 +144,7 @@ public class SemanticResultsActivity extends Activity {
 				}else if(current.mResultType.equals(SemanticServiceResult.FILE)){
 					fileName = current.mFileUrl;
 					fileName = fileName.substring(fileName.lastIndexOf("/")+1);
-					System.out.println(fileName);
+					Log.d(Constants.TAG, fileName);
 					getFileContentTask task = new getFileContentTask();
 					task.execute(SemanticAssistantsActivity.serverURL);
 				}
@@ -158,9 +160,9 @@ public class SemanticResultsActivity extends Activity {
 				editor.putString("reqNum", Integer.toString(intReqNum));
 				boolean result = editor.commit();
 				if(result){
-					System.out.println("Successfully reduced the reqNum");
+					Log.d(Constants.TAG, "Successfully reduced the reqNum");
 				}else{
-					System.out.println("Cannot reduced the reqNum");
+					Log.d(Constants.TAG, "Cannot reduced the reqNum");
 				}
 			}catch(Exception e){
 				System.err.println(e.getMessage());
@@ -187,7 +189,7 @@ public class SemanticResultsActivity extends Activity {
 					StringWriter writer = new StringWriter();
 					resource.get(MediaType.TEXT_XML).write(writer);
 					fileContent = writer.toString();
-					System.out.println(fileContent);
+					Log.d(Constants.TAG, fileContent);
 					return writer.toString();
 				}else{
 					HostnameVerifier hostnameVerifier = org.apache.http.conn.ssl.SSLSocketFactory.ALLOW_ALL_HOSTNAME_VERIFIER;

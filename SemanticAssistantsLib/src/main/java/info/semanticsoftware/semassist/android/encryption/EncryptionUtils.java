@@ -21,6 +21,7 @@
 package info.semanticsoftware.semassist.android.encryption;
 
 import info.semanticsoftware.semassist.android.prefs.PrefUtils;
+import info.semanticsoftware.semassist.android.utils.Constants;
 
 import java.io.UnsupportedEncodingException;
 import java.security.InvalidKeyException;
@@ -37,6 +38,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 import android.app.Application;
 import android.util.Base64;
+import android.util.Log;
 
 public class EncryptionUtils {
 
@@ -123,7 +125,7 @@ public class EncryptionUtils {
 			cipher.init(Cipher.ENCRYPT_MODE,pubKey);
 			byte[] cipherDataBytes = cipher.doFinal(sessionKey);
 			encryptedSessionKeyString = Base64.encodeToString(cipherDataBytes, Base64.DEFAULT);
-			System.out.println("dbg: " + encryptedSessionKeyString);
+			Log.d(Constants.TAG, "dbg: " + encryptedSessionKeyString);
 			return encryptedSessionKeyString;
 		} catch (NoSuchPaddingException e) {
 			e.printStackTrace();
@@ -142,7 +144,7 @@ public class EncryptionUtils {
 	public String encryptTest() {
 		PrefUtils prefUtils = PrefUtils.getInstance(application);
 		PublicKey pubKey = prefUtils.getPublicKey();
-		System.out.println("PublicKey remade: " + pubKey);
+		Log.d(Constants.TAG, "PublicKey remade: " + pubKey);
 		try {
 
 			Cipher cipher = Cipher.getInstance("RSA/ECB/PKCS1Padding");

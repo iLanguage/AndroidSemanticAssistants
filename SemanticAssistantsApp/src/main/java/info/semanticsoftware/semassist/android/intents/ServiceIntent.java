@@ -20,10 +20,13 @@
 */
 package info.semanticsoftware.semassist.android.intents;
 
+import android.util.Log;
+
 import info.semanticsoftware.semassist.android.activity.R;
 import info.semanticsoftware.semassist.android.application.SemAssistApp;
 import info.semanticsoftware.semassist.android.encryption.CustomSSLSocketFactory;
 import info.semanticsoftware.semassist.android.restlet.RequestRepresentation;
+import info.semanticsoftware.semassist.android.utils.Constants;
 
 import java.io.BufferedReader;
 import java.io.InputStream;
@@ -83,9 +86,9 @@ public abstract class ServiceIntent {
 	}
 
 	public String execute(){
-		System.out.println("factory execute for " + pipelineName + " on server " + candidServerURL + " params " + RTParams + " input " + inputString );
+		Log.d(Constants.TAG, "factory execute for " + pipelineName + " on server " + candidServerURL + " params " + RTParams + " input " + inputString);
 		if(candidServerURL.indexOf("https") < 0){
-			System.out.println("non secure post to " + candidServerURL);
+			Log.d(Constants.TAG, "non secure post to " + candidServerURL);
 			RequestRepresentation request = new RequestRepresentation(SemAssistApp.getInstance(), pipelineName, RTParams, inputString);
 			Representation representation = new StringRepresentation(request.getXML(),MediaType.APPLICATION_XML);
 			Representation response = new ClientResource(candidServerURL).post(representation);
@@ -97,7 +100,7 @@ public abstract class ServiceIntent {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			System.out.println("$$$ " + responseString);
+			Log.d(Constants.TAG, "$$$ " + responseString);
 			return responseString;
 		}else{
 			try{

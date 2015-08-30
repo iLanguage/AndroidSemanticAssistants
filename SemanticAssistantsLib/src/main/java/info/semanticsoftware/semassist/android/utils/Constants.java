@@ -33,4 +33,5 @@ public class Constants {
 
 	/** User authentication failure key. */
 	public final static String AUTHENTICATION_FAIL = "AUTHENTICATION_FAIL";
+	public final static String TAG = "SemanticAssistants";
 }
