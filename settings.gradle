@@ -1,0 +1,2 @@
+include ':SemanticAssistantsLib'
+include ':SemanticAssistantsApp'

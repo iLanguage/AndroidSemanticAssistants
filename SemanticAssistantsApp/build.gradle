@@ -1,0 +1,24 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 18
+    buildToolsVersion "23.0.0"
+
+    defaultConfig {
+        applicationId "info.semanticsoftware.semassist.android.activity"
+        minSdkVersion 11
+        targetSdkVersion 18
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}
+
+dependencies {
+    compile project(':SemanticAssistantsLib')
+    compile files('libs/org.restlet.jar')
+}
