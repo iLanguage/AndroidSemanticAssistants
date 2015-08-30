@@ -5,7 +5,7 @@ This project was developed by [Bahar Sateli](https://twitter.com/BaharSateli) as
 
 # Build
 
-This project was built originally using ADT (Eclipse). You need to download the CSAL jar in order to build the project.
+TThis project was built originally using ADT (Eclipse) and has been since converted to Android Studio. You need to download the CSAL jar in order to build the project.
 
 
 [Download](http://assistant.cs.concordia.ca:8080/job/Semantic%20Assistants/lastSuccessfulBuild/artifact/semantic-assist/CSAL/dist/) CSAL.jar latest build from jenkins and put it in:
