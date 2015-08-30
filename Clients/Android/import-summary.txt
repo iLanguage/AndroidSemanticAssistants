@@ -1,0 +1,65 @@
+ECLIPSE ANDROID PROJECT IMPORT SUMMARY
+======================================
+
+Manifest Merging:
+-----------------
+Your project uses libraries that provide manifests, and your Eclipse
+project did not explicitly turn on manifest merging. In Android Gradle
+projects, manifests are always merged (meaning that contents from your
+libraries' manifests will be merged into the app manifest. If you had
+manually copied contents from library manifests into your app manifest
+you may need to remove these for the app to build correctly.
+
+Ignored Files:
+--------------
+The following files were *not* copied into the new Gradle project; you
+should evaluate whether these are still needed in your project and if
+so manually move them:
+
+From SemanticAssistantsApp:
+* LICENSE.txt
+* README.md
+* ant.properties
+* build.xml
+* ic_launcher-web.png
+* sa-android-findbugs-exclude.xml
+From SemanticAssistantsLib:
+* .DS_Store
+* LICENSE.txt
+* README.md
+* build.xml
+* ivy.xml
+* ivysettings.xml
+
+Moved Files:
+------------
+Android Gradle projects use a different directory structure than ADT
+Eclipse projects. Here's how the projects were restructured:
+
+In SemanticAssistantsLib:
+* AndroidManifest.xml => SemanticAssistantsLib/src/main/AndroidManifest.xml
+* assets/ => SemanticAssistantsLib/src/main/assets
+* libs/CSAL.jar => SemanticAssistantsLib/libs/CSAL.jar
+* res/ => SemanticAssistantsLib/src/main/res/
+* src/ => SemanticAssistantsLib/src/main/java/
+In SemanticAssistantsApp:
+* AndroidManifest.xml => SemanticAssistantsApp/src/main/AndroidManifest.xml
+* assets/ => SemanticAssistantsApp/src/main/assets/
+* libs/org.restlet.jar => SemanticAssistantsApp/libs/org.restlet.jar
+* res/ => SemanticAssistantsApp/src/main/res/
+* src/ => SemanticAssistantsApp/src/main/java/
+
+Next Steps:
+-----------
+You can now build the project. The Gradle project needs network
+connectivity to download dependencies.
+
+Bugs:
+-----
+If for some reason your project does not build, and you determine that
+it is due to a bug or limitation of the Eclipse to Gradle importer,
+please file a bug at http://b.android.com with category
+Component-Tools.
+
+(This import summary is for your information only, and can be deleted
+after import once you are satisfied with the results.)

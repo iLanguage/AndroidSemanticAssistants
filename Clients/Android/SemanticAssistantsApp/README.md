@@ -5,7 +5,7 @@ This project was developed by [Bahar Sateli](https://twitter.com/BaharSateli) as
 
 # Build
 
-This project was built originally using ADT (Eclipse). The project depends on the SemanticAssistantLib library project and Restlet.
+This project was built originally using ADT (Eclipse) and has been since converted to Android Studio. The project depends on the SemanticAssistantLib library project and Restlet.
 
 ## Download library dependancies
 
@@ -24,14 +24,14 @@ $ mkdir SemanticAssistantLib/libs
 $ mkdir SemanticAssistantApp/libs
 ```
 
-## Import both into ADT 
+## Import into Android Studio 
 
-Import both project into the ADT.
+Import the Android directory into the Android Studio.
 
+<img width="798" alt="screen shot 2015-08-29 at 10 16 06 pm" src="https://cloud.githubusercontent.com/assets/196199/9565405/ae2e5228-4e9b-11e5-8b2d-a424ca88e6d9.png">
 
-<img width="542" alt="screen shot 2015-08-29 at 12 04 12 pm" src="https://cloud.githubusercontent.com/assets/196199/9562855/3b3062de-4e46-11e5-8f25-c0cfd18c4c38.png">
+<img width="532" alt="screen shot 2015-08-29 at 10 16 31 pm" src="https://cloud.githubusercontent.com/assets/196199/9565406/ae3218e0-4e9b-11e5-82e5-a7dae2872346.png">
 
-<img width="567" alt="screen shot 2015-08-29 at 12 04 38 pm" src="https://cloud.githubusercontent.com/assets/196199/9562856/3b390cea-4e46-11e5-8021-e43af7bd54ca.png">
 
 
 ```
