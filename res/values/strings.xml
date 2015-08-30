@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+	<string name="app_name">Semantic Assistants</string>
+	<string name="btnInvokeLabel">Invoke</string>
+	<string name="btnClearLabel">Clear</string>
+	<string name="lblServiceList">Available assistants:</string>
+	<string name="lblServiceName">Service Name: </string>
+	<string name="lblServiceDesc">Service Description: </string>
+	<string name="lblServiceParams">Service Parameters: </string>
+	<string name="lblInput">Text input:</string>
+	<string name="txtInputSample">Type your content here&#8230;</string>
+	<string name="strSlogan">Semantics for the Masses</string>
+
+	<string name="lblContent">Content</string>
+	<string name="lblType">Type</string>
+	<string name="lblStart">Start</string>
+	<string name="lblEnd">End</string>
+	<string name="lblFeats">Features</string>
+
+	<string name="keystorePassword">SemAssist</string>
+
+	<!-- Accessibility -->
+	<string name="strLogo">Semantic Assistants Logo</string>
+	<string name="strAssistBtn">Available Assistants Button</string>
+	<string name="strSettBtn">Global Settings Button</string>
+
+	<!-- Preferences -->
+	<string name="lblPrefConnectivity">Server Settings</string>
+	<string name="lblPrefServer">Select a server</string>
+	<string name="lblServerDialog">Semantic Assistants Server</string>
+	<string name="lblPrefServerSumm">Choose a server to read available assistants from</string>
+	<string name="selected_server_option">Selected Server</string>
+
+	<string name="lblAccountUser">Username</string>
+	<string name="lblAccountPass">Password</string>
+	<string name="lblSignIn">Sign in</string>
+	<string name="lblCancel">Cancel</string>
+
+	<!-- Dynamic views -->
+	<string name="btnAllServices">&lt; All Services</string>
+	<string name="lblRTParams">No runtime parameters.</string>
+	<string name="account_name">Semantic Assistants</string>
+	<string name="authenticationSuccess">Successfully authenticated</string>
+	<string name="authenticationFail">Authentication failed. Username or password is incorrect.</string>
+</resources>

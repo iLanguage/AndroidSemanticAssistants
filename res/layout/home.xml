@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/backrepeat"
+    android:orientation="vertical" >
+
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:contentDescription="@string/strLogo"
+        android:src="@drawable/sa" />
+
+    <TextView
+        android:id="@+id/textView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:text="@string/strSlogan" />
+
+    <WebView
+        android:id="@+id/webview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.79" />
+
+	<LinearLayout
+	    xmlns:android="http://schemas.android.com/apk/res/android"
+	    android:id="@+id/button_area"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_gravity="center_horizontal"
+	    android:orientation="horizontal" >
+
+	    <ImageButton
+	        android:id="@+id/av_assist"
+	        android:layout_width="wrap_content"
+	        android:layout_height="50dip"
+	        android:onClick="onAssistantsClick"
+	        android:layout_gravity="center_horizontal"
+	        android:contentDescription="@string/strAssistBtn"
+	        android:src="@drawable/av_assist" />
+	
+	    <ImageButton
+	        android:id="@+id/gl_sett"
+	        android:layout_width="wrap_content"
+	        android:layout_height="50dip"
+	        android:onClick="onSettingsClick"
+	        android:layout_gravity="center_horizontal"
+	        android:contentDescription="@string/strSettBtn"
+	        android:src="@drawable/gl_sett" />
+	</LinearLayout>
+</LinearLayout>
