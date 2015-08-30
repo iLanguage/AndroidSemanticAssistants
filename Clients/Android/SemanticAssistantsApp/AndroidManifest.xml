@@ -101,12 +101,7 @@
 				<action android:name="org.openintents.action.PERSON_EXTRACTOR" />
 				<category android:name="android.intent.category.DEFAULT" />
 			</intent-filter>
-		</service>
-		
-		<service
-			android:name="info.semanticsoftware.semassist.android.service.SemanticAssistantsService"
-			android:process=":semassist_service" 
-			android:label="semassist">
+			
 			<intent-filter android:label="Semantic Assistants Open Intents">
 				<action android:name="org.openintents.action.CONTACT_FINDER" />
 				<category android:name="android.intent.category.DEFAULT" />
